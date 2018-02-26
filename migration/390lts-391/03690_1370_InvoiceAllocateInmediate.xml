@@ -60,9 +60,9 @@ https://github.com/adempiere/adempiere/issues/1370</Comments>
     <Step SeqNo="40" StepType="AD">
       <PO AD_Table_ID="277" Action="U" Record_ID="0" Table="AD_Element_Trl">
         <Data AD_Column_ID="2646" Column="Name" oldValue="IsAllocateImmediate">Asignar automaticamente</Data>
-        <Data AD_Column_ID="4300" Column="PrintName" oldValue="IsAllocateImmediate">Asignar automaticamente</Data>
         <Data AD_Column_ID="2638" Column="AD_Language" oldValue="es_MX">es_MX</Data>
         <Data AD_Column_ID="2637" Column="AD_Element_ID" oldValue="59818">59818</Data>
+        <Data AD_Column_ID="4300" Column="PrintName" oldValue="IsAllocateImmediate">Asignar automaticamente</Data>
       </PO>
     </Step>
     <Step SeqNo="50" StepType="AD">
@@ -135,8 +135,8 @@ https://github.com/adempiere/adempiere/issues/1370</Comments>
     </Step>
     <Step SeqNo="70" StepType="AD">
       <PO AD_Table_ID="101" Action="U" Record_ID="86860" Table="AD_Column">
-        <Data AD_Column_ID="124" Column="IsMandatory" oldValue="false">true</Data>
         <Data AD_Column_ID="117" Column="DefaultValue" isOldNull="true">N</Data>
+        <Data AD_Column_ID="124" Column="IsMandatory" oldValue="false">true</Data>
       </PO>
     </Step>
     <Step SeqNo="80" StepType="AD">

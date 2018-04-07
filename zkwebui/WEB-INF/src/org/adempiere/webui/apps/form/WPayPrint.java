@@ -93,6 +93,9 @@ public class WPayPrint extends PayPrint implements IFormController, EventListene
 		{
 			dynInit();
 			zkInit();
+			int c_PaySelection_ID = Env.getContextAsInt(Env.getCtx(),windowNo,0, "C_PaySelection_ID");
+			if (c_PaySelection_ID > 0)
+				initPayselection();
 			Borderlayout contentLayout = new Borderlayout();
 			contentLayout.setWidth("100%");
 			contentLayout.setHeight("100%");
@@ -212,6 +215,11 @@ public class WPayPrint extends PayPrint implements IFormController, EventListene
 		paySelectSearch.addValueChangeListener(this);
 
 	}   //  dynInit
+
+	private void initPayselection(){
+		setPaySelection(new Integer(Env.getContextAsInt(Env.getCtx(),windowNo,0, "C_PaySelection_ID")));
+		paySelectSearch.setReadWrite(false);
+	}
 
 	/**
 	 * 	Dispose

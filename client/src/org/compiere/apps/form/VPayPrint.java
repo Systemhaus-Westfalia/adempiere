@@ -93,6 +93,9 @@ public class VPayPrint extends PayPrint implements FormPanel, ActionListener, Ve
 		{
 			dynInit();
 			jbInit();
+			int c_PaySelection_ID = Env.getContextAsInt(Env.getCtx(),windowNo,0, "C_PaySelection_ID");
+			if (c_PaySelection_ID > 0)
+				initPayselection();
 			frame.getContentPane().add(centerPanel, BorderLayout.CENTER);
 			frame.getContentPane().add(southPanel, BorderLayout.SOUTH);
 		}
@@ -216,8 +219,13 @@ public class VPayPrint extends PayPrint implements FormPanel, ActionListener, Ve
 		MLookup lookupPS = new MLookup(info, 0);
 		paySelectSearch = new VLookup("C_PaySelection_ID", true, false, true, lookupPS);
 		paySelectSearch.addVetoableChangeListener(this);
-		
+
 	}   //  dynInit
+
+	private void initPayselection(){
+		setPaySelection(new Integer(Env.getContextAsInt(Env.getCtx(),windowNo,0, "C_PaySelection_ID")));
+		paySelectSearch.setReadWrite(false);
+	}
 
 	/**
 	 * 	Dispose

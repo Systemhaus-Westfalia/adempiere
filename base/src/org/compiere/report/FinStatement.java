@@ -26,6 +26,7 @@ import java.util.logging.Level;
 
 import org.compiere.model.MAcctSchemaElement;
 import org.compiere.model.MElementValue;
+import org.compiere.model.MLanguage;
 import org.compiere.model.MPeriod;
 import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
@@ -187,13 +188,17 @@ public class FinStatement extends FinStatementAbstract
 		StringBuffer sb = new StringBuffer ("INSERT INTO T_ReportStatement "
 			+ "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
 			+ "DateAcct, Name, Description,"
-			+ "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
+			+ "AmtAcctDr, AmtAcctCr, Balance, Qty, ACCOUNT_ID) ");
 		sb.append("SELECT ").append(getAD_PInstance_ID()).append(",0,0,")
 			.append(DB.TO_DATE(getDateAcct(), true)).append(",")
 			.append(DB.TO_STRING(Msg.getMsg(Env.getCtx(), "BeginningBalance"))).append(",NULL,"
-			+ "COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0), COALESCE(SUM(AmtAcctDr-AmtAcctCr),0), COALESCE(SUM(Qty),0) " + "FROM Fact_Acct "
+			+ "COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0), COALESCE(SUM(AmtAcctDr-AmtAcctCr),0), COALESCE(SUM(Qty),0) "
+			+ ", ACCOUNT_ID "
+			+ "FROM Fact_Acct "
 			+ "WHERE ").append(parameterWhere)
-			.append(" AND TRUNC(DateAcct, 'DD') < ").append(DB.TO_DATE(getDateAcct()));
+			.append(" AND TRUNC(DateAcct, 'DD') < ").append(DB.TO_DATE(getDateAcct()))
+			.append(" GROUP BY ACCOUNT_ID ");
+
 			
 		//	Start Beginning of Year
 		if (getAccountId() > 0)
@@ -222,10 +227,10 @@ public class FinStatement extends FinStatementAbstract
 		StringBuffer sb = new StringBuffer ("INSERT INTO T_ReportStatement "
 			+ "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
 			+ "DateAcct, Name, Description,"
-			+ "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
+			+ "AmtAcctDr, AmtAcctCr, Balance, Qty, ACCOUNT_ID ) ");
 		sb.append("SELECT ").append(getAD_PInstance_ID()).append(",Fact_Acct_ID,1,")
 			.append("TRUNC(DateAcct, 'DD'),NULL,NULL,"
-			+ "AmtAcctDr, AmtAcctCr, AmtAcctDr-AmtAcctCr, Qty "
+			+ "AmtAcctDr, AmtAcctCr, AmtAcctDr-AmtAcctCr, Qty, ACCOUNT_ID "
 			+ "FROM Fact_Acct "
 			+ "WHERE ").append(parameterWhere)
 			.append(" AND TRUNC(DateAcct, 'DD') BETWEEN ").append(DB.TO_DATE(getDateAcct()))
@@ -236,17 +241,24 @@ public class FinStatement extends FinStatementAbstract
 		log.finest(sb.toString());
 
 		//	Set Name,Description
-		String sql_select = "SELECT e.Name, fa.Description "
-			+ "FROM Fact_Acct fa"
-			+ " INNER JOIN AD_Table t ON (fa.AD_Table_ID=t.AD_Table_ID)"
-			+ " INNER JOIN AD_Element e ON (t.TableName||'_ID'=e.ColumnName) "
-			+ "WHERE r.Fact_Acct_ID=fa.Fact_Acct_ID";
-		//	Translated Version ...
-		sb = new StringBuffer ("UPDATE T_ReportStatement r SET (Name,Description)=(")
+		Language currentLanguage = Env.getLanguage(getCtx());
+		Boolean isBaseLanguage = currentLanguage.isBaseLanguage();
+		String selectFields = " e.Name, fa.Description ";
+		if (!isBaseLanguage)
+			selectFields = "etrl.Name, fa.Description ";
+		StringBuffer sql_select = new StringBuffer("SELECT ");
+		sql_select.append(selectFields)
+		.append("FROM Fact_Acct fa")
+		.append(" INNER JOIN AD_Table t ON (fa.AD_Table_ID=t.AD_Table_ID)")
+		.append(" INNER JOIN AD_Element e ON (t.TableName||'_ID'=e.ColumnName) ");
+		if (!isBaseLanguage)
+			sql_select.append(" INNER JOIN AD_element_trl etrl ON (e.ad_element_ID=etrl.ad_element_ID AND AD_Language = '" + currentLanguage.getAD_Language() + "')");
+		sql_select.append(" WHERE r.Fact_Acct_ID=fa.Fact_Acct_ID");
+		StringBuffer updateSql = new StringBuffer ("UPDATE T_ReportStatement r SET (Name,Description)=(")
 			.append(sql_select).append(") "
 			+ "WHERE Fact_Acct_ID <> 0 AND AD_PInstance_ID=").append(getAD_PInstance_ID());
 		//
-	   no = DB.executeUpdate(sb.toString(), get_TrxName());
+	   no = DB.executeUpdate(updateSql.toString(), get_TrxName());
 	   log.fine("Name #" + no);
 	   log.finest("Name - " + sb);
 

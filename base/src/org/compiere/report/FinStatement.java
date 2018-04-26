@@ -16,24 +16,18 @@
  *****************************************************************************/
 package org.compiere.report;
 
-import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.logging.Level;
-
 import org.compiere.model.MAcctSchemaElement;
 import org.compiere.model.MElementValue;
-import org.compiere.model.MLanguage;
 import org.compiere.model.MPeriod;
-import org.compiere.process.ProcessInfoParameter;
-import org.compiere.process.SvrProcess;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
 import org.compiere.util.Language;
 import org.compiere.util.Msg;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
 
 /**
  *  Statement of Account
@@ -62,6 +56,9 @@ public class FinStatement extends FinStatementAbstract
 	private StringBuffer		parameterWhere = new StringBuffer();
 	/**	Account							*/ 
 	private MElementValue 		m_acct = null;
+
+	private String 				accountValueFrom = "";
+	private String				accountValueTo   = "";
 	
 	/**	Start Time						*/
 	private long 				m_start = System.currentTimeMillis();
@@ -91,9 +88,20 @@ public class FinStatement extends FinStatementAbstract
 		parameterWhere.append("C_AcctSchema_ID=").append(getAcctSchemaId())
 				.append(" AND PostingType='").append(getPostingType()).append("'");
 		//	Optional Account_ID
-		if (getAccountId() != 0)
+		if (getAccountId() != 0 && getAccountIdTo() != 0 && getAccountIdTo()==getAccountId())
 			parameterWhere.append(" AND ").append(MReportTree.getWhereClause(getCtx(),
 					getHierarchyId(), MAcctSchemaElement.ELEMENTTYPE_Account, getAccountId()));
+		if (getAccountId() != 0 && getAccountIdTo() != 0 && getAccountIdTo()!=getAccountId())
+		{
+			MElementValue account = new MElementValue(getCtx(),getAccountId(),get_TrxName());
+			accountValueFrom = account.getValue();
+			account = new MElementValue(getCtx(),getAccountIdTo(),get_TrxName());
+			accountValueTo = account.getValue();
+			parameterWhere.append(" AND (fact_Acct.Account_ID IS NULL OR EXISTS (SELECT * FROM C_ElementValue ev ")
+					.append("WHERE fact_acct.Account_ID=ev.C_ElementValue_ID AND ev.Value >= ")
+					.append(DB.TO_STRING(accountValueFrom)).append(" AND ev.Value <= ")
+					.append(DB.TO_STRING(accountValueTo)).append("))");
+		}
 		//	Optional Org
 		if (getOrgId() != 0)
 			parameterWhere.append(" AND ").append(MReportTree.getWhereClause(getCtx(),

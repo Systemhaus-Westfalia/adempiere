@@ -354,4 +354,19 @@ public interface I_PP_Product_BOM
 	  * Search key for the record in the format required - must be unique
 	  */
 	public String getValue();
+
+    /** Column name C_ProjectTask_ID */
+    public static final String COLUMNNAME_C_ProjectTask_ID = "C_ProjectTask_ID";
+
+	/** Set Project Task.
+	  * Actual Project Task in a Phase
+	  */
+	public void setC_ProjectTask_ID (int C_ProjectTask_ID);
+
+	/** Get Project Task.
+	  * Actual Project Task in a Phase
+	  */
+	public int getC_ProjectTask_ID();
+
+	public org.compiere.model.I_C_ProjectTask getC_ProjectTask() throws RuntimeException;
 }

@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 
 import org.adempiere.webui.ValuePreference;
@@ -48,6 +49,7 @@ import org.compiere.model.MOrderLine;
 import org.compiere.model.MProductPrice;
 import org.compiere.model.MQuery;
 import org.compiere.model.MRole;
+import org.compiere.model.MSysConfig;
 import org.compiere.util.CLogger;
 import org.compiere.util.DB;
 import org.compiere.util.DisplayType;
@@ -71,6 +73,9 @@ import org.zkoss.zk.ui.event.Events;
  * @author Yamel Senih, ysenih@erpcya.com, ERPCyA http://www.erpcya.com
  *		<li> FR [ 146 ] Remove unnecessary class, add support for info to specific column
  *		@see https://github.com/adempiere/adempiere/issues/146
+ * 	@author Carlos Parada, cparada@erpcya.com, ERPCyA http://www.erpcya.com
+ *		<li> FR [ 1721 ] Add support to use vendor product code / barcode to identify product
+ *		@see https://github.com/adempiere/adempiere/issues/1721
  */
 
 public class WSearchEditor extends WEditor implements ContextMenuListener, ValueChangeListener, IZoomableEditor
@@ -805,10 +810,26 @@ public class WSearchEditor extends WEditor implements ContextMenuListener, Value
 			}
 			else
 			{
-				sql.append("UPPER(Value) LIKE ").append(DB.TO_STRING(text))
-					.append(" OR UPPER(Name) LIKE ").append(DB.TO_STRING(text))
-					.append(" OR UPPER(SKU) LIKE ").append(DB.TO_STRING(text))
-					.append(" OR UPPER(UPC) LIKE ").append(DB.TO_STRING(text)).append(")");
+				//FR [ 1721 ]
+				Properties ctx = Env.getCtx();
+				sql.append("UPPER(Name) LIKE ").append(DB.TO_STRING(text))
+					.append(" OR UPPER(SKU) LIKE ").append(DB.TO_STRING(text));
+				
+				if (MSysConfig.getBooleanValue("VENDOR_PRODUCT_CODE_TO_IDENTIFY_PRODUCT", false, Env.getAD_Client_ID(ctx)) && !m_isSOTrx) {
+					int l_C_BPartner_ID = Env.getContextAsInt(ctx, m_lookup.getWindowNo(), "C_BPartner_ID");
+					if (l_C_BPartner_ID!=0)
+						sql.append(" OR EXISTS (SELECT 1 FROM M_Product_PO WHERE (")
+							.append("M_Product_PO.M_Product_ID = M_Product.M_Product_ID AND ")
+							.append("M_Product_PO.C_BPartner_ID = ").append(l_C_BPartner_ID).append(") AND (")
+							.append("UPPER(M_Product_PO.VendorProductNo) LIKE ").append(DB.TO_STRING(text))
+							.append("OR UPPER(M_Product_PO.UPC) LIKE ").append(DB.TO_STRING(text)).append(")")
+							.append(")");
+				}
+				
+				sql.append(" OR UPPER(Value) LIKE ").append(DB.TO_STRING(text))
+					.append(" OR UPPER(UPC) LIKE ").append(DB.TO_STRING(text));
+
+				sql.append(")");
 			}
 		}
 		else if (m_columnName.equals("C_BPartner_ID"))

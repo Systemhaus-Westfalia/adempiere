@@ -20,6 +20,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 
 import org.compiere.process.ProcessInfoParameter;
+import org.compiere.process.SvrProcess;
 import org.compiere.util.AdempiereSystemError;
 import org.compiere.util.Env;
 import org.eevolution.model.MPPProductBOM;
@@ -36,7 +37,7 @@ import org.eevolution.model.MPPProductBOMLine;
  * 			<li>BR [ 1723 ] Don't validate product BOM line when is from process copying 
  * 			@see https://github.com/adempiere/adempiere/issues/1723
  */
-public class CopyFromBOM extends CopyFromBOMAbstract {
+public class CopyFromBOM extends SvrProcess {
 	/**					*/
 	private int	p_Record_ID = 0;
 	private int p_PP_Product_BOM_ID = 0;

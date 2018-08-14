@@ -18,7 +18,9 @@
 package org.compiere.model;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.compiere.process.ProcessInfo;
 import org.compiere.util.Env;
@@ -29,8 +31,6 @@ import org.eevolution.service.dsl.ProcessBuilder;
 /**
  * Model Validator for Assembly Project Managment 
  * @author Carlos Parada cparada@erpya.com
- * 
- *
  */
 public class AssemblyProjectModelValidator implements ModelValidator {
 
@@ -41,6 +41,11 @@ public class AssemblyProjectModelValidator implements ModelValidator {
 		
 		engine.addModelChange(MProjectLine.Table_Name, this);
 		engine.addModelChange(MPPProductBOMLine.Table_Name, this);
+		engine.addModelChange(MProjectTask.Table_Name, this);
+		engine.addModelChange(MProjectPhase.Table_Name, this);
+		engine.addModelChange(MProject.Table_Name, this);
+		
+		
 	}
 
 	@Override
@@ -56,6 +61,31 @@ public class AssemblyProjectModelValidator implements ModelValidator {
 	@Override
 	public String modelChange(PO po, int type) throws Exception {
 		
+		String result = null;
+		
+		//Controlled Project Phase/Task BOM Product 
+		result = ProjectBOMControlled(po,type);
+		
+		if (result!=null)
+			return result;
+		//Project Margin Update
+		result = ProjectPlannedMarginUpdate(po, type);
+		
+		return result;
+	}
+
+	@Override
+	public String docValidate(PO po, int timing) {
+		return null;
+	}
+	
+	/**
+	 * Controlled Product BOM on Project Phase / Task
+	 * @param po
+	 * @param type
+	 * @return
+	 */
+	private String ProjectBOMControlled(PO po, int type) {
 		if (type == TYPE_AFTER_CHANGE) {
 			ArrayList<Object> params = new ArrayList<>();
 			String whereClause = "";
@@ -313,9 +343,94 @@ public class AssemblyProjectModelValidator implements ModelValidator {
 		
 		return null;
 	}
-
-	@Override
-	public String docValidate(PO po, int timing) {
+	
+	/**
+	 * Project Planned Margin and Amount Update
+	 * @param po
+	 * @param type
+	 * @return
+	 */
+	private String ProjectPlannedMarginUpdate(PO po, int type) {
+		if (type == TYPE_AFTER_CHANGE) {
+			if (po.get_Table_ID() == MProjectLine.Table_ID) {
+				MProjectLine pl = (MProjectLine) po;
+				if (pl.is_ValueChanged(MProjectLine.COLUMNNAME_PlannedMarginAmt)
+						&& pl.getPlannedMarginAmt()!=null
+							&& pl.getPlannedMarginAmt()!=Env.ZERO
+								&& pl.getPlannedQty()!=null
+									&& pl.getPlannedQty()!=Env.ZERO) {
+					if (pl.getPlannedQty().compareTo(Env.ZERO)==0)
+						pl.setPlannedMarginAmt(Env.ZERO);
+					else {
+						BigDecimal unitMargin = pl.getPlannedMarginAmt().divide(pl.getPlannedQty(), MathContext.DECIMAL128);
+						BigDecimal limitPrice = pl.getLimitPrice();
+						BigDecimal price = pl.getPlannedPrice();
+						if (limitPrice!=null) {
+							if (price.compareTo(unitMargin.add(limitPrice))!=0) {
+								pl.setPlannedPrice(unitMargin.add(limitPrice));
+								pl.save();
+							}
+						}
+					}
+				}
+			}else if (po.get_Table_ID() == MProjectTask.Table_ID
+							|| po.get_Table_ID() == MProjectPhase.Table_ID
+								|| po.get_Table_ID() == MProject.Table_ID) {
+				
+				MProjectTask pTask = null;
+				MProjectPhase pPhase = null;
+				MProject project = null;
+				BigDecimal previousAmt = Env.ZERO;
+				BigDecimal currentAmt = Env.ZERO;
+				MProjectLine[] pLines = null;
+				
+				if (po.get_Table_ID() == MProjectTask.Table_ID) {
+					pTask = (MProjectTask) po;
+				
+					if (pTask.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
+						previousAmt = (BigDecimal) pTask.get_ValueOld(MProjectTask.COLUMNNAME_PlannedAmt);
+						currentAmt = pTask.getPlannedAmt();
+						pLines = pTask.getLines();
+					}
+				}
+				
+				if (po.get_Table_ID() == MProjectPhase.Table_ID) {
+					pPhase = (MProjectPhase) po;
+				
+					if (pPhase.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
+						previousAmt = (BigDecimal) pPhase.get_ValueOld(MProjectTask.COLUMNNAME_PlannedAmt);
+						currentAmt = pPhase.getPlannedAmt();
+						List<MProjectLine> projectLines = pPhase.getLines();
+						MProjectLine[] retValue = new MProjectLine[projectLines.size()];
+						pLines = projectLines.toArray(retValue);
+					}
+				}
+				
+				if (po.get_Table_ID() == MProject.Table_ID) {
+					project = (MProject) po;
+				
+					if (project.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
+						previousAmt = (BigDecimal) project.get_ValueOld(MProjectTask.COLUMNNAME_PlannedAmt);
+						currentAmt = project.getPlannedAmt();
+						List<MProjectLine> projectLines = project.getLines();
+						MProjectLine[] retValue = new MProjectLine[projectLines.size()];
+						pLines = projectLines.toArray(retValue);
+					}
+				}
+				
+				if (pLines != null) {
+					for (MProjectLine mProjectLine : pLines) {
+						BigDecimal linePercent = mProjectLine.getPlannedAmt().divide(previousAmt, MathContext.DECIMAL128);
+						mProjectLine.setPlannedAmt(currentAmt.multiply(linePercent, MathContext.DECIMAL128));
+						mProjectLine.setPlannedPrice(mProjectLine.getPlannedAmt().divide(mProjectLine.getPlannedQty(), MathContext.DECIMAL128));
+						mProjectLine.save();
+					}
+				}
+			
+			}
+			
+		}
+		
 		return null;
 	}
 

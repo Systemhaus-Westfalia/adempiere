@@ -2,8 +2,12 @@
   <library name="SBT: com.typesafe:config:1.2.0:jar">
     <CLASSES>
       <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/config/bundles/config-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/tools/lib/icepdf-core-6.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/tools/lib/icepdf-viewer-6.2.2.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/tools/lib/icepdf-viewer-6.2.2.jar!/" />
+    </SOURCES>
   </library>
 </component>

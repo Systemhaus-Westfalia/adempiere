@@ -196,14 +196,16 @@ public class FinStatement extends FinStatementAbstract
 		StringBuffer sb = new StringBuffer ("INSERT INTO T_ReportStatement "
 			+ "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
 			+ "DateAcct, Name, Description,"
-			+ "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
+			+ "AmtAcctDr, AmtAcctCr, Balance, Qty, ACCOUNT_ID) ");
 		sb.append("SELECT ").append(getAD_PInstance_ID()).append(",0,0,")
 			.append(DB.TO_DATE(getDateAcct(), true)).append(",")
 			.append(DB.TO_STRING(Msg.getMsg(Env.getCtx(), "BeginningBalance"))).append(",NULL,"
 			+ "COALESCE(SUM(AmtAcctDr),0), COALESCE(SUM(AmtAcctCr),0), COALESCE(SUM(AmtAcctDr-AmtAcctCr),0), COALESCE(SUM(Qty),0) "
+			+ ", ACCOUNT_ID "
 			+ "FROM Fact_Acct "
 			+ "WHERE ").append(parameterWhere)
-			.append(" AND TRUNC(DateAcct, 'DD') < ").append(DB.TO_DATE(getDateAcct()));
+			.append(" AND TRUNC(DateAcct, 'DD') < ").append(DB.TO_DATE(getDateAcct()))
+			.append(" GROUP BY ACCOUNT_ID ");
 
 			
 		//	Start Beginning of Year
@@ -233,10 +235,10 @@ public class FinStatement extends FinStatementAbstract
 		StringBuffer sb = new StringBuffer ("INSERT INTO T_ReportStatement "
 			+ "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
 			+ "DateAcct, Name, Description,"
-			+ "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
+			+ "AmtAcctDr, AmtAcctCr, Balance, Qty, ACCOUNT_ID ) ");
 		sb.append("SELECT ").append(getAD_PInstance_ID()).append(",Fact_Acct_ID,1,")
 			.append("TRUNC(DateAcct, 'DD'),NULL,NULL,"
-			+ "AmtAcctDr, AmtAcctCr, AmtAcctDr-AmtAcctCr, Qty "
+			+ "AmtAcctDr, AmtAcctCr, AmtAcctDr-AmtAcctCr, Qty, ACCOUNT_ID "
 			+ "FROM Fact_Acct "
 			+ "WHERE ").append(parameterWhere)
 			.append(" AND TRUNC(DateAcct, 'DD') BETWEEN ").append(DB.TO_DATE(getDateAcct()))

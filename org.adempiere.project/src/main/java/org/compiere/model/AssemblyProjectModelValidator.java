@@ -30,7 +30,7 @@ import org.eevolution.service.dsl.ProcessBuilder;
 
 /**
  * Model Validator for Assembly Project Managment 
- * @author Carlos Parada cparada@erpya.com
+ * @author Carlos Parada, cparada@erpya.com, http://www.erpya.com
  */
 public class AssemblyProjectModelValidator implements ModelValidator {
 
@@ -158,10 +158,10 @@ public class AssemblyProjectModelValidator implements ModelValidator {
 					if (pl!=null) {
 						if (pl.getC_ProjectTask_ID()!=0) {
 							MProjectTask pt = (MProjectTask) pl.getC_ProjectTask();
-							qty = ppbl.getQty().multiply(pt.getQty());
+							qty = ppbl.getQtyBOM().multiply(pt.getQty());
 						}else if (pl.getC_ProjectPhase_ID()!=0) {
 							MProjectPhase pp = (MProjectPhase) pl.getC_ProjectPhase();
-							qty = ppbl.getQty().multiply(pp.getQty());
+							qty = ppbl.getQtyBOM().multiply(pp.getQty());
 						}
 						
 						pl.setPlannedQty(qty);

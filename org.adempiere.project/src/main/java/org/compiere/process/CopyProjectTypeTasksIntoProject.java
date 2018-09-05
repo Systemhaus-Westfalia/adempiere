@@ -37,6 +37,9 @@ import java.util.logging.Level;
  *	
  *  @author Mario Calderon, mario.calderon@westfalia-it.com, http://www.westfalia-it.com
  *  @version $Id: CopyProjectTypeTasksIntoProject.java,v 1.0 2018/05/27 04:58:38 marcalwestf Exp $
+ *  @author Carlos Parada, cparada@erpya.com, http://www.erpya.com
+ *  		FR[ 1961 ] Add Support to set project phase / task invoice rule on Quantity of Product 
+ *  		@see https://github.com/adempiere/adempiere/issues/1961
  *  
  */
 public class CopyProjectTypeTasksIntoProject extends CopyProjectTypeTasksIntoProjectAbstract
@@ -91,6 +94,9 @@ public class CopyProjectTypeTasksIntoProject extends CopyProjectTypeTasksIntoPro
 					if (projectPhase==null){
 						projectPhase = new MProjectPhase (project, projectTypePhase);
 						projectPhase.setProjInvoiceRule(project.getProjInvoiceRule());
+						//FR[ 1961 ]
+						if (projectPhase.getM_Product_ID()!=0)
+							projectPhase.setProjInvoiceRule(MProjectPhase.PROJINVOICERULE_ProductQuantity);
 						projectPhase.saveEx();
 					}
 					
@@ -99,6 +105,9 @@ public class CopyProjectTypeTasksIntoProject extends CopyProjectTypeTasksIntoPro
 					if (projectTask==null){
 						projectTask = new MProjectTask (projectPhase, projectTypeTask);
 						projectTask.setProjInvoiceRule(project.getProjInvoiceRule());
+						//FR[ 1961 ]
+						if (projectTask.getM_Product_ID()!=0)
+							projectTask.setProjInvoiceRule(MProjectTask.PROJINVOICERULE_ProductQuantity);
 						projectTask.saveEx();
 						count.updateAndGet(no -> no + 1);
 					}

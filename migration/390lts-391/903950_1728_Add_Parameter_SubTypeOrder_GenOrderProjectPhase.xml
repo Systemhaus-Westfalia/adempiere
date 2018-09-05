@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Migrations>
-  <Migration EntityType="D" Name="Add Support to Generate Quotation From Project Phase #1721" ReleaseNo="" SeqNo="100009">
+  <Migration EntityType="D" Name="Add Support to Generate Quotation From Project Phase #1721" ReleaseNo="" SeqNo="903950">
     <Comments>https://github.com/adempiere/adempiere/issues/1728</Comments>
     <Step SeqNo="10" StepType="AD">
       <PO AD_Table_ID="108" Action="I" Record_ID="52603" Table="AD_Val_Rule">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Migrations>
-  <Migration EntityType="D" Name="DocType Credit Order for Purchase" ReleaseNo="3.9.1" SeqNo="903960">
+  <Migration EntityType="D" Name="DocType Credit Order for Purchase" ReleaseNo="" SeqNo="903960">
     <Comments>https://github.com/adempiere/adempiere/issues/1682</Comments>
     <Step SeqNo="10" StepType="AD">
       <PO AD_Table_ID="217" Action="I" Record_ID="50037" Table="C_DocType">
@@ -35,7 +35,7 @@
         <Data AD_Column_ID="1527" Column="GL_Category_ID">0</Data>
         <Data AD_Column_ID="1501" Column="C_DocType_ID">50037</Data>
         <Data AD_Column_ID="1503" Column="AD_Org_ID">0</Data>
-        <Data AD_Column_ID="1502" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="1502" Column="AD_Client_ID">11</Data>
         <Data AD_Column_ID="8761" Column="AD_PrintFormat_ID" isNewNull="true"/>
         <Data AD_Column_ID="4205" Column="DocumentCopies">0</Data>
         <Data AD_Column_ID="3915" Column="C_DocTypeShipment_ID">122</Data>

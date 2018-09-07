@@ -338,7 +338,25 @@ public class AssemblyProjectModelValidator implements ModelValidator {
 				if (ppb.getLines().length==0) 
 					ppb.delete(true);
 				
-			} 
+			}
+		}
+		if (type == TYPE_BEFORE_DELETE) {
+			if (po.get_Table_ID() == MProjectPhase.Table_ID) {
+				MProjectPhase pPhase = (MProjectPhase) po;
+				if (pPhase.getC_ProjectPhase_ID()!=0) {
+					List<MProjectLine> pLines = pPhase.getLines();
+					for (MProjectLine mProjectLine : pLines) 
+						mProjectLine.delete(true);
+				}
+			}else if (po.get_Table_ID() == MProjectTask.Table_ID) {
+				MProjectTask pTask = (MProjectTask) po;
+				if (pTask.getC_ProjectTask_ID()!=0) {
+					MProjectLine[] pLines = pTask.getLines();
+					for (MProjectLine mProjectLine : pLines) 
+						mProjectLine.delete(true);
+				}
+			}
+			
 		}
 		
 		return null;

@@ -55,7 +55,7 @@ public class CopyProjectTypeTasksIntoProject extends CopyProjectTypeTasksIntoPro
 			String name = para[i].getParameterName();
 			if (name.equals("C_Project_ID")){
 				p_C_Project_ID = ((BigDecimal)para[i].getParameter()).intValue();
-				m_project = MProject.getById(getCtx(), p_C_Project_ID);
+				m_project = MProject.getById(getCtx(), p_C_Project_ID,get_TrxName());
 			}
 			else
 				log.log(Level.SEVERE, "Unknown Parameter: " + name);

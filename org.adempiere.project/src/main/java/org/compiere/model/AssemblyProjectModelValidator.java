@@ -71,11 +71,6 @@ public class AssemblyProjectModelValidator implements ModelValidator {
 		//Project Margin Update
 		result = ProjectPlannedMarginUpdate(po, type);
 		
-		if (result!=null)
-			return result;
-		//Project Quantity Update
-		result = qtyChanged(po, type);
-		
 		return result;
 	}
 
@@ -446,55 +441,6 @@ public class AssemblyProjectModelValidator implements ModelValidator {
 						BigDecimal linePercent = mProjectLine.getPlannedAmt().divide(previousAmt, MathContext.DECIMAL128);
 						mProjectLine.setPlannedAmt(currentAmt.multiply(linePercent, MathContext.DECIMAL128));
 						mProjectLine.setPlannedPrice(mProjectLine.getPlannedAmt().divide(mProjectLine.getPlannedQty(), MathContext.DECIMAL128));
-						mProjectLine.save();
-					}
-				}
-			
-			}
-			
-		}
-		
-		return null;
-	}
-	
-	private String qtyChanged(PO po, int type) {
-		if (type == TYPE_AFTER_CHANGE) {
-			if (po.get_Table_ID() == MProjectTask.Table_ID
-							|| po.get_Table_ID() == MProjectPhase.Table_ID) {
-				
-				MProjectTask pTask = null;
-				MProjectPhase pPhase = null;
-				BigDecimal previousQty = Env.ZERO;
-				BigDecimal currentQty = Env.ZERO;
-				
-				MProjectLine[] pLines = null;
-				
-				if (po.get_Table_ID() == MProjectTask.Table_ID) {
-					pTask = (MProjectTask) po;
-				
-					if (pTask.is_ValueChanged(MProjectTask.COLUMNNAME_Qty)) {
-						previousQty = (BigDecimal) pTask.get_ValueOld(MProjectTask.COLUMNNAME_Qty);
-						currentQty = pTask.getQty();
-						pLines = pTask.getLines();
-					}
-				}
-				
-				if (po.get_Table_ID() == MProjectPhase.Table_ID) {
-					pPhase = (MProjectPhase) po;
-				
-					if (pPhase.is_ValueChanged(MProjectTask.COLUMNNAME_Qty)) {
-						previousQty = (BigDecimal) pPhase.get_ValueOld(MProjectTask.COLUMNNAME_Qty);
-						currentQty = pPhase.getQty();
-						List<MProjectLine> projectLines = pPhase.getLines();
-						MProjectLine[] retValue = new MProjectLine[projectLines.size()];
-						pLines = projectLines.toArray(retValue);
-					}
-				}
-				
-				if (pLines != null) {
-					for (MProjectLine mProjectLine : pLines) {
-						BigDecimal unitLineQty = mProjectLine.getPlannedQty().divide(previousQty, MathContext.DECIMAL128);
-						mProjectLine.setPlannedQty(unitLineQty.multiply(currentQty, MathContext.DECIMAL128));
 						mProjectLine.save();
 					}
 				}

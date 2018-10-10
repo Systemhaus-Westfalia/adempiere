@@ -17,14 +17,12 @@
 
 package org.compiere.process;
 
-import org.adempiere.util.ProcessUtil;
 import org.compiere.model.MProduct;
 import org.compiere.model.MProject;
 import org.compiere.model.MProjectPhase;
 import org.compiere.model.MProjectTask;
-import org.compiere.util.Trx;
 import org.eevolution.model.MPPProductBOM;
-import org.eevolution.process.CopyFromBOM;;
+import org.eevolution.model.MPPProductBOMLine;;
 
 /**
  *	Copy the BOM and Components from the Product inside the Project Task.
@@ -33,9 +31,7 @@ import org.eevolution.process.CopyFromBOM;;
  *	
  *  @author Mario Calderon, mario.calderon@westfalia-it.com, http://www.westfalia-it.com
  *  @version $Id: CopyProjectTypeTasksIntoProject.java,v 1.0 2018/05/29 04:58:38 marcalwestf Exp $
- *  @author Carlos Parada, cparada@erpya.com, ERPCyA http://www.erpya.com
- * 			<li>BR [ 1723 ] Change for call CopyFromBOM class to copy Product BOM
- * 			@see https://github.com/adempiere/adempiere/issues/1723
+ *  
  */
 public class ProjectTaskCopyBOM extends ProjectTaskCopyBOMAbstract
 {
@@ -48,7 +44,6 @@ public class ProjectTaskCopyBOM extends ProjectTaskCopyBOMAbstract
 	@Override
 	protected String doIt() throws Exception
 	{
-
 		int count = 0;
 		MProjectTask projectTask = new MProjectTask (getCtx(), getRecord_ID(), get_TrxName());
 		MProjectPhase projectPhase = (MProjectPhase) projectTask.getC_ProjectPhase();
@@ -62,7 +57,6 @@ public class ProjectTaskCopyBOM extends ProjectTaskCopyBOMAbstract
 		if (defaultBOM==null)
 			return "@Created@/@Updated@ #" + count;
 
-		
 		MPPProductBOM newBOM = new MPPProductBOM(getCtx(), 0, get_TrxName());
 		MPPProductBOM.copyValues(defaultBOM, newBOM, true);
 		newBOM.setIsDefault(false);
@@ -73,19 +67,16 @@ public class ProjectTaskCopyBOM extends ProjectTaskCopyBOMAbstract
 		newBOM.setC_ProjectTask_ID(projectTask.getC_ProjectTask_ID());
 		newBOM.saveEx();
 
+		MPPProductBOMLine[] frombomlines = defaultBOM.getLines();
+		for (MPPProductBOMLine frombomline : frombomlines){
+			MPPProductBOMLine tobomline = new MPPProductBOMLine(getCtx(), 0, get_TrxName());
+			MPPProductBOMLine.copyValues(frombomline, tobomline);
+			tobomline.setPP_Product_BOM_ID(newBOM.getPP_Product_BOM_ID());
+			tobomline.saveEx();
+			++count;
+		}
 		
-		ProcessInfo pi = new ProcessInfo(getProcessInfo().getTitle(), CopyFromBOM.getProcessId(), MPPProductBOM.Table_ID, newBOM.getPP_Product_BOM_ID(), false);
-
-		pi.addParameter(MPPProductBOM.COLUMNNAME_PP_Product_BOM_ID, defaultBOM.getPP_Product_BOM_ID(), "");
-		pi.setClassName(CopyFromBOM.class.getName());
-		pi.setAD_PInstance_ID(getAD_PInstance_ID());
-		Trx trx = Trx.get(get_TrxName(), true);
-		ProcessUtil.startJavaProcess(getCtx(), pi, trx, false);
-		if(pi.isError()) 
-			rollback();
-		
-		return pi.getSummary();
-
+		return "@Created@/@Updated@ #" + count;
 	}	//	doIt
 	
 }

@@ -1351,7 +1351,15 @@ public class GridField
 	{
 		return m_vo.AD_Process_ID;
 	}
-	
+
+	/** get AD_Image_ID
+	 * @return Image id
+	 */
+	public int getAD_Image_ID()
+	{
+		return m_vo.AD_Image_ID;
+	}
+
 	/** get AD_Chart_ID
 	 * @return chart id
 	 */
@@ -2100,4 +2108,12 @@ public class GridField
 	{
 		return m_vo.IsQuickEntry;
 	}
+	
+    /**
+     * Is Information Only
+     * @return
+     */
+    public int getAD_FieldDefinition_ID() {
+    	return m_vo.AD_FieldDefinition_ID;
+    }
 }   //  MField

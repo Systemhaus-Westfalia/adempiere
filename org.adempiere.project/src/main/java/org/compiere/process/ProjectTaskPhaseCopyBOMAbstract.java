@@ -30,24 +30,9 @@ public abstract class ProjectTaskPhaseCopyBOMAbstract extends SvrProcess {
 	private static final String NAME_FOR_PROCESS = "Create From BOM Product";
 	/** Process Id 	*/
 	private static final int ID_FOR_PROCESS = 54096;
-	/**	Parameter Name for Create Product BOM Copy	*/
-	public static final String CREATEPRODUCTBOMCOPY = "CreateProductBOMCopy";
-	/**	Parameter Value for Create Product BOM Copy	*/
-	private boolean isCreateProductBOMCopy;
 
 	@Override
 	protected void prepare() {
-		isCreateProductBOMCopy = getParameterAsBoolean(CREATEPRODUCTBOMCOPY);
-	}
-
-	/**	 Getter Parameter Value for Create Product BOM Copy	*/
-	protected boolean isCreateProductBOMCopy() {
-		return isCreateProductBOMCopy;
-	}
-
-	/**	 Setter Parameter Value for Create Product BOM Copy	*/
-	protected void setCreateProductBOMCopy(boolean isCreateProductBOMCopy) {
-		this.isCreateProductBOMCopy = isCreateProductBOMCopy;
 	}
 
 	/**	 Getter Parameter Value for Process ID	*/

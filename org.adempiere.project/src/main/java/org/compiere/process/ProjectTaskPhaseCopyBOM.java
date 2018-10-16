@@ -17,18 +17,11 @@
 
 package org.compiere.process;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import org.compiere.model.MProduct;
-import org.compiere.model.MProject;
-import org.compiere.model.MProjectLine;
 import org.compiere.model.MProjectPhase;
 import org.compiere.model.MProjectTask;
-import org.compiere.model.Query;
-import org.compiere.util.Env;
 import org.eevolution.model.MPPProductBOM;
-import org.eevolution.model.MPPProductBOMLine;
 import org.eevolution.service.dsl.ProcessBuilder;
 
 /**
@@ -47,11 +40,8 @@ public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 	
 	int m_C_ProjectPhase_ID = 0;
 	int m_C_ProjectTask_ID	= 0;
-	private int lineNo = 0;
-	private MProject m_C_Project = null;
 	static int PROCESSID_PRODUCT_BOM_COPY = 53004;
 	static int PROCESSID_PROJECT_LINE_PRICING = 230;
-	private boolean isCopyBOM = true;
 	
 	@Override
 	protected void prepare()
@@ -63,14 +53,12 @@ public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 	protected String doIt() throws Exception
 	{
 
-		isCopyBOM = isCreateProductBOMCopy();
 		MProjectPhase phase = null;
 		MProjectTask task = null;
 		MProduct product = null;
 		MPPProductBOM defaultBOM = null;
 		String resultBOM = "";
 		MPPProductBOM newBOM = null;
-		BigDecimal qty = Env.ZERO;
 		//Explode BOM from Product Project Phase
 		
 		if (getTable_ID() == MProjectTask.Table_ID) {
@@ -79,15 +67,11 @@ public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 			m_C_ProjectTask_ID = task.getC_ProjectTask_ID();
 			phase = (MProjectPhase) task.getC_ProjectPhase();
 			m_C_ProjectPhase_ID = phase.getC_ProjectPhase_ID();
-			m_C_Project = (MProject)phase.getC_Project();
-			qty = task.getQty();
 		}
 		else if (getTable_ID() == MProjectPhase.Table_ID) {
 			phase = new MProjectPhase(getCtx(), getRecord_ID(), get_TrxName());
 			product = (MProduct)phase.getM_Product();
 			m_C_ProjectPhase_ID = phase.getC_ProjectPhase_ID();
-			m_C_Project = (MProject)phase.getC_Project();
-			qty = phase.getQty();
 		}
 		
 		if (product==null )
@@ -97,121 +81,43 @@ public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 			return "@InValid@ @PP_Product_BOM_ID@";
 
 		
-		if (m_C_ProjectTask_ID!=0) {
-			defaultBOM = new Query(getCtx(), MPPProductBOM.Table_Name, "M_Product_ID = ? AND C_ProjectTask_ID= ?", get_TrxName())
-					.setParameters(product.getM_Product_ID(),m_C_ProjectTask_ID)
-					.first();
-		}else if (m_C_ProjectPhase_ID!=0) {
-			defaultBOM = new Query(getCtx(), MPPProductBOM.Table_Name, "M_Product_ID = ? AND C_ProjectPhase_ID= ? AND C_ProjectTask_ID IS NULL", get_TrxName())
-					.setParameters(product.getM_Product_ID(),m_C_ProjectPhase_ID)
-					.first();	
-		}
+		if (m_C_ProjectTask_ID!=0) 
+			if (task!=null)
+				defaultBOM = (MPPProductBOM)task.getPP_Product_BOM();
+		else if (m_C_ProjectPhase_ID!=0) 
+			if (phase!=null)
+				defaultBOM = (MPPProductBOM)phase.getPP_Product_BOM();
 		
-		if (defaultBOM!=null)
-			return "@AlreadyExists@ @PP_Product_BOM_ID@ -> @C_ProjectPhase_ID@ /  @C_ProjectTask_ID@";
-		else
+		if (defaultBOM==null)
 			defaultBOM = MPPProductBOM.getDefault(product, get_TrxName());
 		
 		if (defaultBOM==null)
 			return "@PP_Product_BOM_ID@ @NotFound@";
 
-		if (isCopyBOM) {
-			newBOM = new MPPProductBOM(getCtx(), 0, get_TrxName());
-			MPPProductBOM.copyValues(defaultBOM, newBOM, true);
-			newBOM.setIsDefault(false);
-			newBOM.setValue("");
-			newBOM.setC_ProjectTask_ID(m_C_ProjectTask_ID);
-			newBOM.setC_ProjectPhase_ID(m_C_ProjectPhase_ID);
-			newBOM.saveEx();
-	
-			
-			ProcessInfo processInfo = ProcessBuilder.create(getCtx())
-					.process(PROCESSID_PRODUCT_BOM_COPY)
-					.withRecordId(MPPProductBOM.Table_ID, newBOM.getPP_Product_BOM_ID())
-					.withoutTransactionClose()
-					.withParameter(MPPProductBOM.COLUMNNAME_PP_Product_BOM_ID, defaultBOM.getPP_Product_BOM_ID())
-					.execute(get_TrxName());
-			
-			resultBOM = processInfo.getSummary();
-		}else {
-			newBOM = defaultBOM;
-			resultBOM += explodeBOM(product, newBOM ,qty);
+		newBOM = new MPPProductBOM(getCtx(), 0, get_TrxName());
+		MPPProductBOM.copyValues(defaultBOM, newBOM, true);
+		newBOM.setIsDefault(false);
+		newBOM.setValue("");
+		newBOM.saveEx();
+		if (m_C_ProjectTask_ID!=0
+				&& task!=null) {
+			task.setPP_Product_BOM_ID(newBOM.getPP_Product_BOM_ID());
+			task.save();
+		}else if (m_C_ProjectPhase_ID!=0
+				&& phase!=null) {
+			phase.setPP_Product_BOM_ID(newBOM.getPP_Product_BOM_ID());
+			phase.save();
 		}
+		
+		ProcessInfo processInfo = ProcessBuilder.create(getCtx())
+				.process(PROCESSID_PRODUCT_BOM_COPY)
+				.withRecordId(MPPProductBOM.Table_ID, newBOM.getPP_Product_BOM_ID())
+				.withoutTransactionClose()
+				.withParameter(MPPProductBOM.COLUMNNAME_PP_Product_BOM_ID, defaultBOM.getPP_Product_BOM_ID())
+				.execute(get_TrxName());
+		
+		resultBOM = processInfo.getSummary();
 		
 		return resultBOM;
 	}	//	doIt
-
-	/**
-	 * Explode BOM on Project Line
-	 * @param product
-	 * @param p_bom
-	 * @param p_QtyRequired
-	 */
-	private String explodeBOM(MProduct product, MPPProductBOM p_bom , BigDecimal p_QtyRequired) {
-		String result = "";
-		MPPProductBOM bom = null;
-		if (p_bom!=null)
-			bom = p_bom;
-		else
-			bom =MPPProductBOM.getDefault(product, get_TrxName());
-		
-		if (bom==null)
-			return "";
-		for (MPPProductBOMLine bLine : bom.getLines())
-		{			
-			lineNo = lineNo + 10;
-			BigDecimal BOMMovementQty = bLine.getQty(true).multiply(p_QtyRequired);	
-			int precision = bLine.getPrecision();
-			if (BOMMovementQty.scale() > precision)
-			{
-				BOMMovementQty = BOMMovementQty.setScale(precision, RoundingMode.HALF_UP);
-			}
-			MProduct bomproduct = bLine.getProduct();
-			if ( bomproduct.isBOM() && bomproduct.isPhantom() )
-			{
-				explodeBOM(bomproduct, null, BOMMovementQty);
-			}
-			else
-			{
-				MProjectLine projectLine = new MProjectLine(m_C_Project);
-				if (!bomproduct.isStocked())
-				{					
-					projectLine.setLine(lineNo);
-					projectLine.setM_Product_ID(bomproduct.getM_Product_ID());
-					projectLine.setPlannedQty(BOMMovementQty);
-					projectLine.setC_ProjectPhase_ID(m_C_ProjectPhase_ID);
-					projectLine.setC_ProjectTask_ID(m_C_ProjectTask_ID);
-				}
-				else if (BOMMovementQty.signum() == 0) 
-				{
-					projectLine.setLine(lineNo);
-					projectLine.setM_Product_ID(bomproduct.getM_Product_ID());
-					projectLine.setPlannedQty(BOMMovementQty);
-					projectLine.setC_ProjectPhase_ID(m_C_ProjectPhase_ID);
-					projectLine.setC_ProjectTask_ID(m_C_ProjectTask_ID);
-				}
-				else
-				{					
-					
-					projectLine.setLine(lineNo);
-					projectLine.setM_Product_ID(bomproduct.getM_Product_ID());
-					projectLine.setPlannedQty(BOMMovementQty);
-					projectLine.setC_ProjectPhase_ID(m_C_ProjectPhase_ID);
-					projectLine.setC_ProjectTask_ID(m_C_ProjectTask_ID);
-								
-				} // for available storages
-				projectLine.saveEx(get_TrxName());
-				
-				ProcessInfo processInfo = ProcessBuilder.create(getCtx())
-						.process(PROCESSID_PROJECT_LINE_PRICING)
-						.withRecordId(MProjectLine.Table_ID, projectLine.getC_ProjectLine_ID())
-						.withoutTransactionClose()
-						.execute(get_TrxName());
-				if (processInfo.isError())
-					result = processInfo.getSummary();
-				
-			}			
-		}
-		return result;
-	}
 }

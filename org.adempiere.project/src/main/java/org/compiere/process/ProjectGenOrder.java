@@ -33,6 +33,11 @@ import org.compiere.util.Env;
  *
  *	@author Jorg Janke
  *	@version $Id: ProjectGenOrder.java,v 1.3 2006/07/30 00:51:01 jjanke Exp $
+ *	@author Carlos Parada, cparada@erpya.com, ERPCyA http://www.erpya.com
+ *   	<a href="https://github.com/adempiere/LVE/issues/1">
+ *		@see BR [ 2111 ] Save Order Line</a>
+ *
+ *
  */
 public class ProjectGenOrder extends ProjectGenOrderAbstract
 {
@@ -86,6 +91,9 @@ public class ProjectGenOrder extends ProjectGenOrderAbstract
 					orderLine.setPrice(fromProjectLine.getPlannedPrice());
 				orderLine.setDiscount();
 				orderLine.setTax();
+				
+				//BR [ 2111 ]
+				orderLine.saveEx();
 				count.getAndUpdate(no -> no + 1);
 			});
 			if (fromProjectLines.size() != count.get())

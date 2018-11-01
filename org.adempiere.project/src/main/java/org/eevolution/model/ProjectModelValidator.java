@@ -24,15 +24,24 @@ import org.compiere.model.MOrder;
 import org.compiere.model.MOrderLine;
 import org.compiere.model.MPayment;
 import org.compiere.model.MProject;
+import org.compiere.model.MProjectLine;
+import org.compiere.model.MProjectPhase;
+import org.compiere.model.MProjectTask;
 import org.compiere.model.ModelValidationEngine;
 import org.compiere.model.ModelValidator;
 import org.compiere.model.PO;
 import org.compiere.util.Env;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Project Model Validator
+ * 
+ * @author Carlos Parada, cparada@erpya.com, ERPCyA http://www.erpya.com
+ *   	<a href="https://github.com/adempiere/adempiere/issues/1960">
+ *		@see FR [ 1960 ]  Add Support to remove Project Lines referenced on Project Phase / Task </a>
+
  */
 public class ProjectModelValidator implements ModelValidator {
 
@@ -45,6 +54,9 @@ public class ProjectModelValidator implements ModelValidator {
         engine.addModelChange(MInvoice.Table_Name, this);
         engine.addModelChange(MInvoiceLine.Table_Name, this);
         engine.addModelChange(MPayment.Table_Name, this);
+        
+        engine.addModelChange(MProjectPhase.Table_Name, this);
+        engine.addModelChange(MProjectTask.Table_Name, this);
     }
 
     @Override
@@ -100,6 +112,27 @@ public class ProjectModelValidator implements ModelValidator {
                     entity.set_ValueOfColumn(MProject.COLUMNNAME_User4_ID, project.getUser4_ID());
             }
         }
+        
+        //FR [ 1960 ]
+        if (ModelValidator.TYPE_BEFORE_DELETE == type) {
+			//Delete Project Lines when Delete Phase
+        	if (entity.get_Table_ID() == MProjectPhase.Table_ID) {
+				MProjectPhase pPhase = (MProjectPhase) entity;
+				if (pPhase.getC_ProjectPhase_ID()!=0) {
+					List<MProjectLine> pLines = pPhase.getLines();
+					for (MProjectLine mProjectLine : pLines) 
+						mProjectLine.delete(true);
+				}
+			}//Delete Project Lines when Delete Task
+        	else if (entity.get_Table_ID() == MProjectTask.Table_ID) {
+				MProjectTask pTask = (MProjectTask) entity;
+				if (pTask.getC_ProjectTask_ID()!=0) {
+					MProjectLine[] pLines = pTask.getLines();
+					for (MProjectLine mProjectLine : pLines) 
+						mProjectLine.delete(true);
+				}
+			}
+		}
 
         return null;
     }

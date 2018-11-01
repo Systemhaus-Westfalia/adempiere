@@ -34,7 +34,7 @@ import org.compiere.util.Env;
  *	@author Jorg Janke
  *	@version $Id: ProjectGenOrder.java,v 1.3 2006/07/30 00:51:01 jjanke Exp $
  *	@author Carlos Parada, cparada@erpya.com, ERPCyA http://www.erpya.com
- *   	<a href="https://github.com/adempiere/LVE/issues/1">
+ *   	<a href="https://github.com/adempiere/adempiere/issues/2111">
  *		@see BR [ 2111 ] Save Order Line</a>
  *
  *

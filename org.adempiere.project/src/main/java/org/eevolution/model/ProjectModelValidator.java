@@ -41,7 +41,8 @@ import java.util.List;
  * @author Carlos Parada, cparada@erpya.com, ERPCyA http://www.erpya.com
  *   	<a href="https://github.com/adempiere/adempiere/issues/1960">
  *		@see FR [ 1960 ]  Add Support to remove Project Lines referenced on Project Phase / Task </a>
-
+ *   	<a href="https://github.com/adempiere/adempiere/issues/2112">
+ *		@see FR [ 2112 ]  Add Support to cumulated Planned Amt on Project / Phases / Tasks</a>
  */
 public class ProjectModelValidator implements ModelValidator {
 
@@ -111,7 +112,72 @@ public class ProjectModelValidator implements ModelValidator {
                         && project.getUser4_ID() > 0)
                     entity.set_ValueOfColumn(MProject.COLUMNNAME_User4_ID, project.getUser4_ID());
             }
+            //FR [ 2112 ]
+            if (entity.get_Table_ID() == MProjectPhase.Table_ID
+            		&& entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt)) {
+				
+            	MProjectPhase pPhase = (MProjectPhase) entity;
+				if (pPhase.getC_ProjectPhase_ID()!=0) {
+					BigDecimal oldAmt = Env.ZERO;
+					BigDecimal diffAmt =Env.ZERO; 
+					if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt)!=null
+							&& pPhase.getLines().size()==0) {
+						oldAmt = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
+						diffAmt = pPhase.getPlannedAmt().subtract(oldAmt);
+					}
+					MProject project = (MProject) pPhase.getC_Project();
+					if (project.getC_Project_ID()!=0 && !diffAmt.equals(Env.ZERO)) {
+						project.setPlannedAmt(project.getPlannedAmt().add(diffAmt));
+						project.saveEx();
+					}
+					
+				}
+			}else if (entity.get_Table_ID() == MProjectTask.Table_ID
+            		&& entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
+				
+				MProjectTask pTask = (MProjectTask) entity;
+				if (pTask.getC_ProjectTask_ID()!=0) {
+					BigDecimal oldAmt =Env.ZERO;
+					BigDecimal diffAmt =Env.ZERO;
+					if (pTask.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt)!=null
+							&& pTask.getLines().length==0) {
+						oldAmt = (BigDecimal)pTask.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
+						diffAmt = pTask.getPlannedAmt().subtract(oldAmt);
+					}
+					MProjectPhase pPhase = (MProjectPhase) pTask.getC_ProjectPhase();
+					if (pPhase.getC_ProjectPhase_ID()!=0 && !diffAmt.equals(Env.ZERO)) {
+						pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(diffAmt));
+						pPhase.saveEx();
+					}
+					
+				}
+			}
+            
         }
+        //FR [ 2112 ]
+        if (ModelValidator.TYPE_AFTER_NEW == type) {
+			//Delete Project Lines when Delete Phase
+        	if (entity.get_Table_ID() == MProjectPhase.Table_ID) {
+				MProjectPhase pPhase = (MProjectPhase) entity;
+				if (pPhase.getC_ProjectPhase_ID()!=0) {
+					MProject project = (MProject) pPhase.getC_Project();
+					if (project.getC_Project_ID()!=0) {
+						project.setPlannedAmt(project.getPlannedAmt().add(pPhase.getPlannedAmt()));
+						project.saveEx();
+					}
+				}
+			}//Delete Project Lines when Delete Task
+        	else if (entity.get_Table_ID() == MProjectTask.Table_ID) {
+				MProjectTask pTask = (MProjectTask) entity;
+				if (pTask.getC_ProjectTask_ID()!=0) {
+					MProjectPhase pPhase = (MProjectPhase) pTask.getC_ProjectPhase();
+					if (pPhase.getC_Project_ID()!=0) {
+						pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(pTask.getPlannedAmt()));
+						pPhase.saveEx();
+					}
+				}
+			}
+		}
         
         //FR [ 1960 ]
         if (ModelValidator.TYPE_BEFORE_DELETE == type) {
@@ -120,16 +186,32 @@ public class ProjectModelValidator implements ModelValidator {
 				MProjectPhase pPhase = (MProjectPhase) entity;
 				if (pPhase.getC_ProjectPhase_ID()!=0) {
 					List<MProjectLine> pLines = pPhase.getLines();
-					for (MProjectLine mProjectLine : pLines) 
-						mProjectLine.delete(true);
+					if (pLines.size()>0) {
+						for (MProjectLine mProjectLine : pLines) 
+							mProjectLine.delete(true);
+					}else {
+						MProject project = (MProject) pPhase.getC_Project();
+						if (project.getC_Project_ID()!=0) {
+							project.setPlannedAmt(project.getPlannedAmt().subtract(pPhase.getPlannedAmt()));
+							project.saveEx();
+						}
+					}
 				}
 			}//Delete Project Lines when Delete Task
         	else if (entity.get_Table_ID() == MProjectTask.Table_ID) {
 				MProjectTask pTask = (MProjectTask) entity;
 				if (pTask.getC_ProjectTask_ID()!=0) {
 					MProjectLine[] pLines = pTask.getLines();
-					for (MProjectLine mProjectLine : pLines) 
-						mProjectLine.delete(true);
+					if (pLines.length>0) {
+						for (MProjectLine mProjectLine : pLines) 
+							mProjectLine.delete(true);
+					}else {
+						MProjectPhase pPhase = (MProjectPhase) pTask.getC_ProjectPhase();
+						if (pPhase.getC_ProjectPhase_ID()!=0) {
+							pPhase.setPlannedAmt(pPhase.getPlannedAmt().subtract(pTask.getPlannedAmt()));
+							pPhase.saveEx();
+						}
+					}
 				}
 			}
 		}

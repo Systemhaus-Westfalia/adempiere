@@ -18,7 +18,10 @@
 package org.compiere.process;
 
 
+import java.util.List;
+
 import org.compiere.model.MProduct;
+import org.compiere.model.MProject;
 import org.compiere.model.MProjectPhase;
 import org.compiere.model.MProjectTask;
 import org.eevolution.model.MPPProductBOM;
@@ -37,11 +40,10 @@ import org.eevolution.service.dsl.ProcessBuilder;
  */
 public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 {
-	
+	int m_C_Project_ID		= 0;
 	int m_C_ProjectPhase_ID = 0;
 	int m_C_ProjectTask_ID	= 0;
-	static int PROCESSID_PRODUCT_BOM_COPY = 53004;
-	static int PROCESSID_PROJECT_LINE_PRICING = 230;
+	private static int PROCESSID_PRODUCT_BOM_COPY = 53004;
 	
 	@Override
 	protected void prepare()
@@ -53,32 +55,82 @@ public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 	protected String doIt() throws Exception
 	{
 
+		MProject project = null;
 		MProjectPhase phase = null;
 		MProjectTask task = null;
-		MProduct product = null;
-		MPPProductBOM defaultBOM = null;
+		
+		
 		String resultBOM = "";
-		MPPProductBOM newBOM = null;
+		
 		//Explode BOM from Product Project Phase
 		
 		if (getTable_ID() == MProjectTask.Table_ID) {
 			task = new MProjectTask(getCtx(), getRecord_ID(), get_TrxName());
-			product = (MProduct)task.getM_Product();
 			m_C_ProjectTask_ID = task.getC_ProjectTask_ID();
 			phase = (MProjectPhase) task.getC_ProjectPhase();
 			m_C_ProjectPhase_ID = phase.getC_ProjectPhase_ID();
+			resultBOM =copyBOM(null ,task, (MProduct)task.getM_Product());
+			addLog(resultBOM);
 		}
 		else if (getTable_ID() == MProjectPhase.Table_ID) {
 			phase = new MProjectPhase(getCtx(), getRecord_ID(), get_TrxName());
-			product = (MProduct)phase.getM_Product();
 			m_C_ProjectPhase_ID = phase.getC_ProjectPhase_ID();
+			resultBOM = processPhase(phase);
+		}
+		else if (getTable_ID() == MProject.Table_ID) {
+			m_C_Project_ID = getRecord_ID();
+			project = new MProject(getCtx(), m_C_Project_ID, get_TrxName());
+			resultBOM = processProject(project);
 		}
 		
+		return resultBOM;
+	}	//	doIt
+	
+	private String processProject(MProject project) {
+		String result ="";
+		
+		List<MProjectPhase> phases = project.getPhases();
+		for (MProjectPhase mProjectPhase : phases) 
+			result+=processPhase(mProjectPhase);
+		
+		return result;
+	}
+	
+	private String processPhase(MProjectPhase phase) {
+		String result ="";
+		String resultBOM ="";
+		resultBOM +=copyBOM(phase, null, (MProduct)phase.getM_Product()) ;
+		addLog(resultBOM);
+		result +=resultBOM + "\n";
+		
+		List<MProjectTask> ptasks = phase.getTasks();
+		for (MProjectTask mProjectTask : ptasks) { 
+			resultBOM = copyBOM(null ,mProjectTask, (MProduct)mProjectTask.getM_Product());
+			addLog(resultBOM);
+			result +=resultBOM + "\n";
+		}
+		
+		return result;
+	} 
+	
+	private String copyBOM(MProjectPhase phase,MProjectTask task, MProduct product) {
+		String result ="";
+		MPPProductBOM defaultBOM = null;
+		MPPProductBOM newBOM = null;
+		String level ="";
+		
+		if (phase!=null) 
+			level = " @C_ProjectPhase_ID@ " + phase.getName();
+		else if (task!=null)
+			level = " @C_ProjectTask_ID@ " + task.getName();
+		
+		
+		
 		if (product==null )
-			return "@M_Product_ID@ @NotFound@" ;
+			return "@M_Product_ID@ @NotFound@ " + level ;
 		
 		if (!(product.isBOM() && product.isVerified()))
-			return "@InValid@ @PP_Product_BOM_ID@";
+			return "@invalid@ @PP_Product_BOM_ID@ " + level;
 
 		
 		if (m_C_ProjectTask_ID!=0) 
@@ -88,11 +140,12 @@ public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 			if (phase!=null)
 				defaultBOM = (MPPProductBOM)phase.getPP_Product_BOM();
 		
-		if (defaultBOM==null)
+		if (defaultBOM==null
+				|| defaultBOM.getPP_Product_BOM_ID()==0)
 			defaultBOM = MPPProductBOM.getDefault(product, get_TrxName());
 		
 		if (defaultBOM==null)
-			return "@PP_Product_BOM_ID@ @NotFound@";
+			return "@PP_Product_BOM_ID@ @NotFound@ " + level;
 
 		newBOM = new MPPProductBOM(getCtx(), 0, get_TrxName());
 		MPPProductBOM.copyValues(defaultBOM, newBOM, true);
@@ -116,8 +169,8 @@ public class ProjectTaskPhaseCopyBOM extends ProjectTaskPhaseCopyBOMAbstract
 				.withParameter(MPPProductBOM.COLUMNNAME_PP_Product_BOM_ID, defaultBOM.getPP_Product_BOM_ID())
 				.execute(get_TrxName());
 		
-		resultBOM = processInfo.getSummary();
+		result = processInfo.getSummary() + level;
 		
-		return resultBOM;
-	}	//	doIt
+		return result;
+	}
 }

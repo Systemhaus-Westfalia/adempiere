@@ -59,12 +59,15 @@ public class ProjectGenOrder extends ProjectGenOrderAbstract
 		log.info("C_Project_ID=" + getRecord_ID());
 		if (getRecord_ID() == 0)
 			throw new AdempiereException("@C_Project_ID@ @NotFound@");
+		if (getDocSubTypeSO()==null)
+			throw new AdempiereException("@NotFound@ @DocSubTypeSO@");
+		
 		MProject fromProject = getProject (getCtx(), getRecord_ID(), get_TrxName());
 		Env.setSOTrx(getCtx(), true);	//	Set SO context
 
 		/** @todo duplicate invoice prevention */
 
-		MOrder order = new MOrder (fromProject, true, MOrder.DocSubTypeSO_OnCredit);
+		MOrder order = new MOrder (fromProject, true, getDocSubTypeSO());
 		if (!order.save())
 			throw new AdempiereException("@Error@ @To@ @Generated@ @C_Order_ID@");
 

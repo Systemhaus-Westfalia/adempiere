@@ -151,7 +151,7 @@ public class ProjectLinePricing extends SvrProcess
 					//
 					boolean isSOTrx = true;
 					MProductPricing pp = new MProductPricing (mProjectPhase.getM_Product_ID(), 
-						project.getC_BPartner_ID(), mProjectPhase.getQty(), isSOTrx, null);
+						project.getC_BPartner_ID(), mProjectPhase.getPP_Product_BOM_ID(), mProjectPhase.getQty(), isSOTrx, null);
 					pp.setM_PriceList_ID(project.getM_PriceList_ID());
 					pp.setPriceDate(project.getDateContract());
 					//
@@ -194,7 +194,7 @@ public class ProjectLinePricing extends SvrProcess
 				//
 				boolean isSOTrx = true;
 				MProductPricing pp = new MProductPricing (pTask.getM_Product_ID(), 
-					project.getC_BPartner_ID(), pTask.getQty(), isSOTrx, null);
+					project.getC_BPartner_ID(), pTask.getPP_Product_BOM_ID(), pTask.getQty(), isSOTrx, null);
 				pp.setM_PriceList_ID(project.getM_PriceList_ID());
 				pp.setPriceDate(project.getDateContract());
 				//
@@ -227,7 +227,7 @@ public class ProjectLinePricing extends SvrProcess
 		//
 		boolean isSOTrx = true;
 		MProductPricing pp = new MProductPricing (projectLine.getM_Product_ID(), 
-			project.getC_BPartner_ID(), projectLine.getPlannedQty(), isSOTrx, null);
+			project.getC_BPartner_ID(), projectLine.getPP_Product_BOM_ID(), projectLine.getPlannedQty(), isSOTrx, null);
 		pp.setM_PriceList_ID(project.getM_PriceList_ID());
 		pp.setPriceDate(project.getDateContract());
 		//

@@ -33,6 +33,7 @@ import org.compiere.model.PO;
 import org.compiere.util.Env;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 
 /**
@@ -114,38 +115,68 @@ public class ProjectModelValidator implements ModelValidator {
             }
             //FR [ 2112 ]
             if (entity.get_Table_ID() == MProjectPhase.Table_ID
-            		&& entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt)) {
+            		&& (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt) 
+            				|| entity.is_ValueChanged(MProjectPhase.COLUMNNAME_Qty))) {
 				
             	MProjectPhase pPhase = (MProjectPhase) entity;
 				if (pPhase.getC_ProjectPhase_ID()!=0) {
 					BigDecimal oldAmt = Env.ZERO;
 					BigDecimal diffAmt =Env.ZERO; 
-					if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt)!=null
-							&& pPhase.getLines().size()==0) {
-						oldAmt = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
-						diffAmt = pPhase.getPlannedAmt().subtract(oldAmt);
+					if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt)) {
+						if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt)!=null
+								&& pPhase.getLines().size()==0) {
+							oldAmt = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
+							diffAmt = pPhase.getPlannedAmt().subtract(oldAmt);
+						}
+					}else if(entity.is_ValueChanged(MProjectPhase.COLUMNNAME_Qty)) {
+						if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_Qty)!=null
+								&& pPhase.getLines().size()==0) {
+							BigDecimal oldQty = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_Qty);
+							BigDecimal unitPrice = pPhase.getPlannedAmt().divide(oldQty, MathContext.DECIMAL128);
+							BigDecimal newAmt =  pPhase.getQty().multiply(unitPrice, MathContext.DECIMAL128);
+							
+							diffAmt = newAmt.subtract(pPhase.getPlannedAmt());
+							if (diffAmt.compareTo(Env.ZERO)!=0) {
+								pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(diffAmt));
+							}
+						}
 					}
 					MProject project = (MProject) pPhase.getC_Project();
-					if (project.getC_Project_ID()!=0 && !diffAmt.equals(Env.ZERO)) {
+					if (project.getC_Project_ID()!=0 && diffAmt.compareTo(Env.ZERO)!=0) {
 						project.setPlannedAmt(project.getPlannedAmt().add(diffAmt));
 						project.saveEx();
 					}
 					
 				}
 			}else if (entity.get_Table_ID() == MProjectTask.Table_ID
-            		&& entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
+						&& (entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt) 
+	            				|| entity.is_ValueChanged(MProjectTask.COLUMNNAME_Qty))) {
 				
 				MProjectTask pTask = (MProjectTask) entity;
 				if (pTask.getC_ProjectTask_ID()!=0) {
 					BigDecimal oldAmt =Env.ZERO;
 					BigDecimal diffAmt =Env.ZERO;
-					if (pTask.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt)!=null
-							&& pTask.getLines().length==0) {
-						oldAmt = (BigDecimal)pTask.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
-						diffAmt = pTask.getPlannedAmt().subtract(oldAmt);
+					if (entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
+						if (pTask.get_ValueOld(MProjectTask.COLUMNNAME_PlannedAmt)!=null
+								&& pTask.getLines().length==0) {
+							oldAmt = (BigDecimal)pTask.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
+							diffAmt = pTask.getPlannedAmt().subtract(oldAmt);
+						}
+					}else if(entity.is_ValueChanged(MProjectTask.COLUMNNAME_Qty)) {
+						if (pTask.get_ValueOld(MProjectTask.COLUMNNAME_Qty)!=null
+								&& pTask.getLines().length==0) {
+							BigDecimal oldQty = (BigDecimal)pTask.get_ValueOld(MProjectTask.COLUMNNAME_Qty);
+							BigDecimal unitPrice = pTask.getPlannedAmt().divide(oldQty, MathContext.DECIMAL128);
+							BigDecimal newAmt =  pTask.getQty().multiply(unitPrice, MathContext.DECIMAL128);
+							
+							diffAmt = newAmt.subtract(pTask.getPlannedAmt());
+							if (diffAmt.compareTo(Env.ZERO)!=0) {
+								pTask.setPlannedAmt(pTask.getPlannedAmt().add(diffAmt));
+							}
+						}
 					}
 					MProjectPhase pPhase = (MProjectPhase) pTask.getC_ProjectPhase();
-					if (pPhase.getC_ProjectPhase_ID()!=0 && !diffAmt.equals(Env.ZERO)) {
+					if (pPhase.getC_ProjectPhase_ID()!=0 && diffAmt.compareTo(Env.ZERO)!=0) {
 						pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(diffAmt));
 						pPhase.saveEx();
 					}

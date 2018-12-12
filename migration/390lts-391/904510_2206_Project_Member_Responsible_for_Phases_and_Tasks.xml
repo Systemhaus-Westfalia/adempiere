@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Migrations>
   <Migration EntityType="D" Name="Project Member Responsible for Phases and Tasks" ReleaseNo="" SeqNo="904510">
-    <Comments>Responsible for Phases and Tasks should be Project Member or Project Manager #2206
+    <Comments>Responsible for Phases and Tasks should be Project Member #2206
 https://github.com/adempiere/adempiere/issues/2206</Comments>
     <Step SeqNo="10" StepType="AD">
       <PO AD_Table_ID="108" Action="I" Record_ID="52659" Table="AD_Val_Rule">

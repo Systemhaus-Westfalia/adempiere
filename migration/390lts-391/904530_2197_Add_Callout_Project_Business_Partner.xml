@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Migrations>
+  <Migration EntityType="D" Name="Add Callout Project Business Partner" ReleaseNo="" SeqNo="904530">
+    <Comments>See https://github.com/adempiere/adempiere/issues/2197</Comments>
+    <Step SeqNo="10" StepType="AD">
+      <PO AD_Table_ID="101" Action="U" Record_ID="3902" Table="AD_Column">
+        <Data AD_Column_ID="1692" Column="Callout" isOldNull="true">org.compiere.model.CalloutProject.bPartner</Data>
+      </PO>
+    </Step>
+  </Migration>
+</Migrations>

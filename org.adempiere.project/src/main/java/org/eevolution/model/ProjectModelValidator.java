@@ -47,7 +47,7 @@ import java.util.List;
  *   	<a href="https://github.com/adempiere/adempiere/issues/2112">
  *		@see FR [ 2112 ]  Add Support to cumulated Planned Amt on Project / Phases / Tasks</a>
  *   	<a href="https://github.com/adempiere/adempiere/issues/2219">
- *		@see FR [ 2219 ]  Validate Change Product on Phases and Tasks</a>
+ *		@see FR [ 2219 ] Validate Change Product on Phases and Tasks</a>
  */
 public class ProjectModelValidator implements ModelValidator {
 

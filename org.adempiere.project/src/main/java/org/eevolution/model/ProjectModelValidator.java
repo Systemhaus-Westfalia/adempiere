@@ -23,6 +23,7 @@ import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MOrder;
 import org.compiere.model.MOrderLine;
 import org.compiere.model.MPayment;
+import org.compiere.model.MProductionBatch;
 import org.compiere.model.MProject;
 import org.compiere.model.MProjectLine;
 import org.compiere.model.MProjectPhase;
@@ -30,6 +31,7 @@ import org.compiere.model.MProjectTask;
 import org.compiere.model.ModelValidationEngine;
 import org.compiere.model.ModelValidator;
 import org.compiere.model.PO;
+import org.compiere.model.Query;
 import org.compiere.util.Env;
 
 import java.math.BigDecimal;
@@ -44,6 +46,8 @@ import java.util.List;
  *		@see FR [ 1960 ]  Add Support to remove Project Lines referenced on Project Phase / Task </a>
  *   	<a href="https://github.com/adempiere/adempiere/issues/2112">
  *		@see FR [ 2112 ]  Add Support to cumulated Planned Amt on Project / Phases / Tasks</a>
+ *		<a href="https://github.com/adempiere/adempiere/issues/2219">
+ *		@see FR [ 2219 ]  Validate Change Product on  Phases and Tasks</a>
  */
 public class ProjectModelValidator implements ModelValidator {
 
@@ -149,6 +153,28 @@ public class ProjectModelValidator implements ModelValidator {
             				project.setPlannedAmt(project.getPlannedAmt().add(diffAmt));
             			}
             		}
+            		
+            		//FR [ 2219 ]
+            		if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_M_Product_ID)) {
+						MProjectPhase phase = (MProjectPhase) entity;
+						if (phase.getPP_Order_ID()!=0) {
+							MPPOrder pporder = (MPPOrder) phase.getPP_Order();
+							return "@SaveError@ @PP_Order_ID@ " + pporder.getDocumentNo();
+						}else if (phase.get_ValueAsInt("M_ProductionBatch_ID")!=0) {
+							MProductionBatch production = new MProductionBatch(phase.getCtx(), phase.get_ValueAsInt("M_ProductionBatch_ID"), phase.get_TrxName());
+							return "@SaveError@ @M_ProductionBatch_ID@ " + production.getDocumentNo();
+						}else { 
+							MOrder order = new Query(phase.getCtx(), MOrder.Table_Name,
+										 "DocStatus IN ('"+ MOrder.DOCSTATUS_Completed +"','"+ MOrder.DOCSTATUS_Drafted+"','"+ MOrder.DOCSTATUS_InProgress +"') "
+										+"AND EXISTS (SELECT 1 FROM C_OrderLine ol "
+												+ "WHERE ol.C_Order_ID = C_Order.C_Order_ID "
+												+ "AND C_ProjectPhase_ID = ?) ", phase.get_TrxName())
+										.setParameters(phase.getC_ProjectPhase_ID())
+										.first();
+							if (order!=null) 
+								return "@SaveError@ @C_Order_ID@ " + order.getDocumentNo();
+						}
+					}
         			
             		if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_M_Product_ID) && pPhase.getM_Product_ID()!=0) {
             			pPhase.setActualAmt(pPhase.getQty().multiply(pPhase.getPriceEntered()));
@@ -194,7 +220,28 @@ public class ProjectModelValidator implements ModelValidator {
 								pPhase.saveEx();
 							}
 						}
-	        			
+						
+						//FR [ 2219 ]
+						if (entity.is_ValueChanged(MProjectTask.COLUMNNAME_M_Product_ID)) {
+							MProjectTask task = (MProjectTask) entity;
+							if (task.getPP_Order_ID()!=0) {
+								MPPOrder pporder = (MPPOrder) task.getPP_Order();
+								return "@SaveError@ @PP_Order_ID@ " + pporder.getDocumentNo();
+							}else if (task.get_ValueAsInt("M_ProductionBatch_ID")!=0) {
+								MProductionBatch production = new MProductionBatch(task.getCtx(), task.get_ValueAsInt("M_ProductionBatch_ID"), task.get_TrxName());
+								return "@SaveError@ @M_ProductionBatch_ID@ " + production.getDocumentNo();
+							}else { 
+								MOrder order = new Query(task.getCtx(), MOrder.Table_Name,
+											 "DocStatus IN ('"+ MOrder.DOCSTATUS_Completed +"','"+ MOrder.DOCSTATUS_Drafted+"','"+ MOrder.DOCSTATUS_InProgress +"') "
+											+"AND EXISTS (SELECT 1 FROM C_OrderLine ol "
+													+ "WHERE ol.C_Order_ID = C_Order.C_Order_ID "
+													+ "AND ol.C_ProjectTask_ID = ?) ", task.get_TrxName())
+											.setParameters(task.getC_ProjectTask_ID())
+											.first();
+								if (order!=null) 
+									return "@SaveError@ @C_Order_ID@ " + order.getDocumentNo();
+							}
+						}
 	            		if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_M_Product_ID) && pTask.getM_Product_ID()!=0) {
 	            			pTask.setActualAmt(pTask.getQty().multiply(pTask.getPriceEntered()));
 	            			pTask.setMarginAmt(pTask.getActualAmt().subtract(pTask.getLineNetAmt()).

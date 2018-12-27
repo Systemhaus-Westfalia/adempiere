@@ -20,14 +20,15 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 
 import org.adempiere.model.GridTabWrapper;
 import org.compiere.util.DB;
-import org.compiere.util.DisplayType;
 import org.compiere.util.Env;
+import org.compiere.util.Msg;
 
 
 /**
@@ -332,4 +333,369 @@ public class CalloutProject extends CalloutEngine
 		}
 		return "";
 	}	//	bPartner
+	
+	/**
+	 *	Product in Phase or Task updates
+	 *		- List Price
+	 *		- Price Entered
+	 *		- Line Amount
+	 *		- Actual Amount
+	 *		- Margin Amount
+	 *		- Margin (%)
+	 *  @param ctx      Context
+	 *  @param WindowNo current Window No
+	 *  @param mTab     Model Tab
+	 *  @param mField   Model Field
+	 *  @param value    The new value
+	 *  @return Error message or ""
+	 */
+	public String product (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		if (isCalloutActive())
+			return "";
+		
+		// Product empty?
+		Integer M_Product_ID = (Integer)value;
+		if (M_Product_ID == null || M_Product_ID.intValue() == 0) {
+			mTab.setValue("PriceList", Env.ZERO);
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+			return "";		
+		}
+		
+		//	No changes ?
+		if( (Integer)mField.getOldValue()==M_Product_ID)
+			return "";		
+
+		Integer C_Project_ID = Env.getContextAsInt(ctx, WindowNo, "C_Project_ID");
+		MProject project = MProject.getById(Env.getCtx(), C_Project_ID, null);
+		
+		// PriceList or PriceListVersion mandatory
+ 		if(project.getM_PriceList_ID()==0 && project.getM_PriceList_Version_ID()==0) {
+			String info = Msg.parseTranslation(ctx, "@PriceListNotFound@" + ", " + "@PriceListVersionNotFound@");
+			mTab.fireDataStatusEEvent ("Error", info, false);
+		}
+ 		
+ 		// Find out MProductPrice
+		int M_PriceList_Version_ID =0;
+		if (project.getM_PriceList_Version_ID()==0) {
+			String sql = "SELECT plv.M_PriceList_Version_ID "
+				+ "FROM M_PriceList_Version plv "
+				+ "WHERE plv.M_PriceList_ID=? "						//	1
+				+ " AND plv.ValidFrom <= ? "
+				+ " AND plv.isActive = 'Y' "
+				+ "ORDER BY plv.ValidFrom DESC";
+			//	Use newest price list - may not be future
+			
+			Timestamp dateStartSchedule = project.getDateStartSchedule();
+			M_PriceList_Version_ID = DB.getSQLValueEx(null, sql, project.getM_PriceList_ID(), dateStartSchedule);
+			//priceListVersion = new MPriceListVersion(Env.getCtx(), M_PriceList_Version_ID, null);
+			
+		}
+		else {
+			M_PriceList_Version_ID = project.getM_PriceList_Version_ID();
+			//priceListVersion = new MPriceListVersion(Env.getCtx(), project.getM_PriceList_Version_ID(), null);
+		}
+		
+		//MProduct product = MProduct.get (Env.getCtx(), M_Product_ID.intValue());
+		MProductPrice pp = MProductPrice.get(Env.getCtx(), M_PriceList_Version_ID, M_Product_ID, null);
+		if (pp==null) {
+			String info = Msg.parseTranslation(ctx, "@ProductNotOnPriceList@");
+			mTab.fireDataStatusEEvent ("Error", info, false);
+		}
+		else  {
+			BigDecimal listPrice = pp.getPriceList();
+			BigDecimal qty = (BigDecimal) mTab.getValue("Qty");
+			mTab.setValue("PriceList", listPrice);
+			mTab.setValue("PriceEntered", listPrice);
+			mTab.setValue("ActualAmt", qty.multiply(listPrice));
+			mTab.setValue("LineNetAmt", qty.multiply(listPrice));
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+		}
+		
+		
+		return "";
+	}	//	product
+	
+	/**
+	 *	Quantity in Phase or Task updates
+	 *		- Actual Amount
+	 *		- Line Amount
+	 *		- Margin Amount
+	 *		- Margin (%)
+	 *  @param ctx      Context
+	 *  @param WindowNo current Window No
+	 *  @param mTab     Model Tab
+	 *  @param mField   Model Field
+	 *  @param value    The new value
+	 *  @return Error message or ""
+	 */
+	public String qty (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		if (isCalloutActive())
+			return "";
+
+		// Product empty?
+		Integer M_Product_ID = (Integer)mTab.getValue("M_Product_ID");
+		if (M_Product_ID == null || M_Product_ID.intValue() == 0) {
+			mTab.setValue("PriceList", Env.ZERO);
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+			return "";		
+		}
+		
+		BigDecimal qty = (BigDecimal)value;
+		BigDecimal listPrice = (BigDecimal) mTab.getValue("PriceList");
+		BigDecimal priceEntered = (BigDecimal) mTab.getValue("PriceEntered");
+		BigDecimal lineAmt = qty.multiply(listPrice);
+		BigDecimal actualAmt = qty.multiply(priceEntered);
+		mTab.setValue("LineNetAmt", lineAmt);
+		mTab.setValue("ActualAmt", actualAmt);
+		mTab.setValue("MarginAmt", actualAmt.subtract(lineAmt).setScale(2, BigDecimal.ROUND_HALF_UP));
+		if (lineAmt.compareTo(Env.ZERO)!=0)
+			mTab.setValue("Margin",actualAmt.divide(lineAmt, 6, BigDecimal.ROUND_HALF_UP).subtract(Env.ONE)
+					.multiply(Env.ONEHUNDRED).setScale(2, BigDecimal.ROUND_HALF_UP));
+		else
+			mTab.setValue("Margin", Env.ZERO);
+
+		return "";
+	}	//	qty
+	
+	/**
+	 *	Price Entered in Phase or Task updates
+	 *		- Actual Amount
+	 *		- Line Amount
+	 *		- Margin Amount
+	 *		- Margin (%)
+	 *  @param ctx      Context
+	 *  @param WindowNo current Window No
+	 *  @param mTab     Model Tab
+	 *  @param mField   Model Field
+	 *  @param value    The new value
+	 *  @return Error message or ""
+	 */
+	public String priceEntered (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		if (isCalloutActive())
+			return "";
+		
+		// Product empty?
+		Integer M_Product_ID = (Integer)mTab.getValue("M_Product_ID");
+		if (M_Product_ID == null || M_Product_ID.intValue() == 0) {
+			mTab.setValue("PriceList", Env.ZERO);
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+			return "";		
+		}
+
+		BigDecimal priceEntered =  (BigDecimal)value;
+		if (priceEntered.compareTo(Env.ZERO)==0) {
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", ((BigDecimal) mTab.getValue("LineNetAmt")).negate());
+			mTab.setValue("Margin", Env.ONEHUNDRED.negate());
+		}			
+		else  {
+			BigDecimal qty = (BigDecimal) mTab.getValue("Qty");
+			BigDecimal listPrice = (BigDecimal) mTab.getValue("PriceList");
+			BigDecimal lineAmt = qty.multiply(listPrice);
+			BigDecimal actualAmt = qty.multiply(priceEntered);
+			mTab.setValue("LineNetAmt", lineAmt);
+			mTab.setValue("ActualAmt", actualAmt);
+			mTab.setValue("MarginAmt", actualAmt.subtract(lineAmt).setScale(2, BigDecimal.ROUND_HALF_UP));
+			if (lineAmt.compareTo(Env.ZERO)!=0)
+				mTab.setValue("Margin",actualAmt.divide(lineAmt, 6, BigDecimal.ROUND_HALF_UP).subtract(Env.ONE)
+						.multiply(Env.ONEHUNDRED).setScale(2, BigDecimal.ROUND_HALF_UP));
+		}	
+		return "";
+	}	//	priceEntered
+	
+	/**
+	 *	Actual Amount in Phase or Task updates
+	 *		- Price Entered
+	 *		- Margin Amount
+	 *		- Margin (%)
+	 *  @param ctx      Context
+	 *  @param WindowNo current Window No
+	 *  @param mTab     Model Tab
+	 *  @param mField   Model Field
+	 *  @param value    The new value
+	 *  @return Error message or ""
+	 */
+	public String actualAmt (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		if (isCalloutActive())
+			return "";
+
+		// Product empty?
+		Integer M_Product_ID = (Integer)mTab.getValue("M_Product_ID");
+		if (M_Product_ID == null || M_Product_ID.intValue() == 0) {
+			mTab.setValue("PriceList", Env.ZERO);
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+			return "";		
+		}
+
+		BigDecimal actualAmt = (BigDecimal)value;
+		if (actualAmt.compareTo(Env.ZERO)==0) {
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", ((BigDecimal) mTab.getValue("LineNetAmt")).negate());
+			mTab.setValue("Margin", Env.ONEHUNDRED.negate());
+			return "";		
+		}		
+		
+		BigDecimal qty = (BigDecimal) mTab.getValue("Qty");
+		if (qty.compareTo(Env.ZERO)==0) {
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+		}
+		else {
+			BigDecimal priceEntered =  actualAmt.divide(qty, 6, BigDecimal.ROUND_HALF_UP);
+			mTab.setValue("PriceEntered", priceEntered);
+			BigDecimal listPrice = (BigDecimal) mTab.getValue("PriceList");
+			BigDecimal lineAmt = qty.multiply(listPrice);
+			mTab.setValue("LineNetAmt", lineAmt);
+			
+			mTab.setValue("MarginAmt", actualAmt.subtract(lineAmt).setScale(2, BigDecimal.ROUND_HALF_UP));
+			if (lineAmt.compareTo(Env.ZERO)!=0)
+				mTab.setValue("Margin",actualAmt.divide(lineAmt, 6, BigDecimal.ROUND_HALF_UP).subtract(Env.ONE)
+						.multiply(Env.ONEHUNDRED).setScale(2, BigDecimal.ROUND_HALF_UP));			
+		}
+		return "";
+	}	//	actualAmt
+	
+	/**
+	 *	Margin (%) in Phase or Task updates
+	 *		- Actual Amount
+	 *		- Price Entered
+	 *		- Margin Amount
+	 *  @param ctx      Context
+	 *  @param WindowNo current Window No
+	 *  @param mTab     Model Tab
+	 *  @param mField   Model Field
+	 *  @param value    The new value
+	 *  @return Error message or ""
+	 */
+	public String marginPercentage (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		if (isCalloutActive())
+			return "";
+
+		// Product empty?
+		Integer M_Product_ID = (Integer)mTab.getValue("M_Product_ID");
+		if (M_Product_ID == null || M_Product_ID.intValue() == 0) {
+			mTab.setValue("PriceList", Env.ZERO);
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+			return "";		
+		}
+
+		BigDecimal margin = (BigDecimal)value;
+		if (margin.compareTo(Env.ONEHUNDRED.negate())==-1) {
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", ((BigDecimal) mTab.getValue("LineNetAmt")).negate());
+			mTab.setValue("Margin", Env.ONEHUNDRED.negate());
+			return "";		
+		}		
+		
+		BigDecimal qty = (BigDecimal) mTab.getValue("Qty");
+		if (qty.compareTo(Env.ZERO)==0) {
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+		}
+		else {
+			BigDecimal listPrice = (BigDecimal) mTab.getValue("PriceList");
+			BigDecimal lineAmt = qty.multiply(listPrice);
+			mTab.setValue("LineNetAmt", lineAmt);
+			BigDecimal actualAmt = margin.divide(Env.ONEHUNDRED, 6, BigDecimal.ROUND_HALF_UP).add(Env.ONE).multiply(lineAmt).setScale(2, BigDecimal.ROUND_HALF_UP);
+			mTab.setValue("ActualAmt", actualAmt);
+			BigDecimal priceEntered =  actualAmt.divide(qty, 6, BigDecimal.ROUND_HALF_UP);
+			mTab.setValue("PriceEntered", priceEntered);
+			mTab.setValue("MarginAmt", actualAmt.subtract(lineAmt).setScale(2, BigDecimal.ROUND_HALF_UP));
+		}
+		return "";
+	}	//	marginPercentage
+	
+	/**
+	 *	Margin Amount in Phase or Task updates
+	 *		- Actual Amount
+	 *		- Price Entered
+	 *		- Margin %
+	 *  @param ctx      Context
+	 *  @param WindowNo current Window No
+	 *  @param mTab     Model Tab
+	 *  @param mField   Model Field
+	 *  @param value    The new value
+	 *  @return Error message or ""
+	 */
+	public String marginAmt (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		if (isCalloutActive())
+			return "";
+
+		// Product empty?
+		Integer M_Product_ID = (Integer)mTab.getValue("M_Product_ID");
+		if (M_Product_ID == null || M_Product_ID.intValue() == 0) {
+			mTab.setValue("PriceList", Env.ZERO);
+			mTab.setValue("PriceEntered", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+			return "";		
+		}
+
+		BigDecimal marginAmt = (BigDecimal)value;
+		if (marginAmt.compareTo(Env.ZERO)==0) {
+			mTab.setValue("PriceEntered", (BigDecimal) mTab.getValue("PriceList"));
+			mTab.setValue("ActualAmt", (BigDecimal) mTab.getValue("LineNetAmt"));
+			mTab.setValue("Margin", Env.ZERO);
+			return "";		
+		}		
+		
+		BigDecimal qty = (BigDecimal) mTab.getValue("Qty");
+		if (qty.compareTo(Env.ZERO)==0) {
+			mTab.setValue("LineNetAmt", Env.ZERO);
+			mTab.setValue("ActualAmt", Env.ZERO);
+			mTab.setValue("MarginAmt", Env.ZERO);
+			mTab.setValue("Margin", Env.ZERO);
+		}
+		else {
+			BigDecimal listPrice = (BigDecimal) mTab.getValue("PriceList");
+			BigDecimal lineAmt = qty.multiply(listPrice);
+			mTab.setValue("LineNetAmt", lineAmt);
+
+			BigDecimal actualAmt = marginAmt.add(lineAmt);
+			mTab.setValue("ActualAmt", actualAmt);
+
+			BigDecimal priceEntered =  actualAmt.divide(qty, 6, BigDecimal.ROUND_HALF_UP);
+			mTab.setValue("PriceEntered", priceEntered);
+			
+			if (lineAmt.compareTo(Env.ZERO)!=0)
+				mTab.setValue("Margin",actualAmt.divide(lineAmt, 6, BigDecimal.ROUND_HALF_UP).subtract(Env.ONE)
+						.multiply(Env.ONEHUNDRED).setScale(2, BigDecimal.ROUND_HALF_UP));			
+		}
+		return "";
+	}	//	marginAmt
 }	//	CalloutProject

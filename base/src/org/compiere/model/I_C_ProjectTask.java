@@ -41,6 +41,19 @@ public interface I_C_ProjectTask
 
     /** Load Meta Data */
 
+    /** Column name ActualAmt */
+    public static final String COLUMNNAME_ActualAmt = "ActualAmt";
+
+	/** Set Actual Amount.
+	  * The actual amount
+	  */
+	public void setActualAmt (BigDecimal ActualAmt);
+
+	/** Get Actual Amount.
+	  * The actual amount
+	  */
+	public BigDecimal getActualAmt();
+
     /** Column name AD_Client_ID */
     public static final String COLUMNNAME_AD_Client_ID = "AD_Client_ID";
 
@@ -247,6 +260,21 @@ public interface I_C_ProjectTask
 	  * User who created this records
 	  */
 	public int getCreatedBy();
+
+    /** Column name C_RfQLine_ID */
+    public static final String COLUMNNAME_C_RfQLine_ID = "C_RfQLine_ID";
+
+	/** Set RfQ Line.
+	  * Request for Quotation Line
+	  */
+	public void setC_RfQLine_ID (int C_RfQLine_ID);
+
+	/** Get RfQ Line.
+	  * Request for Quotation Line
+	  */
+	public int getC_RfQLine_ID();
+
+	public org.compiere.model.I_C_RfQLine getC_RfQLine() throws RuntimeException;
 
     /** Column name C_SalesRegion_ID */
     public static final String COLUMNNAME_C_SalesRegion_ID = "C_SalesRegion_ID";
@@ -556,6 +584,45 @@ public interface I_C_ProjectTask
 	  */
 	public boolean isRecurrent();
 
+    /** Column name LineNetAmt */
+    public static final String COLUMNNAME_LineNetAmt = "LineNetAmt";
+
+	/** Set Line Amount.
+	  * Line Extended Amount (Quantity * Actual Price) without Freight and Charges
+	  */
+	public void setLineNetAmt (BigDecimal LineNetAmt);
+
+	/** Get Line Amount.
+	  * Line Extended Amount (Quantity * Actual Price) without Freight and Charges
+	  */
+	public BigDecimal getLineNetAmt();
+
+    /** Column name Margin */
+    public static final String COLUMNNAME_Margin = "Margin";
+
+	/** Set Margin %.
+	  * Margin for a product as a percentage
+	  */
+	public void setMargin (BigDecimal Margin);
+
+	/** Get Margin %.
+	  * Margin for a product as a percentage
+	  */
+	public BigDecimal getMargin();
+
+    /** Column name MarginAmt */
+    public static final String COLUMNNAME_MarginAmt = "MarginAmt";
+
+	/** Set Margin Amount.
+	  * Difference between actual and limit price multiplied by the quantity
+	  */
+	public void setMarginAmt (BigDecimal MarginAmt);
+
+	/** Get Margin Amount.
+	  * Difference between actual and limit price multiplied by the quantity
+	  */
+	public BigDecimal getMarginAmt();
+
     /** Column name M_Product_ID */
     public static final String COLUMNNAME_M_Product_ID = "M_Product_ID";
 
@@ -650,6 +717,32 @@ public interface I_C_ProjectTask
 	public int getPP_Product_BOM_ID();
 
 	public org.eevolution.model.I_PP_Product_BOM getPP_Product_BOM() throws RuntimeException;
+
+    /** Column name PriceEntered */
+    public static final String COLUMNNAME_PriceEntered = "PriceEntered";
+
+	/** Set Price.
+	  * Price Entered - the price based on the selected/base UoM
+	  */
+	public void setPriceEntered (BigDecimal PriceEntered);
+
+	/** Get Price.
+	  * Price Entered - the price based on the selected/base UoM
+	  */
+	public BigDecimal getPriceEntered();
+
+    /** Column name PriceList */
+    public static final String COLUMNNAME_PriceList = "PriceList";
+
+	/** Set List Price.
+	  * List Price
+	  */
+	public void setPriceList (BigDecimal PriceList);
+
+	/** Get List Price.
+	  * List Price
+	  */
+	public BigDecimal getPriceList();
 
     /** Column name PriorityRule */
     public static final String COLUMNNAME_PriorityRule = "PriorityRule";

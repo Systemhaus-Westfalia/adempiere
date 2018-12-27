@@ -114,76 +114,97 @@ public class ProjectModelValidator implements ModelValidator {
                     entity.set_ValueOfColumn(MProject.COLUMNNAME_User4_ID, project.getUser4_ID());
             }
             //FR [ 2112 ]
-            if (entity.get_Table_ID() == MProjectPhase.Table_ID
-            		&& (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt) 
-            				|| entity.is_ValueChanged(MProjectPhase.COLUMNNAME_Qty))) {
-				
+            if (entity.get_Table_ID() == MProjectPhase.Table_ID) {
             	MProjectPhase pPhase = (MProjectPhase) entity;
-				if (pPhase.getC_ProjectPhase_ID()!=0) {
-					BigDecimal oldAmt = Env.ZERO;
-					BigDecimal diffAmt =Env.ZERO; 
-					if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt)) {
-						if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt)!=null
-								&& pPhase.getLines().size()==0) {
-							oldAmt = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
-							diffAmt = pPhase.getPlannedAmt().subtract(oldAmt);
-						}
-					}else if(entity.is_ValueChanged(MProjectPhase.COLUMNNAME_Qty)) {
-						if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_Qty)!=null
-								&& pPhase.getLines().size()==0) {
-							BigDecimal oldQty = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_Qty);
-							BigDecimal unitPrice = pPhase.getPlannedAmt().divide(oldQty, MathContext.DECIMAL128);
-							BigDecimal newAmt =  pPhase.getQty().multiply(unitPrice, MathContext.DECIMAL128);
-							
-							diffAmt = newAmt.subtract(pPhase.getPlannedAmt());
-							if (diffAmt.compareTo(Env.ZERO)!=0) {
-								pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(diffAmt));
-							}
-						}
-					}
-					MProject project = (MProject) pPhase.getC_Project();
-					if (project.getC_Project_ID()!=0 && diffAmt.compareTo(Env.ZERO)!=0) {
-						project.setPlannedAmt(project.getPlannedAmt().add(diffAmt));
-						project.saveEx();
-					}
-					
-				}
-			}else if (entity.get_Table_ID() == MProjectTask.Table_ID
-						&& (entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt) 
-	            				|| entity.is_ValueChanged(MProjectTask.COLUMNNAME_Qty))) {
 				
-				MProjectTask pTask = (MProjectTask) entity;
-				if (pTask.getC_ProjectTask_ID()!=0) {
-					BigDecimal oldAmt =Env.ZERO;
-					BigDecimal diffAmt =Env.ZERO;
-					if (entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
-						if (pTask.get_ValueOld(MProjectTask.COLUMNNAME_PlannedAmt)!=null
-								&& pTask.getLines().length==0) {
-							oldAmt = (BigDecimal)pTask.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
-							diffAmt = pTask.getPlannedAmt().subtract(oldAmt);
-						}
-					}else if(entity.is_ValueChanged(MProjectTask.COLUMNNAME_Qty)) {
-						if (pTask.get_ValueOld(MProjectTask.COLUMNNAME_Qty)!=null
-								&& pTask.getLines().length==0) {
-							BigDecimal oldQty = (BigDecimal)pTask.get_ValueOld(MProjectTask.COLUMNNAME_Qty);
-							BigDecimal unitPrice = pTask.getPlannedAmt().divide(oldQty, MathContext.DECIMAL128);
-							BigDecimal newAmt =  pTask.getQty().multiply(unitPrice, MathContext.DECIMAL128);
-							
-							diffAmt = newAmt.subtract(pTask.getPlannedAmt());
-							if (diffAmt.compareTo(Env.ZERO)!=0) {
-								pTask.setPlannedAmt(pTask.getPlannedAmt().add(diffAmt));
+				if (pPhase.getC_ProjectPhase_ID()!=0) {
+					MProject project = (MProject) pPhase.getC_Project();
+					
+            		if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt) 
+            				|| entity.is_ValueChanged(MProjectPhase.COLUMNNAME_Qty)) {
+            			BigDecimal oldAmt = Env.ZERO;
+            			BigDecimal diffAmt =Env.ZERO; 
+            			if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_PlannedAmt)) {
+            				if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt)!=null
+            						&& pPhase.getLines().size()==0) {
+            					oldAmt = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
+            					diffAmt = pPhase.getPlannedAmt().subtract(oldAmt);
+            				}
+            			} else if(entity.is_ValueChanged(MProjectPhase.COLUMNNAME_Qty)) {
+            				if (pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_Qty)!=null
+            						&& pPhase.getLines().size()==0) {
+            					BigDecimal oldQty = (BigDecimal)pPhase.get_ValueOld(MProjectPhase.COLUMNNAME_Qty);
+            					BigDecimal unitPrice = Env.ZERO;
+            					if (oldQty.compareTo(Env.ZERO)==1)
+            						unitPrice = pPhase.getPlannedAmt().divide(oldQty, MathContext.DECIMAL128);
+            					BigDecimal newAmt =  pPhase.getQty().multiply(unitPrice, MathContext.DECIMAL128);
+
+            					diffAmt = newAmt.subtract(pPhase.getPlannedAmt());
+            					if (diffAmt.compareTo(Env.ZERO)!=0) {
+            						pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(diffAmt));
+            					}
+            				}
+            			}
+            			if (project.getC_Project_ID()!=0 && diffAmt.compareTo(Env.ZERO)!=0) {
+            				project.setPlannedAmt(project.getPlannedAmt().add(diffAmt));
+            			}
+            		}
+        			
+            		if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_M_Product_ID) && pPhase.getM_Product_ID()!=0) {
+            			pPhase.setActualAmt(pPhase.getQty().multiply(pPhase.getPriceEntered()));
+            			pPhase.setMarginAmt(pPhase.getActualAmt().subtract(pPhase.getLineNetAmt()).
+            					setScale(2, BigDecimal.ROUND_HALF_UP));
+            			if (pPhase.getLineNetAmt().compareTo(Env.ZERO)!=0)
+            				pPhase.setMargin(pPhase.getActualAmt().divide(pPhase.getLineNetAmt(), 6, BigDecimal.ROUND_HALF_UP).
+            						subtract(Env.ONE).multiply(Env.ONEHUNDRED).setScale(2, BigDecimal.ROUND_HALF_UP));
+            		}
+					project.saveEx();			
+				}
+			} else if (entity.get_Table_ID() == MProjectTask.Table_ID) {
+					MProjectTask pTask = (MProjectTask) entity;
+					if (pTask.getC_ProjectTask_ID()!=0) {
+						if(entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt) 
+								|| entity.is_ValueChanged(MProjectTask.COLUMNNAME_Qty)) {	
+							BigDecimal oldAmt =Env.ZERO;
+							BigDecimal diffAmt =Env.ZERO;
+							if (entity.is_ValueChanged(MProjectTask.COLUMNNAME_PlannedAmt)) {
+								if (pTask.get_ValueOld(MProjectTask.COLUMNNAME_PlannedAmt)!=null
+										&& pTask.getLines().length==0) {
+									oldAmt = (BigDecimal)pTask.get_ValueOld(MProjectPhase.COLUMNNAME_PlannedAmt);
+									diffAmt = pTask.getPlannedAmt().subtract(oldAmt);
+								}
+							} else if(entity.is_ValueChanged(MProjectTask.COLUMNNAME_Qty)) {
+								if (pTask.get_ValueOld(MProjectTask.COLUMNNAME_Qty)!=null
+										&& pTask.getLines().length==0) {
+									BigDecimal oldQty = (BigDecimal)pTask.get_ValueOld(MProjectTask.COLUMNNAME_Qty);
+	            					BigDecimal unitPrice = Env.ZERO;
+	            					if (oldQty.compareTo(Env.ZERO)==1)
+	            						unitPrice = pTask.getPlannedAmt().divide(oldQty, MathContext.DECIMAL128);
+									BigDecimal newAmt =  pTask.getQty().multiply(unitPrice, MathContext.DECIMAL128);
+
+									diffAmt = newAmt.subtract(pTask.getPlannedAmt());
+									if (diffAmt.compareTo(Env.ZERO)!=0) {
+										pTask.setPlannedAmt(pTask.getPlannedAmt().add(diffAmt));
+									}
+								}
+							}
+							MProjectPhase pPhase = (MProjectPhase) pTask.getC_ProjectPhase();
+							if (pPhase.getC_ProjectPhase_ID()!=0 && diffAmt.compareTo(Env.ZERO)!=0) {
+								pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(diffAmt));
+								pPhase.saveEx();
 							}
 						}
+	        			
+	            		if (entity.is_ValueChanged(MProjectPhase.COLUMNNAME_M_Product_ID) && pTask.getM_Product_ID()!=0) {
+	            			pTask.setActualAmt(pTask.getQty().multiply(pTask.getPriceEntered()));
+	            			pTask.setMarginAmt(pTask.getActualAmt().subtract(pTask.getLineNetAmt()).
+	            					setScale(2, BigDecimal.ROUND_HALF_UP));
+	            			if (pTask.getLineNetAmt().compareTo(Env.ZERO)!=0)
+	            				pTask.setMargin(pTask.getActualAmt().divide(pTask.getLineNetAmt(), 6, BigDecimal.ROUND_HALF_UP).
+	            						subtract(Env.ONE).multiply(Env.ONEHUNDRED).setScale(2, BigDecimal.ROUND_HALF_UP));
+	            		}
 					}
-					MProjectPhase pPhase = (MProjectPhase) pTask.getC_ProjectPhase();
-					if (pPhase.getC_ProjectPhase_ID()!=0 && diffAmt.compareTo(Env.ZERO)!=0) {
-						pPhase.setPlannedAmt(pPhase.getPlannedAmt().add(diffAmt));
-						pPhase.saveEx();
-					}
-					
-				}
 			}
-            
         }
         //FR [ 2112 ]
         if (ModelValidator.TYPE_AFTER_NEW == type) {

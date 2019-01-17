@@ -242,6 +242,7 @@ public class ProjectGenSO extends ProjectGenSOAbstract
 		else if (entity instanceof MProjectTask) {
 			line.setC_ProjectPhase_ID(entity.get_ValueAsInt("C_ProjectPhase_ID"));
 			line.setC_ProjectTask_ID(entity.get_ID());
+			line.setC_UOM_ID(product.getC_UOM_ID());
 		}
 		
 		line.setQty(Qty);

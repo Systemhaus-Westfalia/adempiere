@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Migrations>
+  <Migration EntityType="D" Name="Responsible in Tasks: Defalult Value From Phase #2253" ReleaseNo="" SeqNo="904580">
+    <Comments> #2253 Responsible in Tasks: Defalult Value From Phase.
+Issue https://github.com/adempiere/adempiere/issues/2253</Comments>
+    <Step SeqNo="10" StepType="AD">
+      <PO AD_Table_ID="107" Action="U" Record_ID="84294" Table="AD_Field">
+        <Data AD_Column_ID="53265" Column="DefaultValue" isOldNull="true">@3|Responsible_ID@</Data>
+      </PO>
+    </Step>
+  </Migration>
+</Migrations>

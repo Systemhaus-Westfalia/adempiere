@@ -343,5 +343,43 @@ public class MProjectPhase extends X_C_ProjectPhase
 	{
 		return getC_Project().getC_BPartner_ID();
 	}
+	
+	
+	/**
+	 * 	Copy Tasks from other Phase, ignoring phase contents
+	 * Preserve the record sequence
+	 *  Mario Calderon
+	 *	@param fromProjectPhase from phase
+	 *	@return number of tasks copied
+	 */
+	public int copyTasksFromIgnoreMatches (MProjectPhase fromProjectPhase)
+	{
+		if (fromProjectPhase == null)
+			return 0;
+		AtomicInteger count = new AtomicInteger(0);
+		AtomicInteger countLine = new AtomicInteger(0);
+		List<MProjectTask> toProjectTasks = getTasks();
+		List<MProjectTask> fromProjectTasks = fromProjectPhase.getTasks();
+		int lastSequence = 10;
+		if(toProjectTasks.size()>0)
+			lastSequence = toProjectTasks.get(toProjectTasks.size()-1).getSeqNo() + 10;
+		for (MProjectTask fromProjectTask:fromProjectTasks) {
+			MProjectTask toProjectTask = new MProjectTask(getCtx(), 0, get_TrxName());
+			PO.copyValues(fromProjectTask, toProjectTask, getAD_Client_ID(), getAD_Org_ID());
+			toProjectTask.setC_ProjectPhase_ID(getC_ProjectPhase_ID());
+			toProjectTask.setC_Task_ID(fromProjectTask.getC_Task_ID());
+			toProjectTask.setProjInvoiceRule(getProjInvoiceRule());
+			toProjectTask.setSeqNo(lastSequence);	
+			toProjectTask.saveEx();
+			count.getAndUpdate(no -> no + 1);
+			countLine.getAndUpdate(no -> no + toProjectTask.copyLinesFrom(fromProjectTask));
+			lastSequence = lastSequence + 10;  // Lambda not used because of this
+		};
+
+		if (fromProjectTasks.size() != count.get())
+			log.warning("Count difference - ProjectPhase=" + fromProjectTasks.size() + " <> Saved=" + count.get());
+
+		return count.get() + countLine.get();
+	}	//	copyTasksFromIgnoreMatches
 
 }	//	MProjectPhase

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Migrations>
+  <Migration EntityType="D" Name="Dynamic Validation: DocType Only For Sales Orders #2254" ReleaseNo="" SeqNo="904590">
+    <Comments> #2254 New Dynamic Validation: Document Type Only For Sales Orders
+Issue https://github.com/adempiere/adempiere/issues/2254</Comments>
+    <Step SeqNo="10" StepType="AD">
+      <PO AD_Table_ID="108" Action="I" Record_ID="52663" Table="AD_Val_Rule">
+        <Data AD_Column_ID="584" Column="Created">2019-01-16 21:22:51.429</Data>
+        <Data AD_Column_ID="192" Column="Type">S</Data>
+        <Data AD_Column_ID="586" Column="Updated">2019-01-16 21:22:51.429</Data>
+        <Data AD_Column_ID="583" Column="IsActive">true</Data>
+        <Data AD_Column_ID="193" Column="Code">C_DocType.DocBaseType IN ('SOO')</Data>
+        <Data AD_Column_ID="188" Column="Name">C_DocType Sales Orders</Data>
+        <Data AD_Column_ID="189" Column="Description">Document Type for Sales Orders</Data>
+        <Data AD_Column_ID="387" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="388" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="187" Column="AD_Val_Rule_ID">52663</Data>
+        <Data AD_Column_ID="7715" Column="EntityType">D</Data>
+        <Data AD_Column_ID="587" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="585" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="84460" Column="UUID" isNewNull="true"/>
+      </PO>
+    </Step>
+  </Migration>
+</Migrations>

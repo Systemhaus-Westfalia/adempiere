@@ -215,6 +215,7 @@ public class ProjectGenSO extends ProjectGenSOAbstract
 		MDocType docType = new MDocType(getCtx(), m_C_DocType_ID, get_TrxName());
 		
 		m_Order = new MOrder(m_MProject, true, docType.getDocSubTypeSO());
+		m_Order.setC_DocTypeTarget_ID(m_C_DocType_ID);
 		
 		if (!m_Order.save())
 			return "@SaveError@ @C_Order_ID@";

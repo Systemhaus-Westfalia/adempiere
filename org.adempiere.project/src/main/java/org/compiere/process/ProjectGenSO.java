@@ -238,14 +238,15 @@ public class ProjectGenSO extends ProjectGenSOAbstract
 		MOrderLine line = new MOrderLine(m_Order);
 		line.setM_Product_ID(product.getM_Product_ID());
 		line.setC_Project_ID(m_MProject.getC_Project_ID());
-		if (entity instanceof MProjectPhase) 
+		if (entity instanceof MProjectPhase)  {
 			line.setC_ProjectPhase_ID(entity.get_ID());
+		}
 		else if (entity instanceof MProjectTask) {
 			line.setC_ProjectPhase_ID(entity.get_ValueAsInt("C_ProjectPhase_ID"));
 			line.setC_ProjectTask_ID(entity.get_ID());
-			line.setC_UOM_ID(product.getC_UOM_ID());
 		}
-		
+
+		line.setC_UOM_ID(product.getC_UOM_ID());
 		line.setQty(Qty);
 		
 		if (!line.save())

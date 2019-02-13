@@ -32,7 +32,7 @@ public class X_C_ProjectProcessor extends PO implements I_C_ProjectProcessor, I_
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20181220L;
+	private static final long serialVersionUID = 20190109L;
 
     /** Standard Constructor */
     public X_C_ProjectProcessor (Properties ctx, int C_ProjectProcessor_ID, String trxName)
@@ -404,6 +404,34 @@ public class X_C_ProjectProcessor extends PO implements I_C_ProjectProcessor, I_
 	public int getRemindDays () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_RemindDays);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_R_MailText getR_MailText() throws RuntimeException
+    {
+		return (org.compiere.model.I_R_MailText)MTable.get(getCtx(), org.compiere.model.I_R_MailText.Table_Name)
+			.getPO(getR_MailText_ID(), get_TrxName());	}
+
+	/** Set Mail Template.
+		@param R_MailText_ID 
+		Text templates for mailings
+	  */
+	public void setR_MailText_ID (int R_MailText_ID)
+	{
+		if (R_MailText_ID < 1) 
+			set_Value (COLUMNNAME_R_MailText_ID, null);
+		else 
+			set_Value (COLUMNNAME_R_MailText_ID, Integer.valueOf(R_MailText_ID));
+	}
+
+	/** Get Mail Template.
+		@return Text templates for mailings
+	  */
+	public int getR_MailText_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_R_MailText_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();

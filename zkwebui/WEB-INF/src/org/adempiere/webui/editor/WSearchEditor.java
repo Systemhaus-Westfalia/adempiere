@@ -846,7 +846,8 @@ public class WSearchEditor extends WEditor implements ContextMenuListener, Value
 				sql.append("UPPER(Name) LIKE ").append(DB.TO_STRING(text))
 					.append(" OR UPPER(SKU) LIKE ").append(DB.TO_STRING(text));
 				
-				if (MSysConfig.getBooleanValue("VENDOR_PRODUCT_CODE_TO_IDENTIFY_PRODUCT", false, Env.getAD_Client_ID(ctx)) && !m_isSOTrx) {
+				if (MSysConfig.getBooleanValue("VENDOR_PRODUCT_CODE_TO_IDENTIFY_PRODUCT", false, Env.getAD_Client_ID(ctx)) 
+						&& Env.getContext(Env.getCtx(), m_lookup.getWindowNo(), "IsSOTrx").equals("N")) {
 					int l_C_BPartner_ID = Env.getContextAsInt(ctx, m_lookup.getWindowNo(), "C_BPartner_ID");
 					if (l_C_BPartner_ID!=0)
 						sql.append(" OR EXISTS (SELECT 1 FROM M_Product_PO WHERE (")

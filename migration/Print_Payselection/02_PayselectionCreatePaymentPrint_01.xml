@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Migrations>
+  <Migration EntityType="D" Name="PaySelectionCreatePaymentPrint_01" ReleaseNo="" SeqNo="904760">
+    <Step SeqNo="10" StepType="AD">
+      <PO AD_Table_ID="102" Action="I" Record_ID="54191" Table="AD_Reference">
+        <Data AD_Column_ID="139" Column="ValidationType">L</Data>
+        <Data AD_Column_ID="556" Column="Updated">2019-12-10 20:31:20.134</Data>
+        <Data AD_Column_ID="554" Column="Created">2019-12-10 20:31:20.134</Data>
+        <Data AD_Column_ID="553" Column="IsActive">true</Data>
+        <Data AD_Column_ID="132" Column="Help" isNewNull="true"/>
+        <Data AD_Column_ID="54355" Column="IsOrderByValue">true</Data>
+        <Data AD_Column_ID="1180" Column="VFormat" isNewNull="true"/>
+        <Data AD_Column_ID="130" Column="Name">cmd_PayPrint</Data>
+        <Data AD_Column_ID="131" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="129" Column="AD_Reference_ID">54191</Data>
+        <Data AD_Column_ID="363" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="364" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="6486" Column="EntityType">U</Data>
+        <Data AD_Column_ID="557" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="555" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="84393" Column="UUID">8be06a53-dfff-45f1-b782-4f9ba3427d6b</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="20" StepType="AD">
+      <PO AD_Table_ID="126" Action="I" Record_ID="0" Table="AD_Reference_Trl">
+        <Data AD_Column_ID="280" Column="Name">cmd_PayPrint</Data>
+        <Data AD_Column_ID="666" Column="IsActive">true</Data>
+        <Data AD_Column_ID="282" Column="Help" isNewNull="true"/>
+        <Data AD_Column_ID="670" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="668" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="667" Column="Created">2019-12-10 20:31:21.787</Data>
+        <Data AD_Column_ID="669" Column="Updated">2019-12-10 20:31:21.787</Data>
+        <Data AD_Column_ID="283" Column="IsTranslated">false</Data>
+        <Data AD_Column_ID="281" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="1203" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="1202" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="279" Column="AD_Language">es_SV</Data>
+        <Data AD_Column_ID="278" Column="AD_Reference_ID">54191</Data>
+        <Data AD_Column_ID="84394" Column="UUID">8050bd1d-1dea-4e71-8b7b-820eb0029002</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="30" StepType="AD">
+      <PO AD_Table_ID="104" Action="I" Record_ID="55430" Table="AD_Ref_List">
+        <Data AD_Column_ID="371" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="565" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="563" Column="IsActive">true</Data>
+        <Data AD_Column_ID="151" Column="AD_Reference_ID">54191</Data>
+        <Data AD_Column_ID="566" Column="Updated">2019-12-10 20:31:46.206</Data>
+        <Data AD_Column_ID="564" Column="Created">2019-12-10 20:31:46.206</Data>
+        <Data AD_Column_ID="200" Column="Value">PR</Data>
+        <Data AD_Column_ID="150" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="152" Column="ValidFrom" isNewNull="true"/>
+        <Data AD_Column_ID="149" Column="Name">Print</Data>
+        <Data AD_Column_ID="153" Column="ValidTo" isNewNull="true"/>
+        <Data AD_Column_ID="7712" Column="EntityType">D</Data>
+        <Data AD_Column_ID="148" Column="AD_Ref_List_ID">55430</Data>
+        <Data AD_Column_ID="372" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="567" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="84390" Column="UUID">6a5dc47b-8bb9-4c8c-814c-f3f36915a052</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="40" StepType="AD">
+      <PO AD_Table_ID="136" Action="I" Record_ID="55430" Table="AD_Ref_List_Trl">
+        <Data AD_Column_ID="707" Column="Created">2019-12-10 20:31:47.609</Data>
+        <Data AD_Column_ID="709" Column="Updated">2019-12-10 20:31:47.609</Data>
+        <Data AD_Column_ID="706" Column="IsActive">true</Data>
+        <Data AD_Column_ID="338" Column="Name">Print</Data>
+        <Data AD_Column_ID="340" Column="IsTranslated">false</Data>
+        <Data AD_Column_ID="339" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="1216" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="1215" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="710" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="708" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="336" Column="AD_Ref_List_ID">55430</Data>
+        <Data AD_Column_ID="337" Column="AD_Language">es_SV</Data>
+        <Data AD_Column_ID="84391" Column="UUID">cebfca0f-2a66-4419-8656-a1d6d0b5d832</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="50" StepType="AD">
+      <PO AD_Table_ID="102" Action="U" Record_ID="54191" Table="AD_Reference">
+        <Data AD_Column_ID="54355" Column="IsOrderByValue" oldValue="true">false</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="60" StepType="AD">
+      <PO AD_Table_ID="136" Action="D" Record_ID="55430" Table="AD_Ref_List_Trl">
+        <Data AD_Column_ID="707" Column="Created" isNewNull="true" oldValue="2019-12-10 20:31:47.0"/>
+        <Data AD_Column_ID="709" Column="Updated" isNewNull="true" oldValue="2019-12-10 20:31:47.0"/>
+        <Data AD_Column_ID="706" Column="IsActive" isNewNull="true" oldValue="true"/>
+        <Data AD_Column_ID="338" Column="Name" isNewNull="true" oldValue="Print"/>
+        <Data AD_Column_ID="340" Column="IsTranslated" isNewNull="true" oldValue="false"/>
+        <Data AD_Column_ID="339" Column="Description" isNewNull="true" isOldNull="true"/>
+        <Data AD_Column_ID="1216" Column="AD_Org_ID" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="1215" Column="AD_Client_ID" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="710" Column="UpdatedBy" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="708" Column="CreatedBy" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="336" Column="AD_Ref_List_ID" oldValue="55430">55430</Data>
+        <Data AD_Column_ID="337" Column="AD_Language" oldValue="es_SV">es_SV</Data>
+        <Data AD_Column_ID="84391" Column="UUID" isNewNull="true" oldValue="cebfca0f-2a66-4419-8656-a1d6d0b5d832"/>
+      </PO>
+    </Step>
+    <Step SeqNo="70" StepType="AD">
+      <PO AD_Table_ID="104" Action="D" Record_ID="55430" Table="AD_Ref_List">
+        <Data AD_Column_ID="563" Column="IsActive" isNewNull="true" oldValue="true"/>
+        <Data AD_Column_ID="151" Column="AD_Reference_ID" isNewNull="true" oldValue="54191"/>
+        <Data AD_Column_ID="566" Column="Updated" isNewNull="true" oldValue="2019-12-10 20:31:46.0"/>
+        <Data AD_Column_ID="564" Column="Created" isNewNull="true" oldValue="2019-12-10 20:31:46.0"/>
+        <Data AD_Column_ID="200" Column="Value" isNewNull="true" oldValue="PR"/>
+        <Data AD_Column_ID="150" Column="Description" isNewNull="true" isOldNull="true"/>
+        <Data AD_Column_ID="152" Column="ValidFrom" isNewNull="true" isOldNull="true"/>
+        <Data AD_Column_ID="149" Column="Name" isNewNull="true" oldValue="Print"/>
+        <Data AD_Column_ID="153" Column="ValidTo" isNewNull="true" isOldNull="true"/>
+        <Data AD_Column_ID="7712" Column="EntityType" isNewNull="true" oldValue="D"/>
+        <Data AD_Column_ID="148" Column="AD_Ref_List_ID" isNewNull="true" oldValue="55430"/>
+        <Data AD_Column_ID="372" Column="AD_Org_ID" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="371" Column="AD_Client_ID" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="565" Column="CreatedBy" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="567" Column="UpdatedBy" isNewNull="true" oldValue="0"/>
+        <Data AD_Column_ID="84390" Column="UUID" isNewNull="true" oldValue="6a5dc47b-8bb9-4c8c-814c-f3f36915a052"/>
+      </PO>
+    </Step>
+    <Step SeqNo="80" StepType="AD">
+      <PO AD_Table_ID="104" Action="I" Record_ID="55431" Table="AD_Ref_List">
+        <Data AD_Column_ID="563" Column="IsActive">true</Data>
+        <Data AD_Column_ID="151" Column="AD_Reference_ID">54191</Data>
+        <Data AD_Column_ID="566" Column="Updated">2019-12-10 20:32:05.816</Data>
+        <Data AD_Column_ID="564" Column="Created">2019-12-10 20:32:05.816</Data>
+        <Data AD_Column_ID="200" Column="Value">10000006</Data>
+        <Data AD_Column_ID="150" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="152" Column="ValidFrom" isNewNull="true"/>
+        <Data AD_Column_ID="149" Column="Name">Print</Data>
+        <Data AD_Column_ID="153" Column="ValidTo" isNewNull="true"/>
+        <Data AD_Column_ID="7712" Column="EntityType">U</Data>
+        <Data AD_Column_ID="148" Column="AD_Ref_List_ID">55431</Data>
+        <Data AD_Column_ID="372" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="371" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="565" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="567" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="84390" Column="UUID">378b45f1-675f-496a-b2f1-e71ec6c3742a</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="90" StepType="AD">
+      <PO AD_Table_ID="136" Action="I" Record_ID="55431" Table="AD_Ref_List_Trl">
+        <Data AD_Column_ID="707" Column="Created">2019-12-10 20:32:07.003</Data>
+        <Data AD_Column_ID="709" Column="Updated">2019-12-10 20:32:07.003</Data>
+        <Data AD_Column_ID="706" Column="IsActive">true</Data>
+        <Data AD_Column_ID="338" Column="Name">Print</Data>
+        <Data AD_Column_ID="340" Column="IsTranslated">false</Data>
+        <Data AD_Column_ID="339" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="1216" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="1215" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="710" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="708" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="336" Column="AD_Ref_List_ID">55431</Data>
+        <Data AD_Column_ID="337" Column="AD_Language">es_SV</Data>
+        <Data AD_Column_ID="84391" Column="UUID">92687247-e9ae-4db9-a1f9-91a47192e7c8</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="100" StepType="AD">
+      <PO AD_Table_ID="104" Action="I" Record_ID="55432" Table="AD_Ref_List">
+        <Data AD_Column_ID="563" Column="IsActive">true</Data>
+        <Data AD_Column_ID="151" Column="AD_Reference_ID">54191</Data>
+        <Data AD_Column_ID="566" Column="Updated">2019-12-10 20:32:15.306</Data>
+        <Data AD_Column_ID="564" Column="Created">2019-12-10 20:32:15.306</Data>
+        <Data AD_Column_ID="200" Column="Value">10000007</Data>
+        <Data AD_Column_ID="150" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="152" Column="ValidFrom" isNewNull="true"/>
+        <Data AD_Column_ID="149" Column="Name">Reprint</Data>
+        <Data AD_Column_ID="153" Column="ValidTo" isNewNull="true"/>
+        <Data AD_Column_ID="7712" Column="EntityType">U</Data>
+        <Data AD_Column_ID="148" Column="AD_Ref_List_ID">55432</Data>
+        <Data AD_Column_ID="372" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="371" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="565" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="567" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="84390" Column="UUID">b680ec81-6058-47a9-bdb9-9a43d8705043</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="110" StepType="AD">
+      <PO AD_Table_ID="136" Action="I" Record_ID="55432" Table="AD_Ref_List_Trl">
+        <Data AD_Column_ID="707" Column="Created">2019-12-10 20:32:16.522</Data>
+        <Data AD_Column_ID="709" Column="Updated">2019-12-10 20:32:16.522</Data>
+        <Data AD_Column_ID="706" Column="IsActive">true</Data>
+        <Data AD_Column_ID="338" Column="Name">Reprint</Data>
+        <Data AD_Column_ID="340" Column="IsTranslated">false</Data>
+        <Data AD_Column_ID="339" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="1216" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="1215" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="710" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="708" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="336" Column="AD_Ref_List_ID">55432</Data>
+        <Data AD_Column_ID="337" Column="AD_Language">es_SV</Data>
+        <Data AD_Column_ID="84391" Column="UUID">725386aa-3967-438e-b773-f70f55be9bca</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="120" StepType="AD">
+      <PO AD_Table_ID="104" Action="I" Record_ID="55433" Table="AD_Ref_List">
+        <Data AD_Column_ID="563" Column="IsActive">true</Data>
+        <Data AD_Column_ID="151" Column="AD_Reference_ID">54191</Data>
+        <Data AD_Column_ID="566" Column="Updated">2019-12-10 20:32:23.949</Data>
+        <Data AD_Column_ID="564" Column="Created">2019-12-10 20:32:23.949</Data>
+        <Data AD_Column_ID="200" Column="Value">10000008</Data>
+        <Data AD_Column_ID="150" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="152" Column="ValidFrom" isNewNull="true"/>
+        <Data AD_Column_ID="149" Column="Name">Export</Data>
+        <Data AD_Column_ID="153" Column="ValidTo" isNewNull="true"/>
+        <Data AD_Column_ID="7712" Column="EntityType">U</Data>
+        <Data AD_Column_ID="148" Column="AD_Ref_List_ID">55433</Data>
+        <Data AD_Column_ID="372" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="371" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="565" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="567" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="84390" Column="UUID">f5952e12-5eb7-45aa-a6e7-0417abeb3f9b</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="130" StepType="AD">
+      <PO AD_Table_ID="136" Action="I" Record_ID="55433" Table="AD_Ref_List_Trl">
+        <Data AD_Column_ID="707" Column="Created">2019-12-10 20:32:25.321</Data>
+        <Data AD_Column_ID="709" Column="Updated">2019-12-10 20:32:25.321</Data>
+        <Data AD_Column_ID="706" Column="IsActive">true</Data>
+        <Data AD_Column_ID="338" Column="Name">Export</Data>
+        <Data AD_Column_ID="340" Column="IsTranslated">false</Data>
+        <Data AD_Column_ID="339" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="1216" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="1215" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="710" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="708" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="336" Column="AD_Ref_List_ID">55433</Data>
+        <Data AD_Column_ID="337" Column="AD_Language">es_SV</Data>
+        <Data AD_Column_ID="84391" Column="UUID">5c6b352e-9cad-4a04-b723-8b0366c4ca96</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="140" StepType="AD">
+      <PO AD_Table_ID="276" Action="I" Record_ID="61244" Table="AD_Element">
+        <Data AD_Column_ID="6284" Column="PO_Help" isNewNull="true"/>
+        <Data AD_Column_ID="2602" Column="ColumnName">cmd_PayPrint</Data>
+        <Data AD_Column_ID="2594" Column="AD_Element_ID">61244</Data>
+        <Data AD_Column_ID="2600" Column="Updated">2019-12-11 08:54:33.282</Data>
+        <Data AD_Column_ID="2603" Column="Name">cmd_PayPrint</Data>
+        <Data AD_Column_ID="2604" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="2598" Column="Created">2019-12-11 08:54:33.282</Data>
+        <Data AD_Column_ID="6283" Column="PO_Description" isNewNull="true"/>
+        <Data AD_Column_ID="2597" Column="IsActive">true</Data>
+        <Data AD_Column_ID="6285" Column="PO_Name" isNewNull="true"/>
+        <Data AD_Column_ID="2605" Column="Help" isNewNull="true"/>
+        <Data AD_Column_ID="4299" Column="PrintName">cmd_PayPrint</Data>
+        <Data AD_Column_ID="6286" Column="PO_PrintName" isNewNull="true"/>
+        <Data AD_Column_ID="58589" Column="FieldLength">0</Data>
+        <Data AD_Column_ID="58588" Column="AD_Reference_ID">17</Data>
+        <Data AD_Column_ID="2596" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="2595" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="6484" Column="EntityType">D</Data>
+        <Data AD_Column_ID="2599" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="58590" Column="AD_Reference_Value_ID">54191</Data>
+        <Data AD_Column_ID="2601" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="84316" Column="UUID">0e093297-417d-41b1-9ed1-6ed90bb00037</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="150" StepType="AD">
+      <PO AD_Table_ID="277" Action="I" Record_ID="0" Table="AD_Element_Trl">
+        <Data AD_Column_ID="2638" Column="AD_Language">es_SV</Data>
+        <Data AD_Column_ID="2642" Column="Created">2019-12-11 08:54:35.016</Data>
+        <Data AD_Column_ID="2644" Column="Updated">2019-12-11 08:54:35.016</Data>
+        <Data AD_Column_ID="2641" Column="IsActive">true</Data>
+        <Data AD_Column_ID="6449" Column="PO_Help" isNewNull="true"/>
+        <Data AD_Column_ID="2646" Column="Name">cmd_PayPrint</Data>
+        <Data AD_Column_ID="6450" Column="PO_Name" isNewNull="true"/>
+        <Data AD_Column_ID="2648" Column="Help" isNewNull="true"/>
+        <Data AD_Column_ID="2647" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="2649" Column="IsTranslated">false</Data>
+        <Data AD_Column_ID="4300" Column="PrintName">cmd_PayPrint</Data>
+        <Data AD_Column_ID="6451" Column="PO_PrintName" isNewNull="true"/>
+        <Data AD_Column_ID="6448" Column="PO_Description" isNewNull="true"/>
+        <Data AD_Column_ID="2640" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="2639" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="2645" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="2643" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="2637" Column="AD_Element_ID">61244</Data>
+        <Data AD_Column_ID="84317" Column="UUID">a1d2614b-4ec9-42b9-8ad9-befaedc5b59c</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="160" StepType="AD">
+      <PO AD_Table_ID="285" Action="I" Record_ID="57486" Table="AD_Process_Para">
+        <Data AD_Column_ID="2822" Column="Name">cmd_PayPrint</Data>
+        <Data AD_Column_ID="2823" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="3737" Column="FieldLength">0</Data>
+        <Data AD_Column_ID="2828" Column="AD_Reference_Value_ID">54191</Data>
+        <Data AD_Column_ID="2817" Column="IsActive">true</Data>
+        <Data AD_Column_ID="2820" Column="Updated">2019-12-11 08:54:56.326</Data>
+        <Data AD_Column_ID="2818" Column="Created">2019-12-11 08:54:56.326</Data>
+        <Data AD_Column_ID="3738" Column="IsMandatory">false</Data>
+        <Data AD_Column_ID="3742" Column="ValueMax" isNewNull="true"/>
+        <Data AD_Column_ID="4017" Column="ColumnName">cmd_PayPrint</Data>
+        <Data AD_Column_ID="2824" Column="Help" isNewNull="true"/>
+        <Data AD_Column_ID="2830" Column="IsRange">false</Data>
+        <Data AD_Column_ID="56299" Column="ReadOnlyLogic" isNewNull="true"/>
+        <Data AD_Column_ID="5819" Column="IsCentrallyMaintained">true</Data>
+        <Data AD_Column_ID="5593" Column="DefaultValue2" isNewNull="true"/>
+        <Data AD_Column_ID="3740" Column="VFormat" isNewNull="true"/>
+        <Data AD_Column_ID="3741" Column="ValueMin" isNewNull="true"/>
+        <Data AD_Column_ID="3739" Column="DefaultValue" isNewNull="true"/>
+        <Data AD_Column_ID="56300" Column="DisplayLogic" isNewNull="true"/>
+        <Data AD_Column_ID="81287" Column="IsInfoOnly">false</Data>
+        <Data AD_Column_ID="2814" Column="AD_Process_Para_ID">57486</Data>
+        <Data AD_Column_ID="2815" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="2816" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="7728" Column="EntityType">U</Data>
+        <Data AD_Column_ID="2825" Column="AD_Process_ID">54339</Data>
+        <Data AD_Column_ID="2819" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="2827" Column="AD_Reference_ID">17</Data>
+        <Data AD_Column_ID="3736" Column="AD_Val_Rule_ID" isNewNull="true"/>
+        <Data AD_Column_ID="2826" Column="SeqNo">30</Data>
+        <Data AD_Column_ID="2821" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="7729" Column="AD_Element_ID">61244</Data>
+        <Data AD_Column_ID="84385" Column="UUID">06a4b0a9-299f-4db0-acc0-9b49475adbdd</Data>
+      </PO>
+    </Step>
+    <Step SeqNo="170" StepType="AD">
+      <PO AD_Table_ID="286" Action="I" Record_ID="57486" Table="AD_Process_Para_Trl">
+        <Data AD_Column_ID="2838" Column="Updated">2019-12-11 08:54:57.685</Data>
+        <Data AD_Column_ID="2836" Column="Created">2019-12-11 08:54:57.685</Data>
+        <Data AD_Column_ID="2835" Column="IsActive">true</Data>
+        <Data AD_Column_ID="2842" Column="IsTranslated">false</Data>
+        <Data AD_Column_ID="2840" Column="Name">cmd_PayPrint</Data>
+        <Data AD_Column_ID="2841" Column="Description" isNewNull="true"/>
+        <Data AD_Column_ID="3743" Column="Help" isNewNull="true"/>
+        <Data AD_Column_ID="2831" Column="AD_Process_Para_ID">57486</Data>
+        <Data AD_Column_ID="2833" Column="AD_Client_ID">0</Data>
+        <Data AD_Column_ID="2834" Column="AD_Org_ID">0</Data>
+        <Data AD_Column_ID="2837" Column="CreatedBy">0</Data>
+        <Data AD_Column_ID="2832" Column="AD_Language">es_SV</Data>
+        <Data AD_Column_ID="2839" Column="UpdatedBy">0</Data>
+        <Data AD_Column_ID="84386" Column="UUID">aa12bfc4-40f5-44cb-95e0-d2b2b7bb875c</Data>
+      </PO>
+    </Step>
+  </Migration>
+</Migrations>

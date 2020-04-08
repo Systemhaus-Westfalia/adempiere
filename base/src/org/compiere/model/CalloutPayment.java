@@ -159,7 +159,7 @@ public class CalloutPayment extends CalloutEngine
 		//
 		String sql = "SELECT COALESCE(Bill_BPartner_ID, C_BPartner_ID) as C_BPartner_ID "
 			+ ", C_Currency_ID "
-			+ ", GrandTotal "
+			+ ", GrandTotal, C_Project_ID "
 			+ "FROM C_Order WHERE C_Order_ID=?"; // #1
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -179,6 +179,10 @@ public class CalloutPayment extends CalloutEngine
 				if (GrandTotal == null)
 					GrandTotal = Env.ZERO;
 				mTab.setValue ("PayAmt", GrandTotal);
+				BigDecimal C_Project_ID = rs.getBigDecimal(4);
+				if (C_Project_ID !=null && C_Project_ID.compareTo(Env.ZERO) > 0)
+					mTab.setValue("C_Project_ID", C_Project_ID);
+					
 			}
 		}
 		catch (SQLException e)

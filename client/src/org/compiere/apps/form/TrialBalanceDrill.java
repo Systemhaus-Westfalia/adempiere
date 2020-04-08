@@ -315,8 +315,10 @@ public class TrialBalanceDrill
 
 		
 		para = new MPInstancePara(mpInstance, 30);
-		para.setParameter("AD_Org_ID", m_AD_Org_ID);
-		para.save();
+		if(m_AD_Org_ID>0) {
+			para.setParameter("AD_Org_ID", m_AD_Org_ID);
+			para.save();			
+		}
 		
 		para = new MPInstancePara(mpInstance, 40);
 		para.setParameter("PostingType", (column == 4 || column == 7) ? "A" : "B");
@@ -329,8 +331,7 @@ public class TrialBalanceDrill
 		ProcessInfo pInfo = new ProcessInfo("Trial Balance Drill Report", processID);
 		pInfo.setAD_PInstance_ID(mpInstance.getAD_PInstance_ID());
 		pInfo.setReportType("H");
-		pInfo.setAD_Client_ID(Env.getAD_Client_ID(Env.getCtx()));
-		pInfo.setAD_User_ID(Env.getAD_User_ID(Env.getCtx()));
+		
 		ProcessCtl worker = new ProcessCtl(null, 0, pInfo, null);
 		worker.run();
 	} // executeTrialBalanceProcess

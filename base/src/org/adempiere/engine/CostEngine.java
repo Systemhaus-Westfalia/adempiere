@@ -337,7 +337,8 @@ public class CostEngine {
 					MInventoryLine inventoryLine = (MInventoryLine) model;
 					// If cost this level is zero and is a physical inventory then
 					// try get cost from physical inventory
-					if (costThisLevel.signum() == 0 && MCostElement.COSTELEMENTTYPE_Material.equals(costElement.getCostElementType())) {
+					if ((costThisLevel.signum() == 0 || inventoryLine.getCurrentCostPrice().signum() !=0) 
+							&& MCostElement.COSTELEMENTTYPE_Material.equals(costElement.getCostElementType())) {
 						// Use the current cost only for Physical Inventory
 						if (inventoryLine.getQtyInternalUse().signum() == 0 &&
 								inventoryLine.getCurrentCostPrice() != null &&

@@ -17,12 +17,13 @@
 
 package org.eevolution.process;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import org.compiere.process.SvrProcess;
 
 /** Generated Process for (Generate Invoice from Payroll Process)
  *  @author ADempiere (generated) 
- *  @version Release 3.9.0
+ *  @version Release 3.9.1
  */
 public abstract class HRGenerateInvoiceFromProcessAbstract extends SvrProcess {
 	/** Process Value 	*/
@@ -43,6 +44,10 @@ public abstract class HRGenerateInvoiceFromProcessAbstract extends SvrProcess {
 	public static final String C_CHARGE_ID = "C_Charge_ID";
 	/**	Parameter Name for Date Invoiced	*/
 	public static final String DATEINVOICED = "DateInvoiced";
+	/**	Parameter Name for Invoice	*/
+	public static final String C_INVOICE_ID = "C_Invoice_ID";
+	/**	Parameter Name for Control Amount	*/
+	public static final String CONTROLAMT = "ControlAmt";
 	/**	Parameter Value for Business Partner 	*/
 	private int bPartnerId;
 	/**	Parameter Value for Partner Location	*/
@@ -55,6 +60,10 @@ public abstract class HRGenerateInvoiceFromProcessAbstract extends SvrProcess {
 	private int chargeId;
 	/**	Parameter Value for Date Invoiced	*/
 	private Timestamp dateInvoiced;
+	/**	Parameter Value for Invoice	*/
+	private int invoiceId;
+	/**	Parameter Value for Control Amount	*/
+	private BigDecimal controlAmt;
 
 	@Override
 	protected void prepare() {
@@ -64,6 +73,8 @@ public abstract class HRGenerateInvoiceFromProcessAbstract extends SvrProcess {
 		docAction = getParameterAsString(DOCACTION);
 		chargeId = getParameterAsInt(C_CHARGE_ID);
 		dateInvoiced = getParameterAsTimestamp(DATEINVOICED);
+		invoiceId = getParameterAsInt(C_INVOICE_ID);
+		controlAmt = getParameterAsBigDecimal(CONTROLAMT);
 	}
 
 	/**	 Getter Parameter Value for Business Partner 	*/
@@ -124,6 +135,26 @@ public abstract class HRGenerateInvoiceFromProcessAbstract extends SvrProcess {
 	/**	 Setter Parameter Value for Date Invoiced	*/
 	protected void setDateInvoiced(Timestamp dateInvoiced) {
 		this.dateInvoiced = dateInvoiced;
+	}
+
+	/**	 Getter Parameter Value for Invoice	*/
+	protected int getInvoiceId() {
+		return invoiceId;
+	}
+
+	/**	 Setter Parameter Value for Invoice	*/
+	protected void setInvoiceId(int invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+
+	/**	 Getter Parameter Value for Control Amount	*/
+	protected BigDecimal getControlAmt() {
+		return controlAmt;
+	}
+
+	/**	 Setter Parameter Value for Control Amount	*/
+	protected void setControlAmt(BigDecimal controlAmt) {
+		this.controlAmt = controlAmt;
 	}
 
 	/**	 Getter Parameter Value for Process ID	*/

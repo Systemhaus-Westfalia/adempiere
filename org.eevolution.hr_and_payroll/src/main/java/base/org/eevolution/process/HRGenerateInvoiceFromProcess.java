@@ -17,17 +17,25 @@
 package org.eevolution.process;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 
+import org.adempiere.exceptions.AdempiereException;
 import org.compiere.apps.AEnv;
 import org.compiere.apps.AWindow;
 import org.compiere.model.I_C_BP_Relation;
 import org.compiere.model.I_C_BPartner_Location;
+import org.compiere.model.I_C_Charge_Acct;
+import org.compiere.model.MAccount;
+import org.compiere.model.MAcctSchema;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
+import org.compiere.model.MCharge;
+import org.compiere.model.MChargeAcct;
 import org.compiere.model.MDocType;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
@@ -41,7 +49,9 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.eevolution.model.I_HR_Employee;
 import org.eevolution.model.I_HR_Process;
+import org.eevolution.model.MHRConcept;
 import org.eevolution.model.MHRMovement;
+import org.eevolution.model.X_HR_Concept_Acct;
 
 /** Generated Process for (Create Invoice for Business Partner)
  *  @author Susanne Calderon, Westfalia
@@ -77,15 +87,26 @@ public class HRGenerateInvoiceFromProcess extends HRGenerateInvoiceFromProcessAb
 
 			I_HR_Employee employee = payrollMovement.getHR_Employee();
 			if (!invoices.containsKey(partner.get_ID()))
-			{
-				MInvoice invoice = createInvoice(payrollMovement.getHR_Process(), partner, employee, getDocTypeId(), getDateInvoiced());
+			{ 
+				MInvoice invoice = null;
+				if (getInvoiceId() != 0)
+				invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
+			else
+				invoice = createInvoice(payrollMovement.getHR_Process(), partner, employee, getDocTypeId(), getDateInvoiced());
 				invoices.put(invoice.getC_BPartner_ID(), invoice);
 			}
 
 			createInvoiceLine(invoices.get(partner.get_ID()), employee, payrollMovement, getChargeId());
 
 		}
-
+		
+		if (invoices.size()==1 && getControlAmt().compareTo(Env.ZERO)!=0) {	
+			invoices.entrySet().forEach( entry -> {
+			MInvoice invoice = entry.getValue();
+			invoice.prepareIt();
+			createAdjustLine(invoice);
+			});
+		}
 		if (DocAction.ACTION_Complete.equals(getDocAction()))
 		{
 			invoices.entrySet().forEach( entry -> {
@@ -193,7 +214,18 @@ public class HRGenerateInvoiceFromProcess extends HRGenerateInvoiceFromProcessAb
 			invoiceLineDescription.append(Msg.parseTranslation(invoice.getCtx() , "@HR_Employee_ID@ " + employee.getName()
 					+  " @HR_Concept_ID@ " + movement.getHR_Concept().getName()));
 	        MInvoiceLine invoiceLine = new MInvoiceLine(invoice);
-	        invoiceLine.setC_Charge_ID(chargeId);
+	        MAcctSchema acctSchema = MAcctSchema.getClientAcctSchema(getCtx(), movement.getAD_Client_ID(), get_TrxName())[0];
+	        MHRConcept concept = (MHRConcept)movement.getHR_Concept();
+			X_HR_Concept_Acct conceptAcct = concept.getConceptAcct(
+					Optional.ofNullable(acctSchema.getC_AcctSchema_ID()),
+					Optional.ofNullable(movement.getHR_Payroll_ID()),
+					Optional.ofNullable(movement.getC_BPartner().getC_BP_Group_ID()));
+			//int accountID=conceptAcct.getHR_Revenue_A().getAccount_ID();
+			int conceptChargeID = get(acctSchema, conceptAcct.getHR_Revenue_Acct(), get_TrxName());
+			if(conceptChargeID<=0) {				
+					throw new AdempiereException("Falta definir un cargo para " + concept.getName());
+			}
+			invoiceLine.setC_Charge_ID(conceptChargeID);
 	        invoiceLine.setQty(BigDecimal.ONE); //
 	        invoiceLine.setDescription(invoiceLineDescription.toString());
 	        invoiceLine.setC_Activity_ID(movement.getC_Activity_ID());
@@ -206,7 +238,12 @@ public class HRGenerateInvoiceFromProcess extends HRGenerateInvoiceFromProcessAb
 	        invoiceLine.setUser2_ID(movement.getUser2_ID());
 	        invoiceLine.setUser3_ID(movement.getUser3_ID());
 	        invoiceLine.setUser4_ID(movement.getUser4_ID());
-	        invoiceLine.setPrice(movement.getAmount());
+	        BigDecimal amountRounded = movement.getAmount();
+	        int precision = invoice.getC_Currency().getStdPrecision();
+	        if (movement.getHR_Concept().getStdPrecision() != precision) {			
+				amountRounded = amountRounded.setScale(precision,RoundingMode.HALF_UP);
+	        }
+	        invoiceLine.setPrice(amountRounded);
 	        invoiceLine.setTax();
 	        invoiceLine.saveEx();
 	        addLog(invoiceLine.getLine(), invoice.getDateInvoiced(), invoiceLine.getLineNetAmt(), invoiceLineDescription.toString());
@@ -246,5 +283,28 @@ public class HRGenerateInvoiceFromProcess extends HRGenerateInvoiceFromProcessAb
 				}
 			}.start();
 		}	//	zoom
+	    
+	    private int get (MAcctSchema as, int c_ValidCombination_ID, String trx)
+		{
+			final String whereClause = I_C_Charge_Acct.COLUMNNAME_C_AcctSchema_ID+"=? AND "+I_C_Charge_Acct.COLUMNNAME_Ch_Revenue_Acct+"=?";	
+			
+			MChargeAcct chargeAcct = new Query(as.getCtx(),I_C_Charge_Acct.Table_Name,whereClause,trx)
+			.setParameters(as.getC_AcctSchema_ID(),c_ValidCombination_ID)
+			.setClient_ID()
+			.first();
+			if(chargeAcct != null)
+				return chargeAcct.getC_Charge_ID();			
+			
+			return 0;
+		}	//	get
+	    
+	    private void createAdjustLine(MInvoice invoice) {
+	    	BigDecimal difference = getControlAmt().subtract(invoice.getTotalLines());
+	    	MInvoiceLine invoiceLine = new MInvoiceLine(invoice);
+	    	invoiceLine.setC_Charge_ID(getChargeId());
+	    	invoiceLine.setQty(Env.ONE);
+	    	invoiceLine.setPrice(difference);
+	    	invoiceLine.saveEx();
+	    }
 
 }

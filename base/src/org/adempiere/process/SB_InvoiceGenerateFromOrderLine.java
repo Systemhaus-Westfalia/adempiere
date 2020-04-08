@@ -22,8 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
+import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MClient;
 import org.compiere.model.MDocType;
@@ -33,8 +35,12 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MInvoiceSchedule;
 import org.compiere.model.MLocation;
+import org.compiere.model.MLocator;
 import org.compiere.model.MOrder;
 import org.compiere.model.MOrderLine;
+import org.compiere.model.MProduct;
+import org.compiere.model.MRMALine;
+import org.compiere.model.MWarehouse;
 import org.compiere.model.Query;
 import org.compiere.process.DocAction;
 import org.compiere.util.DisplayType;
@@ -66,6 +72,7 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 	protected List<MOrder> ordersToInvoice = null;
 	protected List<MInvoice> m_invoices = null;
 	StringBuffer resultMsg = new StringBuffer();
+	BigDecimal factor = Env.ONE;
 	
 	/**
 	 *  Prepare - e.g., get Parameters.
@@ -95,6 +102,8 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 	protected String doIt () throws Exception
 	{
 		StringBuffer orderClause = new StringBuffer();
+		if (getPercent().compareTo(Env.ONEHUNDRED) !=0)
+			factor = getPercent().divide(Env.ONEHUNDRED);
 		m_invoices = new ArrayList<MInvoice>();
 		if (!isConsolidateDocument())
 			orderClause.append("C_BPartner_ID, C_Order_ID, line");
@@ -130,6 +139,24 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 			}
 			//	
 			msg.append(generate(order));
+		}
+		for (MInvoice invoice:m_invoices) {
+			
+			if (invoice.getDocStatus().equals(MInvoice.DOCSTATUS_Drafted) && getDocAction() !=null) {
+				if (!invoice.processIt(getDocAction())) {
+					log.warning("completeInvoice - failed: " + invoice);
+					addLog(Msg.getMsg(getCtx(), "GenerateInvoiceFromInOut.completeInvoice.Failed") + invoice); // Elaine 2008/11/25
+				}
+				invoice.saveEx();
+
+				addLog(invoice.getC_Invoice_ID(), invoice.getDateInvoiced(), null, invoice.getDocumentNo());
+				m_created++;
+			}
+			msg.append(" @C_Invoice_ID@: " + invoice.getDocumentNo());
+		}
+
+		for (MInvoice invoice:m_invoices) {
+			
 		}
 		//	
 		return msg.toString();
@@ -208,6 +235,11 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 					if ( !getSelectionKeys().contains(oLine.getC_OrderLine_ID()))
 						continue;	
 					BigDecimal toInvoice = oLine.getQtyOrdered().subtract(oLine.getQtyInvoiced());
+					if (getPercent().compareTo(Env.ONEHUNDRED)!=0) {
+						BigDecimal toInvoicepercent = oLine.getQtyOrdered().multiply(getPercent().divide(Env.ONEHUNDRED));
+						if (toInvoicepercent.compareTo(toInvoice)<=0)
+							toInvoice = toInvoicepercent;
+					}
 					if (toInvoice.compareTo(Env.ZERO) == 0 && oLine.getM_Product_ID() != 0)
 						continue;
 					//
@@ -268,13 +300,23 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 					m_line += 1000;
 				}
 			}	//	complete Order
+
+			Boolean isadded =  false;
+			for (MInvoice addedinvoice:m_invoices) {
+				if (addedinvoice.getC_Invoice_ID()==invoice.getC_Invoice_ID()) {
+					isadded = true;
+					break;					
+				}
+			}
+			if (!isadded)
+				m_invoices.add(invoice);
 		}
 		catch (Exception e)
 		{
 			log.log(Level.SEVERE, "", e);
 		}
-		completeInvoice();
-		return "@C_Order_ID@: " + order.getDocumentNo() + "[@C_Invoice_ID@ @Created@: " + m_created + "]";
+		//completeInvoice();
+		return "@C_Order_ID@: " + order.getDocumentNo() ;
 	}	//	generate
 	
 	
@@ -400,14 +442,16 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 	{
 		if (invoice != null)
 		{
-			if (!invoice.processIt(getDocAction())) {
+			if (getDocAction()==null) {
+				// nothing to when no docaction selected, invoice docstatus drafted
+			}
+			else if (!invoice.processIt(getDocAction())) {
 				log.warning("completeInvoice - failed: " + invoice);
 				addLog(Msg.getMsg(getCtx(), "GenerateInvoiceFromInOut.completeInvoice.Failed") + invoice); // Elaine 2008/11/25
 			}
 			invoice.saveEx();
 
 			addLog(invoice.getC_Invoice_ID(), invoice.getDateInvoiced(), null, invoice.getDocumentNo());
-			m_invoices.add(invoice);
 			m_created++;
 		}
 		invoice = null;

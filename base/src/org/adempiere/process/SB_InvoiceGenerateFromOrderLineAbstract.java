@@ -17,12 +17,13 @@
 
 package org.adempiere.process;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import org.compiere.process.SvrProcess;
 
 /** Generated Process for (SB_InvoiceGenerateFromOrderLine)
  *  @author ADempiere (generated) 
- *  @version Release 3.9.0
+ *  @version Release 3.9.1
  */
 public abstract class SB_InvoiceGenerateFromOrderLineAbstract extends SvrProcess {
 	/** Process Value 	*/
@@ -43,6 +44,8 @@ public abstract class SB_InvoiceGenerateFromOrderLineAbstract extends SvrProcess
 	public static final String AD_ORGTRX_ID = "AD_OrgTrx_ID";
 	/**	Parameter Name for Add Invoice Reference Line	*/
 	public static final String ISADDINVOICEREFERENCELINE = "IsAddInvoiceReferenceLine";
+	/**	Parameter Name for Percent	*/
+	public static final String PERCENT = "Percent";
 	/**	Parameter Value for Date Invoiced	*/
 	private Timestamp dateInvoiced;
 	/**	Parameter Value for Document Action	*/
@@ -55,6 +58,8 @@ public abstract class SB_InvoiceGenerateFromOrderLineAbstract extends SvrProcess
 	private int orgTrxId;
 	/**	Parameter Value for Add Invoice Reference Line	*/
 	private boolean isAddInvoiceReferenceLine;
+	/**	Parameter Value for Percent	*/
+	private BigDecimal percent;
 
 	@Override
 	protected void prepare() {
@@ -64,6 +69,7 @@ public abstract class SB_InvoiceGenerateFromOrderLineAbstract extends SvrProcess
 		docTypeId = getParameterAsInt(C_DOCTYPE_ID);
 		orgTrxId = getParameterAsInt(AD_ORGTRX_ID);
 		isAddInvoiceReferenceLine = getParameterAsBoolean(ISADDINVOICEREFERENCELINE);
+		percent = getParameterAsBigDecimal(PERCENT);
 	}
 
 	/**	 Getter Parameter Value for Date Invoiced	*/
@@ -124,6 +130,16 @@ public abstract class SB_InvoiceGenerateFromOrderLineAbstract extends SvrProcess
 	/**	 Setter Parameter Value for Add Invoice Reference Line	*/
 	protected void setIsAddInvoiceReferenceLine(boolean isAddInvoiceReferenceLine) {
 		this.isAddInvoiceReferenceLine = isAddInvoiceReferenceLine;
+	}
+
+	/**	 Getter Parameter Value for Percent	*/
+	protected BigDecimal getPercent() {
+		return percent;
+	}
+
+	/**	 Setter Parameter Value for Percent	*/
+	protected void setPercent(BigDecimal percent) {
+		this.percent = percent;
 	}
 
 	/**	 Getter Parameter Value for Process ID	*/

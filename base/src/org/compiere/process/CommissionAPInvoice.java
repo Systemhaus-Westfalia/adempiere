@@ -17,14 +17,17 @@
 package org.compiere.process;
 
 
+import java.math.BigDecimal;
 import java.util.logging.Level;
 
 import org.compiere.model.MBPartner;
 import org.compiere.model.MCommission;
+import org.compiere.model.MCommissionAmt;
 import org.compiere.model.MCommissionRun;
 import org.compiere.model.MDocType;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
+import org.compiere.model.Query;
 import org.compiere.util.Env;
 
 /**
@@ -70,15 +73,19 @@ public class CommissionAPInvoice extends SvrProcess
 			throw new IllegalArgumentException("CommissionAPInvoice - No Commission");
 		if (com.getC_Charge_ID() == 0)
 			throw new IllegalArgumentException("CommissionAPInvoice - No Charge on Commission");
-		MBPartner bp = new MBPartner (getCtx(), com.getC_BPartner_ID(), get_TrxName());
-		if (bp.get_ID() == 0)
-			throw new IllegalArgumentException("CommissionAPInvoice - No BPartner");
+		for (MBPartner salesRep: com.getSalesRepsOfCommission()) {
 			
+		
 		//	Create Invoice
+			if(getInvoiceofBpartnerCommission(comRun.getC_CommissionRun_ID(), salesRep.getC_BPartner_ID()).signum() ==1) {
+				return "Ya facturado";
+			}
 		MInvoice invoice = new MInvoice (getCtx(), 0, null);
 		invoice.setClientOrg(com.getAD_Client_ID(), com.getAD_Org_ID());
 		invoice.setC_DocTypeTarget_ID(MDocType.DOCBASETYPE_APInvoice);	//	API
-		invoice.setBPartner(bp);
+		invoice.setC_Currency_ID(com.getC_Currency_ID());
+		invoice.setBPartner(salesRep);
+		invoice.set_ValueOfColumn(MCommissionRun.COLUMNNAME_C_CommissionRun_ID, comRun.getC_CommissionRun_ID());
 	//	invoice.setDocumentNo (comRun.getDocumentNo());		//	may cause unique constraint
 		invoice.setSalesRep_ID(getAD_User_ID());	//	caller
 		//
@@ -90,14 +97,36 @@ public class CommissionAPInvoice extends SvrProcess
 			
  		//	Create Invoice Line
  		MInvoiceLine iLine = new MInvoiceLine(invoice);
+ 		BigDecimal totalAmt = getTotalofBpartner(comRun.getC_CommissionRun_ID(), salesRep.getC_BPartner_ID());
+ 		if (totalAmt.signum()==0) {
+ 			invoice.delete(true);
+ 			continue;
+ 		}
 		iLine.setC_Charge_ID(com.getC_Charge_ID());
  		iLine.setQty(1);
- 		iLine.setPrice(comRun.getGrandTotal());
+ 		iLine.setPrice(totalAmt);
 		iLine.setTax();
 		if (!iLine.save())
 			throw new IllegalStateException("CommissionAPInvoice - cannot save Invoice Line");
+		}
 		//
-		return "@C_Invoice_ID@ = " + invoice.getDocumentNo();
+		return "";
 	}	//	doIt
+	
+	private BigDecimal getTotalofBpartner(int C_CommissionRun_ID, int C_Bpartner_ID) {
+		BigDecimal totalCommission = new Query(getCtx(), MCommissionAmt.Table_Name, "C_CommissionRun_ID=? and C_Bpartner_ID=?", get_TrxName())
+				.setParameters(C_CommissionRun_ID, C_Bpartner_ID)
+				.aggregate(MCommissionAmt.COLUMNNAME_CommissionAmt, Query.AGGREGATE_SUM);
+		
+		return totalCommission;
+	}
+
+	private BigDecimal getInvoiceofBpartnerCommission(int C_CommissionRun_ID, int C_Bpartner_ID) {
+		BigDecimal countInvoices = new Query(getCtx(), MInvoice.Table_Name, "C_CommissionRun_ID=? and C_Bpartner_ID=? And Docstatus not in('VO','RE')", get_TrxName())
+				.setParameters(C_CommissionRun_ID, C_Bpartner_ID)
+				.aggregate(MInvoice.COLUMNNAME_C_Invoice_ID, Query.AGGREGATE_COUNT);
+		
+		return countInvoices;
+	}
 
 }	//	CommissionAPInvoice

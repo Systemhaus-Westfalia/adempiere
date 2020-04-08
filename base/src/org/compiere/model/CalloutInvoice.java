@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -28,6 +29,7 @@ import org.compiere.util.CLogger;
 import org.compiere.util.DB;
 import org.compiere.util.DisplayType;
 import org.compiere.util.Env;
+import org.eevolution.model.X_C_TaxDefinition;
 
 /**
  *	Invoice Callouts	
@@ -61,7 +63,7 @@ public class CalloutInvoice extends CalloutEngine
 
 		String sql = "SELECT d.HasCharges,'N',d.IsDocNoControlled," // 1..3
 			+ "s.CurrentNext, d.DocBaseType, " // 4..5
-			+ "s.StartNewYear, s.DateColumn, s.AD_Sequence_ID " //6..8
+			+ "s.StartNewYear, s.DateColumn, s.AD_Sequence_ID, d.invoicetype " //6..8
 			+ "FROM C_DocType d, AD_Sequence s "
 			+ "WHERE C_DocType_ID=?"		//	1
 			+ " AND d.DocNoSequence_ID=s.AD_Sequence_ID(+)";
@@ -76,6 +78,7 @@ public class CalloutInvoice extends CalloutEngine
 			{
 				//	Charges - Set Context
 				Env.setContext(ctx, WindowNo, "HasCharges", rs.getString(1));
+				Env.setContext(ctx, WindowNo, "InvoiceType", rs.getString(9));
 				//	DocumentNo
 				if (rs.getString(3).equals("Y"))
 				{
@@ -349,9 +352,10 @@ public class CalloutInvoice extends CalloutEngine
 		mTab.setValue("C_Currency_ID", new Integer(pp.getC_Currency_ID()));
 	//	mTab.setValue("Discount", pp.getDiscount());
 		mTab.setValue("C_UOM_ID", new Integer(pp.getC_UOM_ID()));
+		Env.setContext(ctx, WindowNo, "EnforcePriceLimit", pp.isEnforcePriceLimit() ? "Y" : "N");
 		Env.setContext(ctx, WindowNo, "DiscountSchema", pp.isDiscountSchema() ? "Y" : "N");
 		//
-		return tax (ctx, WindowNo, mTab, mField, value);
+		return taxDefinition(ctx, WindowNo, mTab, mField, value);
 	}	//	product
 
 	/**
@@ -411,7 +415,7 @@ public class CalloutInvoice extends CalloutEngine
 			rs = null; pstmt = null;
 		}
 		//
-		return tax (ctx, WindowNo, mTab, mField, value);
+		return taxDefinition(ctx, WindowNo, mTab, mField, value);
 	}	//	charge
 
 
@@ -471,7 +475,7 @@ public class CalloutInvoice extends CalloutEngine
 		//
 		int C_Tax_ID = Tax.get(ctx, M_Product_ID, C_Charge_ID, billDate, shipDate,
 			AD_Org_ID, M_Warehouse_ID, billC_BPartner_Location_ID, shipC_BPartner_Location_ID,
-			Env.getContext(ctx, WindowNo, "IsSOTrx").equals("Y"),null);
+			Env.getContext(ctx, WindowNo, "IsSOTrx").equals("Y"));
 		log.info("Tax ID=" + C_Tax_ID);
 		//
 		if (C_Tax_ID == 0)
@@ -621,7 +625,13 @@ public class CalloutInvoice extends CalloutEngine
 		log.fine("amt = PriceEntered=" + PriceEntered + ", Actual" + PriceActual + ", Discount=" + Discount);
 		/* */
 
-		if (MPriceList.isCheckPriceLimit(priceListId) && priceLimit.doubleValue() != 0.0
+		//	Check PriceLimit
+		String epl = Env.getContext(ctx, WindowNo, "EnforcePriceLimit");
+		boolean enforce = Env.isSOTrx(ctx, WindowNo) && epl != null && epl.equals("Y");
+		if (enforce && MRole.getDefault().isOverwritePriceLimit())
+			enforce = false;
+		//	Check Price Limit?
+		if (enforce && priceLimit.doubleValue() != 0.0
 		  && priceActual.compareTo(priceLimit) < 0)
 		{
 			priceActual = priceLimit;
@@ -644,19 +654,7 @@ public class CalloutInvoice extends CalloutEngine
 		}
 
 		//	Line Net Amt
-		BigDecimal lineNetAmount = null;
-		if(productId != 0) {
-			MProduct product = MProduct.get(ctx, productId);
-			if(product.getC_UOM_ID() != uOMToId
-					&& priceEntered != null && !priceEntered.equals(Env.ZERO)
-					&& quantityEntered != null && !quantityEntered.equals(Env.ZERO)) {
-				lineNetAmount = quantityEntered.multiply(priceEntered);
-			}
-		}
-		//	Set default
-		if(lineNetAmount == null) {
-			lineNetAmount = quantityInvoiced.multiply(priceActual);
-		}
+		BigDecimal lineNetAmount = quantityInvoiced.multiply(priceActual);
 		if (lineNetAmount.scale() > standardPrecision)
 			lineNetAmount = lineNetAmount.setScale(standardPrecision, BigDecimal.ROUND_HALF_UP);
 		log.info("amt = LineNetAmt=" + lineNetAmount);
@@ -824,4 +822,66 @@ public class CalloutInvoice extends CalloutEngine
 		//
 		return "";
 	}	//	qty
+	
+	public String taxDefinition (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		//import org.compoere.model.MProduct;
+		//import org.compoere.model.MBPartner;
+		//import org.compoere.model.MCharge;
+		//import org.compoere.model.X_C_TaxDefinition;
+		//import org.compoere.model.Query;
+
+		//import java.util.ArrayList;
+		String column = mField.getColumnName();
+		if (value == null)
+			return "";
+		
+		//	Check Product
+		int M_Product_ID = 0;
+		if (column.equals("M_Product_ID"))
+			M_Product_ID = ((Integer)value).intValue();
+		else
+			M_Product_ID = Env.getContextAsInt(ctx, WindowNo, "M_Product_ID");
+		int C_Charge_ID = 0;
+		if (column.equals("C_Charge_ID"))
+			C_Charge_ID = ((Integer)value).intValue();
+		else
+			C_Charge_ID = Env.getContextAsInt(ctx, WindowNo, "C_Charge_ID");
+		log.fine("Product=" + M_Product_ID + ", C_Charge_ID=" + C_Charge_ID);
+		if (M_Product_ID == 0 && C_Charge_ID == 0)
+			return amt(ctx, WindowNo, mTab, mField, value);		//
+
+	    ArrayList<Object> params = new ArrayList<Object>();
+		//	Check Partner Location
+		String whereClause = "(c_taxgroup_ID =? or c_taxgroup_ID is null)";
+		int	shipC_BPartner = Env.getContextAsInt(ctx, WindowNo, "C_BPartner_ID");
+		MBPartner bpartner = new MBPartner(Env.getCtx(), shipC_BPartner, null);
+		params.add(bpartner.getC_TaxGroup_ID());
+		if (C_Charge_ID != 0)
+		{
+			MCharge charge = new MCharge(ctx, C_Charge_ID, null);
+			whereClause = whereClause + " AND (c_taxtype_ID =? or c_taxtype_ID is null)";
+			params.add(charge.getC_TaxCategory_ID());
+		}
+		else if (M_Product_ID != 0)
+		{
+			MProduct product = new MProduct(ctx, M_Product_ID, null);
+			whereClause = whereClause + " AND (C_TaxType_ID =? or C_TaxType_ID is null)";
+			params.add(product.getC_TaxType_ID());
+		}
+		X_C_TaxDefinition taxdefinition = new Query(Env.getCtx(), X_C_TaxDefinition.Table_Name, whereClause, null)
+			.setClient_ID()
+			.setOnlyActiveRecords(true)
+			.setParameters(params)
+			.setOrderBy("seqNo")
+			.first();
+		if (taxdefinition == null || taxdefinition.getC_Tax_ID() == 0) {
+			tax(ctx, WindowNo, mTab, mField, value);		}
+		else
+			mTab.setValue("C_Tax_ID", new Integer(taxdefinition.getC_Tax_ID()));
+		//
+		return amt(ctx, WindowNo, mTab, mField, value);
+	}
+	
+	
 }	//	CalloutInvoice

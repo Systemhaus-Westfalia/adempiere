@@ -34,6 +34,7 @@ import org.compiere.model.MInOutLine;
 import org.compiere.model.MLandedCostAllocation;
 import org.compiere.model.MMatchInv;
 import org.compiere.model.MMatchPO;
+import org.compiere.model.MRule;
 import org.compiere.model.MTransaction;
 import org.compiere.model.Query;
 import org.compiere.model.X_M_CostType;
@@ -307,7 +308,9 @@ public class GenerateCostDetail extends GenerateCostDetailAbstract {
     public void generateCostDetail(MAcctSchema accountSchema, MCostType costType, MCostElement costElement, MTransaction transaction) {
 
         //Create Cost Detail for this Transaction
+    	log.config(transaction.getM_Product().getName() + " Start Transaction");
         CostEngineFactory.getCostEngine(accountSchema.getAD_Client_ID()).createCostDetail(accountSchema, costType, costElement, transaction, transaction.getDocumentLine(), true);
+        log.config(transaction.getM_Product().getName() + " End Transaction");
         CostEngineFactory.getCostEngine(accountSchema.getAD_Client_ID()).clearAccounting(accountSchema, transaction);
 
         // Calculate adjustment cost by variances in
@@ -321,7 +324,9 @@ public class GenerateCostDetail extends GenerateCostDetailAbstract {
                     if (match.getM_Product_ID() == transaction.getM_Product_ID()
                     && match.getDateAcct().after(getDateAcct())
                     && match.getDateAcct().before(getDateAcctTo())) {
+                    	log.config(transaction.getM_Product().getName() + " Start MAtchPo");
                         CostEngineFactory.getCostEngine(accountSchema.getAD_Client_ID()).createCostDetail(accountSchema, costType, costElement, transaction, match, true);
+                        log.config(transaction.getM_Product().getName() + " End MatchPO");
                     }
                 });
                 //get invoice matches
@@ -330,18 +335,25 @@ public class GenerateCostDetail extends GenerateCostDetailAbstract {
                     if (match.getM_Product_ID() == transaction.getM_Product_ID()
                     && match.getDateAcct().after(getDateAcct())
                     && match.getDateAcct().before(getDateAcctTo())) {
+                    	log.config(transaction.getM_Product().getName() + " Start MAtchInv");
                         CostEngineFactory.getCostEngine(
                                 accountSchema.getAD_Client_ID())
                                 .createCostDetail(accountSchema, costType, costElement, transaction,
                                         match, true);
+                        log.config(transaction.getM_Product().getName() + " End MAtchInv");
                     }
                 });
             }
 
             //get landed allocation cost
             MLandedCostAllocation.getOfInOutline(line, costElement.getM_CostElement_ID()).stream().forEach(allocation -> {
-                if (allocation.getDateAcct().after(getDateAcct()) && allocation.getDateAcct().before(getDateAcctTo()))
-                    CostEngineFactory.getCostEngine(accountSchema.getAD_Client_ID()).createCostDetail(accountSchema, costType, costElement, transaction, allocation, true);
+                if (allocation.getDateAcct().after(getDateAcct()) && allocation.getDateAcct().before(getDateAcctTo())) {
+                	log.config(transaction.getM_Product().getName() + " Start LandedCost");
+                	 CostEngineFactory.getCostEngine(accountSchema.getAD_Client_ID()).createCostDetail(accountSchema, costType, costElement, transaction, allocation, true);
+
+                 	log.config(transaction.getM_Product().getName() + " End LandedCost");
+                }
+                   
             });
         }
     }
@@ -393,10 +405,10 @@ public class GenerateCostDetail extends GenerateCostDetailAbstract {
             whereClause.append(" AND TRUNC(").append(MCostDetail.COLUMNNAME_DateAcct).append(")<=?");
             parameters.add(getDateAcctTo());
         }
-
+        MRule rule = MRule.get(getCtx(), "GenerateCostDetailOrderClause");
         sql.append("SELECT M_Transaction_ID , M_Product_ID FROM RV_Transaction ")
                 .append(whereClause)
-                .append(" ORDER BY lowlevel desc, M_Product_ID ,  TRUNC( DateAcct ) , M_Transaction_ID , SUBSTR(MovementType,2,1) ");
+                .append(rule.getScript());
         //.append(" ORDER BY M_Product_ID , DateAcct , M_Transaction_ID");
         //System.out.append("SQL :" + sql);
         return DB.getKeyNamePairs(get_TrxName(), sql.toString(), false, parameters.toArray());

@@ -63,6 +63,9 @@ import org.eevolution.model.MPPProductBOMLine;
  * 				https://sourceforge.net/tracker/?func=detail&aid=2892578&group_id=176962&atid=879335
  * @author Michael Judd, www.akunagroup.com
  *          <li>BF [ 2804888 ] Incorrect reservation of products with attributes
+ * @author Yamel Senih, ysenih@erpya.com, ERPCyA http://www.erpya.com
+ *		<a href="https://github.com/adempiere/adempiere/issues/1455">
+ * 		@see FR [ 1455 ] Add Sales Region to Order and Invoice</a>
  */
 public class MOrder extends X_C_Order implements DocAction
 {
@@ -382,6 +385,8 @@ public class MOrder extends X_C_Order implements DocAction
 	public static final String		DocSubTypeSO_OnCredit = "WI";
 	/** Sales Order Sub Type - RM	*/
 	public static final String		DocSubTypeSO_RMA = "RM";
+	/** Pre-Invoiced Sub Type - PI	*/
+	public static final String		DocSubTypeSO_InvoiceOrder = "IO";
 
 	/**
 	 * 	Set Target Sales Document Type
@@ -978,6 +983,27 @@ public class MOrder extends X_C_Order implements DocAction
 				setC_Currency_ID(Env.getContextAsInt(getCtx(), "#C_Currency_ID"));
 		}
 
+		//	Set sales region
+		if(getC_SalesRegion_ID() == 0) {
+			int salesRegionId = 0;
+			if(getC_BPartner_Location_ID() != 0) {
+				MBPartnerLocation shipLocation = (MBPartnerLocation) getC_BPartner_Location();
+				if(shipLocation.getC_SalesRegion_ID() != 0) {
+					salesRegionId = shipLocation.getC_SalesRegion_ID();
+				}
+			}
+			if(getBill_Location_ID() != 0) {
+				MBPartnerLocation shiLocation = (MBPartnerLocation) getBill_Location();
+				if(shiLocation.getC_SalesRegion_ID() != 0) {
+					salesRegionId = shiLocation.getC_SalesRegion_ID();
+				}
+			}
+			//	Set Sales Region
+			if(salesRegionId != 0) {
+				setC_SalesRegion_ID(salesRegionId);
+			}
+		}
+		
 		//	Default Sales Rep
 		if (getSalesRep_ID() == 0)
 		{
@@ -1733,8 +1759,7 @@ public class MOrder extends X_C_Order implements DocAction
 		if (MDocType.DOCSUBTYPESO_OnCreditOrder.equals(DocSubTypeSO)		//	(W)illCall(I)nvoice
 			|| MDocType.DOCSUBTYPESO_WarehouseOrder.equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
 			|| MDocType.DOCSUBTYPESO_POSOrder.equals(DocSubTypeSO)			//	(W)alkIn(R)eceipt
-			//|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO) //es soll nicht automatisch ausgeliefert werden
-			) 
+			|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO)) 
 		{
 			if (!DELIVERYRULE_Force.equals(getDeliveryRule()))
 				setDeliveryRule(DELIVERYRULE_Force);
@@ -1752,9 +1777,8 @@ public class MOrder extends X_C_Order implements DocAction
 		//	Create SO Invoice - Always invoice complete Order
 		if ( MDocType.DOCSUBTYPESO_POSOrder.equals(DocSubTypeSO)
 			|| MDocType.DOCSUBTYPESO_OnCreditOrder.equals(DocSubTypeSO) 	
-			//|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO) //es soll nicht automatisch fakturiert werden
-			) 
-		{
+			|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO)
+			|| MDocType.DOCSUBTYPESO_InvoiceOrder.equals(DocSubTypeSO)) {
 			MInvoice invoice = createInvoice (dt, shipment, realTimePOS ? null : getDateOrdered());
 			if (invoice == null)
 				return DocAction.STATUS_Invalid;

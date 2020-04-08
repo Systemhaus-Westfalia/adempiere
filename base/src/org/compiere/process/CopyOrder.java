@@ -93,9 +93,11 @@ public class CopyOrder extends SvrProcess
 		if (p_IsCloseDocument)
 		{
 			MOrder original = new MOrder (getCtx(), p_C_Order_ID, get_TrxName());
-			original.setDocAction(MOrder.DOCACTION_Complete);
-			original.processIt(MOrder.DOCACTION_Complete);
-			original.saveEx();
+			if (original.getDocStatus().equals(MOrder.DOCSTATUS_InProgress)) {
+				original.setDocAction(MOrder.DOCACTION_Complete);
+				original.processIt(MOrder.DOCACTION_Complete);
+				original.saveEx();
+			}
 			original.setDocAction(MOrder.DOCACTION_Close);
 			original.processIt(MOrder.DOCACTION_Close);
 			original.saveEx();

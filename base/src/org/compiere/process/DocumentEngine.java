@@ -35,6 +35,7 @@ import org.compiere.model.MBankStatement;
 import org.compiere.model.MCash;
 import org.compiere.model.MClient;
 import org.compiere.model.MColumn;
+import org.compiere.model.MCommission;
 import org.compiere.model.MInOut;
 import org.compiere.model.MInventory;
 import org.compiere.model.MInvoice;
@@ -45,6 +46,8 @@ import org.compiere.model.MOrder;
 import org.compiere.model.MPayment;
 import org.compiere.model.MProduction;
 import org.compiere.model.MProductionBatch;
+import org.compiere.model.MProject;
+import org.compiere.model.MProjectIssue;
 import org.compiere.model.MRequisition;
 import org.compiere.model.MRole;
 import org.compiere.model.MTable;
@@ -970,22 +973,10 @@ public class DocumentEngine implements DocAction
 			}
 		}
 		
-		else if (AD_Table_ID == MRequisition.Table_ID) {
-			//	Draft                       ..  DR/IP/IN
-			if (docStatus.equals(DocumentEngine.STATUS_Drafted)
-				|| docStatus.equals(DocumentEngine.STATUS_InProgress)
-				|| docStatus.equals(DocumentEngine.STATUS_Invalid)) {
+		else if (AD_Table_ID == MRequisition.Table_ID)
+		{
+			//	Prepare
 				options[index++] = DocumentEngine.ACTION_Prepare;
-				options[index++] = DocumentEngine.ACTION_Close;
-			}
-			//	Complete                    ..  CO
-			else if (docStatus.equals(DocumentEngine.STATUS_Completed)) {
-				options[index++] = DocumentEngine.ACTION_Void;
-				options[index++] = DocumentEngine.ACTION_ReActivate;
-			} else if (docStatus.equals(DocumentEngine.STATUS_WaitingPayment)) {
-				options[index++] = DocumentEngine.ACTION_ReActivate;
-				options[index++] = DocumentEngine.ACTION_Close;
-			}
 
 		}
 		
@@ -1013,6 +1004,12 @@ public class DocumentEngine implements DocAction
 				options[index++] = DocumentEngine.ACTION_Void;
 				options[index++] = DocumentEngine.ACTION_Reverse_Correct;
 				options[index++] = DocumentEngine.ACTION_Reverse_Accrual;
+			}
+
+			//	Draft                       ..  DR/IP/IN
+			if (docStatus.equals(DocumentEngine.STATUS_InProgress))
+			{
+				options[index++] = DocumentEngine.ACTION_Prepare;
 			}
 		}
 		/********************
@@ -1123,6 +1120,14 @@ public class DocumentEngine implements DocAction
 			{
 				options[index++] = DocumentEngine.ACTION_Void;
 			}
+
+			//	Draft                       ..  DR/IP/IN
+			if (docStatus.equals(DocumentEngine.STATUS_Drafted)
+					|| docStatus.equals(DocumentEngine.STATUS_InProgress)
+					|| docStatus.equals(DocumentEngine.STATUS_Invalid))
+			{
+				options[index++] = DocumentEngine.ACTION_Prepare;
+			}
 		}
 
 		/********************
@@ -1202,6 +1207,39 @@ public class DocumentEngine implements DocAction
 					options[index++] = DocumentEngine.ACTION_Reverse_Correct;
 					options[index++] = DocumentEngine.ACTION_Reverse_Accrual;
 				}
+		}
+
+		/********************
+		 *  Project Issue
+		 */
+		else if (AD_Table_ID == MProjectIssue.Table_ID || AD_Table_ID == MProject.Table_ID)
+		{
+			//	Complete                    ..  CO
+			if (docStatus.equals(DocumentEngine.STATUS_Completed))
+			{
+				options[index++] = DocumentEngine.ACTION_Void;
+				options[index++] = DocumentEngine.ACTION_Reverse_Correct;
+				options[index++] = DocumentEngine.ACTION_Reverse_Accrual;
+			}
+
+			//	Draft                       ..  DR/IP/IN
+			if (docStatus.equals(DocumentEngine.STATUS_InProgress))
+			{
+				options[index++] = DocumentEngine.ACTION_Prepare;
+			}
+		}
+		
+		else if (AD_Table_ID == MCommission.Table_ID || AD_Table_ID == MCommission.Table_ID) // I_HR_Process.Table_ID
+		{
+			if (docStatus.equals(DocumentEngine.STATUS_Drafted)
+					|| docStatus.equals(DocumentEngine.STATUS_InProgress)
+					|| docStatus.equals(DocumentEngine.STATUS_Invalid))
+				{
+					options[index++] = DocumentEngine.ACTION_Prepare;
+					options[index++] = DocumentEngine.ACTION_Close;
+				}
+				//	Complete                    ..  CO
+				
 		}
 		return index;
 	}

@@ -21,9 +21,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.logging.Level;
 
 import org.adempiere.exceptions.DBException;
+import org.compiere.model.I_C_Invoice;
 import org.compiere.model.MAging;
 import org.compiere.model.MRole;
 import org.compiere.util.DB;
@@ -39,56 +39,23 @@ import org.compiere.util.TimeUtil;
  *  @see https://sourceforge.net/tracker2/?func=detail&aid=2655587&group_id=176962&atid=879332 
  *  @version $Id: Aging.java,v 1.5 2006/10/07 00:58:44 jjanke Exp $
  */
-public class Aging extends SvrProcess
+public class Aging extends AgingAbstract
 {
 	/** The date to calculate the days due from			*/
-	private Timestamp	p_StatementDate = null;
-	//FR 1933937
-	private boolean		p_DateAcct = false;
-	private boolean 	p_IsSOTrx = false;
-	private int			p_C_Currency_ID = 0;
-	private int			p_AD_Org_ID = 0;
-	private int			p_C_BP_Group_ID = 0;
-	private int			p_C_BPartner_ID = 0;
-	private boolean		p_IsListInvoices = false;
-	/** Number of days between today and statement date	*/
+
 	private int			m_statementOffset = 0;
-	
 	/**
 	 *  Prepare - e.g., get Parameters.
 	 */
 	protected void prepare()
 	{
-		ProcessInfoParameter[] para = getParameter();
-		for (int i = 0; i < para.length; i++)
-		{
-			String name = para[i].getParameterName();
-			if (para[i].getParameter() == null)
-				;
-			else if (name.equals("StatementDate"))
-				p_StatementDate = (Timestamp)para[i].getParameter();
-			else if (name.equals("DateAcct"))
-				p_DateAcct = "Y".equals(para[i].getParameter());
-			else if (name.equals("IsSOTrx"))
-				p_IsSOTrx = "Y".equals(para[i].getParameter());
-			else if (name.equals("C_Currency_ID"))
-				p_C_Currency_ID = ((BigDecimal)para[i].getParameter()).intValue();
-			else if (name.equals("AD_Org_ID"))
-				p_AD_Org_ID = ((BigDecimal)para[i].getParameter()).intValue();
-			else if (name.equals("C_BP_Group_ID"))
-				p_C_BP_Group_ID = ((BigDecimal)para[i].getParameter()).intValue();
-			else if (name.equals("C_BPartner_ID"))
-				p_C_BPartner_ID = ((BigDecimal)para[i].getParameter()).intValue();
-			else if (name.equals("IsListInvoices"))
-				p_IsListInvoices = "Y".equals(para[i].getParameter());
-			else
-				log.log(Level.SEVERE, "Unknown Parameter: " + name);
-		}
-		if (p_StatementDate == null)
-			p_StatementDate = new Timestamp (System.currentTimeMillis());
+		super.prepare();
+		if (getStatementDate() == null)
+			setStatementDate(new Timestamp (System.currentTimeMillis()));
 		else
 			m_statementOffset = TimeUtil.getDaysBetween( 
-				new Timestamp(System.currentTimeMillis()), p_StatementDate);
+				new Timestamp(System.currentTimeMillis()), getStatementDate());
+
 	}	//	prepare
 
 	/**
@@ -98,20 +65,20 @@ public class Aging extends SvrProcess
 	 */
 	protected String doIt() throws Exception
 	{
-		log.info("StatementDate=" + p_StatementDate + ", IsSOTrx=" + p_IsSOTrx
-			+ ", C_Currency_ID=" + p_C_Currency_ID + ", AD_Org_ID=" + p_AD_Org_ID
-			+ ", C_BP_Group_ID=" + p_C_BP_Group_ID + ", C_BPartner_ID=" + p_C_BPartner_ID
-			+ ", IsListInvoices=" + p_IsListInvoices);
+		log.info("StatementDate=" + getStatementDate()+ ", IsSOTrx=" + isSOTrx()
+			+ ", C_Currency_ID=" + getCurrencyId() + ", AD_Org_ID=" + getOrgId()
+			+ ", C_BP_Group_ID=" + getBPGroupId() + ", C_BPartner_ID=" + getBPartnerId()
+			+ ", IsListInvoices=" + isListInvoices());
 		//FR 1933937
-		String dateacct = DB.TO_DATE(p_StatementDate);  
+		String dateacct = DB.TO_DATE(getStatementDate());  
 		 
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT bp.C_BP_Group_ID, oi.C_BPartner_ID,oi.C_Invoice_ID,oi.C_InvoicePaySchedule_ID, "  // 1..4 
 			+ "oi.C_Currency_ID, oi.IsSOTrx, "								//	5..6
 			+ "oi.DateInvoiced, oi.NetDays,oi.DueDate,oi.DaysDue, ");		//	7..10
-		if (p_C_Currency_ID == 0)
+		if (getCurrencyId() == 0)
 		{
-			if (!p_DateAcct)//FR 1933937
+			if (!isDateAcct())//FR 1933937
 			{
 				sql.append(" oi.GrandTotal, oi.PaidAmt, oi.OpenAmt ");			//	11..13
 			}
@@ -122,9 +89,9 @@ public class Aging extends SvrProcess
 		}
 		else
 		{
-			String s = ",oi.C_Currency_ID," + p_C_Currency_ID + ",oi.DateAcct,oi.C_ConversionType_ID,oi.AD_Client_ID,oi.AD_Org_ID)";
+			String s = ",oi.C_Currency_ID," + getCurrencyId() + ",oi.DateAcct,oi.C_ConversionType_ID,oi.AD_Client_ID,oi.AD_Org_ID)";
 			sql.append("currencyConvert(oi.GrandTotal").append(s);		//	11
-			if (!p_DateAcct)
+			if (!isDateAcct())
 			{
 				sql.append(", currencyConvert(oi.PaidAmt").append(s)  // 12
 				.append(", currencyConvert(oi.OpenAmt").append(s);  // 13
@@ -135,34 +102,45 @@ public class Aging extends SvrProcess
 				.append(", currencyConvert(invoiceOpenToDate(oi.C_Invoice_ID,oi.C_InvoicePaySchedule_ID,"+dateacct+")").append(s);  // 13
 			}
 		}
-		sql.append(",oi.C_Activity_ID,oi.C_Campaign_ID,oi.C_Project_ID,oi.AD_Org_ID ");	//	14..17
-		if (!p_DateAcct)//FR 1933937
+		sql.append(",oi.C_Activity_ID,oi.C_Campaign_ID,oi.C_Project_ID,oi.AD_Org_ID , oi.c_PaymentTerm_ID, oi.Salesrep_ID");	//	14..17
+		if (!isDateAcct())//FR 1933937
 		{
-			sql.append(" FROM RV_OpenItem oi");
+			sql.append(" FROM rv_C_INvoice oi");
 		}
 		else
 		{
-			sql.append(" FROM RV_OpenItemToDate oi");
+			sql.append(" FROM rv_C_INvoice oi");
 		}
 		
 		sql.append(" INNER JOIN C_BPartner bp ON (oi.C_BPartner_ID=bp.C_BPartner_ID) "
-			+ "WHERE oi.ISSoTrx=").append(p_IsSOTrx ? "'Y'" : "'N'");
-		if (p_C_BPartner_ID > 0)
+			+ "WHERE oi.ISSoTrx=").append(isSOTrx() ? "'Y'" : "'N'");
+		if (getBPartnerId() > 0)
 		{
-			sql.append(" AND oi.C_BPartner_ID=").append(p_C_BPartner_ID);
+			sql.append(" AND oi.C_BPartner_ID=").append(getBPartnerId());
 		}
-		else if (p_C_BP_Group_ID > 0)
+		else if (getBPGroupId() > 0)
 		{
-			sql.append(" AND bp.C_BP_Group_ID=").append(p_C_BP_Group_ID);
+			sql.append(" AND bp.C_BP_Group_ID=").append(getBPGroupId());
 		}
-		if (p_AD_Org_ID > 0) // BF 2655587
+		if (getOrgId() > 0) // BF 2655587
 		{
-			sql.append(" AND oi.AD_Org_ID=").append(p_AD_Org_ID);
+			sql.append(" AND oi.AD_Org_ID=").append(getOrgId());
 		}
 		
-		if (p_DateAcct)//FR 1933937
+		if (isDateAcct())//FR 1933937
 		{
 			sql.append(" AND invoiceOpenToDate(oi.C_Invoice_ID,oi.C_InvoicePaySchedule_ID,"+dateacct+") <> 0 ");
+		}
+		
+
+		if (getSalesRepId()>0)
+		{
+			sql.append(" AND oi.salesrep_ID=").append(getSalesRepId());
+		}
+		if(isSalesRep()) {
+			sql.append(" and EXISTS (SELECT 1 FROM AD_User u " + 
+					"	INNER JOIN c_Bpartner bp on u.c_Bpartner_ID=bp.c_Bpartner_ID " + 
+					"	WHERE u.ad_User_ID=oi.salesrep_ID AND bp.IsSalesRep='Y') ");
 		}
 		
 		sql.append(" ORDER BY oi.C_BPartner_ID, oi.C_Currency_ID, oi.C_Invoice_ID");
@@ -188,8 +166,8 @@ public class Aging extends SvrProcess
 			{
 				int C_BP_Group_ID = rs.getInt(1);
 				int C_BPartner_ID = rs.getInt(2);
-				int C_Invoice_ID = p_IsListInvoices ? rs.getInt(3) : 0;
-				int C_InvoicePaySchedule_ID = p_IsListInvoices ? rs.getInt(4) : 0;
+				int C_Invoice_ID = isListInvoices() ? rs.getInt(3) : 0;
+				int C_InvoicePaySchedule_ID = isListInvoices() ? rs.getInt(4) : 0;
 				int C_Currency_ID = rs.getInt(5);
 				boolean IsSOTrx = "Y".equals(rs.getString(6));
 				//
@@ -204,9 +182,11 @@ public class Aging extends SvrProcess
 				BigDecimal PaidAmt = rs.getBigDecimal(12);
 				BigDecimal OpenAmt = rs.getBigDecimal(13);
 				//
-				int C_Activity_ID = p_IsListInvoices ? rs.getInt(14) : 0;
-				int C_Campaign_ID = p_IsListInvoices ? rs.getInt(15) : 0;
-				int C_Project_ID = p_IsListInvoices ? rs.getInt(16) : 0;
+				int C_Activity_ID = isListInvoices() ? rs.getInt(14) : 0;
+				int C_Campaign_ID = isListInvoices() ? rs.getInt(15) : 0;
+				int C_Project_ID = isListInvoices() ? rs.getInt(16) : 0;
+				int C_PaymentTerm_ID = isListInvoices() ? rs.getInt(18) : 0;
+				int SalesRep_ID = isListInvoices() ? rs.getInt(19) : 0;
 				int AD_Org_ID = rs.getInt(17);
 				
 				rows++;
@@ -223,7 +203,7 @@ public class Aging extends SvrProcess
 						aging.saveEx();
 						log.fine("#" + ++counter + " - " + aging);
 					}
-					aging = new MAging (getCtx(), AD_PInstance_ID, p_StatementDate,
+					aging = new MAging (getCtx(), AD_PInstance_ID, getStatementDate(),
 						C_BPartner_ID, C_Currency_ID, 
 						C_Invoice_ID, C_InvoicePaySchedule_ID, 
 						C_BP_Group_ID, AD_Org_ID, DueDate, IsSOTrx, get_TrxName());
@@ -232,7 +212,9 @@ public class Aging extends SvrProcess
 					aging.setC_Project_ID(C_Project_ID);
                     aging.set_ValueOfColumn("C_BankAccount_ID", 0);
                     aging.set_ValueOfColumn("C_CashFlow_ID", 0);
-					aging.setDateAcct(p_DateAcct);
+                    aging.set_ValueOfColumn(I_C_Invoice.COLUMNNAME_C_Payment_ID, C_PaymentTerm_ID);
+                    aging.set_ValueOfColumn(I_C_Invoice.COLUMNNAME_SalesRep_ID, SalesRep_ID);
+					aging.setDateAcct(isDateAcct());
 				}
 				//	Fill Buckets
 				aging.add (DueDate, DaysDue, GrandTotal, OpenAmt);

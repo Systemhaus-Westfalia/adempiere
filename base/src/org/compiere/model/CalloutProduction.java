@@ -28,6 +28,11 @@ import org.compiere.util.Env;
  *  
  *  @contrib Paul Bowden (adaxa)  set locator from product
  */
+/**
+ * 
+ * @author SHW_User
+ * QtyUsed setzten, Zeile 71
+ */
 public class CalloutProduction extends CalloutEngine
 {
 	/**
@@ -64,6 +69,15 @@ public class CalloutProduction extends CalloutEngine
 			if ( product.getM_Locator_ID() > 0)
 				mTab.setValue("M_Locator_ID", product.getM_Locator_ID());
 		}
+		
+		return "";
+	}   //  product
+	
+
+	public String qtyUsed (Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value)
+	{
+		BigDecimal qtyUsed = (BigDecimal)value;
+		mTab.setValue("MovementQty", qtyUsed.negate());
 		
 		return "";
 	}   //  product

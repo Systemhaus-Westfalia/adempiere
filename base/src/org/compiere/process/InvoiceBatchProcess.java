@@ -125,6 +125,7 @@ public class InvoiceBatchProcess extends SvrProcess
 			invoiceLine.setTaxAmt(line.getTaxAmt());
 			invoiceLine.setLineNetAmt(line.getLineNetAmt());
 			invoiceLine.setLineTotalAmt(line.getLineTotalAmt());
+			invoiceLine.setUser4_ID(line.get_ValueAsInt("User4_ID"));
 			if (!invoiceLine.save())
 			{
 				//	rollback

@@ -246,7 +246,7 @@ public class Doc_BankStatement extends Doc
 				fl = fact.createLine(line,
 					getAccount(Doc.ACCTTYPE_InterestExp, as), getAccount(Doc.ACCTTYPE_InterestExp, as),
 					line.getC_Currency_ID(), line.getInterestAmt().negate());
-			else
+			if (line.getInterestAmt().signum()> 0)
 				fl = fact.createLine(line,
 					getAccount(Doc.ACCTTYPE_InterestRev, as), getAccount(Doc.ACCTTYPE_InterestRev, as),
 					line.getC_Currency_ID(), line.getInterestAmt().negate());

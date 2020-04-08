@@ -63,9 +63,6 @@ import org.eevolution.model.MPPProductBOMLine;
  * 				https://sourceforge.net/tracker/?func=detail&aid=2892578&group_id=176962&atid=879335
  * @author Michael Judd, www.akunagroup.com
  *          <li>BF [ 2804888 ] Incorrect reservation of products with attributes
- * @author Yamel Senih, ysenih@erpya.com, ERPCyA http://www.erpya.com
- *		<a href="https://github.com/adempiere/adempiere/issues/1455">
- * 		@see FR [ 1455 ] Add Sales Region to Order and Invoice</a>
  */
 public class MOrder extends X_C_Order implements DocAction
 {
@@ -385,8 +382,6 @@ public class MOrder extends X_C_Order implements DocAction
 	public static final String		DocSubTypeSO_OnCredit = "WI";
 	/** Sales Order Sub Type - RM	*/
 	public static final String		DocSubTypeSO_RMA = "RM";
-	/** Pre-Invoiced Sub Type - PI	*/
-	public static final String		DocSubTypeSO_InvoiceOrder = "IO";
 
 	/**
 	 * 	Set Target Sales Document Type
@@ -983,50 +978,12 @@ public class MOrder extends X_C_Order implements DocAction
 				setC_Currency_ID(Env.getContextAsInt(getCtx(), "#C_Currency_ID"));
 		}
 
-		//	Set sales region
-		if(getC_SalesRegion_ID() == 0) {
-			int salesRegionId = 0;
-			if(getC_BPartner_Location_ID() != 0) {
-				MBPartnerLocation shipLocation = (MBPartnerLocation) getC_BPartner_Location();
-				if(shipLocation.getC_SalesRegion_ID() != 0) {
-					salesRegionId = shipLocation.getC_SalesRegion_ID();
-				}
-			}
-			if(getBill_Location_ID() != 0) {
-				MBPartnerLocation shiLocation = (MBPartnerLocation) getBill_Location();
-				if(shiLocation.getC_SalesRegion_ID() != 0) {
-					salesRegionId = shiLocation.getC_SalesRegion_ID();
-				}
-			}
-			//	Set Sales Region
-			if(salesRegionId != 0) {
-				setC_SalesRegion_ID(salesRegionId);
-			}
-		}
-		
 		//	Default Sales Rep
-		if (getSalesRep_ID() == 0) {
-			int salesRepresentativeId = 0;
-			MBPartner businessPartner = (MBPartner) getC_BPartner();
-			if(businessPartner.getSalesRep_ID() != 0) {
-				salesRepresentativeId = businessPartner.getSalesRep_ID();
-			}
-			//	for Sales Region
-			if(salesRepresentativeId == 0) {
-				if(getC_SalesRegion_ID() != 0) {
-					MSalesRegion salesRegion = MSalesRegion.getById(getCtx(), getC_SalesRegion_ID(), get_TrxName());
-					if(salesRegion.getSalesRep_ID() != 0) {
-						salesRepresentativeId = salesRegion.getSalesRep_ID();
-					}
-				}
-			}
-			//	
-			if(salesRepresentativeId == 0) {
-				salesRepresentativeId = Env.getContextAsInt(getCtx(), "#SalesRep_ID");
-			}
-			if(salesRepresentativeId != 0) {
-				setSalesRep_ID(salesRepresentativeId);
-			}
+		if (getSalesRep_ID() == 0)
+		{
+			int ii = Env.getContextAsInt(getCtx(), "#SalesRep_ID");
+			if (ii != 0)
+				setSalesRep_ID (ii);
 		}
 
 		//	Default Document Type
@@ -1305,6 +1262,13 @@ public class MOrder extends X_C_Order implements DocAction
 			m_processMsg = "Cannot reserve Stock";
 			return DocAction.STATUS_Invalid;
 		}
+		
+		if (isSOTrx() && getC_BPartner().getC_TaxGroup_ID() == 5000000 && getTotalLines().compareTo(Env.ONEHUNDRED)<0) {
+			for (MOrderLine orderLine:getLines()) {
+				orderLine.setC_Tax_ID(1000000);
+				orderLine.saveEx();
+			}
+		}
 		if (!calculateTaxTotal())
 		{
 			m_processMsg = "Error calculating tax";
@@ -1314,7 +1278,16 @@ public class MOrder extends X_C_Order implements DocAction
 		//	Credit Check
 		if (isSOTrx())
 		{
-			if (   MDocType.DOCSUBTYPESO_POSOrder.equals(documentType.getDocSubTypeSO())
+			StringBuffer sqlRole = new StringBuffer();
+			sqlRole.append("SELECT count(*) FROM AD_Role r  WHERE r.IsActive='Y' ");
+			sqlRole.append("	AND EXISTS (SELECT * FROM AD_User_Roles ur");
+			sqlRole.append("	WHERE r.AD_Role_ID=ur.AD_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID=?) ");
+			sqlRole.append("	AND r.iscanapprovecreditlimit = 'Y' ");
+			int noRole = DB.getSQLValueEx(get_TrxName(), sqlRole.toString(), Env.getAD_User_ID(getCtx()));
+			if (noRole>0) {				
+				set_Value("creditApprovedBy", Env.getAD_User_ID(getCtx()));	// ignore -- don't validate for special roles
+				}
+			else if (   MDocType.DOCSUBTYPESO_POSOrder.equals(documentType.getDocSubTypeSO())
 					&& PAYMENTRULE_Cash.equals(getPaymentRule())
 					&& !MSysConfig.getBooleanValue("CHECK_CREDIT_ON_CASH_POS_ORDER", true, getAD_Client_ID(), getAD_Org_ID())) {
 				// ignore -- don't validate for Cash POS Orders depending on sysconfig parameter
@@ -1760,7 +1733,8 @@ public class MOrder extends X_C_Order implements DocAction
 		if (MDocType.DOCSUBTYPESO_OnCreditOrder.equals(DocSubTypeSO)		//	(W)illCall(I)nvoice
 			|| MDocType.DOCSUBTYPESO_WarehouseOrder.equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
 			|| MDocType.DOCSUBTYPESO_POSOrder.equals(DocSubTypeSO)			//	(W)alkIn(R)eceipt
-			|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO)) 
+			//|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO) //es soll nicht automatisch ausgeliefert werden
+			) 
 		{
 			if (!DELIVERYRULE_Force.equals(getDeliveryRule()))
 				setDeliveryRule(DELIVERYRULE_Force);
@@ -1778,8 +1752,9 @@ public class MOrder extends X_C_Order implements DocAction
 		//	Create SO Invoice - Always invoice complete Order
 		if ( MDocType.DOCSUBTYPESO_POSOrder.equals(DocSubTypeSO)
 			|| MDocType.DOCSUBTYPESO_OnCreditOrder.equals(DocSubTypeSO) 	
-			|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO)
-			|| MDocType.DOCSUBTYPESO_InvoiceOrder.equals(DocSubTypeSO)) {
+			//|| MDocType.DOCSUBTYPESO_PrepayOrder.equals(DocSubTypeSO) //es soll nicht automatisch fakturiert werden
+			) 
+		{
 			MInvoice invoice = createInvoice (dt, shipment, realTimePOS ? null : getDateOrdered());
 			if (invoice == null)
 				return DocAction.STATUS_Invalid;
@@ -2134,6 +2109,7 @@ public class MOrder extends X_C_Order implements DocAction
 	private boolean createReversals()
 	{
 		//	Cancel only Sales 
+		
 		if (!isSOTrx())
 			return true;
 		

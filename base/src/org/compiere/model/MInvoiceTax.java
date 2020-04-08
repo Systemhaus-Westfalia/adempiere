@@ -36,6 +36,11 @@ import org.compiere.util.Env;
  *  @author Teo Sarca, www.arhipac.ro
  *  		<li>FR [ 2214883 ] Remove SQL code and Replace for Query
  */
+/**
+ * 
+ * @author SHW_User
+ * Precision 
+ */
 public class MInvoiceTax extends X_C_InvoiceTax
 {
 	/**
@@ -231,7 +236,11 @@ public class MInvoiceTax extends X_C_InvoiceTax
 		
 		//	Calculate Tax
 		if (documentLevel || taxAmt.signum() == 0)
+		{
+			if (taxBaseAmt.scale()>getPrecision())
+				taxBaseAmt = taxBaseAmt.setScale(getPrecision(), BigDecimal.ROUND_HALF_UP);
 			taxAmt = tax.calculateTax(taxBaseAmt, isTaxIncluded(), getPrecision());
+		}
 		setTaxAmt(taxAmt);
 
 		//	Set Base

@@ -18,11 +18,12 @@ package org.compiere.model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
 
 /** Generated Interface for PA_SLA_Criteria
  *  @author Adempiere (generated) 
- *  @version Release 3.9.2
+ *  @version Release 3.9.0
  */
 public interface I_PA_SLA_Criteria 
 {
@@ -61,6 +62,15 @@ public interface I_PA_SLA_Criteria
 	  * Organizational entity within client
 	  */
 	public int getAD_Org_ID();
+
+    /** Column name AggregationType */
+    public static final String COLUMNNAME_AggregationType = "AggregationType";
+
+	/** Set AggregationType	  */
+	public void setAggregationType (String AggregationType);
+
+	/** Get AggregationType	  */
+	public String getAggregationType();
 
     /** Column name Classname */
     public static final String COLUMNNAME_Classname = "Classname";
@@ -169,18 +179,14 @@ public interface I_PA_SLA_Criteria
 	  */
 	public int getPA_SLA_Criteria_ID();
 
-    /** Column name UUID */
-    public static final String COLUMNNAME_UUID = "UUID";
+    /** Column name SQLStatement */
+    public static final String COLUMNNAME_SQLStatement = "SQLStatement";
 
-	/** Set Immutable Universally Unique Identifier.
-	  * Immutable Universally Unique Identifier
-	  */
-	public void setUUID (String UUID);
+	/** Set SQLStatement	  */
+	public void setSQLStatement (String SQLStatement);
 
-	/** Get Immutable Universally Unique Identifier.
-	  * Immutable Universally Unique Identifier
-	  */
-	public String getUUID();
+	/** Get SQLStatement	  */
+	public String getSQLStatement();
 
     /** Column name Updated */
     public static final String COLUMNNAME_Updated = "Updated";
@@ -197,4 +203,17 @@ public interface I_PA_SLA_Criteria
 	  * User who updated this records
 	  */
 	public int getUpdatedBy();
+
+    /** Column name UUID */
+    public static final String COLUMNNAME_UUID = "UUID";
+
+	/** Set Immutable Universally Unique Identifier.
+	  * Immutable Universally Unique Identifier
+	  */
+	public void setUUID (String UUID);
+
+	/** Get Immutable Universally Unique Identifier.
+	  * Immutable Universally Unique Identifier
+	  */
+	public String getUUID();
 }

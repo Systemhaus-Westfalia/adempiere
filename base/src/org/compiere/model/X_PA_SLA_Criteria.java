@@ -19,18 +19,19 @@ package org.compiere.model;
 
 import java.sql.ResultSet;
 import java.util.Properties;
+import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
 
 /** Generated Model for PA_SLA_Criteria
  *  @author Adempiere (generated) 
- *  @version Release 3.9.2 - $Id$ */
+ *  @version Release 3.9.0 - $Id$ */
 public class X_PA_SLA_Criteria extends PO implements I_PA_SLA_Criteria, I_Persistent 
 {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20191120L;
+	private static final long serialVersionUID = 20181119L;
 
     /** Standard Constructor */
     public X_PA_SLA_Criteria (Properties ctx, int PA_SLA_Criteria_ID, String trxName)
@@ -72,6 +73,27 @@ public class X_PA_SLA_Criteria extends PO implements I_PA_SLA_Criteria, I_Persis
         .append(get_ID()).append("]");
       return sb.toString();
     }
+
+	/** AggregationType AD_Reference_ID=1000002 */
+	public static final int AGGREGATIONTYPE_AD_Reference_ID=1000002;
+	/** Sum = SUM */
+	public static final String AGGREGATIONTYPE_Sum = "SUM";
+	/** Average = AVG */
+	public static final String AGGREGATIONTYPE_Average = "AVG";
+	/** Set AggregationType.
+		@param AggregationType AggregationType	  */
+	public void setAggregationType (String AggregationType)
+	{
+
+		set_Value (COLUMNNAME_AggregationType, AggregationType);
+	}
+
+	/** Get AggregationType.
+		@return AggregationType	  */
+	public String getAggregationType () 
+	{
+		return (String)get_Value(COLUMNNAME_AggregationType);
+	}
 
 	/** Set Classname.
 		@param Classname 
@@ -194,6 +216,20 @@ public class X_PA_SLA_Criteria extends PO implements I_PA_SLA_Criteria, I_Persis
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
+	}
+
+	/** Set SQLStatement.
+		@param SQLStatement SQLStatement	  */
+	public void setSQLStatement (String SQLStatement)
+	{
+		set_Value (COLUMNNAME_SQLStatement, SQLStatement);
+	}
+
+	/** Get SQLStatement.
+		@return SQLStatement	  */
+	public String getSQLStatement () 
+	{
+		return (String)get_Value(COLUMNNAME_SQLStatement);
 	}
 
 	/** Set Immutable Universally Unique Identifier.

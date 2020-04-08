@@ -537,6 +537,7 @@ public class MProduction extends X_M_Production implements DocAction , DocumentR
 			setIsCreated(false);
 			deleteLines();
 			setProductionQty(BigDecimal.ZERO);
+			setDocStatus(MProduction.DOCSTATUS_Voided);
 		} else {
 			boolean accrual = false;
 			try {
@@ -663,6 +664,8 @@ public class MProduction extends X_M_Production implements DocAction , DocumentR
 			tline.setQtyUsed(fline.getQtyUsed().negate());
 			tline.setReversalLine_ID(fline.getM_ProductionLine_ID());
 			tline.saveEx();
+			fline.setReversalLine_ID(tline.getM_ProductionLine_ID());
+			fline.saveEx();
 			//We need to copy MA
 			if (tline.getM_AttributeSetInstance_ID() == 0)
 			{
@@ -1148,6 +1151,7 @@ public class MProduction extends X_M_Production implements DocAction , DocumentR
 					BOMLine.setPlannedQty( BOMMovementQty );
 					BOMLine.setQtyReserved(BOMMovementQty);
 					BOMLine.setMovementQty(BOMMovementQty.negate());
+					BOMLine.setQtyUsed( BOMMovementQty );
 					BOMLine.saveEx(get_TrxName());
 					lineno = lineno + 10;				
 				} // for available storages

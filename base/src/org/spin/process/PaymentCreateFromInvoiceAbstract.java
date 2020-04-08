@@ -23,7 +23,7 @@ import org.compiere.process.SvrProcess;
 
 /** Generated Process for (Payment Generate (From Invoice Customer))
  *  @author ADempiere (generated) 
- *  @version Release 3.9.0
+ *  @version Release 3.9.1
  */
 public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 	/** Process Value 	*/
@@ -46,6 +46,8 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 	public static final String PAYAMT = "PayAmt";
 	/**	Parameter Name for Over/Under Payment	*/
 	public static final String ISOVERUNDERPAYMENT = "IsOverUnderPayment";
+	/**	Parameter Name for Document No	*/
+	public static final String DOCUMENTNO = "DocumentNo";
 	/**	Parameter Name for Routing No	*/
 	public static final String ROUTINGNO = "RoutingNo";
 	/**	Parameter Name for Account No	*/
@@ -92,6 +94,8 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 	public static final String VOICEAUTHCODE = "VoiceAuthCode";
 	/**	Parameter Name for Original Transaction ID	*/
 	public static final String ORIG_TRXID = "Orig_TrxID";
+	/**	Parameter Name for Document Action	*/
+	public static final String DOCACTION = "DocAction";
 	/**	Parameter Value for Target Document Type	*/
 	private int docTypeTargetId;
 	/**	Parameter Value for Document Date	*/
@@ -106,6 +110,8 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 	private BigDecimal payAmt;
 	/**	Parameter Value for Over/Under Payment	*/
 	private boolean isOverUnderPayment;
+	/**	Parameter Value for Document No	*/
+	private String documentNo;
 	/**	Parameter Value for Routing No	*/
 	private String routingNo;
 	/**	Parameter Value for Account No	*/
@@ -152,6 +158,8 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 	private String voiceAuthCode;
 	/**	Parameter Value for Original Transaction ID	*/
 	private String trxID;
+	/**	Parameter Value for Document Action	*/
+	private Object docAction;
 
 	@Override
 	protected void prepare() {
@@ -162,6 +170,7 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 		tenderType = getParameterAsString(TENDERTYPE);
 		payAmt = getParameterAsBigDecimal(PAYAMT);
 		isOverUnderPayment = getParameterAsBoolean(ISOVERUNDERPAYMENT);
+		documentNo = getParameterAsString(DOCUMENTNO);
 		routingNo = getParameterAsString(ROUTINGNO);
 		accountNo = getParameterAsString(ACCOUNTNO);
 		checkNo = getParameterAsString(CHECKNO);
@@ -185,6 +194,7 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 		pONum = getParameterAsString(PONUM);
 		voiceAuthCode = getParameterAsString(VOICEAUTHCODE);
 		trxID = getParameterAsString(ORIG_TRXID);
+		docAction = getParameter(DOCACTION);
 	}
 
 	/**	 Getter Parameter Value for Target Document Type	*/
@@ -255,6 +265,16 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 	/**	 Setter Parameter Value for Over/Under Payment	*/
 	protected void setIsOverUnderPayment(boolean isOverUnderPayment) {
 		this.isOverUnderPayment = isOverUnderPayment;
+	}
+
+	/**	 Getter Parameter Value for Document No	*/
+	protected String getDocumentNo() {
+		return documentNo;
+	}
+
+	/**	 Setter Parameter Value for Document No	*/
+	protected void setDocumentNo(String documentNo) {
+		this.documentNo = documentNo;
 	}
 
 	/**	 Getter Parameter Value for Routing No	*/
@@ -485,6 +505,16 @@ public abstract class PaymentCreateFromInvoiceAbstract extends SvrProcess {
 	/**	 Setter Parameter Value for Original Transaction ID	*/
 	protected void setTrxID(String trxID) {
 		this.trxID = trxID;
+	}
+
+	/**	 Getter Parameter Value for Document Action	*/
+	protected Object getDocAction() {
+		return docAction;
+	}
+
+	/**	 Setter Parameter Value for Document Action	*/
+	protected void setDocAction(Object docAction) {
+		this.docAction = docAction;
 	}
 
 	/**	 Getter Parameter Value for Process ID	*/

@@ -131,8 +131,11 @@ public class PaymentCreateFromInvoice extends PaymentCreateFromInvoiceAbstract {
 			//	Load Record
 			payment.load(get_TrxName());
 			//	Process Selection
-			if(!payment.processIt(MPaySelection.DOCACTION_Complete)) {
-				throw new AdempiereException("@Error@ " + payment.getProcessMsg());
+						if (getDocAction() != null) {
+				if(!payment.processIt((String)getDocAction())) {
+					throw new AdempiereException("@Error@ " + payment.getProcessMsg());
+				}
+				
 			}
 			//	
 			payment.saveEx();
@@ -160,6 +163,11 @@ public class PaymentCreateFromInvoice extends PaymentCreateFromInvoiceAbstract {
 		}
 		//	
 		payment.setC_BPartner_ID(businessPartnerId);
+
+		//	Check No
+		if(!Util.isEmpty(getDocumentNo())) {
+			payment.setDocumentNo(getDocumentNo());
+		}
 		payment.setC_BankAccount_ID(getBankAccountId());
 		payment.setDateTrx(getPayDate());
 		payment.setDateAcct(getDateDoc());

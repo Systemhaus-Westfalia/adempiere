@@ -24,14 +24,14 @@ import org.compiere.util.KeyNamePair;
 
 /** Generated Model for C_TaxDeclaration
  *  @author Adempiere (generated) 
- *  @version Release 3.9.2 - $Id$ */
+ *  @version Release 3.9.1 - $Id$ */
 public class X_C_TaxDeclaration extends PO implements I_C_TaxDeclaration, I_Persistent 
 {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20191120L;
+	private static final long serialVersionUID = 20181220L;
 
     /** Standard Constructor */
     public X_C_TaxDeclaration (Properties ctx, int C_TaxDeclaration_ID, String trxName)
@@ -75,6 +75,87 @@ public class X_C_TaxDeclaration extends PO implements I_C_TaxDeclaration, I_Pers
         .append(get_ID()).append("]");
       return sb.toString();
     }
+
+	public I_C_InvoiceType getC_InvoiceType() throws RuntimeException
+    {
+		return (I_C_InvoiceType)MTable.get(getCtx(), I_C_InvoiceType.Table_Name)
+			.getPO(getC_InvoiceType_ID(), get_TrxName());	}
+
+	/** Set C_InvoiceType ID.
+		@param C_InvoiceType_ID C_InvoiceType ID	  */
+	public void setC_InvoiceType_ID (int C_InvoiceType_ID)
+	{
+		if (C_InvoiceType_ID < 1) 
+			set_Value (COLUMNNAME_C_InvoiceType_ID, null);
+		else 
+			set_Value (COLUMNNAME_C_InvoiceType_ID, Integer.valueOf(C_InvoiceType_ID));
+	}
+
+	/** Get C_InvoiceType ID.
+		@return C_InvoiceType ID	  */
+	public int getC_InvoiceType_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_InvoiceType_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_Period getC_Period() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_Period)MTable.get(getCtx(), org.compiere.model.I_C_Period.Table_Name)
+			.getPO(getC_Period_ID(), get_TrxName());	}
+
+	/** Set Period.
+		@param C_Period_ID 
+		Period of the Calendar
+	  */
+	public void setC_Period_ID (int C_Period_ID)
+	{
+		if (C_Period_ID < 1) 
+			set_Value (COLUMNNAME_C_Period_ID, null);
+		else 
+			set_Value (COLUMNNAME_C_Period_ID, Integer.valueOf(C_Period_ID));
+	}
+
+	/** Get Period.
+		@return Period of the Calendar
+	  */
+	public int getC_Period_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_Period_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.compiere.model.I_C_TaxCategory getC_TaxCategory() throws RuntimeException
+    {
+		return (org.compiere.model.I_C_TaxCategory)MTable.get(getCtx(), org.compiere.model.I_C_TaxCategory.Table_Name)
+			.getPO(getC_TaxCategory_ID(), get_TrxName());	}
+
+	/** Set Tax Category.
+		@param C_TaxCategory_ID 
+		Tax Category
+	  */
+	public void setC_TaxCategory_ID (int C_TaxCategory_ID)
+	{
+		if (C_TaxCategory_ID < 1) 
+			set_Value (COLUMNNAME_C_TaxCategory_ID, null);
+		else 
+			set_Value (COLUMNNAME_C_TaxCategory_ID, Integer.valueOf(C_TaxCategory_ID));
+	}
+
+	/** Get Tax Category.
+		@return Tax Category
+	  */
+	public int getC_TaxCategory_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_TaxCategory_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
 
 	/** Set Tax Declaration.
 		@param C_TaxDeclaration_ID 
@@ -165,6 +246,30 @@ public class X_C_TaxDeclaration extends PO implements I_C_TaxDeclaration, I_Pers
 	public String getDescription () 
 	{
 		return (String)get_Value(COLUMNNAME_Description);
+	}
+
+	/** Set Sales Transaction.
+		@param IsSOTrx 
+		This is a Sales Transaction
+	  */
+	public void setIsSOTrx (boolean IsSOTrx)
+	{
+		set_Value (COLUMNNAME_IsSOTrx, Boolean.valueOf(IsSOTrx));
+	}
+
+	/** Get Sales Transaction.
+		@return This is a Sales Transaction
+	  */
+	public boolean isSOTrx () 
+	{
+		Object oo = get_Value(COLUMNNAME_IsSOTrx);
+		if (oo != null) 
+		{
+			 if (oo instanceof Boolean) 
+				 return ((Boolean)oo).booleanValue(); 
+			return "Y".equals(oo);
+		}
+		return false;
 	}
 
 	/** Set Name.

@@ -872,6 +872,7 @@ public class Doc_Invoice extends Doc
 					factLine.setDescription(desc + " " + landedCostAllocation.getM_CostElement().getName());
 					factLine.setM_Product_ID(landedCostAllocation.getM_Product_ID());
 				}
+				costAdjustment = costAdjustment.setScale(m_precision, BigDecimal.ROUND_HALF_UP);
 				if (costAdjustment.signum() != 0) {
 					if (isDebit)
 						debitAmount = costAdjustment;

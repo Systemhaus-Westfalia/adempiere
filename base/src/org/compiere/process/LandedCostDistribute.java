@@ -56,8 +56,8 @@ public class LandedCostDistribute extends SvrProcess
 
 		String error = m_lc.allocateCosts();
 		
-		//generateCostDetail();
-		
+		if (m_lc.getC_InvoiceLine().getC_Invoice().getDocStatus().equals("CO"))
+			generateCostDetail();		
 		if (error == null || error.length() == 0)
 			return "@OK@";
 		return error;

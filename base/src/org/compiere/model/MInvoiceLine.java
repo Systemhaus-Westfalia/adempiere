@@ -171,7 +171,8 @@ public class MInvoiceLine extends X_C_InvoiceLine implements DocumentReversalLin
 		m_C_BPartner_ID = invoice.getC_BPartner_ID();
 		m_C_BPartner_Location_ID = invoice.getC_BPartner_Location_ID();
 		m_IsSOTrx = invoice.isSOTrx();
-		m_precision = new Integer(invoice.getPrecision());
+		//m_precision = new Integer(invoice.getPrecision());
+		m_precision = invoice.getM_PriceList().getPricePrecision();
 	}	//	setOrder
 
 	/**

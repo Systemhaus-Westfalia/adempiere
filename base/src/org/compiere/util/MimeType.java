@@ -100,10 +100,18 @@ public class MimeType
 			sourceExtension = sourcePath.substring(sourcePath.lastIndexOf("."));
 			sourceExtension = sourceExtension.trim();
 		}
+		String sourceMimeType = getMimeType(sourcePath);
 		//	For Restricted
 		for(String restrictedExtension : Arrays.asList(restrictedTypes.split(","))) {
 			restrictedExtension = restrictedExtension.trim();
 			if(sourceExtension.equals(restrictedExtension)) {
+				return false;
+			}
+			//	For Mime
+			String restrictedMimeType = getMimeType(restrictedExtension);
+			
+			
+			if(sourceMimeType.equals(restrictedMimeType)) {
 				return false;
 			}
 		}
@@ -117,6 +125,11 @@ public class MimeType
 			if(sourceExtension.equals(allowedExtension)) {
 				return true;
 			}
+			//	For Mime
+			String allowedMimeType = getMimeType(allowedExtension);
+			if(sourceMimeType.equals(allowedMimeType)) {
+				return true;
+			}
 		}
 		//	
 		return false;
@@ -127,7 +140,7 @@ public class MimeType
 	 * @return
 	 */
 	public static String getAllowedFileTypes() {
-		return MSysConfig.getValue(ATTACHMENT_FILE_TYPES_ALLOWED, ".pdf, .png, .jpg, .jpeg, .xls, .xlsx, .doc, .docx, .txt, .log, .properties", Env.getAD_Client_ID(Env.getCtx()));
+		return MSysConfig.getValue(ATTACHMENT_FILE_TYPES_ALLOWED, ".pdf, .png, .jpg, .jpeg, .xls, .xlsx, .doc, .docx, .txt, .log, .properties, .jrxml, .jasper", Env.getAD_Client_ID(Env.getCtx()));
 	}
 	
 	/**

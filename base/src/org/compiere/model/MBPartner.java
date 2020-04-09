@@ -861,6 +861,26 @@ public class MBPartner extends X_C_BPartner
 		creditLimit = creditLimit.subtract(additionalAmt);
 		if (creditLimit.compareTo(getTotalOpenBalance()) < 0)
 			return SOCREDITSTATUS_CreditHold;
+		
+		//	Exist due invoices Above dunning Grace
+//		Exist due invoices Above dunning Grace
+			int noInvoicesDue = 0;
+			StringBuffer sql = new StringBuffer("SELECT 1 "
+					+ "FROM C_Invoice i "
+					+ "LEFT JOIN C_PaymentTerm pt ON(pt.C_PaymentTerm_ID = i.C_PaymentTerm_ID) "
+					+ "WHERE i.IsSotrx = 'Y' "
+					+ "AND i.C_BPartner_ID=? "
+					+ "AND i.IsPaid = 'N' "
+					+ "AND (paymenttermDueDays(i.C_PaymentTerm_ID, i.DateInvoiced, getDate()) - pt.GraceDays) > 0");
+			if(getDunningGrace() != null) {
+				sql.append(" AND paymenttermDueDate(i.C_PaymentTerm_ID, i.DateInvoiced) >= ?");
+				noInvoicesDue = DB.getSQLValueEx(null, sql.toString(), getC_BPartner_ID(), getDunningGrace());
+			} else {
+				noInvoicesDue = DB.getSQLValueEx(null, sql.toString(), getC_BPartner_ID());
+			}
+			if (noInvoicesDue == 1)
+				return SOCREDITSTATUS_CreditHold;
+		
 
 		//	Above Watch Limit
 		BigDecimal watchAmt = creditLimit.multiply(getCreditWatchRatio());

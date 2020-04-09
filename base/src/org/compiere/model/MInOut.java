@@ -1111,36 +1111,28 @@ public class MInOut extends X_M_InOut implements DocAction , DocumentReversalEna
 		//	Credit Check
 		if (isSOTrx() && !isReversal())
 		{
-			I_C_Order order = getC_Order();
-			if (order != null && MDocType.DOCSUBTYPESO_PrepayOrder.equals(order.getC_DocType().getDocSubTypeSO())
-					&& !MSysConfig.getBooleanValue("CHECK_CREDIT_ON_PREPAY_ORDER", true, getAD_Client_ID(), getAD_Org_ID())) {
-				// ignore -- don't validate Prepay Orders depending on sysconfig parameter
-			} else {
-				MBPartner bp = new MBPartner (getCtx(), getC_BPartner_ID(), get_TrxName());
-				if (MBPartner.SOCREDITSTATUS_CreditStop.equals(bp.getSOCreditStatus()))
-				{
-					processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
-						+ bp.getTotalOpenBalance()
-						+ ", @SO_CreditLimit@=" + bp.getSO_CreditLimit();
-					return DocAction.STATUS_Invalid;
-				}
-				if (MBPartner.SOCREDITSTATUS_CreditHold.equals(bp.getSOCreditStatus()))
-				{
-					processMsg = "@BPartnerCreditHold@ - @TotalOpenBalance@="
-						+ bp.getTotalOpenBalance()
-						+ ", @SO_CreditLimit@=" + bp.getSO_CreditLimit();
-					return DocAction.STATUS_Invalid;
-				}
-				BigDecimal notInvoicedAmt = MBPartner.getNotInvoicedAmt(getC_BPartner_ID());
-				if (MBPartner.SOCREDITSTATUS_CreditHold.equals(bp.getSOCreditStatus(notInvoicedAmt)))
-				{
-					processMsg = "@BPartnerOverSCreditHold@ - @TotalOpenBalance@="
-						+ bp.getTotalOpenBalance() + ", @NotInvoicedAmt@=" + notInvoicedAmt
-						+ ", @SO_CreditLimit@=" + bp.getSO_CreditLimit();
-					return DocAction.STATUS_Invalid;
-				}
-			}
-		}
+			/*
+			 * I_C_Order order = getC_Order(); if (order != null &&
+			 * MDocType.DOCSUBTYPESO_PrepayOrder.equals(order.getC_DocType().getDocSubTypeSO
+			 * ()) && !MSysConfig.getBooleanValue("CHECK_CREDIT_ON_PREPAY_ORDER", true,
+			 * getAD_Client_ID(), getAD_Org_ID())) { // ignore -- don't validate Prepay
+			 * Orders depending on sysconfig parameter } else { MBPartner bp = new MBPartner
+			 * (getCtx(), getC_BPartner_ID(), get_TrxName()); if
+			 * (MBPartner.SOCREDITSTATUS_CreditStop.equals(bp.getSOCreditStatus())) {
+			 * processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@=" +
+			 * bp.getTotalOpenBalance() + ", @SO_CreditLimit@=" + bp.getSO_CreditLimit();
+			 * return DocAction.STATUS_Invalid; } if
+			 * (MBPartner.SOCREDITSTATUS_CreditHold.equals(bp.getSOCreditStatus())) {
+			 * processMsg = "@BPartnerCreditHold@ - @TotalOpenBalance@=" +
+			 * bp.getTotalOpenBalance() + ", @SO_CreditLimit@=" + bp.getSO_CreditLimit();
+			 * return DocAction.STATUS_Invalid; } BigDecimal notInvoicedAmt =
+			 * MBPartner.getNotInvoicedAmt(getC_BPartner_ID()); if
+			 * (MBPartner.SOCREDITSTATUS_CreditHold.equals(bp.getSOCreditStatus(
+			 * notInvoicedAmt))) { processMsg =
+			 * "@BPartnerOverSCreditHold@ - @TotalOpenBalance@=" + bp.getTotalOpenBalance()
+			 * + ", @NotInvoicedAmt@=" + notInvoicedAmt + ", @SO_CreditLimit@=" +
+			 * bp.getSO_CreditLimit(); return DocAction.STATUS_Invalid; } }
+			 */}
 
 		//	Lines
 		MInOutLine[] lines = getLines(true);
@@ -1163,8 +1155,22 @@ public class MInOut extends X_M_InOut implements DocAction , DocumentReversalEna
 				Weight = Weight.add(product.getWeight().multiply(line.getMovementQty()));
 			}
 			//
-			if (line.getM_AttributeSetInstance_ID() != 0)
+			// Check Attribute Set settings
+			MAttributeSet attributeSet = MAttributeSet.get(product.getCtx(), product.getM_AttributeSet_ID());
+			if (attributeSet == null || !attributeSet.isInstanceAttribute())
 				continue;
+			if (line.getM_AttributeSetInstance_ID() != 0 || !line.getM_Product().isStocked())
+				continue;
+		
+			if (isSOTrx() && !isReversal())
+				checkMaterialPolicy(line);
+			List<MInOutLineMA> inOutLineMAs = MInOutLineMA.get(getCtx(), line.getM_InOutLine_ID(), get_TrxName());
+			if (inOutLineMAs.size() == 1) {
+				for (MInOutLineMA inOutLineMA:inOutLineMAs){
+					line.setM_AttributeSetInstance_ID(inOutLineMA.getM_AttributeSetInstance_ID());
+					line.saveEx();
+				}
+			}
 			/*if (product != null && product.isASIMandatory(isSOTrx(),line.getAD_Org_ID()))
 			{
 				processMsg = "@M_AttributeSet_ID@ @IsMandatory@ (@Line@ #" + lines[i].getLine() +

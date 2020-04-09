@@ -811,6 +811,8 @@ public class MInventory extends X_M_Inventory implements DocAction, DocumentReve
 			rLine.setQtyInternalUse (oLine.getQtyInternalUse().negate());
 
 			rLine.saveEx();
+			oLine.setReversalLine_ID(rLine.getM_InventoryLine_ID());
+			oLine.saveEx();
 
 			//We need to copy MA
 			if (rLine.getM_AttributeSetInstance_ID() == 0)

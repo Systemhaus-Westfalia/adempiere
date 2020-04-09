@@ -244,7 +244,7 @@ public class MMatchInv extends X_M_MatchInv implements IDocumentLine
 			setDateAcct(dateTrx);
 		}
 		setM_Product_ID (invoiceLine.getM_Product_ID());
-		setM_AttributeSetInstance_ID(invoiceLine.getM_AttributeSetInstance_ID());
+		setM_AttributeSetInstance_ID(getM_InOutLine().getM_AttributeSetInstance_ID());
 		setQty (qty);
 		setProcessed(true);		//	auto
 	}	//	MMatchInv

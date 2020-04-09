@@ -777,6 +777,8 @@ public class MMovement extends X_M_Movement implements DocAction , DocumentRever
 			reversalMovementLine.setConfirmedQty(movementLine.getConfirmedQty().negate());
 			reversalMovementLine.setProcessed(false);
 			reversalMovementLine.saveEx();
+			movementLine.setReversalLine_ID(reversalMovementLine.getM_MovementLine_ID());
+			movementLine.saveEx();
 
 			//	We need revert MA
 			MMovementLineMA[] mas = MMovementLineMA.get(getCtx(), movementLine.getM_MovementLine_ID(), get_TrxName());

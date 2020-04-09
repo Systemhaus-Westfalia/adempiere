@@ -118,7 +118,7 @@ public class OrderRMACreateFrom extends OrderRMACreateFromAbstract {
 				order.saveEx();
 			}
 			//	Set Reference
-			orderLine.setRef_InOutLine(inOutLine);
+			//orderLine.setRef_InOutLine(inOutLine);
 			//	Set quantity
 			orderLine.setQty(qtyEntered);							//	Movement/Entered
 			orderLine.setQtyOrdered(qtyOrdered);

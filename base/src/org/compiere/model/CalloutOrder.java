@@ -1111,17 +1111,17 @@ public class CalloutOrder extends CalloutEngine
 		if (enforce && MRole.getDefault().isOverwritePriceLimit())
 			enforce = false;
 		//	Check Price Limit?
-		if (enforce && PriceLimit.doubleValue() != 0.0
-		  && PriceActual.compareTo(PriceLimit) < 0)
+		if (enforce && priceLimit.doubleValue() != 0.0
+		  && priceActual.compareTo(priceLimit) < 0)
 		{
-			PriceActual = PriceLimit;
-			PriceEntered = MUOMConversion.convertProductFrom (ctx, M_Product_ID, 
-				C_UOM_To_ID, PriceLimit);
-			if (PriceEntered == null)
-				PriceEntered = PriceLimit;
-			log.fine("(under) PriceEntered=" + PriceEntered + ", Actual" + PriceLimit);
-			mTab.setValue ("PriceActual", PriceLimit);
-			mTab.setValue ("PriceEntered", PriceEntered);
+			priceActual = priceLimit;
+			priceEntered = MUOMConversion.convertProductFrom (ctx, productId, 
+				uOMToId, priceLimit);
+			if (priceEntered == null)
+				priceEntered = priceLimit;
+			log.fine("(under) PriceEntered=" + priceEntered + ", Actual" + priceLimit);
+			mTab.setValue ("PriceActual", priceLimit);
+			mTab.setValue ("PriceEntered", priceEntered);
 			mTab.fireDataStatusEEvent ("UnderLimitPrice", "", false);
 			//	Repeat Discount calc
 			if (priceList.intValue() != 0)

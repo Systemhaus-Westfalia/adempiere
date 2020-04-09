@@ -340,8 +340,8 @@ public class MPaySelectionLine extends X_C_PaySelectionLine
 		if(getC_BPartner_ID() == 0)
 			throw new AdempiereException("@C_BPartner_ID@ @NotFound@");
 
-		if (getC_Invoice_ID() > 0 && getOpenAmt().subtract(getPayAmt()).subtract(getDiscountAmt()).signum() < 0 )
-			throw new AdempiereException("@PayAmt@ > @C_Invoice_ID@ @Amount@ @OpenAmt@ ");
+		//if (getC_Invoice_ID() > 0 && getOpenAmt().subtract(getPayAmt()).subtract(getDiscountAmt()).signum() < 0 )
+		//	throw new AdempiereException("@PayAmt@ > @C_Invoice_ID@ @Amount@ @OpenAmt@ ");
 
 		return true;
 	}	//	beforeSave
@@ -411,7 +411,8 @@ public class MPaySelectionLine extends X_C_PaySelectionLine
 			if (!getPaymentRule().equals(PAYMENTRULE_Check)
 					&& !getPaymentRule().equals(PAYMENTRULE_CreditCard) 
 					&& !getPaymentRule().equals(PAYMENTRULE_DirectDeposit) 
-					&& !getPaymentRule().equals(PAYMENTRULE_DirectDebit)) {
+					&& !getPaymentRule().equals(PAYMENTRULE_DirectDebit)
+					&& !getPaymentRule().equals(PAYMENTRULE_Cash)) {
 				//	Set
 				setPaymentRule(PAYMENTRULE_Check);
 			}
@@ -593,12 +594,7 @@ public class MPaySelectionLine extends X_C_PaySelectionLine
 	@Override
 	public void setPaymentRule(String PaymentRule) {
 		if (PaymentRule == null
-				||(
-						!getPaymentRule().equals(PAYMENTRULE_Check) 
-						&& !getPaymentRule().equals(PAYMENTRULE_CreditCard) 
-						&& !getPaymentRule().equals(PAYMENTRULE_DirectDeposit) 
-						&& !getPaymentRule().equals(PAYMENTRULE_DirectDebit)
-				)) {
+				) {
 			//	Set from Standard
 			PaymentRule = PAYMENTRULE_Check;
 		}

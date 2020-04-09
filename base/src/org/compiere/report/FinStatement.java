@@ -51,6 +51,7 @@ public class FinStatement extends FinStatementAbstract
 	/** AcctSchame Parameter			*/
 	/**	Parameter Where Clause			*/
 	private StringBuffer		parameterWhere = new StringBuffer();
+	private String 				whereAccountIDs = "";
 
 	/**	Start Time						*/
 	private long 				m_start = System.currentTimeMillis();
@@ -80,9 +81,14 @@ public class FinStatement extends FinStatementAbstract
 		parameterWhere.append("C_AcctSchema_ID=").append(getAcctSchemaId())
 				.append(" AND PostingType='").append(getPostingType()).append("'");
 		//	Optional Account_ID
-		if (getAccountId() >0)
-			parameterWhere.append(" AND ").append(MReportTree.getWhereClause(getCtx(),
-					getHierarchyId(), MAcctSchemaElement.ELEMENTTYPE_Account, getAccountId()));
+		if (getAccountId() >0) {
+			String accountIds = MReportTree.getWhereClause(getCtx(),
+					getHierarchyId(), MAcctSchemaElement.ELEMENTTYPE_Account, getAccountId());
+			parameterWhere.append(" AND ").append(accountIds);
+			whereAccountIDs = accountIds;
+			
+		}
+			
 
 		//	Optional Org
 		if (getOrgId() != 0)
@@ -169,7 +175,8 @@ public class FinStatement extends FinStatementAbstract
 		StringBuffer sb = new StringBuffer("INSERT INTO T_ReportStatement "
 				+ "(AD_PInstance_ID, Fact_Acct_ID, LevelNo,"
 				+ "DateAcct, Name, Description,"
-				+ "AmtAcctDr, AmtAcctCr, Balance, Qty, ACCOUNT_ID, accountvalue, accountName, accountType) ");
+				+ "AmtAcctDr, AmtAcctCr, Balance, Qty, ACCOUNT_ID, accountvalue,"
+				+ "accountName, accountType) ");
 		sb.append("SELECT ").append(getAD_PInstance_ID()).append(",0,0,")
 				.append(DB.TO_DATE(getDateAcct(), true)).append(",")
 				.append(DB.TO_STRING(Msg.getMsg(Env.getCtx(), "BeginningBalance"))).append(",NULL,")
@@ -184,9 +191,9 @@ public class FinStatement extends FinStatementAbstract
 				
 				.append("LEFT JOIN (SELECT ")
 							.append("Account_ID, ")
-							.append("SUM(AcctBalance(Account_ID, AmtAcctDr, 0)) AmtAcctDr, ")
-							.append("SUM(AcctBalance(fa.Account_ID, 0, AmtAcctCr)) AmtAcctCr, ")
-							.append("SUM(AcctBalance(fa.Account_ID, fa.AmtAcctDr, 0) - AcctBalance(fa.Account_ID, 0, fa.AmtAcctCr)) Balance, ")
+							.append("SUM( AmtAcctDr) amtacctdr, ")
+							.append("SUM( AmtAcctCr) AmtAcctCr, ")
+							.append("SUM(AmtAcctDr - AmtAcctCr) Balance, ")
 							.append("SUM(AcctBalance(Account_ID, Qty, 0)) Qty ")
 							.append("FROM Fact_Acct fa ")
 							.append(where)
@@ -195,7 +202,7 @@ public class FinStatement extends FinStatementAbstract
 				
 
 		if (getAccountId() > 0)
-			sb.append(" AND  ev.C_ElementValue_ID = ").append(getAccountId());
+			sb.append(" AND  ").append(whereAccountIDs);
 
 		if (getAccountType() != null && !getAccountType().isEmpty())
 			sb.append(" AND  ev.AccountType = '").append(getAccountType()).append("'");

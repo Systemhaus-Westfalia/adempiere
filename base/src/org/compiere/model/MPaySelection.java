@@ -490,12 +490,24 @@ public class MPaySelection extends X_C_PaySelection implements DocAction, DocOpt
 		if(isCompletelyUsed())
 			throw new AdempiereException("@C_PaySelection_ID@ @Processed@");
 		//	Valid if is completely paid
-		if(isCompletelyPaid())
-			throw new AdempiereException("@C_PaySelection_ID@ @IsPaid@");
+		if(isCompletelyPaid()) {
+			for (MPaySelectionCheck paySelectionCheck:MPaySelectionCheck.get(getCtx(), getC_PaySelection_ID(), get_TrxName())){
+				if (paySelectionCheck.getC_Payment().getDocStatus().equals("CO") ||
+						paySelectionCheck.getC_Payment().getDocStatus().equals("IP")) {
+					MPayment payment = (MPayment)paySelectionCheck.getC_Payment();
+					payment.voidIt();
+					payment.saveEx();
+				}				
+			}			
+		}
 		//	
 		setProcessed(false);
 		//	Delete check
 		deleteChecks();
+		for (MPaySelectionLine paySelectionLine:getLines(true)) {
+			paySelectionLine.setProcessed(false);
+			paySelectionLine.saveEx();
+		}
 		return true;
 	}	//	reActivateIt
 	

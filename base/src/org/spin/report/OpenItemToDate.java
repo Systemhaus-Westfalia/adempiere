@@ -111,8 +111,9 @@ public class OpenItemToDate extends OpenItemToDateAbstract {
 				+ "FROM RV_C_Invoice i "
 				+ "INNER JOIN C_PaymentTerm p ON (i.C_PaymentTerm_ID = p.C_PaymentTerm_ID) "
 				+ "WHERE invoiceOpenToDate(i.C_Invoice_ID, 0, ?) <> 0 "
-				+ "AND i.IsPayScheduleValid<>'Y' "
-				+ "AND i.DocStatus IN ('CO','CL') ");
+				+ "AND i.IsPayScheduleValid<>'Y' ");
+				//+ "AND i.DocStatus IN ('CO','CL') ")
+		
 		//	Union
 		sql.append("UNION ");
 		//	With Payment Schedule
@@ -135,7 +136,7 @@ public class OpenItemToDate extends OpenItemToDateAbstract {
 				+ "INNER JOIN C_InvoicePaySchedule ips ON (i.C_Invoice_ID = ips.C_Invoice_ID)	"
 				+ "WHERE invoiceOpenToDate(i.C_Invoice_ID, ips.C_InvoicePaySchedule_ID, ? ) <> 0 "
 				+ "AND i.IsPayScheduleValid='Y' "
-				+ "AND i.DocStatus IN ('CO','CL') "
+				//+ "AND i.DocStatus IN ('CO','CL') "
 				+ "AND ips.IsValid='Y') i ");
 		//	Sales Order Transaction
 		sql.append("WHERE i.IsSOTrx = ").append(isSOTrx()? "'Y'": "'N'");

@@ -90,6 +90,10 @@ public class ADTreeFavoriteOnDropListener implements EventListener
 		ADTreeFavoriteOnDropListener.tree = tree;
 		ADTreeFavoriteOnDropListener.treeModel = treeModel;
 		ADTreeFavoriteOnDropListener.windowNo = windowNo;
+		AD_Client_ID = Env.getAD_Client_ID(Env.getCtx());
+		AD_Org_ID = Env.getAD_Org_ID(Env.getCtx());
+		AD_Role_ID = Env.getAD_Role_ID(Env.getCtx());
+		AD_User_ID = Env.getAD_User_ID(Env.getCtx());
 		ADTreeFavoriteOnDropListener.mTreeFavoriteID = mTreeFavorite.getTreeID(AD_Role_ID, AD_User_ID, AD_Client_ID);
 
 		return new ADTreeFavoriteOnDropListener();

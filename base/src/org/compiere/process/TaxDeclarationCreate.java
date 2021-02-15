@@ -1,3 +1,4 @@
+
 /******************************************************************************
  * Product: Adempiere ERP & CRM Smart Business Solution                       *
  * Copyright (C) 1999-2006 ComPiere, Inc. All Rights Reserved.                *
@@ -18,14 +19,22 @@ package org.compiere.process;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
+import org.compiere.model.I_C_Period;
 import org.compiere.model.MFactAcct;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceTax;
+import org.compiere.model.MPeriod;
 import org.compiere.model.MTaxDeclaration;
 import org.compiere.model.MTaxDeclarationAcct;
 import org.compiere.model.MTaxDeclarationLine;
+import org.compiere.model.Query;
+import org.compiere.model.X_C_DocType;
+import org.compiere.model.X_C_Tax;
 import org.compiere.util.AdempiereSystemError;
 import org.compiere.util.DB;
 
@@ -35,38 +44,16 @@ import org.compiere.util.DB;
  *  @author Jorg Janke
  *  @version $Id: TaxDeclarationCreate.java,v 1.2 2006/07/30 00:51:01 jjanke Exp $
  */
-public class TaxDeclarationCreate extends SvrProcess
+public class TaxDeclarationCreate extends TaxDeclarationCreateAbstract
 {
 	/**	Tax Declaration			*/
-	private int 				p_C_TaxDeclaration_ID = 0;
-	/** Delete Old Lines		*/
-	private boolean				p_DeleteOld = true;
-	
-	/**	Tax Declaration			*/
-	private MTaxDeclaration 	m_td = null;
+	private MTaxDeclaration 	taxDeclaration = null;
 	/** TDLines					*/
 	private int					m_noLines = 0;
 	/** TDAccts					*/
 	private int					m_noAccts = 0;
+	private int					noInvoices = 0;
 	
-	/**
-	 *  Prepare - e.g., get Parameters.
-	 */
-	protected void prepare ()
-	{
-		ProcessInfoParameter[] para = getParameter();
-		for (int i = 0; i < para.length; i++)
-		{
-			String name = para[i].getParameterName();
-			if (para[i].getParameter() == null)
-				;
-			else if (name.equals("DeleteOld"))
-				p_DeleteOld = "Y".equals(para[i].getParameter());
-			else
-				log.log(Level.SEVERE, "Unknown Parameter: " + name);
-		}
-		p_C_TaxDeclaration_ID = getRecord_ID();
-	}	//	prepare
 
 	
 	/**
@@ -76,54 +63,69 @@ public class TaxDeclarationCreate extends SvrProcess
 	 */
 	protected String doIt () throws Exception
 	{
-		log.info("C_TaxDeclaration_ID=" + p_C_TaxDeclaration_ID);
-		m_td = new MTaxDeclaration (getCtx(), p_C_TaxDeclaration_ID, get_TrxName());
-		if (m_td.get_ID() == 0)
-			throw new AdempiereSystemError("@NotFound@ @C_TaxDeclaration_ID@ = " + p_C_TaxDeclaration_ID);
+
+		if (getRecord_ID() == 0)
+		throw new AdempiereSystemError("@NotFound@ @C_TaxDeclaration_ID@ = " + getRecord_ID());
+		log.info("C_TaxDeclaration_ID=" + getRecord_ID());
+
+		taxDeclaration = new MTaxDeclaration(getCtx(), getRecord_ID(), get_TrxName());
 		
-		if (p_DeleteOld)
+		if (isDeleteOld())
 		{
 			//	Delete old
 			String sql = "DELETE C_TaxDeclarationLine WHERE C_TaxDeclaration_ID=?";
-			int no = DB.executeUpdate(sql, p_C_TaxDeclaration_ID, false, get_TrxName());
+			int no = DB.executeUpdate(sql, taxDeclaration.getC_TaxDeclaration_ID(), false, get_TrxName());
 			if (no != 0)
 				log.config("Delete Line #" + no);
 			sql = "DELETE C_TaxDeclarationAcct WHERE C_TaxDeclaration_ID=?";
-			no = DB.executeUpdate(sql, p_C_TaxDeclaration_ID, false, get_TrxName());
+			no = DB.executeUpdate(sql, taxDeclaration.getC_TaxDeclaration_ID(), false, get_TrxName());
 			if (no != 0)
 				log.config("Delete Acct #" + no);
 		}
 
 		//	Get Invoices
-		String sql = "SELECT * FROM C_Invoice i "
-			+ "WHERE TRUNC(i.DateInvoiced, 'DD') >= ? AND TRUNC(i.DateInvoiced, 'DD') <= ? "
-			+ " AND Processed='Y'"
-			+ " AND NOT EXISTS (SELECT * FROM C_TaxDeclarationLine tdl "
-				+ "WHERE i.C_Invoice_ID=tdl.C_Invoice_ID)";
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		int noInvoices = 0;
-		try
-		{
-			pstmt = DB.prepareStatement (sql, get_TrxName());
-			pstmt.setTimestamp(1, m_td.getDateFrom());
-			pstmt.setTimestamp(2, m_td.getDateTo());
-			rs = pstmt.executeQuery ();
-			while (rs.next ())
-			{
-				create (new MInvoice (getCtx(), rs, null));	//	no lock
-				noInvoices++;
-			}
+		Timestamp dateFrom = taxDeclaration.getDateFrom();
+		Timestamp dateTo = taxDeclaration.getDateTo();
+		if (taxDeclaration.getC_Period_ID() >0) {
+			dateFrom = taxDeclaration.getC_Period().getStartDate();
+			dateTo = taxDeclaration.getC_Period().getEndDate();
 		}
-		catch (Exception e)
-		{
-			log.log (Level.SEVERE, sql, e);
+		StringBuffer  whereClause = new StringBuffer();
+		ArrayList<Object> params = new ArrayList<>();
+		params.add(dateFrom);
+		params.add(dateTo);
+		whereClause.append(" dateacct between ? and ? and processed = 'Y' ");
+		if (taxDeclaration.getC_TaxDeclarationType_ID() > 0) {
+			whereClause.append(" AND c_Doctype_ID IN (SELECT c_Doctype_ID from c_Doctype dt INNER JOIN C_TaxdeclType_Invoicetype dti on dt.c_InvoiceType_ID=dti.c_Invoicetype_ID where c_TaxDeclarationtype_ID=?)");
+			params.add(taxDeclaration.getC_TaxDeclarationType_ID());
 		}
-		finally
-		{
-			DB.close(rs, pstmt);
-			rs = null; pstmt = null;
+		if (taxDeclaration.getC_TaxCategory_ID() >0) {
+			whereClause.append(" and EXISTS (select 1 from c_Invoicetax it " + 
+					"			INNER JOIN c_Tax t on it.c_Tax_ID=t.c_Tax_ID " + 
+					"			WHERE it.c_Invoice_ID=C_Invoice.c_Invoice_ID and " + 
+					"		    t.c_TaxCategory_ID = ?)");
+			params.add(taxDeclaration.getC_TaxCategory_ID());
+		}		
+		whereClause.append(" AND not exists (select 1 from c_Taxdeclarationline tdl " + 
+				"			   INNER JOIN c_Taxdeclaration td on tdl.c_Taxdeclaration_ID=td.c_Taxdeclaration_ID " + 
+				"			   WHERE tdl.c_INvoice_ID=c_Invoice.c_Invoice_ID ");
+		if (taxDeclaration.getC_TaxCategory_ID() >0) {
+			whereClause.append(" AND td.c_TaxDeclarationtype_ID = ?");
+			params.add(taxDeclaration.getC_TaxDeclarationType_ID());
 		}
+		if (taxDeclaration.getC_TaxCategory_ID() > 0) {
+			whereClause.append(" AND td.C_TaxCategory_ID=?");
+			params.add(taxDeclaration.getC_TaxCategory_ID());
+		}
+		whereClause.append(")");
+		List<MInvoice> invoices = new Query(getCtx(), MInvoice.Table_Name, whereClause.toString(), get_TrxName())
+				.setParameters(params)
+				.setClient_ID()
+				.setOrderBy("DateAcct, c_Bpartner_ID")
+				.list();		
+		invoices.stream().forEach(invoice ->{
+			create(invoice);
+		});
 		
 		
 		return "@C_Invoice_ID@ #" + noInvoices 
@@ -136,64 +138,60 @@ public class TaxDeclarationCreate extends SvrProcess
 	 */
 	private void create (MInvoice invoice)
 	{
-		/**	Lines					**
-		MInvoiceLine[] lines = invoice.getLines();
-		for (int i = 0; i < lines.length; i++)
-		{
-			MInvoiceLine line = lines[i];
-			if (line.isDescription())
-				continue;
-			//
-			MTaxDeclarationLine tdl = new MTaxDeclarationLine (m_td, invoice, line);
-			tdl.setLine((m_noLines+1) * 10);
-			if (tdl.save())
-				m_noLines++;
-		}
-		/** **/
-
-		/** Invoice Tax				**/
 		MInvoiceTax[] taxes = invoice.getTaxes(false);
-		for (int i = 0; i < taxes.length; i++)
+		for (MInvoiceTax invoiceTax:taxes)
 		{
-			MInvoiceTax tLine = taxes[i];
-			//
-			MTaxDeclarationLine tdl = new MTaxDeclarationLine (m_td, invoice, tLine);
-			tdl.setLine((m_noLines+1) * 10);
-			if (tdl.save())
-				m_noLines++;
-		}
-		/** **/
-
-		/**	Acct					**/
-		String sql = "SELECT * FROM Fact_Acct WHERE AD_Table_ID=? AND Record_ID=?";
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try
-		{
-			pstmt = DB.prepareStatement (sql, null);
-			pstmt.setInt (1, MInvoice.Table_ID);
-			pstmt.setInt (2, invoice.getC_Invoice_ID());
-			rs = pstmt.executeQuery ();
-			while (rs.next ())
-			{
-				MFactAcct fact = new MFactAcct(getCtx(), rs, null);	//	no lock
-				MTaxDeclarationAcct tda = new MTaxDeclarationAcct (m_td, fact);
-				tda.setLine((m_noAccts+1) * 10);
-				if (tda.save())
-					m_noAccts++;
+			if (invoiceTax.getC_Tax().getC_TaxCategory_ID() != taxDeclaration.getC_TaxCategory_ID())
+				continue;
+			//if (TaxDeclarationLineExists(invoiceTax.getC_Invoice_ID()))
+			//	continue;
+			MTaxDeclarationLine taxDeclarationLine = new MTaxDeclarationLine (taxDeclaration, invoice, invoiceTax);
+			Boolean isCreditMemo = invoice.getC_DocType().getDocBaseType().equals(X_C_DocType.DOCBASETYPE_ARCreditMemo)
+					||invoice.getC_DocType().getDocBaseType().equals(X_C_DocType.DOCBASETYPE_APCreditMemo)?true:false; 
+			if (isCreditMemo) {
+				taxDeclarationLine.setTaxAmt(taxDeclarationLine.getTaxAmt().negate());
+				taxDeclarationLine.setTaxBaseAmt(taxDeclarationLine.getTaxBaseAmt().negate());
 			}
+			taxDeclarationLine.setLine((m_noLines+1) * 10);
+			taxDeclarationLine.saveEx();
+			m_noLines++;
+			String sql = "SELECT * FROM Fact_Acct f"
+					+ " INNER JOIN c_Elementvalue ev on f.account_ID=ev.c_Elementvalue_ID "
+					+ " WHERE AD_Table_ID=? AND Record_ID=? AND C_Tax_ID is not null and postingType = 'A'" 
+					+ " AND ev.accountType in ('A','L')";
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			try
+			{
+				pstmt = DB.prepareStatement (sql, null);
+				pstmt.setInt (1, MInvoice.Table_ID);
+				pstmt.setInt (2, invoice.getC_Invoice_ID());
+				rs = pstmt.executeQuery ();
+				while (rs.next ())
+				{
+					MFactAcct fact = new MFactAcct(getCtx(), rs, null);	//	no lock
+					MTaxDeclarationAcct tda = new MTaxDeclarationAcct (taxDeclaration, fact);
+					tda.setLine((m_noAccts+1) * 10);
+					if (tda.save())
+						m_noAccts++;
+				}
+			}
+			catch (Exception e)
+			{
+				log.log (Level.SEVERE, sql, e);
+			}
+			finally
+			{
+				DB.close(rs, pstmt);
+				rs = null; pstmt = null;
+			}
+			
 		}
-		catch (Exception e)
-		{
-			log.log (Level.SEVERE, sql, e);
-		}
-		finally
-		{
-			DB.close(rs, pstmt);
-			rs = null; pstmt = null;
-		}
-		
-		/** **/
+		noInvoices ++;
 	}	//	invoice
+	
+	
+	
+	
 	
 }	//	TaxDeclarationCreate

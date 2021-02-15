@@ -18,20 +18,19 @@ package org.compiere.model;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
 
-/** Generated Interface for C_TaxDeclaration
+/** Generated Interface for C_TaxDeclarationType
  *  @author Adempiere (generated) 
  *  @version Release 3.9.3
  */
-public interface I_C_TaxDeclaration 
+public interface I_C_TaxDeclarationType 
 {
 
-    /** TableName=C_TaxDeclaration */
-    public static final String Table_Name = "C_TaxDeclaration";
+    /** TableName=C_TaxDeclarationType */
+    public static final String Table_Name = "C_TaxDeclarationType";
 
-    /** AD_Table_ID=818 */
+    /** AD_Table_ID=54593 */
     public static final int Table_ID = MTable.getTable_ID(Table_Name);
 
     KeyNamePair Model = new KeyNamePair(Table_ID, Table_Name);
@@ -63,49 +62,6 @@ public interface I_C_TaxDeclaration
 	  */
 	public int getAD_Org_ID();
 
-    /** Column name C_Period_ID */
-    public static final String COLUMNNAME_C_Period_ID = "C_Period_ID";
-
-	/** Set Period.
-	  * Period of the Calendar
-	  */
-	public void setC_Period_ID (int C_Period_ID);
-
-	/** Get Period.
-	  * Period of the Calendar
-	  */
-	public int getC_Period_ID();
-
-	public org.compiere.model.I_C_Period getC_Period() throws RuntimeException;
-
-    /** Column name C_TaxCategory_ID */
-    public static final String COLUMNNAME_C_TaxCategory_ID = "C_TaxCategory_ID";
-
-	/** Set Tax Category.
-	  * Tax Category
-	  */
-	public void setC_TaxCategory_ID (int C_TaxCategory_ID);
-
-	/** Get Tax Category.
-	  * Tax Category
-	  */
-	public int getC_TaxCategory_ID();
-
-	public org.compiere.model.I_C_TaxCategory getC_TaxCategory() throws RuntimeException;
-
-    /** Column name C_TaxDeclaration_ID */
-    public static final String COLUMNNAME_C_TaxDeclaration_ID = "C_TaxDeclaration_ID";
-
-	/** Set Tax Declaration.
-	  * Define the declaration to the tax authorities
-	  */
-	public void setC_TaxDeclaration_ID (int C_TaxDeclaration_ID);
-
-	/** Get Tax Declaration.
-	  * Define the declaration to the tax authorities
-	  */
-	public int getC_TaxDeclaration_ID();
-
     /** Column name C_TaxDeclarationType_ID */
     public static final String COLUMNNAME_C_TaxDeclarationType_ID = "C_TaxDeclarationType_ID";
 
@@ -114,8 +70,6 @@ public interface I_C_TaxDeclaration
 
 	/** Get TaxDeclarationType ID	  */
 	public int getC_TaxDeclarationType_ID();
-
-	
 
     /** Column name Created */
     public static final String COLUMNNAME_Created = "Created";
@@ -133,58 +87,6 @@ public interface I_C_TaxDeclaration
 	  */
 	public int getCreatedBy();
 
-    /** Column name DateFrom */
-    public static final String COLUMNNAME_DateFrom = "DateFrom";
-
-	/** Set Date From.
-	  * Starting date for a range
-	  */
-	public void setDateFrom (Timestamp DateFrom);
-
-	/** Get Date From.
-	  * Starting date for a range
-	  */
-	public Timestamp getDateFrom();
-
-    /** Column name DateTo */
-    public static final String COLUMNNAME_DateTo = "DateTo";
-
-	/** Set Date To.
-	  * End date of a date range
-	  */
-	public void setDateTo (Timestamp DateTo);
-
-	/** Get Date To.
-	  * End date of a date range
-	  */
-	public Timestamp getDateTo();
-
-    /** Column name DateTrx */
-    public static final String COLUMNNAME_DateTrx = "DateTrx";
-
-	/** Set Transaction Date.
-	  * Transaction Date
-	  */
-	public void setDateTrx (Timestamp DateTrx);
-
-	/** Get Transaction Date.
-	  * Transaction Date
-	  */
-	public Timestamp getDateTrx();
-
-    /** Column name Description */
-    public static final String COLUMNNAME_Description = "Description";
-
-	/** Set Description.
-	  * Optional short description of the record
-	  */
-	public void setDescription (String Description);
-
-	/** Get Description.
-	  * Optional short description of the record
-	  */
-	public String getDescription();
-
     /** Column name IsActive */
     public static final String COLUMNNAME_IsActive = "IsActive";
 
@@ -198,19 +100,6 @@ public interface I_C_TaxDeclaration
 	  */
 	public boolean isActive();
 
-    /** Column name IsSOTrx */
-    public static final String COLUMNNAME_IsSOTrx = "IsSOTrx";
-
-	/** Set Sales Transaction.
-	  * This is a Sales Transaction
-	  */
-	public void setIsSOTrx (boolean IsSOTrx);
-
-	/** Get Sales Transaction.
-	  * This is a Sales Transaction
-	  */
-	public boolean isSOTrx();
-
     /** Column name Name */
     public static final String COLUMNNAME_Name = "Name";
 
@@ -223,28 +112,6 @@ public interface I_C_TaxDeclaration
 	  * Alphanumeric identifier of the entity
 	  */
 	public String getName();
-
-    /** Column name Processed */
-    public static final String COLUMNNAME_Processed = "Processed";
-
-	/** Set Processed.
-	  * The document has been processed
-	  */
-	public void setProcessed (boolean Processed);
-
-	/** Get Processed.
-	  * The document has been processed
-	  */
-	public boolean isProcessed();
-
-    /** Column name Processing */
-    public static final String COLUMNNAME_Processing = "Processing";
-
-	/** Set Process Now	  */
-	public void setProcessing (boolean Processing);
-
-	/** Get Process Now	  */
-	public boolean isProcessing();
 
     /** Column name Updated */
     public static final String COLUMNNAME_Updated = "Updated";
@@ -274,4 +141,17 @@ public interface I_C_TaxDeclaration
 	  * Immutable Universally Unique Identifier
 	  */
 	public String getUUID();
+
+    /** Column name Value */
+    public static final String COLUMNNAME_Value = "Value";
+
+	/** Set Search Key.
+	  * Search key for the record in the format required - must be unique
+	  */
+	public void setValue (String Value);
+
+	/** Get Search Key.
+	  * Search key for the record in the format required - must be unique
+	  */
+	public String getValue();
 }

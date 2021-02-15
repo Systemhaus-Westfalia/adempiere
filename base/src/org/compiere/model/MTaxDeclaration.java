@@ -67,6 +67,11 @@ public class MTaxDeclaration extends X_C_TaxDeclaration
 			setDateFrom(TimeUtil.getDay(getDateFrom()));
 		if (is_ValueChanged("DateTo"))
 			setDateTo(TimeUtil.getDay(getDateTo()));
+		if (is_ValueChanged(COLUMNNAME_C_Period_ID) || is_ValueChanged(COLUMNNAME_C_TaxDeclarationType_ID)
+				|| is_ValueChanged(COLUMNNAME_C_TaxCategory_ID)) {
+			String name = getC_Period().getName() + " " + getC_TaxDeclarationType().getName() + " " + getC_TaxCategory().getName();
+			setName(name);
+		}
 		return true;
 	}	//	beforeSave
 	

@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.adempiere.core.domains.models.I_M_CostType;
-import org.adempiere.core.domains.models.X_M_CostType;
 import org.adempiere.exceptions.AdempiereException;
+import org.adempiere.core.domains.models.I_M_CostType;
 import org.compiere.model.MCostType;
 import org.compiere.model.Query;
+import org.adempiere.core.domains.models.X_M_CostType;
 import org.compiere.util.Env;
 import org.compiere.util.Util;
 
@@ -42,23 +42,21 @@ public class CostingMethodFactory
 		s_map.put(X_M_CostType.COSTINGMETHOD_LastPOPrice, LastPOPriceCostingMethod.class);
 		s_map.put(X_M_CostType.COSTINGMETHOD_StandardCosting, StandardCostingMethod.class);
 		new Query(Env.getCtx(), I_M_CostType.Table_Name, "", null)
-		.setOnlyActiveRecords(true)
-		.setClient_ID()
-		.<MCostType>list()
-		.forEach(costType ->{
-			Optional<String> maybeClassName = Optional.ofNullable(costType.getClassname());
-			maybeClassName.ifPresent(className ->{
-				if (!Util.isEmpty(className)) {
-					try {
-						@SuppressWarnings("unchecked")
-						Class<? extends ICostingMethod> clazz = (Class<? extends ICostingMethod>) Class.forName(className);
-						s_map.put(costType.getCostingMethod(), clazz);
-					} catch (ClassNotFoundException e) {
-						throw new AdempiereException("No implementation found for costing method "+costType.getCostingMethod() + " - " + className.toString());
-					}
-				}
-			});
-		});
+						.setOnlyActiveRecords(true)
+						.setClient_ID()
+						.<MCostType>list()
+						.forEach(costType ->{
+							Optional<Object> maybeClassName = Optional.ofNullable(costType.get_Value("ClassName"));
+							maybeClassName.ifPresent(className ->{
+								if (!Util.isEmpty(className.toString())) {
+									try {
+										s_map.put(costType.getCostingMethod(),(Class<? extends ICostingMethod>) Class.forName(className.toString()));
+									} catch (ClassNotFoundException e) {
+										throw new AdempiereException("No implementation found for costing method "+costType.getCostingMethod() + " - " + className.toString());
+									}
+								}
+							});
+						});
 	}
 
 	

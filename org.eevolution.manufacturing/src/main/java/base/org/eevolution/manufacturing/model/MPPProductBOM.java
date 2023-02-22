@@ -130,8 +130,8 @@ public class MPPProductBOM extends X_PP_Product_BOM
 	 */
 	public static MPPProductBOM getDefault(MProduct product, String trxName)
 	{
-		MPPProductBOM bom = new Query(product.getCtx(), Table_Name, "M_Product_ID=? AND Value=?", trxName)
-				.setParameters(new Object[]{product.getM_Product_ID(), product.getValue()}).setOnlyActiveRecords(true)
+		MPPProductBOM bom = new Query(product.getCtx(), Table_Name, "M_Product_ID=? AND IsDefault = 'Y'", trxName)
+				.setParameters(new Object[]{product.getM_Product_ID()})
 				.setOnlyActiveRecords(true)
 				.setClient_ID()
 				.firstOnly();

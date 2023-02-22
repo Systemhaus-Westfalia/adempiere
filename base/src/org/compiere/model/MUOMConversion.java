@@ -477,7 +477,7 @@ public class MUOMConversion extends X_C_UOM_Conversion
 		{
 			if (Env.ONE.compareTo(retValue) == 0)
 				return qtyPrice;
-			MUOM uom = MUOM.get (ctx, C_UOM_To_ID);
+			MUOM uom = MUOM.get (ctx, MProduct.get(ctx, M_Product_ID).getC_UOM_ID());
 			if (uom != null)
 				return uom.round(retValue.multiply(qtyPrice), true);
 			return retValue.multiply(qtyPrice);
@@ -544,7 +544,7 @@ public class MUOMConversion extends X_C_UOM_Conversion
 		{
 			if (Env.ONE.compareTo(retValue) == 0)
 				return qtyPrice;
-			MUOM uom = MUOM.get (ctx, C_UOM_To_ID);
+			MUOM uom = MUOM.get (ctx, MProduct.get(ctx, M_Product_ID).getC_UOM_ID());
 			if (uom != null)
 				return uom.round(retValue.multiply(qtyPrice), true);
 			return retValue.multiply(qtyPrice);

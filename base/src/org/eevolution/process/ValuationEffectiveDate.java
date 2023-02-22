@@ -50,13 +50,6 @@ public class ValuationEffectiveDate extends ValuationEffectiveDateAbstract {
 	private int count = 0;
 
 	/**
-	 * Prepare - e.g., get Parameters.
-	 */
-	protected void prepare() {
-		super.prepare();
-	} // prepare
-
-	/**
 	 * execute the Valuation Effective Date
 	 */
 	protected String doIt() throws Exception {
@@ -79,43 +72,14 @@ public class ValuationEffectiveDate extends ValuationEffectiveDateAbstract {
 		commitEx();
 		DB.close(pstmt);
 		updatePricePO();
-		for (MAcctSchema acctSchema: acctSchemas) {
-			int no = 0;
-			String whereSeq = " (SELECT MAX(SeqNo) FROM M_CostDetail " + 
-					" WHERE IsReversal='N' AND M_Product_ID=iv.M_Product_ID AND iv.M_CostType_ID=cd.M_CostType_ID AND iv.C_AcctSchema_ID=cd.C_AcctSchema_ID AND iv.M_CostElement_ID=cd.M_Costelement_ID AND DateAcct <=?))";
-			if (acctSchema.getCostingLevel().equals(MAcctSchema.COSTINGLEVEL_Client)) {
-				ArrayList<Object> params = new ArrayList<>();
-				params.add(getDateValue());
-				params.add(getDateValue());
-				params.add(getDateValue());
-				params.add(getAD_PInstance_ID());
-				StringBuffer update1 = new StringBuffer( "UPDATE T_InventoryValue iv ")
-						.append(" set costamt = (SELECT COALESCE(CurrentCostPrice,0) FROM RV_M_Transaction_Costing cd WHERE iv.M_Product_ID=cd.M_Product_ID AND cd.SeqNo= ")
-						.append(whereSeq);
-				update1.append(", costamtll = (SELECT COALESCE(CurrentCostPriceLL) FROM RV_M_Transaction_Costing cd WHERE iv.M_Product_ID=cd.M_Product_ID AND cd.SeqNo= ")
-				.append(whereSeq);
-				//update1.append(" ,cumulatedamt = (select endingqtybalance from rv_m_transaction_costing cd where iv.m_Product_ID=cd.m_Product_ID and cd.seqno= ")
-				//.append(whereSeq);
-				update1.append(", DateValue = ? WHERE iv.AD_PInstance_ID=?");
-				no = DB.executeUpdateEx(update1.toString(), params.toArray(), get_TrxName());		
-				int i = no;
-				commitEx();
-				String update2 = "UPDATE T_InventoryValue set CumulatedAmt = (CostAmt +CostAmtLL)*QtyonHand WHERE AD_PInstance_ID=?";
-				DB.executeUpdate(update2, getAD_PInstance_ID(), get_TrxName());
-			}
-			if (acctSchema.getCostingLevel().equals(MAcctSchema.COSTINGLEVEL_Warehouse)) {
-				no = DB.executeUpdate("UPDATE T_InventoryValue SET Cost = CASE WHEN QtyOnHand <> 0 THEN (CostAmt + CostAmtLL) / QtyOnHand ELSE  0 END  ,  CumulatedAmt = CASE WHEN QtyOnHand <> 0  THEN  CostAmt + CostAmtLL ELSE 0 END ,  DateValue = "
+		DB.executeUpdate("UPDATE T_InventoryValue SET Cost = CASE WHEN QtyOnHand <> 0 THEN (CostAmt + CostAmtLL) / QtyOnHand ELSE  0 END  ,  CumulatedAmt = CASE WHEN QtyOnHand <> 0  THEN  CostAmt + CostAmtLL ELSE 0 END ,  DateValue = "
 						+ DB.TO_DATE(getDateValue()) + " WHERE AD_PInstance_ID=?",
 				getAD_PInstance_ID(), get_TrxName());
-				int i=no;
-			}
-			
-		}
 
 		return "@Ok@ " + count;
 
 	}
-
+	
 	/**
 	 * Update Price PO
 	 */
@@ -151,7 +115,7 @@ public class ValuationEffectiveDate extends ValuationEffectiveDateAbstract {
 		//	Update
 		DB.executeUpdateEx (update.toString(), get_TrxName());
 	}
-	
+
 	/**
 	 * Setup the collections
 	 */
@@ -214,10 +178,16 @@ public class ValuationEffectiveDate extends ValuationEffectiveDateAbstract {
 				" AND tc.SeqNo = (SELECT MAX(SeqNo) FROM M_CostDetail tc1")
 				.append(" WHERE tc1.IsReversal='N' AND tc1.M_Product_ID=tc.M_Product_ID AND tc1.M_Warehouse_ID = tc.M_Warehouse_ID ");
 
-		whereClause1.append("AND tc.DateAcct<= ").append(DB.TO_DATE(getDateValue()));
-		whereClause2.append("AND tc1.DateAcct<= ").append(DB.TO_DATE(getDateValue()));
+		whereClause1.append("AND tc.DateAcct<= ").append(
+				DB.TO_DATE(getDateValue()));
+		whereClause2.append("AND tc1.DateAcct<= ").append(
+				DB.TO_DATE(getDateValue()));
 
 		whereClause1.append(" AND p.M_Product_ID=? ");
+
+		
+		if (getProductCategoryId() > 0)
+			whereClause1.append(" AND p.M_Product_Category_ID =? ");
 
 		whereClause1.append(" AND tc.C_AcctSchema_ID=? ");
 		whereClause2.append(" AND tc1.C_AcctSchema_ID = tc.C_AcctSchema_ID");
@@ -230,11 +200,6 @@ public class ValuationEffectiveDate extends ValuationEffectiveDateAbstract {
 		
 		whereClause1.append(" AND tc.M_Warehouse_ID=? ");
 		whereClause2.append(")");
-		//	
-		if (getProductCategoryId() > 0) {
-			whereClause1.append(" AND p.M_Product_Category_ID =? ");
-		}
-
 	}
 	
 	/**
@@ -249,17 +214,16 @@ public class ValuationEffectiveDate extends ValuationEffectiveDateAbstract {
 			int costTypeId,
 			int costElementId,
 			int warehouseId) throws SQLException {
-			
-			int index = 1;
-			pstmt.setInt(index++, currencyId);
-			pstmt.setInt(index++, productId);
-			pstmt.setInt(index++, accountSchemaId);
-			pstmt.setInt(index++, costTypeId);
-			pstmt.setInt(index++, costElementId);
-			pstmt.setInt(index++, warehouseId);
+		
+			pstmt.setInt(1, currencyId);
+			pstmt.setInt(2, productId);
+			pstmt.setInt(3, accountSchemaId);
+			pstmt.setInt(4, costTypeId);
+			pstmt.setInt(5, costElementId);
+			pstmt.setInt(6, warehouseId);
 			
 			if(getProductCategoryId() > 0)
-				pstmt.setInt(index++, getProductCategoryId());
+				pstmt.setInt(6, getProductCategoryId());
 			
 			pstmt.addBatch();
 			

@@ -30,8 +30,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
+import org.adempiere.core.domains.models.I_HR_Period;
 import org.adempiere.core.domains.models.X_HR_Process;
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.exceptions.PeriodClosedException;
@@ -57,6 +59,7 @@ import org.compiere.util.CLogger;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
 import org.compiere.util.TimeUtil;
+import org.compiere.util.Trx;
 import org.compiere.util.Util;
 import org.eevolution.hr.services.HRProcessActionMsg;
 import org.eevolution.manufacturing.model.MPPCostCollector;
@@ -768,6 +771,7 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			description = context.getAttribute("description");
 			long elapsed = System.currentTimeMillis() - startTime;
 			logger.info("ScriptResult -> Concept Name " + concept.getName() + " = " + result + " Time elapsed: " + TimeUtil.formatElapsed(elapsed));
+			System.err.println("ScriptResult -> Concept Name " + concept.getValue() + " - " + concept.getName() + " = " + result + " Time elapsed: " + TimeUtil.formatElapsed(elapsed));
 		}
 		catch (Exception e)
 		{
@@ -789,12 +793,15 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 		Object result = null;
 		description = null;
 		try {
-			if (rule == null) {
+			if (rule == null
+					|| rule.getAD_Rule_ID() <= 0) {
 				logger.log(Level.WARNING, " @AD_Rule_ID@ @NotFound@");
+				return null;
 			}
 			if (!(rule.getEventType().equals(MRule.EVENTTYPE_HumanResourcePayroll)
 					&& rule.getRuleType().equals(MRule.RULETYPE_JSR223ScriptingAPIs))) {
 				logger.log(Level.WARNING, " must be of type JSR 223 and event human resource");
+				return null;
 			}
 			boolean isRunned = false;
 			if(rule.isRuleClassGenerated()) {
@@ -846,6 +853,7 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			}
 			long elapsed = System.currentTimeMillis() - startTime;
 			logger.info("ScriptResult -> Concept Name " + concept.getName() + " = " + result + " Time elapsed: " + TimeUtil.formatElapsed(elapsed));
+			System.err.println("ScriptResult -> Concept Name " + concept.getName() + " = " + result + " Time elapsed: " + TimeUtil.formatElapsed(elapsed));
 		} catch (Exception e) {
 			throw new AdempiereException("@HR_Employee_ID@ : " + businessPartner.getName() + " " + businessPartner.getName2() 
 			+ " \n @HR_Concept_ID@ " + concept.getValue() + " -> " + concept.getName()
@@ -972,6 +980,7 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 	 */
 	private void createMovements() throws Exception
 	{
+		deleteMovements();
 		logger.info("CreateMovements #");
 		long startTime = System.currentTimeMillis();
 		scriptCtx.clear();
@@ -1055,6 +1064,7 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			payrollPeriod.saveEx();
 		}
 		logger.info("Calculation for CreateMovements # Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startTime));
+		System.err.println("Calculation for CreateMovements # Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startTime));
 	}
 
 	/**
@@ -1081,10 +1091,9 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 		if(employee == null) {
 			return;
 		}
-		String employeePayrollValue = null;
+		MHRPayroll employeePayroll = null;
 		if(employee.getHR_Payroll_ID() != 0) {
-			MHRPayroll employeePayroll = MHRPayroll.getById(getCtx(), employee.getHR_Payroll_ID(), get_TrxName());
-			employeePayrollValue = employeePayroll.getValue();
+			employeePayroll = MHRPayroll.getById(getCtx(), employee.getHR_Payroll_ID(), get_TrxName());
 		}
 		Timestamp employeeValidFrom = dateFrom;
 		Timestamp employeeValidTo = dateTo;
@@ -1115,15 +1124,14 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 		scriptCtx.put("_HR_Employee_ID", employee.getHR_Employee_ID());
 		scriptCtx.put("_C_BPartner", partner);
 		scriptCtx.put("_HR_Employee", employee);
-		scriptCtx.put("_HR_Employee_Payroll_Value", employeePayrollValue);
+		if(employeePayroll != null) {
+			scriptCtx.put("_HR_Employee_Payroll_Value", employeePayroll.getValue());
+			MHRContract contract = MHRContract.getById(getCtx(), employeePayroll.getHR_Contract_ID(), get_TrxName());
+			scriptCtx.put("_HR_Employee_Contract", contract);
+		}
 		//	Get Employee valid from and to
 		scriptCtx.put("_HR_Employee_ValidFrom", employeeValidFrom);
 		scriptCtx.put("_HR_Employee_ValidTo", employeeValidTo);
-		if(employee.getHR_Payroll_ID() > 0) {
-			MHRPayroll payroll = MHRPayroll.getById(getCtx(), employee.getHR_Payroll_ID(), get_TrxName());
-			MHRContract contract = MHRContract.getById(getCtx(), payroll.getHR_Contract_ID(), get_TrxName());
-			scriptCtx.put("_HR_Employee_Contract", contract);
-		}
 		//	
 		if(getHR_Period_ID() > 0) {
 			createCostCollectorMovements(partner.get_ID(), payrollPeriod);
@@ -1181,41 +1189,49 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			return;
 		}
 		logger.info("Calculation for Employee # " + partner.getValue() + " - " + partner.getName() +  " " + partner.getName2() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startTime));
+		System.err.println("Calculation for Employee # " + partner.getValue() + " - " + partner.getName() +  " " + partner.getName2() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startTime));
 		long startSavingTime = System.currentTimeMillis();
-		// Save movements:
-		movements.values()
-			.stream()
-			.filter(movement -> movement.getHR_Concept_ID() != 0)
-			.forEach(movement -> {
-			long startSavingMovementTime = System.currentTimeMillis();
-			MHRConcept concept = MHRConcept.getById(getCtx() , movement.getHR_Concept_ID() , get_TrxName());
-			if (concept != null && concept.get_ID() > 0) {
-				if (concept.isManual()) {
-					logger.fine("Skip saving " + movement);
-				} else {
-					boolean saveThisRecord = (concept.isSaveInHistoric() 
-													|| movement.isPrinted() 
-													|| concept.isPaid() 
-													|| concept.isPrinted()) 
-											&& (!concept.isNotSaveInHistoryIfNull() || !movement.isEmpty());
-					if (saveThisRecord)
-						movement.saveEx();
+		Trx.run(transactionName -> {
+			// Save movements:
+			movements.values()
+				.stream()
+				.filter(movement -> movement.getHR_Concept_ID() != 0)
+				.forEach(movement -> {
+				long startSavingMovementTime = System.currentTimeMillis();
+				MHRConcept concept = MHRConcept.getById(getCtx() , movement.getHR_Concept_ID(), transactionName);
+				if (concept != null && concept.get_ID() > 0) {
+					if (concept.isManual()) {
+						logger.fine("Skip saving " + movement);
+					} else {
+						boolean saveThisRecord = (concept.isSaveInHistoric() 
+														|| movement.isPrinted() 
+														|| concept.isPaid() 
+														|| concept.isPrinted()) 
+												&& (!concept.isNotSaveInHistoryIfNull() || !movement.isEmpty());
+						if (saveThisRecord)
+							movement.saveEx(transactionName);
+					}
 				}
-			}
-			logger.info("Saving Concept " + concept.getValue() + " - " + concept.getName() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startSavingMovementTime));
+				logger.info("Saving Concept " + concept.getValue() + " - " + concept.getName() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startSavingMovementTime));
+			});
 		});
 		logger.info("Saving for Employee # " + partner.getValue() + " - " + partner.getName() +  " " + partner.getName2() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startSavingTime));
 		logger.info("Employee # " + partner.getValue() + " - " + partner.getName() +  " " + partner.getName2() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startTime));
+		System.err.println("Saving for Employee # " + partner.getValue() + " - " + partner.getName() +  " " + partner.getName2() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startSavingTime));
+		System.err.println("Employee # " + partner.getValue() + " - " + partner.getName() +  " " + partner.getName2() + " Time elapsed: " + TimeUtil.formatElapsed(System.currentTimeMillis() - startTime));
 		//	Clear persistence
 		actionScope.clearPersistence();
 	}
 
 	private int deleteMovements()
 	{
-		// RE-Process, delete movement except concept type Incidence
-		int no = DB.executeUpdateEx("DELETE FROM HR_Movement m WHERE HR_Process_ID=? AND IsManual<>?", new Object[]{getHR_Process_ID(), true}, get_TrxName());
-		logger.info("Movements Deleted #" + no);
-		return  no;
+		AtomicInteger no = new AtomicInteger();
+		Trx.run(transactionName -> {
+			// RE-Process, delete movement except concept type Incidence
+			no.set(DB.executeUpdateEx("DELETE FROM HR_Movement m WHERE HR_Process_ID=? AND IsManual<>?", new Object[]{getHR_Process_ID(), true}, transactionName));
+			logger.info("Movements Deleted #" + no);
+		});
+		return no.get();
 	}
 
 
@@ -1860,14 +1876,15 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 				}
 				rate = MConversionRate.getRate(attribute.getC_Currency_ID(), getC_Currency_ID(), getDateAcct(), getC_ConversionType_ID(), getAD_Client_ID(), getAD_Org_ID());
 				if(rate != null) {
-					amount = rate.multiply(Optional.ofNullable(amount).orElse(Env.ZERO))
-							.setScale(precision, RoundingMode.HALF_UP);
+					amount = rate.multiply(amount)
+							.setScale(precision, BigDecimal.ROUND_HALF_UP);
+					
 				}
 			}
 			if(amount == null) {
 				return 0.0;
 			}
-			return amount.doubleValue();
+			return Optional.ofNullable(amount).orElse(Env.ZERO).doubleValue();
 		}
 
 		//something else
@@ -2057,13 +2074,13 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			payrollId = payroll.get_ID();
 		}
 		String key = "SUM|" + partnerId + "|" + conceptValue + "|" + payrollId + "|" + periodFrom + "|" + periodTo + "|" + includeInProcess;
-		BigDecimal amount = conceptAgregateMap.get(key);
-		if(amount == null) {
-			amount = new BigDecimal(MHRMovement.getConceptSum(getCtx(), conceptValue, payrollId, partnerId, getHR_Period_ID(), periodFrom, periodTo, includeInProcess, get_TrxName()));
-			conceptAgregateMap.put(key, amount);
+		if(conceptAgregateMap.containsKey(key)) {
+			return Optional.ofNullable(conceptAgregateMap.get(key)).orElse(Env.ZERO).doubleValue();
 		}
+		BigDecimal amount = new BigDecimal(MHRMovement.getConceptSum(getCtx(), conceptValue, payrollId, partnerId, getHR_Period_ID(), periodFrom, periodTo, includeInProcess, get_TrxName()));
+		conceptAgregateMap.put(key, amount);
 		//	Get from Movement helper method
-		return amount.doubleValue();
+		return Optional.ofNullable(amount).orElse(Env.ZERO).doubleValue();
 	} // getConcept
 
 	/**
@@ -2101,13 +2118,13 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			payrollId = payroll.get_ID();
 		}
 		String key = "AVG|" + partnerId + "|" + conceptValue + "|" + payrollId + "|" + periodFrom + "|" + periodTo + "|" + includeInProcess;
-		BigDecimal amount = conceptAgregateMap.get(key);
-		if(amount == null) {
-			amount = new BigDecimal(MHRMovement.getConceptAvg(getCtx(), conceptValue, payrollId, partnerId, getHR_Period_ID(), periodFrom, periodTo, includeInProcess, get_TrxName()));
-			conceptAgregateMap.put(key, amount);
+		if(conceptAgregateMap.containsKey(key)) {
+			return Optional.ofNullable(conceptAgregateMap.get(key)).orElse(Env.ZERO).doubleValue();
 		}
+		BigDecimal amount = new BigDecimal(MHRMovement.getConceptAvg(getCtx(), conceptValue, payrollId, partnerId, getHR_Period_ID(), periodFrom, periodTo, includeInProcess, get_TrxName()));
+		conceptAgregateMap.put(key, amount);
 		//	Get from Movement helper method
-		return amount.doubleValue();
+		return Optional.ofNullable(amount).orElse(Env.ZERO).doubleValue();
 	} // getConcept
 	
 	/**
@@ -2125,13 +2142,11 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 		String key = partnerId + "|" + conceptValue + "|" + payrollValue + "|" + breakDate.getTime() + "|" + isWithValidFrom;
 		
 		//	Get from cache
-		MHRMovement lastMovement = lastConceptMap.get(key);
-		if(lastMovement == null) {
-			lastMovement = MHRMovement.getLastMovement(getCtx(), conceptValue, payrollValue, partnerId, breakDate, isWithValidFrom, get_TrxName());
-			if(lastMovement != null) {
-				lastConceptMap.put(key, lastMovement);
-			}
+		if(lastConceptMap.containsKey(key)) {
+			return lastConceptMap.get(key);
 		}
+		MHRMovement lastMovement = MHRMovement.getLastMovement(getCtx(), conceptValue, payrollValue, partnerId, breakDate, isWithValidFrom, get_TrxName());
+		lastConceptMap.put(key, lastMovement);
 		return lastMovement;
 	}
 	
@@ -2381,13 +2396,13 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			payrollId = payroll.get_ID();
 		}
 		String key = "SUM|" + partnerId + "|" + conceptValue + "|" + payrollId + "|" + from.getTime() + "|" + to.getTime() + "|" + includeInProcess;
-		BigDecimal amount = conceptAgregateMap.get(key);
-		if(amount == null) {
-			amount = new BigDecimal(MHRMovement.getConceptSum(getCtx(), conceptValue, payrollId, partnerId, from, to, includeInProcess, get_TrxName()));
-			conceptAgregateMap.put(key, amount);
+		if(conceptAgregateMap.containsKey(key)) {
+			return Optional.ofNullable(conceptAgregateMap.get(key)).orElse(Env.ZERO).doubleValue();
 		}
+		BigDecimal amount = new BigDecimal(MHRMovement.getConceptSum(getCtx(), conceptValue, payrollId, partnerId, from, to, includeInProcess, get_TrxName()));
+		conceptAgregateMap.put(key, amount);
 		//	Get from Movement helper method
-		return amount.doubleValue();
+		return Optional.ofNullable(amount).orElse(Env.ZERO).doubleValue();
 	} // getConcept
 
 	/**
@@ -2422,13 +2437,13 @@ public class MHRProcess extends X_HR_Process implements DocAction , DocumentReve
 			payrollId = payroll.get_ID();
 		}
 		String key = "AVG|" + partnerId + "|" + conceptValue + "|" + payrollId + "|" + from.getTime() + "|" + to.getTime() + "|" + includeInProcess;
-		BigDecimal amount = conceptAgregateMap.get(key);
-		if(amount == null) {
-			amount = new BigDecimal(MHRMovement.getConceptAvg(getCtx(), conceptValue, payrollId, partnerId, from, to , includeInProcess, get_TrxName()));
-			conceptAgregateMap.put(key, amount);
+		if(conceptAgregateMap.containsKey(key)) {
+			return Optional.ofNullable(conceptAgregateMap.get(key)).orElse(Env.ZERO).doubleValue();
 		}
+		BigDecimal amount = new BigDecimal(MHRMovement.getConceptAvg(getCtx(), conceptValue, payrollId, partnerId, from, to , includeInProcess, get_TrxName()));
+		conceptAgregateMap.put(key, amount);
 		//	Get from Movement helper method
-		return amount.doubleValue();
+		return Optional.ofNullable(amount).orElse(Env.ZERO).doubleValue();
 	} // getConcept
 	
 	

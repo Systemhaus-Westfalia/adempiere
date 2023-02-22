@@ -19,7 +19,6 @@ package org.compiere.model;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -27,12 +26,9 @@ import org.adempiere.core.domains.models.X_AD_Session;
 import org.compiere.Adempiere;
 import org.compiere.util.CCache;
 import org.compiere.util.DB;
-import org.compiere.util.DisplayType;
 import org.compiere.util.Env;
 import org.compiere.util.Ini;
-import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
-import org.compiere.util.Trx;
 
 /**
  *	Session Model.
@@ -76,7 +72,7 @@ public class MSession extends X_AD_Session
 		int AD_Session_ID = Env.getContextAsInt(ctx, "#AD_Session_ID");
 		MSession session = null;
 		if (AD_Session_ID > 0)
-			session = (MSession) s_sessions.get(Integer.valueOf(AD_Session_ID));
+			session = (MSession)s_sessions.get(AD_Session_ID);
 		// Try to load
 		if (session == null && AD_Session_ID > 0)
 		{
@@ -93,7 +89,7 @@ public class MSession extends X_AD_Session
 			session.saveEx();
 			AD_Session_ID = session.getAD_Session_ID();
 			Env.setContext (ctx, "#AD_Session_ID", AD_Session_ID);
-			s_sessions.put(Integer.valueOf(AD_Session_ID), session);
+			s_sessions.put (AD_Session_ID, session);
 		}
 		if(session != null && keepAlive) {
 			session.keepAlive();
@@ -114,14 +110,14 @@ public class MSession extends X_AD_Session
 		int AD_Session_ID = Env.getContextAsInt(ctx, "#AD_Session_ID");
 		MSession session = null;
 		if (AD_Session_ID > 0)
-			session = (MSession) s_sessions.get(Integer.valueOf(AD_Session_ID));
+			session = (MSession)s_sessions.get(AD_Session_ID);
 		if (session == null)
 		{
 			session = new MSession (ctx, Remote_Addr, Remote_Host, WebSession, null);	//	remote session
 			session.saveEx();
 			AD_Session_ID = session.getAD_Session_ID();
 			Env.setContext(ctx, "#AD_Session_ID", AD_Session_ID);
-			s_sessions.put(Integer.valueOf(AD_Session_ID), session);
+			s_sessions.put(AD_Session_ID, session);
 		}	
 		return session;
 	}	//	get
@@ -254,23 +250,20 @@ public class MSession extends X_AD_Session
 	 */
 	public void logout()
 	{
-			setProcessed(true);
-			saveEx();
-			s_sessions.remove(getAD_Session_ID());
-			log.info(TimeUtil.formatElapsed(getCreated(), getUpdated()));
+		setProcessed(true);
+		saveEx();
+		s_sessions.remove(getAD_Session_ID());
+		log.info(TimeUtil.formatElapsed(getCreated(), getUpdated()));
 	}	//	logout
 	
 	/**
 	 * Keep Alive Session
 	 */
 	public void keepAlive() {
-		Trx.run(trxName -> {
-			MSession session = new MSession(getCtx() , getAD_Session_ID() , trxName);
-			Timestamp lastAlive = new Timestamp(System.currentTimeMillis());
-			session.set_ValueNoCheck(COLUMNNAME_Updated, lastAlive);
-			session.setDescription(Msg.parseTranslation(getCtx(), "@LastConnection@: ") + DisplayType.getDateFormat(DisplayType.DateTime).format(lastAlive));
-			session.saveEx();
-		});
+		//Timestamp lastAlive = new Timestamp(System.currentTimeMillis());
+		//set_ValueNoCheck(COLUMNNAME_Updated, lastAlive);
+		//setDescription(Msg.parseTranslation(getCtx(), "@LastConnection@: ") + DisplayType.getDateFormat(DisplayType.DateTime).format(lastAlive));
+		//saveEx();
 	}
 
 	/**

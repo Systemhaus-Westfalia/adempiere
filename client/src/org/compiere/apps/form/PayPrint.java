@@ -228,7 +228,7 @@ public class PayPrint {
 	protected void setBankAccountNextSequence(String paymentRule, int lastDocumentNo) {
 		if (bankAccountId > 0) { 
 			MBankAccount bankAccount = MBankAccount.get(Env.getCtx(), bankAccountId);
-			bankAccount.setDocumentCurrentNext(paymentRule, lastDocumentNo);
+			bankAccount.setCurrentNext(paymentRule, lastDocumentNo);
 		}
 	}
 }

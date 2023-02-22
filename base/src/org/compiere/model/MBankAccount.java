@@ -195,11 +195,12 @@ public class MBankAccount extends X_C_BankAccount
 	 * @param paymentRule
 	 * @param currentNext
 	 */
-	public void setDocumentCurrentNext(String paymentRule, int currentNext) {
+	public void setCurrentNext(String paymentRule, int currentNext) {
 		Optional<X_C_BankAccountDoc> maybeBankAccountDoc = Optional.ofNullable(MBankAccountDoc.get(getC_BankAccount_ID(), paymentRule));
 		maybeBankAccountDoc.ifPresent(bankAccountDoc ->{
 			bankAccountDoc.setCurrentNext(currentNext);
 			bankAccountDoc.save();
 		});
+		
 	}
 }	//	MBankAccount

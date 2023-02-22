@@ -28,11 +28,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.core.domains.models.I_M_DiscountSchemaLine;
 import org.adempiere.core.domains.models.I_M_ProductPrice;
 import org.adempiere.core.domains.models.I_M_Product_PO;
-import org.adempiere.core.domains.models.X_M_DiscountSchemaLine;
-import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.MConversionRate;
 import org.compiere.model.MDiscountSchemaLine;
 import org.compiere.model.MPriceList;
@@ -40,6 +39,7 @@ import org.compiere.model.MPriceListVersion;
 import org.compiere.model.MProductPO;
 import org.compiere.model.MProductPrice;
 import org.compiere.model.Query;
+import org.adempiere.core.domains.models.X_M_DiscountSchemaLine;
 import org.compiere.util.AdempiereUserError;
 import org.compiere.util.CLogger;
 import org.compiere.util.DB;
@@ -375,7 +375,7 @@ public class M_PriceList_Create extends M_PriceList_CreateAbstract {
 						combinationMap.put(productPurchasing.getM_Product_ID(), 
 								new ProductCombination(productPurchasing.getM_Product_ID(), 
 										conversionRate, 
-										productPurchasing.getPriceList(), 
+										productPurchasing.getPricePO(), 
 										productPurchasing.getPricePO(), 
 										productPurchasing.getPricePO(), 
 										discountSchemaLine));
@@ -540,21 +540,9 @@ public class M_PriceList_Create extends M_PriceList_CreateAbstract {
 		public ProductCombination(int productId, BigDecimal conversionRate, BigDecimal priceList, BigDecimal priceStandard, BigDecimal priceLimit, MDiscountSchemaLine discountSchemaLine) {
 			this.productId = productId;
 			this.conversionRate = conversionRate;
-			BigDecimal defaultPrice = Optional.ofNullable(priceList).orElseGet(() -> {
-				//	Standard
-				if(Optional.ofNullable(priceStandard).isPresent()) {
-					return priceStandard;
-				}
-				//	Limit
-				if(Optional.ofNullable(priceLimit).isPresent()) {
-					return priceLimit;
-				}
-				//	Default
-				return Env.ZERO;
-			});
-			this.priceList = Optional.ofNullable(priceList).orElse(defaultPrice);
-			this.priceStandard = Optional.ofNullable(priceStandard).orElse(defaultPrice);
-			this.priceLimit = Optional.ofNullable(priceLimit).orElse(defaultPrice);
+			this.priceList = Optional.ofNullable(priceList).orElse(Env.ZERO);
+			this.priceStandard = Optional.ofNullable(priceStandard).orElse(Env.ZERO);
+			this.priceLimit = Optional.ofNullable(priceLimit).orElse(Env.ZERO);
 			this.discountSchemaLine = discountSchemaLine;
 		}
 		

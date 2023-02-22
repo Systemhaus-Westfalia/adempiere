@@ -120,11 +120,12 @@ public class MCommissionDetail extends X_C_CommissionDetail
 	 */
 	public void setConvertedAmt (Timestamp date)
 	{
-		BigDecimal amt = MConversionRate.convertBase(getCtx(), 
-			getActualAmt(), getC_Currency_ID(), date, 0, 	//	type
-			getAD_Client_ID(), getAD_Org_ID());
-		if (amt != null)
+		MCommissionAmt commissionAmount = getParent();
+		MCommissionRun commissionRun = (MCommissionRun) commissionAmount.getC_CommissionRun();
+		BigDecimal amt = MConversionRate.convert(getCtx(), getActualAmt(), getC_Currency_ID(), commissionRun.get_ValueAsInt("C_Currency_ID"), date, commissionRun.get_ValueAsInt("C_ConversionType_ID"), getAD_Client_ID(), getAD_Org_ID());
+		if (amt != null) {
 			setConvertedAmt(amt);
+		}
 	}	//	setConvertedAmt
 	
 	/**

@@ -18,41 +18,25 @@ package org.compiere.util;
 
 import java.security.Principal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
-
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
-import io.vavr.Tuple3;
-import io.vavr.Tuple4;
-import io.vavr.collection.List;
-import io.vavr.control.Try;
+import javax.swing.*;
 
 import org.adempiere.core.domains.models.I_AD_User;
 import org.adempiere.core.domains.models.I_AD_User_Roles;
 import org.adempiere.core.domains.models.I_M_Warehouse;
+import org.adempiere.exceptions.DBException;
 import org.compiere.Adempiere;
 import org.compiere.db.CConnection;
-import org.compiere.model.MAcctSchema;
-import org.compiere.model.MAcctSchemaElement;
-import org.compiere.model.MClientInfo;
-import org.compiere.model.MColumn;
-import org.compiere.model.MCountry;
-import org.compiere.model.MPreference;
-import org.compiere.model.MRole;
-import org.compiere.model.MSystem;
-import org.compiere.model.MTree;
-import org.compiere.model.MUser;
-import org.compiere.model.M_Element;
-import org.compiere.model.ModelValidationEngine;
-import org.compiere.model.Query;
-
+import org.compiere.model.*;
 
 /**
  *	Login Manager
@@ -71,7 +55,6 @@ import org.compiere.model.Query;
 public class Login
 {
 	protected Integer authenticatedUserId = null;
-
 	/**
 	 *  Test Init - Set Environment for tests
 	 *	@param isClient client session
@@ -122,11 +105,14 @@ public class Login
 		//if (jVersion.startsWith("1.5.0"))
 		//	return true;
         //vpj-cd e-evolution support to java 6
-        if (jVersion.startsWith("11"))
-            return true;
-		//Add ADEMPIERE-86 Add JAVA 11.0 support in ADempiere
-		if (jVersion.startsWith("17"))
+        //if (jVersion.startsWith("1.6.0"))
+		//	return true;
+        //Add ADEMPIERE-86 Add JAVA 7.0 support in ADempiere
+        if (jVersion.startsWith("1.7.0"))
 			return true;
+        //Add ADEMPIERE-86 Add JAVA 8.0 support in ADempiere
+        if (jVersion.startsWith("1.8.0"))
+            return true;
         //end
 		//  Warning
 		boolean ok = false;
@@ -139,7 +125,8 @@ public class Login
 		msg.append(System.getProperty("java.vm.name")).append(" - ").append(jVersion);
 		if (ok)
 			msg.append("(untested)");
-        msg.append(" <> 11, 17");
+		//msg.append(" <> 1.5.0, 1.6.0, 1.7.0 1.8.0");
+        msg.append(" <> 1.7.0 , 1.8.0");
 		//
 		if (isClient)
 			JOptionPane.showMessageDialog(null, msg.toString(),
@@ -250,19 +237,19 @@ public class Login
 	 * @return User ID if exist else return -1
 	 */
 	public int getAuthenticatedUserId(String app_user, String app_pwd) {
-		authenticatedUserId = null;
 		log.info("User=" + app_user);
+		authenticatedUserId = null;
 		int userId = -1;
 		String userPwd = null;
 		String userSalt = null;
 		if (app_user == null || app_user.length() == 0) {
 			log.warning("No Apps User");
-			authenticatedUserId = userId;
+			authenticatedUserId =userId;
 			return userId;
 		}
 		if (app_pwd == null || app_pwd.length() == 0) {
 			log.warning("No Apps Password");
-			authenticatedUserId = userId;
+			authenticatedUserId =userId;
 			return userId;
 		}
 		//	Authentication
@@ -284,51 +271,37 @@ public class Login
 		if(loginWithValue) {
 			userLogin = "Value";
 		}
-
 		// adaxa-pb: try to authenticate using hashed password -- falls back to plain text/encrypted
-		StringBuilder sql = new StringBuilder("SELECT AD_User_ID, Password, Salt FROM AD_User " +
-				"WHERE COALESCE(LDAPUser, " + userLogin + " ) = ? AND" +
+		String sql = "SELECT AD_User_ID, Password, Salt FROM AD_User " + 
+				"WHERE COALESCE(LDAPUser," + userLogin + ") = ? AND" +
 				" EXISTS (SELECT 1 FROM AD_User_Roles ur" +
 				"         INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID)" +
-				"         WHERE ur.AD_User_ID=AD_User.AD_User_ID AND ur.IsActive = ? AND r.IsActive = ? ) AND " +
+				"         WHERE ur.AD_User_ID=AD_User.AD_User_ID AND ur.IsActive='Y' AND r.IsActive='Y') AND " +
 				" EXISTS (SELECT 1 FROM AD_Client c" +
 				"         WHERE c.AD_Client_ID=AD_User.AD_Client_ID" +
-				"         AND c.IsActive = ? ) " +
-				"AND AD_User.IsActive = ? ");
-		ArrayList<Object> parameters = new ArrayList<>();
-		parameters.add(app_user);
-		parameters.add(true);
-		parameters.add(true);
-		parameters.add(true);
-		parameters.add(true);
+				"         AND c.IsActive='Y') " + 
+				"AND AD_User.IsActive='Y' ";
 		if(loginWithValue) {
-			sql.append("AND IsLoginUser = ? ");
-			parameters.add(true);
+			sql += "AND IsLoginUser = 'Y'";
 		}
 
-		AtomicReference<Tuple3<Integer, String, String>> authenticatedUserTupleReference = new AtomicReference<>();
-		Try<Void> authenticatedUserInfo = DB.runResultSetFunction.apply(null, sql.toString() , io.vavr.collection.List.ofAll(parameters), resultSet -> {
-			if(resultSet.next()) {
-				authenticatedUserTupleReference.set(
-						Tuple.of(
-								resultSet.getInt("AD_User_ID"),
-								resultSet.getString("Password"),
-								resultSet.getString("Salt")
-						)
-				);
-			}
-		}).onFailure(throwable -> log.severe(throwable.getMessage()));
-		//if Failure return -1
-		if (authenticatedUserInfo.isFailure())
-			return -1;
-
-		if (authenticatedUserTupleReference.get() != null) {
-			Tuple3<Integer, String, String>  authenticatedUserTuple = authenticatedUserTupleReference.get();
-			userId = authenticatedUserTuple._1;
-			userPwd = authenticatedUserTuple._2;
-			userSalt = authenticatedUserTuple._3;
-		}
-
+		PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = DB.prepareStatement(sql, null);
+            pstmt.setString(1, app_user);
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+            	userId = rs.getInt("AD_User_ID");
+            	userPwd = rs.getString("Password");
+            	userSalt = rs.getString("Salt");
+            }
+        } catch (SQLException e) {
+            throw new DBException(e, sql);
+        } finally {
+            DB.close(rs, pstmt);
+            rs = null; pstmt = null;
+        }
         //	
         if(!authenticated) {
         	//Validate if password column is encrypted
@@ -344,19 +317,21 @@ public class Login
 			//	
 	        if(userSalt == null) {
 	        	if(app_pwd.equals(userPwd)) {
-					authenticatedUserId = userId;
+	        		authenticatedUserId =userId;
 	        		return userId;
 	        	}
 	        }
 	        //	Match Password
 			if (userSalt != null && MUser.authenticateHash(app_pwd, userPwd , userSalt)) {
-				authenticatedUserId = userId;
+				authenticatedUserId =userId;
 				return userId;
 			}
 			//	
+			authenticatedUserId = null;
 			return -1;
         }
-		authenticatedUserId = userId;
+        //	
+        authenticatedUserId =userId;
         return userId;
 	}
 	
@@ -370,15 +345,12 @@ public class Login
 	 */
 	public KeyNamePair[] getRoles (String app_user, String app_pwd, boolean force) {
 		long start = System.currentTimeMillis();
-
-		if (getAuthenticatedUserId() == null )
-			authenticatedUserId = getAuthenticatedUserId(app_user, app_pwd);
-
+		//	
+		int userId = getAuthenticatedUserId(app_user, app_pwd);
 		//	Fail authentication
-		if(getAuthenticatedUserId() == -1) {
+		if(userId == -1) {
 			return null;
 		}
-
 		KeyNamePair[] retValue = null;
 		ArrayList<KeyNamePair> list = new ArrayList<KeyNamePair>();
 		//	Validate if exist column
@@ -389,26 +361,26 @@ public class Login
 			orderBy = "COALESCE(ur.IsDefault,'N') Desc,";
 		}
 		//
-		StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
+		StringBuffer sql = new StringBuffer("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
 			.append(" u.ConnectionProfile ")
 			.append("FROM AD_User u")
-			.append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive = 'Y' )")
-			.append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive = 'Y' ) ")
+			.append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
+			.append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ")
 			.append( "WHERE u.AD_User_ID = ?")         
-			.append(" AND u.IsActive = ? ")
+			.append(" AND u.IsActive='Y'")
 			.append(" AND EXISTS (SELECT 1 FROM AD_Client c "
-					+ "WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive = ? )");
-		sql.append(" ORDER BY ").append(orderBy).append("r.Name");  // #1935 Show the default role, if defined, first
-		List<Object> parameters = List.of(authenticatedUserId,true,true);
-		Try<Void> tryRoles =  DB.runResultSetFunction.apply(null , sql.toString() , parameters , resultSet -> {
-			List<Tuple4<Integer, Integer, String, String>> roles = new ResultSetIterable<>(resultSet, row -> {
-				return Tuple.of(
-						row.getInt("AD_User_ID"),
-						row.getInt("AD_Role_ID"),
-						row.getString("Name"),
-						row.getString("ConnectionProfile"));
-			}).toList();
-			if (roles.isEmpty()) {
+					+ "WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
+		sql.append(" ORDER BY " + orderBy + "r.Name");  // #1935 Show the default role, if defined, first
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = DB.prepareStatement(sql.toString(), null);
+			pstmt.setInt(1, userId);
+			//	execute a query
+			rs = pstmt.executeQuery();
+			//	
+			if (!rs.next())		//	no record found
 				if (force)
 				{
 					Env.setContext(m_ctx, "#AD_User_Name", "System");
@@ -417,64 +389,77 @@ public class Login
 					Env.setContext(m_ctx, "#User_Level", "S  ");  	//	Format 'SCO'
 					Env.setContext(m_ctx, "#User_Client", "0");		//	Format c1, c2, ...
 					Env.setContext(m_ctx, "#User_Org", "0"); 		//	Format o1, o2, ...
-					list.add(new KeyNamePair(0, "System Administrator"));
-					//retValue = new KeyNamePair[] {new KeyNamePair(0, "System Administrator")};
+					rs.close();
+					pstmt.close();
+					retValue = new KeyNamePair[] {new KeyNamePair(0, "System Administrator")};
+					return retValue;
 				}
 				else
 				{
+					rs.close();
+					pstmt.close();
 					log.saveError("UserPwdError", app_user, false);
+					return null;
 				}
-			} else {
-				roles.forEach(user -> {
-					Env.setContext(m_ctx, "#AD_User_Name", app_user);
-					Env.setContext(m_ctx, "#AD_User_ID", user._1);
-					Env.setContext(m_ctx, "#SalesRep_ID", user._1);
 
-					if (Ini.isClient())
+			Env.setContext(m_ctx, "#AD_User_Name", app_user);
+			Env.setContext(m_ctx, "#AD_User_ID", rs.getInt(1));
+			Env.setContext(m_ctx, "#SalesRep_ID", rs.getInt(1));
+
+			//
+			if (Ini.isClient())
+			{
+				if (MSystem.isSwingRememberUserAllowed())
+					Ini.setProperty(Ini.P_UID, app_user);
+				else
+					Ini.setProperty(Ini.P_UID, "");
+				if (Ini.isPropertyBool(Ini.P_STORE_PWD) && MSystem.isSwingRememberPasswordAllowed())
+					Ini.setProperty(Ini.P_PWD, app_pwd);
+				
+				m_connectionProfile = rs.getString(4);		//	User Based
+				if (m_connectionProfile != null)
+				{
+					CConnection cc = CConnection.get();
+					if (!cc.getConnectionProfile().equals(m_connectionProfile))
 					{
-						if (MSystem.isSwingRememberUserAllowed())
-							Ini.setProperty(Ini.P_UID, app_user);
-						else
-							Ini.setProperty(Ini.P_UID, "");
-						if (Ini.isPropertyBool(Ini.P_STORE_PWD) && MSystem.isSwingRememberPasswordAllowed())
-							Ini.setProperty(Ini.P_PWD, app_pwd);
-
-						m_connectionProfile = user._4;		//	User Based
-						if (m_connectionProfile != null)
-						{
-							CConnection cc = CConnection.get();
-							if (!cc.getConnectionProfile().equals(m_connectionProfile))
-							{
-								cc.setConnectionProfile(m_connectionProfile);
-								Ini.setProperty(Ini.P_CONNECTION, cc.toStringLong());
-								Ini.saveProperties(false);
-							}
-						}
+						cc.setConnectionProfile(m_connectionProfile);
+						Ini.setProperty(Ini.P_CONNECTION, cc.toStringLong());
+						Ini.saveProperties(false);
 					}
-
-					int AD_Role_ID = user._2;
-					if (AD_Role_ID == 0)
-						Env.setContext(m_ctx, "#SysAdmin", "Y");
-					String Name =user._3;
-					KeyNamePair keyNamePair = new KeyNamePair(AD_Role_ID, Name);
-					list.add(keyNamePair);
-				});
+				}
 			}
-		}).onFailure(throwable -> {
-			log.log(Level.SEVERE, sql.toString(), throwable);
-			log.saveError("DBLogin", throwable);
-		});
 
-		if (tryRoles.isFailure())
-			return null;
-
-		retValue = new KeyNamePair[list.size()];
-		list.toArray(retValue);
+			do	//	read all roles
+			{
+				int AD_Role_ID = rs.getInt(2);
+				if (AD_Role_ID == 0)
+					Env.setContext(m_ctx, "#SysAdmin", "Y");
+				String Name = rs.getString(3);
+				KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
+				list.add(p);
+			}
+			while (rs.next());
+		//
+			retValue = new KeyNamePair[list.size()];
+			list.toArray(retValue);
+			log.fine("User=" + app_user + " - roles #" + retValue.length);
+		}
+		catch (Exception ex)
+		{
+			log.log(Level.SEVERE, sql.toString(), ex);
+			log.saveError("DBLogin", ex);
+			retValue = null;
+		}
+		//
+		finally
+		{
+			DB.close(rs, pstmt);
+			rs = null; pstmt = null;
+		}
 		long ms = System.currentTimeMillis () - start;
-		log.fine("User=" + app_user + " - roles #" + retValue.length +  " Start : " + start + " Time  : " + ms);
 		return retValue;
 	}	//	getRoles
-
+	
 	/**
 	 * Get User Roles from MUser
 	 * @param userLogin
@@ -508,23 +493,26 @@ public class Login
 			.append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive = 'Y' )")
 			.append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive = 'Y' ) ")
 			.append( "WHERE u.AD_User_ID = ?")         
-			.append(" AND u.IsActive = ? ")
+			.append(" AND u.IsActive = 'Y' ")
 			.append(" AND EXISTS (SELECT 1 FROM AD_Client c "
-					+ "WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive = ? )");
+					+ "WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive = 'Y' )");
 		sql.append(" ORDER BY ").append(orderBy).append("r.Name");  // #1935 Show the default role, if defined, first
-		List<Object> parameters = List.of(authenticatedUserId,true,true);
-		Try<Void> tryRoles =  DB.runResultSetFunction.apply(null , sql.toString() , parameters , resultSet -> {
-			List<Tuple4<Integer, Integer, String, String>> roles = new ResultSetIterable<>(resultSet, row -> {
-				return Tuple.of(
-						row.getInt("AD_User_ID"),
-						row.getInt("AD_Role_ID"),
-						row.getString("Name"),
-						row.getString("ConnectionProfile"));
-			}).toList();
-			roles.forEach(user -> {
+		
+		PreparedStatement pstmt = null;
+		ResultSet row = null;
+		try {
+			pstmt = DB.prepareStatement(sql.toString(), null);
+			pstmt.setInt(1, authenticatedUserId);
+            row = pstmt.executeQuery();
+            while(row.next()) {
+            	int userId = row.getInt("AD_User_ID");
+				int roleId = row.getInt("AD_Role_ID");
+				String name = row.getString("Name");
+				String connectionProfile = row.getString("ConnectionProfile");
+				
 				Env.setContext(m_ctx, "#AD_User_Name", app_user);
-				Env.setContext(m_ctx, "#AD_User_ID", user._1);
-				Env.setContext(m_ctx, "#SalesRep_ID", user._1);
+				Env.setContext(m_ctx, "#AD_User_ID", userId);
+				Env.setContext(m_ctx, "#SalesRep_ID", userId);
 
 				if (Ini.isClient())
 				{
@@ -533,7 +521,7 @@ public class Login
 					else
 						Ini.setProperty(Ini.P_UID, "");
 
-					m_connectionProfile = user._4;		//	User Based
+					m_connectionProfile = connectionProfile;		//	User Based
 					if (m_connectionProfile != null)
 					{
 						CConnection cc = CConnection.get();
@@ -546,20 +534,26 @@ public class Login
 					}
 				}
 
-				int AD_Role_ID = user._2;
+				int AD_Role_ID = roleId;
 				if (AD_Role_ID == 0)
 					Env.setContext(m_ctx, "#SysAdmin", "Y");
-				String Name =user._3;
+				String Name =name;
 				KeyNamePair keyNamePair = new KeyNamePair(AD_Role_ID, Name);
 				list.add(keyNamePair);
-			});
-		}).onFailure(throwable -> {
-			log.log(Level.SEVERE, sql.toString(), throwable);
-			log.saveError("DBLogin", throwable);
-		});
-
-		if (tryRoles.isFailure())
-			return null;
+            }
+			
+		}catch (Exception ex)
+		{
+			log.log(Level.SEVERE, sql.toString(), ex);
+			log.saveError("DBLogin", ex);
+			retValue = null;
+		}
+		//
+		finally
+		{
+			DB.close(row, pstmt);
+			row = null; pstmt = null;
+		}
 
 		retValue = new KeyNamePair[list.size()];
 		list.toArray(retValue);
@@ -567,6 +561,7 @@ public class Login
 		log.fine("User=" + app_user + " - roles #" + retValue.length +  " Start : " + start + " Time  : " + ms);
 		return retValue;
 	}	//	getRoles
+
 	
 	/**************************************************************************
 	 *  Load Clients.
@@ -584,62 +579,78 @@ public class Login
 
 		ArrayList<KeyNamePair> list = new ArrayList<KeyNamePair>();
 		KeyNamePair[] retValue = null;
-		final String sql = "SELECT DISTINCT r.UserLevel, r.ConnectionProfile, "	//	1/2
+		String sql = "SELECT DISTINCT r.UserLevel, r.ConnectionProfile, "	//	1/2
 			+ " c.AD_Client_ID,c.Name "						//	3/4 
 			+ "FROM AD_Role r" 
 			+ " INNER JOIN AD_Client c ON (r.AD_Client_ID=c.AD_Client_ID) "
-			+ "WHERE r.AD_Role_ID = ? "		//	#1
-			+ " AND r.IsActive = ? AND c.IsActive = ? ";
+			+ "WHERE r.AD_Role_ID=?"		//	#1
+			+ " AND r.IsActive='Y' AND c.IsActive='Y'";
 
-		List<Object> parameters = List.of(role.getKey(), true, true);
-		Try<Void> tryRole = DB.runResultSetFunction.apply(null, sql, parameters , resultSet -> {
-			List<Tuple4<String , String , Integer , String>> roles =  new ResultSetIterable<>(resultSet, row -> {
-				return Tuple.of(
-						row.getString("UserLevel") ,
-						row.getString("ConnectionProfile") ,
-						row.getInt("AD_Client_ID") ,
-						row.getString("Name")
-				);
-			}).toList();
-			if (roles.isEmpty()) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		//	get Role details
+		try
+		{
+			pstmt = DB.prepareStatement(sql, null);
+			pstmt.setInt(1, role.getKey());
+			rs = pstmt.executeQuery();
+
+			if (!rs.next())
+			{
+				rs.close();
+				pstmt.close();
 				log.log(Level.SEVERE, "No Clients for Role: " + role.toStringX());
-			} else {
-				roles.forEach(row -> {
-					//  Role Info
-					Env.setContext(m_ctx, "#AD_Role_ID", role.getKey());
-					Env.setContext(m_ctx, "#AD_Role_Name", role.getName());
-					Ini.setProperty(Ini.P_ROLE, role.getName());
-					//	User Level
-					Env.setContext(m_ctx, "#User_Level", row._1);  	//	Format 'SCO'
-
-					//	ConnectionProfile
-					CConnection cc = CConnection.get();
-					if (m_connectionProfile == null)			//	No User Based
-					{
-						m_connectionProfile = row._2;	//	Role Based
-						if (m_connectionProfile != null
-								&& !cc.getConnectionProfile().equals(m_connectionProfile))
-						{
-							cc.setConnectionProfile(m_connectionProfile);
-							Ini.setProperty(Ini.P_CONNECTION, cc.toStringLong());
-							Ini.saveProperties(false);
-						}
-					}
-
-					int AD_Client_ID =row._3;
-					String Name = row._4;
-					KeyNamePair keyNamePair = new KeyNamePair(AD_Client_ID, Name);
-					list.add(keyNamePair);
-				});
+				return null;
 			}
-		}).onFailure(throwable -> log.log(Level.SEVERE, sql, throwable));
 
-		if (tryRole.isFailure())
-			return null;
-
-		retValue = new KeyNamePair[list.size()];
-		list.toArray(retValue);
-		log.fine("Role: " + role.toStringX() + " - clients #" + retValue.length);
+			//  Role Info
+			Env.setContext(m_ctx, "#AD_Role_ID", role.getKey());
+			Env.setContext(m_ctx, "#AD_Role_Name", role.getName());
+			Ini.setProperty(Ini.P_ROLE, role.getName());
+			//	User Level
+			Env.setContext(m_ctx, "#User_Level", rs.getString(1));  	//	Format 'SCO'
+			
+			//	ConnectionProfile
+			CConnection cc = CConnection.get();
+			if (m_connectionProfile == null)			//	No User Based
+			{
+				m_connectionProfile = rs.getString(2);	//	Role Based
+				if (m_connectionProfile != null
+					&& !cc.getConnectionProfile().equals(m_connectionProfile))
+				{
+					cc.setConnectionProfile(m_connectionProfile);
+					Ini.setProperty(Ini.P_CONNECTION, cc.toStringLong());
+					Ini.saveProperties(false);
+				}
+			}
+			
+			//  load Clients
+			do
+			{
+				int AD_Client_ID = rs.getInt(3);
+				String Name = rs.getString(4);
+				KeyNamePair p = new KeyNamePair(AD_Client_ID, Name);
+				list.add(p);
+			}
+			while (rs.next());
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+			//
+			retValue = new KeyNamePair[list.size()];
+			list.toArray(retValue);
+			log.fine("Role: " + role.toStringX() + " - clients #" + retValue.length);
+		}
+		catch (SQLException ex)
+		{
+			log.log(Level.SEVERE, sql, ex);
+			retValue = null;
+		}
+		finally
+		{
+			DB.close(rs, pstmt);
+			rs = null; pstmt = null;
+		}
 		return retValue;
 	}   //  getClients
 
@@ -665,67 +676,80 @@ public class Login
 		ArrayList<KeyNamePair> list = new ArrayList<KeyNamePair>();
 		KeyNamePair[] retValue = null;
 		//
-		final String sql = "SELECT o.AD_Org_ID,o.Name,o.IsSummary "	//	1..3
+		String sql = "SELECT o.AD_Org_ID,o.Name,o.IsSummary "	//	1..3
 			+ "FROM AD_Role r, AD_Client c"
 			+ " INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID OR o.AD_Org_ID=0) "
-			+ "WHERE r.AD_Role_ID = ?" 	//	#1
-			+ " AND c.AD_Client_ID = ?"	//	#2
-			+ " AND o.IsActive = ? AND o.IsSummary = ? "
-			+ " AND (r.IsAccessAllOrgs = ? "
-				+ "OR (r.IsUseUserOrgAccess = ?  AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
-					+ "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive = ? )) "
-				+ "OR (r.IsUseUserOrgAccess = ? AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_User_OrgAccess ua "
-					+ "WHERE ua.AD_User_ID = ? AND ua.IsActive = ? ))"		//	#3
+			+ "WHERE r.AD_Role_ID=?" 	//	#1
+			+ " AND c.AD_Client_ID=?"	//	#2
+			+ " AND o.IsActive='Y' AND o.IsSummary='N'"
+			+ " AND (r.IsAccessAllOrgs='Y' "
+				+ "OR (r.IsUseUserOrgAccess='N' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
+					+ "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
+				+ "OR (r.IsUseUserOrgAccess='Y' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_User_OrgAccess ua "
+					+ "WHERE ua.AD_User_ID=? AND ua.IsActive='Y'))"		//	#3
 				+ ") "
 			+ "ORDER BY o.Name";
-
-		List<Object>  parameters = List.of(AD_Role_ID, client.getKey() , true , false , true , false , true , true , AD_User_ID, true);
-		Try<Void> tryRole = DB.runResultSetFunction.apply(null, sql, parameters , resultSet -> {
-			List<Tuple3<Integer, String, Boolean>> roles = new ResultSetIterable<>(resultSet, row -> {
-				return Tuple.of(
-						row.getInt("AD_Org_ID") ,
-						row.getString("Name"),
-						row.getBoolean("IsSummary")
-						);
-			}).toList();
-			if (roles.isEmpty()) {
-				log.log(Level.WARNING, "No Org for Client: " + client.toStringX()
-						+ ", AD_Role_ID=" + AD_Role_ID
-						+ ", AD_User_ID=" + AD_User_ID);
-			}
-			roles.forEach(row ->{
-				int AD_Org_ID = row._1;
-				String Name = row._2;
-				boolean summary = row._3;
+		//
+		PreparedStatement pstmt = null;
+		MRole role = null;
+		ResultSet rs = null;
+		try
+		{
+			pstmt = DB.prepareStatement(sql, null);
+			pstmt.setInt(1, AD_Role_ID);
+			pstmt.setInt(2, client.getKey());
+			pstmt.setInt(3, AD_User_ID);
+			rs = pstmt.executeQuery();
+			//  load Orgs
+			while (rs.next())
+			{
+				int AD_Org_ID = rs.getInt(1);
+				String Name = rs.getString(2);
+				boolean summary = "Y".equals(rs.getString(3));
 				if (summary)
 				{
-					MRole role = MRole.get(m_ctx, AD_Role_ID);
+					if (role == null)
+						role = MRole.get(m_ctx, AD_Role_ID);
 					getOrgsAddSummary (list, AD_Org_ID, Name, role);
 				}
 				else
 				{
-					KeyNamePair keyNamePair = new KeyNamePair(AD_Org_ID, Name);
-					if (!list.contains(keyNamePair))
-						list.add(keyNamePair);
+					KeyNamePair p = new KeyNamePair(AD_Org_ID, Name);
+					if (!list.contains(p))
+						list.add(p);
 				}
-			});
-		}).onFailure(throwable -> log.log(Level.SEVERE, sql, throwable));
-
-		if (tryRole.isFailure())
+			}
+			//
+			retValue = new KeyNamePair[list.size()];
+			list.toArray(retValue);
+			log.fine("Client: " + client.toStringX() 
+				+ ", AD_Role_ID=" + AD_Role_ID
+				+ ", AD_User_ID=" + AD_User_ID
+				+ " - orgs #" + retValue.length);
+		}
+		catch (SQLException ex)
+		{
+			log.log(Level.SEVERE, sql, ex);
+			retValue = null;
+		}
+		finally
+		{
+			DB.close(rs, pstmt);
+			rs = null; pstmt = null;
+		}
+		//	No Orgs
+		if (retValue == null || retValue.length == 0)
+		{
+			log.log(Level.WARNING, "No Org for Client: " + client.toStringX()
+				+ ", AD_Role_ID=" + AD_Role_ID
+				+ ", AD_User_ID=" + AD_User_ID);
 			return null;
+		}
 
 		//  Client Info
 		Env.setContext(m_ctx, "#AD_Client_ID", client.getKey());
 		Env.setContext(m_ctx, "#AD_Client_Name", client.getName());
 		Ini.setProperty(Ini.P_CLIENT, client.getName());
-
-		retValue = new KeyNamePair[list.size()];
-		list.toArray(retValue);
-		log.fine("Client: " + client.toStringX()
-				+ ", AD_Role_ID=" + AD_Role_ID
-				+ ", AD_User_ID=" + AD_User_ID
-				+ " - orgs #" + retValue.length);
-
 		return retValue;
 	}   //  getOrgs
 
@@ -753,43 +777,56 @@ public class Login
 		}
 		//	Summary Org - Get Dependents
 		MTree tree = MTree.get(m_ctx, role.getAD_Tree_Org_ID(), null);
-		final String sql =  "SELECT AD_Client_ID, AD_Org_ID, Name, IsSummary FROM AD_Org "
-			+ "WHERE IsActive = ?  AND AD_Org_ID IN (SELECT Node_ID FROM "
+		String sql =  "SELECT AD_Client_ID, AD_Org_ID, Name, IsSummary FROM AD_Org "
+			+ "WHERE IsActive='Y' AND AD_Org_ID IN (SELECT Node_ID FROM "
 			+ tree.getNodeTableName()
-			+ " WHERE AD_Tree_ID=? AND Parent_ID=? AND IsActive = ? ) "
+			+ " WHERE AD_Tree_ID=? AND Parent_ID=? AND IsActive='Y') "
 			+ "ORDER BY Name";
-
-		List<Object> parameters = List.of(true,tree.getAD_Tree_ID(), Summary_Org_ID, true);
-		Try<Void> tryOrganization = DB.runResultSetFunction.apply(null, sql , parameters , resultSet -> {
-			while (resultSet.next ())
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try
+		{
+			pstmt = DB.prepareStatement (sql, null);
+			pstmt.setInt (1, tree.getAD_Tree_ID());
+			pstmt.setInt (2, Summary_Org_ID);
+			rs = pstmt.executeQuery ();
+			while (rs.next ())
 			{
-				int AD_Client_ID = resultSet.getInt("AD_Client_ID");
-				int AD_Org_ID = resultSet.getInt("AD_Org_ID");
-				String Name = resultSet.getString("Name");
-				boolean summary = "Y".equals(resultSet.getString("IsSummary"));
+				int AD_Client_ID = rs.getInt(1);
+				int AD_Org_ID = rs.getInt(2);
+				String Name = rs.getString(3);
+				boolean summary = "Y".equals(rs.getString(4));
 				//
 				if (summary)
 					getOrgsAddSummary (list, AD_Org_ID, Name, role);
 				else
 				{
-					KeyNamePair keyNamePair = new KeyNamePair(AD_Org_ID, Name);
-					if (!list.contains(keyNamePair))
-						list.add(keyNamePair);
+					KeyNamePair p = new KeyNamePair(AD_Org_ID, Name);
+					if (!list.contains(p))
+						list.add(p);
 				}
 			}
-		}).onFailure(throwable ->  log.log(Level.SEVERE, sql, throwable));
-
+		}
+		catch (Exception e)
+		{
+			log.log (Level.SEVERE, sql, e);
+		}
+		finally
+		{
+			DB.close(rs, pstmt);
+			rs = null; pstmt = null;
+		}
 	}	//	getOrgAddSummary
 
 	
 	/**
 	 *  Load Warehouses
-	 * @param organization Organization
+	 * @param org organization
 	 * @return Array of Warehouse Info
 	 */
-	public KeyNamePair[] getWarehouses (KeyNamePair organization)
+	public KeyNamePair[] getWarehouses (KeyNamePair org)
 	{
-		if (organization == null)
+		if (org == null)
 			throw new IllegalArgumentException("Org missing");
 
 	//	s_log.info("loadWarehouses - Org: " + org.toStringX());
@@ -797,35 +834,54 @@ public class Login
 		ArrayList<KeyNamePair> list = new ArrayList<KeyNamePair>();
 		KeyNamePair[] retValue = null;
 		String sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse "
-			+ "WHERE AD_Org_ID=? AND IsActive = ? "
-			+ " AND "+I_M_Warehouse.COLUMNNAME_IsInTransit+" = ? " // do not show in tranzit warehouses - teo_sarca [ 2867246 ]
+			+ "WHERE AD_Org_ID=? AND IsActive='Y' "
+			+ " AND "+I_M_Warehouse.COLUMNNAME_IsInTransit+"='N' " // do not show in tranzit warehouses - teo_sarca [ 2867246 ]
 			+ "ORDER BY Name";
-		List <Object> parameters = List.of(organization.getKey(), true , false);
-		Try<Void> tryWarehouse = DB.runResultSetFunction.apply(null, sql , parameters , resultSet -> {
-			List<Tuple2<Integer , String>> warehouses = new ResultSetIterable<>(resultSet , row -> {
-				return Tuple.of(
-						resultSet.getInt("M_Warehouse_ID") ,
-						resultSet.getString("Name")
-				);
-			}).toList();
-			if (warehouses.isEmpty()) {
-				log.info("No Warehouses for Org: " + organization.toStringX());
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try
+		{
+			pstmt = DB.prepareStatement(sql, null);
+			pstmt.setInt(1, org.getKey());
+			rs = pstmt.executeQuery();
+
+			if (!rs.next())
+			{
+				rs.close();
+				pstmt.close();
+				log.info("No Warehouses for Org: " + org.toStringX());
+				return null;
 			}
-			warehouses.forEach(warehouse -> {
-				int AD_Warehouse_ID = warehouse._1;
-				String Name = warehouse._2;
-				KeyNamePair keyNamePair = new KeyNamePair(AD_Warehouse_ID, Name);
-				list.add(keyNamePair);
-			});
-		}).onFailure(throwable  -> log.log(Level.SEVERE, "getWarehouses", throwable));
 
-		if (tryWarehouse.isFailure())
-			return null;
+			//  load Warehousess
+			do
+			{
+				int AD_Warehouse_ID = rs.getInt(1);
+				String Name = rs.getString(2);
+				KeyNamePair p = new KeyNamePair(AD_Warehouse_ID, Name);
+				list.add(p);
+			}
+			while (rs.next());
 
-		retValue = new KeyNamePair[list.size()];
-		list.toArray(retValue);
-		log.fine("Org: " + organization.toStringX()
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+			//
+			retValue = new KeyNamePair[list.size()];
+			list.toArray(retValue);
+			log.fine("Org: " + org.toStringX()
 				+ " - warehouses #" + retValue.length);
+		}
+		catch (SQLException ex)
+		{
+			log.log(Level.SEVERE, "getWarehouses", ex);
+			retValue = null;
+		}
+		finally
+		{
+			DB.close(rs, pstmt);
+			rs = null; pstmt = null;
+		}
 		return retValue;
 	}   //  getWarehouses
 
@@ -917,116 +973,151 @@ public class Login
 		Env.setContext(m_ctx, "#ShowTrl", Ini.getProperty(Ini.P_SHOW_TRL));
 		Env.setContext(m_ctx, "#ShowAdvanced", Ini.getProperty(Ini.P_SHOW_ADVANCED));
 
-		AtomicReference<String> retValue = new AtomicReference<>("");
-		int clientId = Env.getContextAsInt(m_ctx, "#AD_Client_ID");
-		int organizationId =  org.getKey();
-		int userId =  Env.getContextAsInt(m_ctx, "#AD_User_ID");
-		int roleId =  Env.getContextAsInt(m_ctx, "#AD_Role_ID");
+		String retValue = "";
+		int AD_Client_ID = Env.getContextAsInt(m_ctx, "#AD_Client_ID");
+		int AD_Org_ID =  org.getKey();
+		int AD_User_ID =  Env.getContextAsInt(m_ctx, "#AD_User_ID");
+		int AD_Role_ID =  Env.getContextAsInt(m_ctx, "#AD_Role_ID");
 
 		//	Other Settings
 		Env.setContext(m_ctx, "#YYYY", "Y");
 		Env.setContext(m_ctx, "#StdPrecision", 2);
 
 		//	AccountSchema Info (first)
-		final String sql = "SELECT C_AcctSchema_ID , C_Currency_ID , HasAlias "
+		String sql = "SELECT * "
 			+ "FROM C_AcctSchema a, AD_ClientInfo c "
 			+ "WHERE a.C_AcctSchema_ID=c.C_AcctSchema1_ID "
 			+ "AND c.AD_Client_ID=?";
-			List<Object> parameters = List.of(clientId);
-			Try<Void> tryAcctSchema =  DB.runResultSetFunction.apply(null , sql , parameters, resultSet -> {
-			List<Tuple3<Integer , Integer , String >> acctSchemas = new ResultSetIterable<>(resultSet ,  row -> {
-				return Tuple.of(
-						row.getInt("C_AcctSchema_ID") ,
-						row.getInt("C_Currency_ID") ,
-						row.getString("HasAlias")
-				);
-			}).toList();
-			if (acctSchemas.isEmpty()) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try
+		{
+
+			int C_AcctSchema_ID = 0;
+			
+			pstmt = DB.prepareStatement(sql, null);
+			pstmt.setInt(1, AD_Client_ID);
+			rs = pstmt.executeQuery();
+
+			if (!rs.next())
+			{
 				//  No Warning for System
-				if (roleId != 0)
-					retValue.set("NoValidAcctInfo");
-			} else {
-				//	Accounting Info
-				acctSchemas.forEach( acctSchema -> {
-					int acctSchemaId = acctSchema._1;
-					Env.setContext(m_ctx, "$C_AcctSchema_ID",acctSchemaId);
-					Env.setContext(m_ctx, "$C_Currency_ID", acctSchema._2);
-					Env.setContext(m_ctx, "$HasAlias",acctSchema._3);
-					//Define AcctSchema , Currency, HasAlias for Multi AcctSchema
-					MAcctSchema[] clientAcctSchemes = MAcctSchema.getClientAcctSchema(Env.getCtx(), clientId);
-					if(clientAcctSchemes != null && clientAcctSchemes.length > 1) {
-						acctSchemaId = List.of(clientAcctSchemes)
-								.filter(accountSchema -> accountSchema.getAD_OrgOnly_ID() != 0 && !accountSchema.isSkipOrg(organizationId))
-								.map(accountSchema -> {
-									Env.setContext(m_ctx, "$C_AcctSchema_ID", accountSchema.getC_AcctSchema_ID());
-									Env.setContext(m_ctx, "$C_Currency_ID", accountSchema.getC_Currency_ID());
-									Env.setContext(m_ctx, "$HasAlias", accountSchema.isHasAlias());
-									return accountSchema.getC_AcctSchema_ID();
-								}).getOrElse(MClientInfo.get(Env.getCtx(), clientId).getC_AcctSchema1_ID());
-					}
-					//	Accounting Elements
-					List<MAcctSchemaElement> acctSchemaElements = List.ofAll(new Query(m_ctx , MAcctSchemaElement.Table_Name , " C_AcctSchema_ID = ?" , null)
-							.setOnlyActiveRecords(true)
-							.setParameters(acctSchemaId)
-							.<MAcctSchemaElement>list());
-
-					acctSchemaElements.forEach(acctSchemaElement -> {
-						Env.setContext(m_ctx, "$Element_" + acctSchemaElement.getElementType(), "Y");
-					});
-
-					final String whereClause =  "AD_Client_ID IN (0, @#AD_Client_ID@)"
-							+ " AND AD_Org_ID IN (0, @#AD_Org_ID@)"
-							+ " AND (AD_User_ID IS NULL OR AD_User_ID=0 OR AD_User_ID=@#AD_User_ID@)";
-
-					final String whereClauseFinal = Env.parseContext(m_ctx, 0, whereClause, false);
-					if (whereClauseFinal.length() == 0)
-						log.log(Level.SEVERE, "loadPreferences - Missing Environment");
-					else
-					{
-						List<MPreference> preferences =  List.ofAll(new Query(m_ctx, MPreference.Table_Name , whereClauseFinal , null)
-							.setOnlyActiveRecords(true)
-							.setOrderBy("Attribute, AD_Client_ID, AD_User_ID DESC, AD_Org_ID")
-							.list());
-						//	This reads all relevant window neutral defaults
-						//	overwriting superseded ones.  Window specific is read in Maintain
-						preferences.forEach(preference -> {
-							//sql = "SELECT Attribute, Value, AD_Window_ID "
-							int windowId = preference.getAD_Window_ID();
-							String at = "";
-							if (windowId == 0)
-								at = "P|" + preference.getAttribute();
-							else
-								at = "P" + windowId + "|" +  preference.getAttribute();
-							String value = preference.getValue();
-							Env.setContext(m_ctx, at, value);
-						});
-						//	Default Values
-						final String columnsSelect = "SELECT t.TableName, c.ColumnName "
-								+ "FROM AD_Column c "
-								+ " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
-								+ "WHERE c.IsKey = ? AND t.IsActive = ? "
-								+ " AND EXISTS (SELECT * FROM AD_Column cc "
-								+ " WHERE ColumnName = 'IsDefault' AND t.AD_Table_ID=cc.AD_Table_ID AND cc.IsActive = ? )";
-						List<Object> parametersColumnsSelect = List.of(true,true,true);
-						Try<Void> tryColumns = DB.runResultSetFunction.apply(null , columnsSelect ,parametersColumnsSelect , resultSet1 -> {
-							while (resultSet1.next())
-								loadDefault (resultSet1.getString("TableName"), resultSet1.getString("ColumnName"));
-						}).onFailure(throwable -> log.log(Level.SEVERE, "loadPreferences", throwable));
-					}
-				});
+				if (AD_Client_ID != 0)
+					retValue = "NoValidAcctInfo";
 			}
-			}).onFailure(throwable -> {
-				log.log(Level.SEVERE, "loadPreferences", throwable);
-				retValue.set(throwable.getMessage());
-			});
+			else
+			{
+				//	Accounting Info
+				C_AcctSchema_ID = rs.getInt("C_AcctSchema_ID");
+				Env.setContext(m_ctx, "$C_AcctSchema_ID", C_AcctSchema_ID);
+				Env.setContext(m_ctx, "$C_Currency_ID", rs.getInt("C_Currency_ID"));
+				Env.setContext(m_ctx, "$HasAlias", rs.getString("HasAlias"));
+			}
+			rs.close();
+			pstmt.close();
+			
+			/**Define AcctSchema , Currency, HasAlias for Multi AcctSchema**/
+			MAcctSchema[] ass = MAcctSchema.getClientAcctSchema(Env.getCtx(), AD_Client_ID);
+			if(ass != null && ass.length > 1)
+			{
+				for(MAcctSchema as : ass)
+				{
+					C_AcctSchema_ID  = MClientInfo.get(Env.getCtx(), AD_Client_ID).getC_AcctSchema1_ID(); 			 
+					if (as.getAD_OrgOnly_ID() != 0)
+					{
+						if (as.isSkipOrg(AD_Org_ID))
+						{
+							continue;
+						}
+						else 
+						{
+							C_AcctSchema_ID = as.getC_AcctSchema_ID();
+							Env.setContext(m_ctx, "$C_AcctSchema_ID", C_AcctSchema_ID);
+							Env.setContext(m_ctx, "$C_Currency_ID", as.getC_Currency_ID());
+							Env.setContext(m_ctx, "$HasAlias", as.isHasAlias());
+							break;
+						}
+					}
+				}
+			}	
 
+			//	Accounting Elements
+			sql = "SELECT ElementType "
+				+ "FROM C_AcctSchema_Element "
+				+ "WHERE C_AcctSchema_ID=?"
+				+ " AND IsActive='Y'";
+			pstmt = DB.prepareStatement(sql, null);
+			pstmt.setInt(1, C_AcctSchema_ID);
+			rs = pstmt.executeQuery();
+			while (rs.next())
+				Env.setContext(m_ctx, "$Element_" + rs.getString("ElementType"), "Y");
+			rs.close();
+			pstmt.close();
+
+			//	This reads all relevant window neutral defaults
+			//	overwriting superseeded ones.  Window specific is read in Mainain
+			sql = "SELECT Attribute, Value, AD_Window_ID "
+				+ "FROM AD_Preference "
+				+ "WHERE AD_Client_ID IN (0, @#AD_Client_ID@)"
+				+ " AND AD_Org_ID IN (0, @#AD_Org_ID@)"
+				+ " AND (AD_User_ID IS NULL OR AD_User_ID=0 OR AD_User_ID=@#AD_User_ID@)"
+				+ " AND IsActive='Y' "
+				+ "ORDER BY Attribute, AD_Client_ID, AD_User_ID DESC, AD_Org_ID";
+				//	the last one overwrites - System - Client - User - Org - Window
+			sql = Env.parseContext(m_ctx, 0, sql, false);
+			if (sql.length() == 0)
+				log.log(Level.SEVERE, "loadPreferences - Missing Environment");
+			else
+			{
+				pstmt = DB.prepareStatement(sql, null);
+				rs = pstmt.executeQuery();
+				while (rs.next())
+				{
+					int AD_Window_ID = rs.getInt(3);
+					String at = "";
+					if (rs.wasNull())
+						at = "P|" + rs.getString(1);
+					else
+						at = "P" + AD_Window_ID + "|" + rs.getString(1);
+					String va = rs.getString(2);
+					Env.setContext(m_ctx, at, va);
+				}
+				rs.close();
+				pstmt.close();
+			}
+
+			//	Default Values
+			log.info("Default Values ...");
+			sql = "SELECT t.TableName, c.ColumnName "
+				+ "FROM AD_Column c "
+				+ " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+				+ "WHERE c.IsKey='Y' AND t.IsActive='Y'"
+				+ " AND EXISTS (SELECT * FROM AD_Column cc "
+				+ " WHERE ColumnName = 'IsDefault' AND t.AD_Table_ID=cc.AD_Table_ID AND cc.IsActive='Y')";
+			pstmt = DB.prepareStatement(sql, null);
+			rs = pstmt.executeQuery();
+			while (rs.next())
+				loadDefault (rs.getString(1), rs.getString(2));
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+		}
+		catch (SQLException e)
+		{
+			log.log(Level.SEVERE, "loadPreferences", e);
+		}
+		finally
+		{
+			DB.close(rs, pstmt);
+			rs = null; pstmt = null;
+		}
 		//
 		Ini.saveProperties(Ini.isClient());
 		//	Country
 		Env.setContext(m_ctx, "#C_Country_ID", MCountry.getDefault(m_ctx).getC_Country_ID());
 		// Call ModelValidators afterLoadPreferences - teo_sarca FR [ 1670025 ]
 		ModelValidationEngine.get().afterLoadPreferences(m_ctx);
-		return retValue.get();
+		return retValue;
 	}	//	loadPreferences
 
 	/**
@@ -1040,29 +1131,42 @@ public class Login
 			|| TableName.startsWith("AD_PrintFormat")
 			|| TableName.startsWith("AD_Workflow") )
 			return;
-		//String value = null;
+		String value = null;
 		//
-		final String sql = "SELECT " + ColumnName + " FROM " + TableName	//	most specific first
-			+ " WHERE IsDefault = ? AND IsActive = ? ORDER BY AD_Client_ID DESC, AD_Org_ID DESC";
-		final String sqlAccess = MRole.getDefault(m_ctx, false).addAccessSQL(sql,
+		String sql = "SELECT " + ColumnName + " FROM " + TableName	//	most specific first
+			+ " WHERE IsDefault='Y' AND IsActive='Y' ORDER BY AD_Client_ID DESC, AD_Org_ID DESC";
+		sql = MRole.getDefault(m_ctx, false).addAccessSQL(sql, 
 			TableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
-
-		List<Object> parameters = List.of(true,true);
-		Try<Void> tryLoadDefaultValue = DB.runResultSetFunction.apply(null , sqlAccess , parameters , resultSet -> {
-			if (resultSet.next()) {
-				String value = resultSet.getString(ColumnName);
-				if (value != null && value.length() != 0) {
-					if (TableName.equals("C_DocType"))
-						Env.setContext(m_ctx, "#C_DocTypeTarget_ID", value);
-					else
-						Env.setContext(m_ctx, "#" + ColumnName, value);
-				}
-			}
-		}).onFailure(throwable -> {
-			log.log(Level.SEVERE, "loadPreferences", throwable);
-		});
-
-
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try
+		{
+			pstmt = DB.prepareStatement(sql, null);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				value = rs.getString(1);
+			rs.close();
+			pstmt.close();
+			pstmt = null;
+		}
+		catch (SQLException e)
+		{
+			log.log(Level.SEVERE, TableName + " (" + sql + ")", e);
+			return;
+		}
+		finally
+		{
+			DB.close(rs, pstmt);
+			rs = null; pstmt = null;
+		}
+		//	Set Context Value
+		if (value != null && value.length() != 0)
+		{
+			if (TableName.equals("C_DocType"))
+				Env.setContext(m_ctx, "#C_DocTypeTarget_ID", value);
+			else
+				Env.setContext(m_ctx, "#" + ColumnName, value);
+		}
 	}	//	loadDefault
 	
 	/**
@@ -1235,8 +1339,9 @@ public class Login
 	{
 		return null;
 	}	//	getPrincipal
-
+	
 	public Integer getAuthenticatedUserId() {
 		return authenticatedUserId;
 	}
+	
 }	//	Login

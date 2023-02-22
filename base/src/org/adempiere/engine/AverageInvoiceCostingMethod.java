@@ -6,7 +6,9 @@ package org.adempiere.engine;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.compiere.model.MAcctSchema;
 import org.compiere.model.MCost;
@@ -135,13 +137,17 @@ public class AverageInvoiceCostingMethod extends AbstractCostingMethod
 					MCostDetail receiptCostDetail = MCostDetail.get(model.getCtx(),whereClause.toString(),
 							((MMatchInv) model).getM_InOutLine_ID(),
 							model.getM_AttributeSetInstance_ID(), dimension.getC_AcctSchema_ID(), model.get_TrxName());
-					provisionOfPurchaseCost = receiptCostDetail.getCostAmt();
-					provisionOfPurchaseCostLL =  receiptCostDetail.getCostAmtLL();
+					if (receiptCostDetail!=null) {
+						provisionOfPurchaseCost = receiptCostDetail.getCostAmt().divide(receiptCostDetail.getQty()).multiply(model.getMovementQty());//receiptCostDetail.getCostAmt();
+						provisionOfPurchaseCostLL =  receiptCostDetail.getCostAmtLL().divide(receiptCostDetail.getQty()).multiply(model.getMovementQty());
+					}
 				}
 				else
 				{
-					provisionOfPurchaseCost = lastCostDetail.getCostAmt();
-					provisionOfPurchaseCostLL =  lastCostDetail.getCostAmtLL();
+					if (lastCostDetail!=null) {
+						provisionOfPurchaseCost = lastCostDetail.getCostAmt().divide(lastCostDetail.getQty()).multiply(model.getMovementQty());//receiptCostDetail.getCostAmt();
+						provisionOfPurchaseCostLL =  lastCostDetail.getCostAmtLL().divide(lastCostDetail.getQty()).multiply(model.getMovementQty());
+					}
 				}
 				MMatchInv iMatch =  (MMatchInv) model;
 				//lastCostDetail.setC_InvoiceLine_ID(iMatch.getC_InvoiceLine_ID());
@@ -466,16 +472,19 @@ public class AverageInvoiceCostingMethod extends AbstractCostingMethod
 	public BigDecimal getNewAccumulatedAmount(MCostDetail cost) {
 
 		BigDecimal accumulatedAmount = Env.ZERO;
+		BigDecimal multiplier = getMultiplierTrx(cost);
+		BigDecimal costAmount = cost.getCostAmt().multiply(multiplier);
+		BigDecimal costAmountAdj = cost.getCostAdjustment().multiply(multiplier);
 		if (cost.getQty().signum() > 0)
-			accumulatedAmount = cost.getCumulatedAmt().add(cost.getCostAmt()).add(cost.getCostAdjustment());
+			accumulatedAmount = cost.getCumulatedAmt().add(costAmount).add(costAmountAdj);
 		else if (cost.getQty().signum() < 0)
-			accumulatedAmount = cost.getCumulatedAmt().add(cost.getCostAmt().negate()).add(cost.getCostAdjustment().negate());
+			accumulatedAmount = cost.getCumulatedAmt().add(costAmount.negate()).add(costAmountAdj.negate());
 		else if (cost.getQty().signum() == 0)
 		{
 			if(getNewAccumulatedQuantity(cost).signum() > 0)
-				accumulatedAmount = cost.getCumulatedAmt().add(cost.getCostAmt()).add(cost.getCostAdjustment());
+				accumulatedAmount = cost.getCumulatedAmt().add(costAmount).add(costAmountAdj);
 			else if (getNewAccumulatedQuantity(cost).signum() < 0)
-				accumulatedAmount = cost.getCumulatedAmt().add(cost.getCostAmt().negate()).add(cost.getCostAdjustment().negate());
+				accumulatedAmount = cost.getCumulatedAmt().add(costAmount.negate()).add(costAmountAdj.negate());
 		}
 		return accumulatedAmount;
 	}
@@ -599,9 +608,13 @@ public class AverageInvoiceCostingMethod extends AbstractCostingMethod
     public void updateInventoryValue() {
         if (accumulatedQuantity.signum() != 0)
         {
-            dimension.setCurrentCostPrice(accumulatedAmount.divide(accumulatedQuantity, accountSchema.getCostingPrecision(), RoundingMode.HALF_UP));
-            dimension.setCurrentCostPriceLL(accumulatedAmountLowerLevel.divide(accumulatedQuantity, accountSchema.getCostingPrecision(), RoundingMode.HALF_UP));
+            dimension.setCurrentCostPrice(accumulatedAmount.divide(accumulatedQuantity, accountSchema.getCostingPrecision(), BigDecimal.ROUND_HALF_UP));
+            dimension.setCurrentCostPriceLL(accumulatedAmountLowerLevel.divide(accumulatedQuantity, accountSchema.getCostingPrecision(), BigDecimal.ROUND_HALF_UP));
+        }else {
+        	dimension.setCurrentCostPrice(Env.ZERO);
+        	dimension.setCurrentCostPriceLL(Env.ZERO);
         }
+        	
         if (model.getReversalLine_ID() != 0)
 		{
 			if (lastCostDetail == null)
@@ -676,5 +689,16 @@ public class AverageInvoiceCostingMethod extends AbstractCostingMethod
         else
             CostEngineFactory.getCostEngine(clientId).createCostDetail(
                     accountSchema, costType, costElement, transaction, transaction.getDocumentLine(), true);
+	}
+	
+	private BigDecimal getMultiplierTrx(MCostDetail cost) {
+		AtomicReference<BigDecimal> result = new AtomicReference<BigDecimal>(Env.ONE);
+		
+		Optional.ofNullable(cost).ifPresent(costDetail ->{
+			if (!costDetail.isReversal()) 
+				result.set(new BigDecimal(costDetail.getCurrentCostPrice().signum()));
+			
+		});
+		return result.get();
 	}
 }

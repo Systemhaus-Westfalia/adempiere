@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 /**
  *	Group By Management
@@ -320,6 +321,18 @@ public class PrintDataGroup
 		sb.append("]");
 		return sb.toString();
 	}	//	toString
+	
+	/**
+	 * Replace ColumnName on Function and Groups
+	 * @param columnName
+	 * @param newColumnName
+	 */
+	public void replaceColumnName(String columnName, String newColumnName) {
+		m_functions = (ArrayList<String>) m_functions.stream().map(function -> (function.startsWith(columnName) ? function.replaceAll(columnName, newColumnName): function)
+				).collect(Collectors.toList());
+		m_groups = (ArrayList<String>) m_groups.stream().map(group -> (group.startsWith(columnName) ? group.replaceAll(columnName, newColumnName): group)
+				).collect(Collectors.toList());
+	}
 
 }	//	PrintDataGroup
 

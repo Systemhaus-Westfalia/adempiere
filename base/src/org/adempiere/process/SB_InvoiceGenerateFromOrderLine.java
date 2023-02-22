@@ -132,6 +132,7 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 			//	
 			msg.append(generate(order));
 		}
+		completeInvoice();
 		//	
 		return msg.toString();
 	}	//	doIt
@@ -274,7 +275,6 @@ public class SB_InvoiceGenerateFromOrderLine extends SB_InvoiceGenerateFromOrder
 		{
 			log.log(Level.SEVERE, "", e);
 		}
-		completeInvoice();
 		return "@C_Order_ID@: " + order.getDocumentNo() + "[@C_Invoice_ID@ @Created@: " + m_created + "]";
 	}	//	generate
 	

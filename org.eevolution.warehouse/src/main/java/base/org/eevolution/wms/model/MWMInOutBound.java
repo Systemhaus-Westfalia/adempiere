@@ -28,9 +28,17 @@
  **********************************************************************/
 package org.eevolution.wms.model;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+
+import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.core.domains.models.I_M_InOut;
 import org.adempiere.core.domains.models.X_WM_InOutBound;
-import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.MDocType;
 import org.compiere.model.MInOut;
 import org.compiere.model.MInOutLine;
@@ -48,19 +56,10 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.compiere.util.Util;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-
 /**
  * Class Model for In & Out Bound Operation
  * @author victor.perez@e-evoluton.com, e-Evolution
- * @author Yamel Senih, ysenih@erpya.com, ERPCyA http://www.erpya.com
- * Fix get line method
+ *
  */
 public class MWMInOutBound extends X_WM_InOutBound implements DocAction, DocOptions {
 
@@ -363,7 +362,7 @@ public class MWMInOutBound extends X_WM_InOutBound implements DocAction, DocOpti
 		new Query(getCtx(), I_M_InOut.Table_Name, "DocStatus = 'CO' "
 				+ "AND EXISTS(SELECT 1 FROM M_InOutLine iol "
 				+ "		INNER JOIN WM_InOutBoundLine iobl ON(iobl.WM_InOutBoundLine_ID = iol.WM_InOutBoundLine_ID) "
-				+ "		WHERE iobl.WM_InOutBound_ID = ?)", get_TrxName())
+				+ "		WHERE iobl.WM_InOutBound_ID = ? AND iol.M_InOut_ID = M_InOut.M_InOut_ID)", get_TrxName())
 			.setParameters(getWM_InOutBound_ID())
 			.<MInOut>list()
 			.forEach(receipt -> {
@@ -441,6 +440,7 @@ public class MWMInOutBound extends X_WM_InOutBound implements DocAction, DocOpti
 		shipment.setM_FreightCategory_ID(outbound.getM_FreightCategory_ID());
 		shipment.setFreightCostRule(outbound.getFreightCostRule());
 		shipment.setFreightAmt(outbound.getFreightAmt());
+		shipment.setM_Warehouse_ID(outbound.getM_Warehouse_ID());
 		shipment.saveEx();
 		return shipment;
 	}
@@ -647,7 +647,7 @@ public class MWMInOutBound extends X_WM_InOutBound implements DocAction, DocOpti
 	{
 		StringBuffer whereClause = new StringBuffer(MWMInOutBoundLine.COLUMNNAME_WM_InOutBound_ID+"=?");
 		if (!Util.isEmpty(where, true))
-			whereClause.append(where);
+			whereClause.append(whereClause);
 		if (orderClause.length() == 0)
 			orderClause = MWMInOutBoundLine.COLUMNNAME_Line;
 		//

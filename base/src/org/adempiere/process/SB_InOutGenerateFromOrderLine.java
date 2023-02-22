@@ -192,7 +192,11 @@ public class SB_InOutGenerateFromOrderLine extends SB_InOutGenerateFromOrderLine
 
 				//	Stored Product
 				String MMPolicy = product.getMMPolicy();
-				
+				int attributeSetInstanceId = getSelectionAsInt(oLine.getC_OrderLine_ID(), "OL_M_AttributeSetInstance_ID");
+				if(attributeSetInstanceId > 0
+						&& oLine.getM_AttributeSetInstance_ID() <= 0) {
+					oLine.setM_AttributeSetInstance_ID(attributeSetInstanceId);
+				}
 				MStorage[] storages = getStorages(oLine.getM_Warehouse_ID(),
 						oLine.getM_Product_ID(), oLine.getM_AttributeSetInstance_ID(),
 						minGuaranteeDate, MClient.MMPOLICY_FiFo.equals(MMPolicy));
@@ -321,11 +325,12 @@ public class SB_InOutGenerateFromOrderLine extends SB_InOutGenerateFromOrderLine
 			if (!m_shipment.save())
 				throw new IllegalStateException("Could not create Shipment");
 		}
+		int locatorId = getSelectionAsInt(orderLine.getC_OrderLine_ID(), "OL_M_Locator_ID");
 		//	Non Inventory Lines
 		if (storages == null)
 		{
 			MInOutLine line = new MInOutLine (m_shipment);
-			line.setOrderLine(orderLine, 0, Env.ZERO);
+			line.setOrderLine(orderLine, locatorId, Env.ZERO);
 			line.setQty(qty);	//	Correct UOM
 			if (orderLine.getQtyEntered().compareTo(orderLine.getQtyOrdered()) != 0)
 				line.setQtyEntered(qty
@@ -360,7 +365,9 @@ public class SB_InOutGenerateFromOrderLine extends SB_InOutGenerateFromOrderLine
 			}
 			if (deliver.signum() == 0)	//	zero deliver
 				continue;
-			int M_Locator_ID = storage.getM_Locator_ID();
+			if(locatorId <= 0) {
+				locatorId = storage.getM_Locator_ID();
+			}
 			//
 			MInOutLine line = null;
 			if (orderLine.getM_AttributeSetInstance_ID() == 0)      //      find line with Locator
@@ -368,7 +375,7 @@ public class SB_InOutGenerateFromOrderLine extends SB_InOutGenerateFromOrderLine
 				for (int ll = 0; ll < list.size(); ll++)
 				{
 					MInOutLine test = (MInOutLine)list.get(ll);
-					if (test.getM_Locator_ID() == M_Locator_ID && test.getM_AttributeSetInstance_ID() == 0)
+					if (test.getM_Locator_ID() == locatorId && test.getM_AttributeSetInstance_ID() == 0)
 					{
 						line = test;
 						break;
@@ -378,7 +385,7 @@ public class SB_InOutGenerateFromOrderLine extends SB_InOutGenerateFromOrderLine
 			if (line == null)	//	new line
 			{
 				line = new MInOutLine (m_shipment);
-				line.setOrderLine(orderLine, M_Locator_ID, order.isSOTrx() ? deliver : Env.ZERO);
+				line.setOrderLine(orderLine, locatorId, order.isSOTrx() ? deliver : Env.ZERO);
 				line.setQty(deliver);
 				MAttributeSet.validateAttributeSetInstanceMandatory(product, MInOutLine.Table_ID , line.isSOTrx() , line.getM_AttributeSetInstance_ID());
 				//if (product != null && product.isASIMandatory(order.isSOTrx(),line.getAD_Org_ID()))

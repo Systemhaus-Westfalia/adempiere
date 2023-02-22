@@ -44,7 +44,6 @@ import org.compiere.util.DisplayType;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.compiere.util.Util;
-import org.eevolution.manufacturing.model.MPPProductBOMLine;
 import org.eevolution.services.dsl.ProcessBuilder;
 
 /**
@@ -428,6 +427,8 @@ public class MProduction extends X_M_Production implements DocAction , DocumentR
 	{
 		if (log.isLoggable(Level.INFO))
 			log.info("unlockIt - " + toString());
+//		TODO: Generate X and I class
+//		setProcessing(false);
 		return true;
 	}
 
@@ -655,7 +656,7 @@ public class MProduction extends X_M_Production implements DocAction , DocumentR
 		Timestamp currentDate = new Timestamp(System.currentTimeMillis());
 		Optional<Timestamp> loginDateOptional = Optional.of(Env.getContextAsDate(getCtx(),"#Date"));
 		Timestamp reversalDate =  isAccrual ? loginDateOptional.orElseGet(() -> currentDate) : getMovementDate();
-		MPeriod.testPeriodOpen(getCtx(), reversalDate , getC_DocType_ID(), getAD_Org_ID(), get_TrxName());
+		MPeriod.testPeriodOpen(getCtx(), reversalDate , getC_DocType_ID(), getAD_Org_ID());
 		MProduction reversal = null;
 		reversal = copyFrom(reversalDate);
 		MDocType docType = MDocType.get(getCtx(), getC_DocType_ID());
@@ -675,6 +676,8 @@ public class MProduction extends X_M_Production implements DocAction , DocumentR
 		}
 
 		reversal.closeIt();
+//		TODO: Generate X and I class
+//		reversal.setProcessing(false);
 		reversal.setDocStatus(DOCSTATUS_Reversed);
 		reversal.setDocAction(DOCACTION_None);
 		reversal.saveEx(get_TrxName());
@@ -703,8 +706,12 @@ public class MProduction extends X_M_Production implements DocAction , DocumentR
 		to.setDocStatus(DOCSTATUS_Drafted); // Draft
 		to.setDocAction(DOCACTION_Complete);
 		to.setMovementDate(reversalDate);
+//		TODO: Generate X and I class
+//		to.setIsComplete("N");
 		to.setIsCreated(true);
 		to.setPosted(false);
+//		TODO: Generate X and I class
+//		to.setProcessing(false);
 		to.setProcessed(false);
 		to.setReversal(true);
 		to.setProductionQty(getProductionQty().negate());

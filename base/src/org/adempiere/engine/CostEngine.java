@@ -314,7 +314,7 @@ public class CostEngine {
 
 		if (model instanceof MLandedCostAllocation) {
 			MLandedCostAllocation allocation = (MLandedCostAllocation) model;
-			costThisLevel  = allocation.getPriceActual();
+			costThisLevel = convertCostToSchemaCurrency(accountSchema, model , model.getPriceActualCurrency());
 		}
 
 		MCost cost = MCost.validateCostForCostType(accountSchema, costType, costElement,
@@ -340,7 +340,7 @@ public class CostEngine {
 					MInventoryLine inventoryLine = (MInventoryLine) model;
 					// If cost this level is zero and is a physical inventory then
 					// try get cost from physical inventory
-					if (costThisLevel.signum() == 0 && MCostElement.COSTELEMENTTYPE_Material.equals(costElement.getCostElementType())) {
+					if (MCostElement.COSTELEMENTTYPE_Material.equals(costElement.getCostElementType())) {
 						// Use the current cost only for Physical Inventory
 						if (inventoryLine.getQtyInternalUse().signum() == 0 &&
 								inventoryLine.getCurrentCostPrice() != null &&
@@ -380,6 +380,12 @@ public class CostEngine {
 			} else if (MCostElement.COSTELEMENTTYPE_Material.equals(costElement.getCostElementType())) {
 					costThisLevel = convertCostToSchemaCurrency(accountSchema , model , model.getPriceActualCurrency());
 			}
+		}else if ((MCostElement.COSTELEMENTTYPE_Material.equals(costElement
+				.getCostElementType()))
+				&& transaction.getMovementType().equals(MTransaction.MOVEMENTTYPE_VendorReturns)
+				&& !MCostType.COSTINGMETHOD_StandardCosting.equals(costType
+						.getCostingMethod())) {
+			costThisLevel = convertCostToSchemaCurrency(accountSchema , model , model.getPriceActualCurrency());
 		}
 
 		if (!MCostType.COSTINGMETHOD_StandardCosting.equals(costType.getCostingMethod())) {
@@ -507,15 +513,21 @@ public class CostEngine {
 	 */
 	private BigDecimal convertCostToSchemaCurrency(MAcctSchema acctSchema , IDocumentLine model , BigDecimal cost)
 	{
-		BigDecimal totalCostThisLevel = MConversionRate.convertBase(
-				model.getCtx(),
-				cost,
-				model.getC_Currency_ID(),
-				model.getDateAcct(),
-				model.getC_ConversionType_ID(),
-				model.getAD_Client_ID(),
-				model.getAD_Org_ID());
-		return totalCostThisLevel;
+		BigDecimal costThisLevel = BigDecimal.ZERO;
+		BigDecimal rate = MConversionRate.getRate(
+				model.getC_Currency_ID(), acctSchema.getC_Currency_ID() ,
+				model.getDateAcct(), model.getC_ConversionType_ID() ,
+				model.getAD_Client_ID(), model.getAD_Org_ID());
+		if (rate != null) {
+			if (rate.compareTo(BigDecimal.ONE) == 0)
+				costThisLevel = cost;
+			else {
+				costThisLevel = cost.multiply(rate);
+				if (costThisLevel.scale() > acctSchema.getCostingPrecision())
+					costThisLevel = costThisLevel.setScale(acctSchema.getCostingPrecision(), BigDecimal.ROUND_HALF_UP);
+			}
+		}
+		return costThisLevel;
 	}
 
 	//Create cost detail for by document

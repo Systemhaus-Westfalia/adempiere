@@ -19,6 +19,7 @@ import org.compiere.util.Env;
 import org.compiere.util.Trx;
 import org.compiere.util.Util;
 import org.spin.util.AbstractExportFormat;
+import org.spin.util.ExportFormatPDF;
 import org.spin.util.ReportExportHandler;
 
 
@@ -158,6 +159,9 @@ public class ServerReportCtl {
 		try {
 			ReportExportHandler exportHandler = new ReportExportHandler(Env.getCtx(), reportEngine);
 			AbstractExportFormat exporter = exportHandler.getExporterFromExtension(processInfo.getReportType());
+			if(exporter == null) {	//	Default exporter
+				exporter = new ExportFormatPDF(Env.getCtx(), reportEngine);
+			}
 			//	Get File
 			File tempFile = File.createTempFile(reportEngine.getName() + "_" + System.currentTimeMillis(), "." + exporter.getExtension());
 			exporter.exportTo(tempFile);

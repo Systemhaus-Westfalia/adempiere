@@ -197,6 +197,9 @@ public class ReportExportHandler {
 	 * @return
 	 */
 	public AbstractExportFormat getExporterFromExtension(String exportExtension) {
+		if(Util.isEmpty(exportExtension)) {
+			exportExtension = "pdf";
+		}
 		for(AbstractExportFormat exporter : getExportFormatList()) {
 			if(exporter.getExtension().equals(exportExtension)) {
 				return exporter;

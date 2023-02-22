@@ -37,6 +37,7 @@ allprojects {
 
 
 def entityType = 'D'
+def customGroupId = System.getenv("ADEMPIERE_LIBRARY_GROUP")
 version = System.getenv("ADEMPIERE_LIBRARY_VERSION")
 
 jar {
@@ -59,7 +60,7 @@ publishing {
     }
     publications {
         mavenJava(MavenPublication) {
-        	groupId 'io.github.adempiere'
+        	groupId customGroupId
             artifactId 'tools'
             version
            	from components.java

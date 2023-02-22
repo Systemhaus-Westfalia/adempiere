@@ -274,9 +274,9 @@ public class PrintData implements Serializable
 	{
 		m_matrix.addRow(nodes);
 		if (functionRow)
-			m_functionRows.add(Integer.valueOf(m_matrix.getRowIndex()));
+			m_functionRows.add(new Integer(m_matrix.getRowIndex()));
 		if (m_hasLevelNo && levelNo != 0)
-			addNode(new PrintDataElement(LEVEL_NO, Integer.valueOf(levelNo), DisplayType.Integer, null));
+			addNode(new PrintDataElement(LEVEL_NO, new Integer(levelNo), DisplayType.Integer, null));
 	}	//	addRow
 
 	/**
@@ -323,7 +323,7 @@ public class PrintData implements Serializable
 	 */
 	public boolean isFunctionRow (int row)
 	{
-		return m_functionRows.contains(Integer.valueOf(row));
+		return m_functionRows.contains(new Integer(row));
 	}	//	isFunctionRow
 
 	/**
@@ -332,7 +332,7 @@ public class PrintData implements Serializable
 	 */
 	public boolean isFunctionRow ()
 	{
-		return m_functionRows.contains(Integer.valueOf(m_matrix.getRowIndex()));
+		return m_functionRows.contains(new Integer(m_matrix.getRowIndex()));
 	}	//	isFunctionRow
 
 	/**
@@ -457,7 +457,7 @@ public class PrintData implements Serializable
 	 * 	@param index index
 	 * 	@return PrintData(Element) of index or null
 	 */
-	public Object getNode (int index)
+	private Object getNode (int index)
 	{
 		List<Serializable> nodes = m_matrix.getRowData();
 		if (nodes == null || index < 0 || index >= nodes.size())
@@ -487,6 +487,14 @@ public class PrintData implements Serializable
 	public Object getNode (Integer AD_Column_ID)
 	{
 		int index = getIndex (AD_Column_ID.intValue());
+		if (index < 0)
+			return null;
+		List<Serializable> nodes = m_matrix.getRowData();
+		return nodes.get(index);
+	}	//	getNode
+	
+	public Object getNodeFromPrintFormatItem(int printFormatItemId) {
+		int index = getIndexFromPrintFormatItem(printFormatItemId);
 		if (index < 0)
 			return null;
 		List<Serializable> nodes = m_matrix.getRowData();
@@ -566,6 +574,26 @@ public class PrintData implements Serializable
 		}
 		log.log(Level.SEVERE, "Column not found - AD_Column_ID=" + AD_Column_ID);
 		if (AD_Column_ID == 0)
+			Trace.printStack();
+		return -1;
+	}	//	getIndex
+	
+	/**
+	 * 	Get Index of Node in Structure (not recursing) row
+	 * 	@param printFormatItemId printFormatItemId
+	 * 	@return index or -1
+	 */
+	public int getIndexFromPrintFormatItem(int printFormatItemId)
+	{
+		if (m_columnInfo == null)
+			return -1;
+		for (int i = 0; i < m_columnInfo.length; i++)
+		{
+			if (m_columnInfo[i].getPrinformatItemId() == printFormatItemId)
+				return getIndex(m_columnInfo[i].getColumnName());
+		}
+		log.log(Level.SEVERE, "Column not found - AD_Column_ID=" + printFormatItemId);
+		if (printFormatItemId == 0)
 			Trace.printStack();
 		return -1;
 	}	//	getIndex
@@ -876,7 +904,7 @@ public class PrintData implements Serializable
 	public void addRow(boolean functionRow, int levelNo, int reportLineId) {
 		addRow(functionRow, levelNo);
 		if (m_hasLevelNo && reportLineId != 0)
-			addNode(new PrintDataElement("PA_ReportLine_ID", Integer.valueOf(reportLineId), DisplayType.Integer, null));
+			addNode(new PrintDataElement("PA_ReportLine_ID", new Integer(reportLineId), DisplayType.Integer, null));
 		
 	}
 

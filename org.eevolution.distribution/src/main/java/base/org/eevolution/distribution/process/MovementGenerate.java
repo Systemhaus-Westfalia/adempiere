@@ -383,7 +383,7 @@ public class MovementGenerate extends MovementGenerateAbstract
 		});
 
 		//	Non Inventory Lines
-		if (storages == null) {
+		if (storages == null || storages.length == 0) {
 			MMovementLine line = new MMovementLine(currentMovement);
 			InventoryMovementService.setMovementOrderLine(line, orderLine, Env.ZERO, false);
 			line.setMovementQty(qty);    //	Correct UOM

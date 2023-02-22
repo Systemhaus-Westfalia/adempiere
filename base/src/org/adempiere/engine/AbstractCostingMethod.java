@@ -299,14 +299,25 @@ public abstract class AbstractCostingMethod implements ICostingMethod {
             currentCostPrice = lastCostDetail.getCurrentCostPrice().negate();
             currentCostPriceLowerLevel = lastCostDetail.getCurrentCostPriceLL().negate();
         }
-
-		updateAmountCost();
 		
+		MCostDetail lastTrxCostDetail = MCostDetail.getLastTransaction(model, transaction,
+                accountSchema.getC_AcctSchema_ID(), dimension.getM_CostType_ID(),
+                dimension.getM_CostElement_ID(),dateAccounting,
+                costingLevel);
+		if (lastCostDetail != lastTrxCostDetail) {
+			MCostDetail tmp = lastCostDetail;
+			lastCostDetail = lastTrxCostDetail;
+			updateAmountCost();
+			costDetail.setSeqNo(lastCostDetail.getSeqNo() + 10);
+			lastCostDetail = tmp;
+		}
+		
+
 		// Update the new cost detail
 		accumulatedQuantity = getNewAccumulatedQuantity(costDetail);
 		accumulatedAmount = getNewAccumulatedAmount(costDetail);
 		accumulatedAmountLowerLevel = getNewAccumulatedAmountLowerLevel(costDetail);
-		currentCostPrice = getNewCurrentCostPrice(costDetail, accountSchema.getCostingPrecision(), RoundingMode.HALF_UP);
+		currentCostPrice = getNewCurrentCostPrice(costDetail, accountSchema.getCostingPrecision(), BigDecimal.ROUND_HALF_UP);
 	}
 	
 	public abstract void updateAmountCost();

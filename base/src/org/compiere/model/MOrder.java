@@ -2156,11 +2156,8 @@ public class MOrder extends X_C_Order implements DocAction
 		MOrderTax[] taxes = getTaxes(true);
 		for (MOrderTax tax : taxes )
 		{
-			if(!tax.calculateTaxFromLines()) {
+			if ( !(tax.calculateTaxFromLines() && tax.save()) )
 				return false;
-			}
-			//	Save
-			tax.saveEx();
 		}
 		
 		addDescription(Msg.getMsg(getCtx(), "Voided"));

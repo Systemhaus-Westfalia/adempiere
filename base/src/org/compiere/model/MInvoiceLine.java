@@ -984,17 +984,11 @@ public class MInvoiceLine extends X_C_InvoiceLine implements DocumentReversalLin
 	 */
 	public String allocateLandedCosts()
 	{
-		//if (isProcessed())
-		//	return "Processed";
-		if (getParent().isProcessed())
-			MPeriod.testPeriodOpen(getCtx(), getParent().getDateAcct(), getParent().getC_DocTypeTarget_ID(), getAD_Org_ID());
-		if (getParent().isProcessed()) {
-			MFactAcct.deleteEx(MInvoice.Table_ID, getParent().get_ID(), get_TrxName());
-			//
-			// Update Invoice
-			getParent().setPosted(false);
-			getParent().saveEx();
-		}
+		if (isProcessed())
+			return "Processed";
+		MLandedCost[] lcs = MLandedCost.getLandedCosts(this);
+		if (lcs.length == 0)
+			return "";
 
 		String sql = "DELETE M_CostDetail WHERE C_landedcostallocation_ID in " +
 				"(select c_landedCostAllocation_ID from c_landedcostAllocation where c_invoiceline_ID=" + getC_InvoiceLine_ID() + ")";
@@ -1006,10 +1000,6 @@ public class MInvoiceLine extends X_C_InvoiceLine implements DocumentReversalLin
 		if (no != 0)
 			log.info("Deleted #" + no);
 
-		MLandedCost[] lcs = MLandedCost.getLandedCosts(this);
-		if (lcs.length == 0)
-			return "";
-		
 		int inserted = 0;
 		//	*** Single Criteria ***
 		if (lcs.length == 1)
@@ -1321,4 +1311,17 @@ public class MInvoiceLine extends X_C_InvoiceLine implements DocumentReversalLin
         setC_Activity_ID(rmaLine.getC_Activity_ID());
         setC_Campaign_ID(rmaLine.getC_Campaign_ID());
 	}
+
+	/**
+	 * @return matched qty
+	 */
+	public BigDecimal getMatchedQty()
+	{
+		String sql = "SELECT COALESCE(SUM("+MMatchInv.COLUMNNAME_Qty+"),0)"
+						+" FROM "+MMatchInv.Table_Name
+						+" WHERE "+MMatchInv.COLUMNNAME_C_InvoiceLine_ID+"=?"
+							+" AND "+MMatchInv.COLUMNNAME_Processed+"=?";
+		return DB.getSQLValueBDEx(get_TrxName(), sql, getC_InvoiceLine_ID(), true);
+	}
+
 }	//	MInvoiceLine

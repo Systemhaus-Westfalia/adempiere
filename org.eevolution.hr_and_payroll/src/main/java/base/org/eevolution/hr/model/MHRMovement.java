@@ -15,7 +15,6 @@
  *****************************************************************************/
 package org.eevolution.hr.model;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import org.adempiere.exceptions.AdempiereException;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MCurrency;
 import org.compiere.model.Query;
+import org.compiere.util.CCache;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
 import org.compiere.util.Util;
@@ -46,7 +46,12 @@ import org.compiere.util.Util;
  */
 public class MHRMovement extends X_HR_Movement
 {
+	/**	Movements Cache */
+	private static CCache<String, MHRMovement> movementsHistory = new CCache<String, MHRMovement>(Table_Name + "_Movements", 40, 0);
+	/**	Amounts Cache */
+	private static CCache<String, BigDecimal> amountsHistory = new CCache<String, BigDecimal>(Table_Name + "_Amounts", 40, 0);
 
+	
 	/**
 	 * 
 	 */
@@ -270,7 +275,12 @@ public class MHRMovement extends X_HR_Movement
 		MHRConcept concept = MHRConcept.getByValue(ctx, conceptValue, trxName);
 		if (concept == null)
 			return 0.0;
-		//
+		//	Get from Cache
+		String key = "SUM|" + concept.getHR_Concept_ID() + "|" + payrollId + "|" + partnerId + "|" + from + "|" + to + "|" + includeInProcess;
+		BigDecimal value = amountsHistory.get(key);
+		if(value != null) {
+			return value.doubleValue();
+		}
 		// Detect field name
 		final String fieldName;
 		if (MHRConcept.COLUMNTYPE_Quantity.equals(concept.getColumnType())) {
@@ -307,7 +317,9 @@ public class MHRMovement extends X_HR_Movement
 		StringBuffer sql = new StringBuffer("SELECT COALESCE(SUM(")
 								.append(fieldName).append("),0) FROM ").append(MHRMovement.Table_Name)
 								.append(" WHERE ").append(whereClause);
-		BigDecimal value = DB.getSQLValueBDEx(null, sql.toString(), params);
+		value = DB.getSQLValueBDEx(null, sql.toString(), params);
+		//	Set cache
+		amountsHistory.put(key, value);
 		return value.doubleValue();
 		
 	} // getConcept
@@ -354,7 +366,11 @@ public class MHRMovement extends X_HR_Movement
 		MHRConcept concept = MHRConcept.getByValue(ctx, conceptValue, trxName);
 		if (concept == null)
 			return 0.0;
-		//
+		//	Get from Cache
+		String key = "AVG|" + concept.getHR_Concept_ID() + "|" + payrollId + "|" + partnerId + "|" + from + "|" + to + "|" + includeInProcess;
+		if(amountsHistory.containsKey(key)) {
+			return Optional.ofNullable(amountsHistory.get(key)).orElse(Env.ZERO).doubleValue();
+		}
 		// Detect field name
 		final String fieldName;
 		if (MHRConcept.COLUMNTYPE_Quantity.equals(concept.getColumnType())) {
@@ -392,6 +408,7 @@ public class MHRMovement extends X_HR_Movement
 								.append(fieldName).append("),0) FROM ").append(MHRMovement.Table_Name)
 								.append(" WHERE ").append(whereClause);
 		BigDecimal value = DB.getSQLValueBDEx(null, sql.toString(), params);
+		amountsHistory.put(key, value);
 		return value.doubleValue();
 		
 	} // getConcept
@@ -446,7 +463,11 @@ public class MHRMovement extends X_HR_Movement
 		MHRConcept concept = MHRConcept.getByValue(ctx, conceptValue, trxName);
 		if (concept == null)
 			return 0.0;
-		//
+		//	Get from Cache
+		String key = "SUM|" + concept.getHR_Concept_ID() + "|" + payrollId + "|" + partnerId + "|" + periodId + "|" + periodFrom + "|" + periodTo + "|" + includeInProcess;
+		if(amountsHistory.containsKey(key)) {
+			return Optional.ofNullable(amountsHistory.get(key)).orElse(Env.ZERO).doubleValue();
+		}
 		// Detect field name
 		final String fieldName;
 		if (MHRConcept.COLUMNTYPE_Quantity.equals(concept.getColumnType())) {
@@ -489,6 +510,7 @@ public class MHRMovement extends X_HR_Movement
 					.append(fieldName).append("),0) FROM ").append(MHRMovement.Table_Name)
 					.append(" WHERE ").append(whereClause);
 		BigDecimal value = DB.getSQLValueBDEx(null, sql.toString(), params);
+		amountsHistory.put(key, value);
 		return value.doubleValue();
 
 	} // getConcept
@@ -571,7 +593,11 @@ public class MHRMovement extends X_HR_Movement
 		MHRConcept concept = MHRConcept.getByValue(ctx, conceptValue, trxName);
 		if (concept == null)
 			return null;
-		//	
+		//	Get from Cache
+		String key = concept.getHR_Concept_ID() + "|" + payrollId + "|" + partnerId + "|" + breakDate + "|" + isWithValidFrom;
+		if(movementsHistory.containsKey(key)) {
+			return movementsHistory.get(key);
+		}
 		//
 		ArrayList<Object> params = new ArrayList<Object>();
 		StringBuffer whereClause = new StringBuffer();
@@ -595,10 +621,15 @@ public class MHRMovement extends X_HR_Movement
 		
 		whereClause.append(")");
 		//	return
-		return new Query(ctx, I_HR_Movement.Table_Name, whereClause.toString(), trxName)
+		MHRMovement value = new Query(ctx, I_HR_Movement.Table_Name, whereClause.toString(), trxName)
 			.setParameters(params)
-			.setOrderBy(I_HR_Movement.COLUMNNAME_ValidFrom + " DESC")
+			.setOrderBy(I_HR_Movement.COLUMNNAME_ValidFrom + " DESC, " + I_HR_Movement.COLUMNNAME_Updated + " DESC")
 			.<MHRMovement>first();
+		if(value != null) {
+			value.set_TrxName(null);
+		}
+		movementsHistory.put(key, value);
+		return value;
 	}
 	
 	/**
@@ -728,7 +759,11 @@ public class MHRMovement extends X_HR_Movement
 		MHRConcept concept = MHRConcept.getByValue(ctx, conceptValue, trxName);
 		if (concept == null)
 			return 0.0;
-		//
+		//	Get from Cache
+		String key = "AVG|" + concept.getHR_Concept_ID() + "|" + payrollId + "|" + partnerId + "|" + periodId + "|" + periodFrom + "|" + periodTo + "|" + includeInProcess;
+		if(amountsHistory.containsKey(key)) {
+			return Optional.ofNullable(amountsHistory.get(key)).orElse(Env.ZERO).doubleValue();
+		}
 		// Detect field name
 		final String fieldName;
 		if (MHRConcept.COLUMNTYPE_Quantity.equals(concept.getColumnType())) {
@@ -771,6 +806,7 @@ public class MHRMovement extends X_HR_Movement
 					.append(fieldName).append("),0) FROM ").append(MHRMovement.Table_Name)
 					.append(" WHERE ").append(whereClause);
 		BigDecimal value = DB.getSQLValueBDEx(null, sql.toString(), params);
+		amountsHistory.put(key, value);
 		return value.doubleValue();
 
 	} // getConcept
@@ -896,12 +932,12 @@ public class MHRMovement extends X_HR_Movement
 		if(value == null) {
 			return;
 		}
+		//	Get column Type from concept
+		MHRConcept concept = MHRConcept.getById(getCtx(), getHR_Concept_ID(), get_TrxName());
+		if(concept == null) {
+			throw new AdempiereException("@HR_Concept_ID@ @NotFound@");
+		}
 		try {
-			//	Get column Type from concept
-			MHRConcept concept = MHRConcept.getById(getCtx(), getHR_Concept_ID(), get_TrxName());
-			if(concept == null) {
-				throw new AdempiereException("@HR_Concept_ID@ @NotFound@");
-			}
 			//	
 			final String columnType = concept.getColumnType();
 			int precision = MCurrency.getStdPrecision(getCtx(), Env.getContextAsInt(p_ctx, "#C_Currency_ID"));
@@ -932,7 +968,7 @@ public class MHRMovement extends X_HR_Movement
 				//	Set from type
 				if(MHRConcept.COLUMNTYPE_Amount.equals(columnType)) {
 					BigDecimal amount = new BigDecimal(doubleValue)
-							.setScale(precision, RoundingMode.HALF_UP);
+							.setScale(precision, BigDecimal.ROUND_HALF_UP);
 					setAmount(amount);
 					setQty(Env.ZERO);
 				} else {
@@ -946,77 +982,19 @@ public class MHRMovement extends X_HR_Movement
 		}
 		catch (Exception e) 
 		{
-			throw new AdempiereException("@Script Error@ " + e.getLocalizedMessage());
+			throw new AdempiereException(concept.getValue() + " - " + concept.getName() + " @Script Error@ " + e.getLocalizedMessage());
 		}
 	}
 	
 	@Override
 	protected boolean beforeSave(boolean newRecord)
 	{
+		if(getHR_Employee_ID() > 0) {
+			return true;
+		}
 		MHREmployee employee  = MHREmployee.getActiveEmployee(Env.getCtx(), getC_BPartner_ID(), get_TrxName());
 		if (employee != null) {
-			setAD_Org_ID(employee.getAD_Org_ID());
-			int activityId = employee.getC_Activity_ID();
-			int user1Id = employee.getUser1_ID();
-			int user2Id = employee.getUser2_ID();
-			int user3Id = employee.getUser3_ID();
-			int user4Id = employee.getUser4_ID();
-			//	Get from Job
-			if(employee.getHR_Job_ID() > 0
-					&& (activityId <= 0 || user1Id <= 0 || user2Id <= 0 || user3Id <= 0 || user4Id <= 0)) {
-				MHRJob job = MHRJob.getById(getCtx(), employee.getHR_Job_ID(), get_TrxName());
-				if(activityId <= 0) {
-					activityId = job.getC_Activity_ID();
-				}
-				if(user1Id <= 0) {
-					user1Id = job.getUser1_ID();
-				}
-				if(user2Id <= 0) {
-					user2Id = job.getUser2_ID();
-				}
-				if(user3Id <= 0) {
-					user3Id = job.getUser3_ID();
-				}
-				if(user4Id <= 0) {
-					user4Id = job.getUser4_ID();
-				}
-			}
-			//	Get from Department
-			if(employee.getHR_Department_ID() > 0
-					&& (activityId <= 0 || user1Id <= 0 || user2Id <= 0 || user3Id <= 0 || user4Id <= 0)) {
-				MHRDepartment department = MHRDepartment.getById(getCtx(), employee.getHR_Department_ID(), get_TrxName());
-				if(activityId <= 0) {
-					activityId = department.getC_Activity_ID();
-				}
-				if(user1Id <= 0) {
-					user1Id = department.getUser1_ID();
-				}
-				if(user2Id <= 0) {
-					user2Id = department.getUser2_ID();
-				}
-				if(user3Id <= 0) {
-					user3Id = department.getUser3_ID();
-				}
-				if(user4Id <= 0) {
-					user4Id = department.getUser4_ID();
-				}
-			}
-			//	Set result
-			if(activityId > 0) {
-				setC_Activity_ID(activityId);
-			}
-			if(user1Id > 0) {
-				setUser1_ID(user1Id);
-			}
-			if(user2Id > 0) {
-				setUser2_ID(user2Id);
-			}
-			if(user3Id > 0) {
-				setUser3_ID(user3Id);
-			}
-			if(user4Id > 0) {
-				setUser4_ID(user4Id);
-			}
+			setEmployee(employee);
 		}		
 		return true;
 	}
@@ -1027,19 +1005,78 @@ public class MHRMovement extends X_HR_Movement
 	 */
 	public void setEmployee(MHREmployee employee)
 	{
-		MHRDepartment department = MHRDepartment.getById(getCtx(), employee.getHR_Department_ID(), get_TrxName());
 		setAD_Org_ID(employee.getAD_Org_ID());
 		setHR_Department_ID(employee.getHR_Department_ID());
 		setHR_Job_ID(employee.getHR_Job_ID());
-		setC_Activity_ID(employee.getC_Activity_ID() > 0 ?  employee.getC_Activity_ID() : department.getC_Activity_ID());
+		setC_Activity_ID(employee.getC_Activity_ID() > 0 ?  employee.getC_Activity_ID() : employee.getHR_Department().getC_Activity_ID());
 		setHR_Employee_ID(employee.getHR_Employee_ID());
 		setHR_EmployeeType_ID(employee.getHR_EmployeeType_ID());
 		setHR_SkillType_ID(employee.getHR_SkillType_ID());
 		setHR_Payroll_ID(employee.getHR_Payroll_ID());
 		setC_Project_ID(employee.getC_Project_ID());
-		if (employee.getHR_Payroll_ID() > 0) {
-			MHRPayroll payroll = MHRPayroll.getById(getCtx(), employee.getHR_Payroll_ID(), get_TrxName());
-			setHR_Contract_ID(payroll.getHR_Contract_ID());
+		if (employee.getHR_Payroll_ID() > 0)
+			setHR_Contract_ID(employee.getHR_Payroll().getHR_Contract_ID());
+		setAD_Org_ID(employee.getAD_Org_ID());
+		int activityId = employee.getC_Activity_ID();
+		int user1Id = employee.getUser1_ID();
+		int user2Id = employee.getUser2_ID();
+		int user3Id = employee.getUser3_ID();
+		int user4Id = employee.getUser4_ID();
+		//	Get from Job
+		if(employee.getHR_Job_ID() > 0
+				&& (activityId <= 0 || user1Id <= 0 || user2Id <= 0 || user3Id <= 0 || user4Id <= 0)) {
+			MHRJob job = MHRJob.getById(getCtx(), employee.getHR_Job_ID(), get_TrxName());
+			if(activityId <= 0) {
+				activityId = job.getC_Activity_ID();
+			}
+			if(user1Id <= 0) {
+				user1Id = job.getUser1_ID();
+			}
+			if(user2Id <= 0) {
+				user2Id = job.getUser2_ID();
+			}
+			if(user3Id <= 0) {
+				user3Id = job.getUser3_ID();
+			}
+			if(user4Id <= 0) {
+				user4Id = job.getUser4_ID();
+			}
+		}
+		//	Get from Department
+		if(employee.getHR_Department_ID() > 0
+				&& (activityId <= 0 || user1Id <= 0 || user2Id <= 0 || user3Id <= 0 || user4Id <= 0)) {
+			MHRDepartment department = MHRDepartment.getById(getCtx(), employee.getHR_Department_ID(), get_TrxName());
+			if(activityId <= 0) {
+				activityId = department.getC_Activity_ID();
+			}
+			if(user1Id <= 0) {
+				user1Id = department.getUser1_ID();
+			}
+			if(user2Id <= 0) {
+				user2Id = department.getUser2_ID();
+			}
+			if(user3Id <= 0) {
+				user3Id = department.getUser3_ID();
+			}
+			if(user4Id <= 0) {
+				user4Id = department.getUser4_ID();
+			}
+		}
+		//	Set result
+		if(activityId > 0) {
+			setC_Activity_ID(activityId);
+		}
+		if(user1Id > 0) {
+			setUser1_ID(user1Id);
+		}
+		if(user2Id > 0) {
+			setUser2_ID(user2Id);
+		}
+		if(user3Id > 0) {
+			setUser3_ID(user3Id);
+		}
+		if(user4Id > 0) {
+			setUser4_ID(user4Id);
 		}
 	}
 }	//	HRMovement

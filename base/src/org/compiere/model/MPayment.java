@@ -719,7 +719,7 @@ public final class MPayment extends X_C_Payment
 	{
 		BigDecimal retValue = null;
 		if (getC_Charge_ID() != 0)
-			return getPayAmt();
+			return getPayAmt(false);
 		//
 		String sql = "SELECT SUM(currencyConvert(al.Amount,"
 				+ "ah.C_Currency_ID, p.C_Currency_ID,ah.DateTrx,p.C_ConversionType_ID, al.AD_Client_ID,al.AD_Org_ID)) "
@@ -1731,21 +1731,23 @@ public final class MPayment extends X_C_Payment
 		if (counter != null)
 			processMsg += " @CounterDoc@: @C_Payment_ID@=" + counter.getDocumentNo();
 
-		// @Trifon - CashPayments
-		if ( isCashTrx() && getC_POS_ID() == 0) {
-			// Create Cash Book entry - check that the bank is a cash bank
-			// The bank account is mandatory
-			MBankAccount bankAccount = (MBankAccount) getC_BankAccount();
-			if ( !bankAccount.getC_Bank().getBankType().equals(MBank.BANKTYPE_CashJournal) ) {
-				m_errorMessage = Msg.parseTranslation(getCtx(), "@Mandatory@: @C_CashBook_ID@");
-				log.saveError("Error", m_errorMessage);
-				processMsg = "@NoCashBook@";
-				return DocAction.STATUS_Invalid;
-			}
-			// Find or create a suitable bank statement which is or will become the Cash Journal of this day
-			MBankStatement.addPayment(this);
-		}
-		// End Trifon - CashPayments
+//		// @Trifon - CashPayments
+//		if ( isCashTrx() && getC_POS_ID() == 0) {
+//			// Create Cash Book entry - check that the bank is a cash bank
+//			// The bank account is mandatory
+//			MBankAccount bankAccount = (MBankAccount) getC_BankAccount();
+//			if ( !bankAccount.getC_Bank().getBankType().equals(MBank.BANKTYPE_CashJournal) ) {
+//				m_errorMessage = Msg.parseTranslation(getCtx(), "@Mandatory@: @C_CashBook_ID@");
+//				log.saveError("Error", m_errorMessage);
+//				processMsg = "@NoCashBook@";
+//				return DocAction.STATUS_Invalid;
+//			}
+//			// Find or create a suitable bank statement which is or will become the Cash Journal of this day
+//			if(bankAccount.get_ValueAsBoolean("")) {
+//				MBankStatement.addPayment(this);
+//			}
+//		}
+//		// End Trifon - CashPayments
 		
 		//	User Validation
 		String valid = ModelValidationEngine.get().fireDocValidate(this, ModelValidator.TIMING_AFTER_COMPLETE);
@@ -2086,7 +2088,8 @@ public final class MPayment extends X_C_Payment
 		List<MAllocationHdr> allocations = Arrays.asList(MAllocationHdr.getOfPayment(getCtx(), getC_Payment_ID(), get_TrxName()));
 		log.fine("#" + allocations.size());
 		allocations.stream()
-				.filter(allocationHdr -> allocationHdr.getDocStatus().equals(DOCSTATUS_Completed))
+				.filter(allocationHdr -> !allocationHdr.getDocStatus().equals(DOCSTATUS_Reversed)
+						|| !allocationHdr.getDocStatus().equals(DOCSTATUS_Voided))
 				.forEach(allocationHdr -> {
 					allocationHdr.set_TrxName(get_TrxName());
 					if (isAccrual) {
@@ -2459,7 +2462,8 @@ public final class MPayment extends X_C_Payment
 	private int getC_BankStatementLine_ID() {
 		String sql = "SELECT bsl.C_BankStatementLine_ID FROM C_BankStatementLine bsl WHERE bsl.C_Payment_ID=? "
 				+ "AND EXISTS(SELECT 1 FROM C_BankStatement bs "
-				+ "					WHERE bs.C_BankStatement_ID = bsl.C_BankStatement_ID )";
+				+ "					WHERE bs.C_BankStatement_ID = bsl.C_BankStatement_ID "
+				+ "					AND bs.DocStatus IN('CO', 'CL'))";
 		return DB.getSQLValue(get_TrxName(), sql, getC_Payment_ID());
 	}	//	getC_BankStatementLine_ID
 

@@ -109,6 +109,7 @@ public class AcctSchemaDefaultCopy extends SvrProcess
 				+ ", P_OutsideProcessing_Acct=" + acct.getP_OutsideProcessing_Acct()			
 				+ ", P_Overhead_Acct=" + acct.getP_Overhead_Acct()	
 				+ ", P_Scrap_Acct=" + acct.getP_Scrap_Acct()	
+				+ ", P_LandedCostClearing_Acct=" + acct.get_ValueAsInt("P_LandedCostClearing_Acct")
 				+ ", Updated=SysDate, UpdatedBy=0 "
 				+ "WHERE pa.C_AcctSchema_ID=" + p_C_AcctSchema_ID
 				+ " AND EXISTS (SELECT * FROM M_Product_Category p "
@@ -125,14 +126,14 @@ public class AcctSchemaDefaultCopy extends SvrProcess
 			+ " P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct, P_AverageCostVariance_Acct,"
 			+ " P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct," 
 			+ " P_WIP_Acct,P_FloorStock_Acct,P_MethodChangeVariance_Acct,P_UsageVariance_Acct,P_RateVariance_Acct," 
-			+ " P_MixVariance_Acct,P_Labor_Acct,P_Burden_Acct,P_CostOfProduction_Acct,P_OutsideProcessing_Acct,P_Overhead_Acct,P_Scrap_Acct) "
+			+ " P_MixVariance_Acct,P_Labor_Acct,P_Burden_Acct,P_CostOfProduction_Acct,P_OutsideProcessing_Acct,P_Overhead_Acct,P_Scrap_Acct, P_LandedCostClearing_Acct) "
 			+ " SELECT p.M_Product_Category_ID, acct.C_AcctSchema_ID,"
 			+ " p.AD_Client_ID, p.AD_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.P_Revenue_Acct, acct.P_Expense_Acct, acct.P_CostAdjustment_Acct, acct.P_InventoryClearing_Acct, acct.P_Asset_Acct, acct.P_CoGs_Acct,"
 			+ " acct.P_PurchasePriceVariance_Acct, acct.P_InvoicePriceVariance_Acct, acct.P_AverageCostVariance_Acct,"
 			+ " acct.P_TradeDiscountRec_Acct, acct.P_TradeDiscountGrant_Acct,"
 			+ " acct.P_WIP_Acct,acct.P_FloorStock_Acct,acct.P_MethodChangeVariance_Acct,acct.P_UsageVariance_Acct,acct.P_RateVariance_Acct," 
-			+ " acct.P_MixVariance_Acct,acct.P_Labor_Acct,acct.P_Burden_Acct,acct.P_CostOfProduction_Acct,acct.P_OutsideProcessing_Acct,P_Overhead_Acct,P_Scrap_Acct "
+			+ " acct.P_MixVariance_Acct,acct.P_Labor_Acct,acct.P_Burden_Acct,acct.P_CostOfProduction_Acct,acct.P_OutsideProcessing_Acct,P_Overhead_Acct,P_Scrap_Acct, acct.P_LandedCostClearing_Acct "
 			+ "FROM M_Product_Category p"
 			+ " INNER JOIN C_AcctSchema_Default acct ON (p.AD_Client_ID=acct.AD_Client_ID) "
 			+ "WHERE acct.C_AcctSchema_ID=" + p_C_AcctSchema_ID
@@ -151,14 +152,14 @@ public class AcctSchemaDefaultCopy extends SvrProcess
 				+ " P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct, P_AverageCostVariance_Acct,"
 				+ " P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct, "
 				+ " P_WIP_Acct,P_FloorStock_Acct,P_MethodChangeVariance_Acct,P_UsageVariance_Acct,P_RateVariance_Acct," 
-				+ " P_MixVariance_Acct,P_Labor_Acct,P_Burden_Acct,P_CostOfProduction_Acct,P_OutsideProcessing_Acct,P_Overhead_Acct,P_Scrap_Acct) "
+				+ " P_MixVariance_Acct,P_Labor_Acct,P_Burden_Acct,P_CostOfProduction_Acct,P_OutsideProcessing_Acct,P_Overhead_Acct,P_Scrap_Acct,P_LandedCostClearing_Acct) "
 				+ "SELECT p.M_Product_ID, acct.C_AcctSchema_ID,"
 				+ " p.AD_Client_ID, p.AD_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 				+ " acct.P_Revenue_Acct, acct.P_Expense_Acct, acct.P_CostAdjustment_Acct, acct.P_InventoryClearing_Acct, acct.P_Asset_Acct, acct.P_CoGs_Acct,"
 				+ " acct.P_PurchasePriceVariance_Acct, acct.P_InvoicePriceVariance_Acct, acct.P_AverageCostVariance_Acct,"
 				+ " acct.P_TradeDiscountRec_Acct, acct.P_TradeDiscountGrant_Acct,"
 				+ " acct.P_WIP_Acct,acct.P_FloorStock_Acct,acct.P_MethodChangeVariance_Acct,acct.P_UsageVariance_Acct,acct.P_RateVariance_Acct," 
-				+ " acct.P_MixVariance_Acct,acct.P_Labor_Acct,acct.P_Burden_Acct,acct.P_CostOfProduction_Acct,acct.P_OutsideProcessing_Acct,acct.P_Overhead_Acct,acct.P_Scrap_Acct "
+				+ " acct.P_MixVariance_Acct,acct.P_Labor_Acct,acct.P_Burden_Acct,acct.P_CostOfProduction_Acct,acct.P_OutsideProcessing_Acct,acct.P_Overhead_Acct,acct.P_Scrap_Acct,acct.P_LandedCostClearing_Acct "
 				+ "FROM M_Product p"
 				+ " INNER JOIN M_Product_Category_Acct acct ON (acct.M_Product_Category_ID=p.M_Product_Category_ID)"
 				+ "WHERE acct.C_AcctSchema_ID=" + p_C_AcctSchema_ID

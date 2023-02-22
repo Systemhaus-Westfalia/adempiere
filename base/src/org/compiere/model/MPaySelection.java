@@ -269,7 +269,7 @@ public class MPaySelection extends X_C_PaySelection implements DocAction, DocOpt
 		MDocType docType = MDocType.get(getCtx(), getC_DocType_ID());
 
 		//	Std Period open?
-		if (!MPeriod.isOpen(getCtx(), getDateDoc(), docType.getDocBaseType(), getAD_Org_ID()))
+		if (!MPeriod.isOpen(getCtx(), getDateDoc(), docType.getDocBaseType(), getAD_Org_ID(), null))
 		{
 			processMessage = "@PeriodClosed@";
 			return DocAction.STATUS_Invalid;

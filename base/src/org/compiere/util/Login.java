@@ -55,6 +55,7 @@ import org.compiere.model.*;
 public class Login
 {
 	protected Integer authenticatedUserId = null;
+
 	/**
 	 *  Test Init - Set Environment for tests
 	 *	@param isClient client session
@@ -105,14 +106,11 @@ public class Login
 		//if (jVersion.startsWith("1.5.0"))
 		//	return true;
         //vpj-cd e-evolution support to java 6
-        //if (jVersion.startsWith("1.6.0"))
-		//	return true;
-        //Add ADEMPIERE-86 Add JAVA 7.0 support in ADempiere
-        if (jVersion.startsWith("1.7.0"))
-			return true;
-        //Add ADEMPIERE-86 Add JAVA 8.0 support in ADempiere
-        if (jVersion.startsWith("1.8.0"))
+        if (jVersion.startsWith("11"))
             return true;
+		//Add ADEMPIERE-86 Add JAVA 11.0 support in ADempiere
+		if (jVersion.startsWith("17"))
+			return true;
         //end
 		//  Warning
 		boolean ok = false;
@@ -125,8 +123,7 @@ public class Login
 		msg.append(System.getProperty("java.vm.name")).append(" - ").append(jVersion);
 		if (ok)
 			msg.append("(untested)");
-		//msg.append(" <> 1.5.0, 1.6.0, 1.7.0 1.8.0");
-        msg.append(" <> 1.7.0 , 1.8.0");
+        msg.append(" <> 11, 17");
 		//
 		if (isClient)
 			JOptionPane.showMessageDialog(null, msg.toString(),

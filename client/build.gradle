@@ -61,7 +61,8 @@ signing {
 }
 
 def entityType = 'D'
-version = "3.9.4-develop-1.0"
+def customGroupId = System.getenv("ADEMPIERE_LIBRARY_GROUP")
+version = System.getenv("ADEMPIERE_LIBRARY_VERSION")
 
 jar {
     manifest {
@@ -83,7 +84,7 @@ publishing {
     }
     publications {
         mavenJava(MavenPublication) {
-        	groupId 'io.github.adempiere'
+        	groupId customGroupId
             artifactId 'swing'
             version
            	from components.java

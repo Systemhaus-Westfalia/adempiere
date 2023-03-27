@@ -138,17 +138,19 @@ public class MPaymentAllocate extends X_C_PaymentAllocate
 			log.saveError("PaymentIsAllocated", "");
 			return false;
 		}
-		
-		BigDecimal check = getAmount()
-			.add(getDiscountAmt())
-			.add(getWriteOffAmt())
-			.add(getOverUnderAmt());
-		if (check.compareTo(getInvoiceAmt()) != 0)
+		if (getC_Invoice_ID() != 0)
 		{
-			log.saveError("Error", Msg.parseTranslation(getCtx(), 
-				"@InvoiceAmt@(" + getInvoiceAmt()
-				+ ") <> @Totals@(" + check + ")"));
-			return false;
+			BigDecimal check = getAmount()
+					.add(getDiscountAmt())
+					.add(getWriteOffAmt())
+					.add(getOverUnderAmt());
+				if (check.compareTo(getInvoiceAmt()) != 0)
+				{
+					log.saveError("Error", Msg.parseTranslation(getCtx(), 
+						"@InvoiceAmt@(" + getInvoiceAmt()
+						+ ") <> @Totals@(" + check + ")"));
+					return false;
+				}			
 		}
 		
 		//	Org

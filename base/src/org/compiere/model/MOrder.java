@@ -54,6 +54,7 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
 import org.compiere.util.Util;
+import org.shw.model.*;
 
 
 /**
@@ -1960,7 +1961,18 @@ public class MOrder extends X_C_Order implements DocAction
 	{
 		log.info(dt.toString());
 		MInvoice invoice = new MInvoice (this, dt.getC_DocTypeInvoice_ID(), invoiceDate);
-		invoice.saveEx(get_TrxName());
+		//SHW SA
+		int c_doctype_ID = new Query(getCtx(), MDocType.Table_Name, "isSplitInvoice ='Y'", get_TrxName())
+		.setOnlyActiveRecords(true)
+		.setClient_ID()
+		.firstId();
+		MInvoice NdD = new MInvoice((MOrder)invoice.getC_Order(), c_doctype_ID, invoice.getDateInvoiced());
+		NdD.saveEx();
+		if (!invoice.save(get_TrxName()))
+		{
+			m_processMsg = "Could not create Invoice";
+			return null;
+		}
 		
 		//	If we have a Shipment - use that as a base
 		if (shipment != null)
@@ -1969,22 +1981,53 @@ public class MOrder extends X_C_Order implements DocAction
 				setInvoiceRule(INVOICERULE_AfterDelivery);
 			//
 			MInOutLine[] sLines = shipment.getLines(false);
+
+			MInvoiceLine iLine = null;
 			for (int i = 0; i < sLines.length; i++)
 			{
+
 				MInOutLine sLine = sLines[i];
+				MOrderLine oLine = (MOrderLine)sLine.getC_OrderLine();
 				//
-				MInvoiceLine iLine = new MInvoiceLine(invoice);
-				iLine.setShipLine(sLine);
-				//	Qty = Delivered	
-				if (sLine.sameOrderLineUOM())
-					iLine.setQtyEntered(sLine.getQtyEntered());
-				else
-					iLine.setQtyEntered(sLine.getMovementQty());
-				iLine.setQtyInvoiced(sLine.getMovementQty());
-				iLine.saveEx(get_TrxName());
+				Boolean isRateProduct = IsRateProduct(sLine);
+				BigDecimal qtyInvoiced = sLine.getMovementQty();
+				BigDecimal qtyentered = oLine.getQtyEntered();
+				Integer repeat = 1;
+				
+				if (isRateProduct)
+				{
+					qtyInvoiced = Env.ONE;
+					repeat = sLine.getMovementQty().intValue();
+					qtyentered = Env.ONE;
+				}
+				for (int j = 0; j < repeat; j++)	
+				{
+					//SHW SA
+					if (oLine.get_ValueAsBoolean("isSplitInvoice"))
+					{
+						iLine = new MInvoiceLine(NdD);
+					}
+					else
+						iLine = new MInvoiceLine(invoice);
+					iLine.setShipLine(sLine);
+					//	Qty = Delivered	
+					if (sLine.sameOrderLineUOM())
+						iLine.setQtyEntered(qtyentered);
+					else
+						iLine.setQtyEntered(qtyentered);
+					iLine.setQtyInvoiced(qtyInvoiced);
+					if (!iLine.save(get_TrxName()))
+					{
+						m_processMsg = "Could not create Invoice Line from Shipment Line";
+						return null;
+					}					
+				}
 				//
 				sLine.setIsInvoiced(true);
-				sLine.saveEx(get_TrxName());
+				if (!sLine.save(get_TrxName()))
+				{
+					log.warning("Could not update Shipment line: " + sLine);
+				}
 			}
 		}
 		else	//	Create Invoice from Order
@@ -1993,24 +2036,47 @@ public class MOrder extends X_C_Order implements DocAction
 				setInvoiceRule(INVOICERULE_Immediate);
 			//
 			MOrderLine[] oLines = getLines();
+			MInvoiceLine iLine = null;
 			for (int i = 0; i < oLines.length; i++)
 			{
 				MOrderLine oLine = oLines[i];
-				//
-				MInvoiceLine iLine = new MInvoiceLine(invoice);
+				//SHW SA
+				if (oLine.get_ValueAsBoolean("isSplitInvoice"))
+				{
+					iLine = new MInvoiceLine(NdD);
+				}
+				else
+					iLine = new MInvoiceLine(invoice);
 				iLine.setOrderLine(oLine);
 				//	Qty = Ordered - Invoiced	
 				iLine.setQtyInvoiced(oLine.getQtyOrdered().subtract(oLine.getQtyInvoiced()));
-				if (oLine.getQtyOrdered().compareTo(oLine.getQtyEntered()) == 0) {
+				if (oLine.getQtyOrdered().compareTo(oLine.getQtyEntered()) == 0)
 					iLine.setQtyEntered(iLine.getQtyInvoiced());
-				} else {
-					iLine.setQtyEntered(iLine.getQtyInvoiced().multiply(oLine.getQtyEntered()).divide(oLine.getQtyOrdered(), 12, RoundingMode.HALF_UP));
+				else
+					iLine.setQtyEntered(iLine.getQtyInvoiced().multiply(oLine.getQtyEntered())
+						.divide(oLine.getQtyOrdered(), 12, BigDecimal.ROUND_HALF_UP));
+				if (!iLine.save(get_TrxName()))
+				{
+					m_processMsg = "Could not create Invoice Line from Order Line";
+					return null;
 				}
-				iLine.saveEx(get_TrxName());
 			}
 		}
 		//	Manually Process Invoice
-		invoice.processIt(DocAction.ACTION_Complete);
+		if (invoice.getLines().length > 0)
+		{
+			invoice.processIt(DocAction.ACTION_Complete);
+			invoice.set_Value("isSplitInvoice", false);
+		}
+		if (NdD.getLines().length > 0)
+		{
+			NdD.set_Value("isSplitInvoice", false);
+			NdD.processIt(DocAction.ACTION_Complete);
+			NdD.saveEx(get_TrxName());
+			if (invoice.getLines().length == 0)
+				return NdD;
+		}
+		
 		invoice.saveEx(get_TrxName());
 		setC_CashLine_ID(invoice.getC_CashLine_ID());
 		if (!DOCSTATUS_Completed.equals(invoice.getDocStatus()))
@@ -2019,7 +2085,7 @@ public class MOrder extends X_C_Order implements DocAction
 			return null;
 		}
 		return invoice;
-	}	//	createInvoice
+}	//	createInvoice
 	
 	/**
 	 * 	Create Counter Document
@@ -2611,6 +2677,23 @@ public class MOrder extends X_C_Order implements DocAction
 		rs.close();
 		ps.close();
 		
+	}private Boolean IsRateProduct(MInOutLine ioLine)
+	{ 
+		if (ioLine.getM_Product_ID() <=0)
+			return false;
+		String whereClause = "isvalid = 'Y' and (c_bpartner_ID = ? or c_bpartner_ID is null) and LG_RateType = 'G' and m_pricelist_ID = ? " +
+    			" and  exists (select 1 from lg_productpricerateline where m_product_id = ?) ";
+    	ArrayList<Object> param1 = new ArrayList<Object>();
+    	param1.add(ioLine.getM_InOut().getC_BPartner_ID());
+    	param1.add(ioLine.getC_OrderLine().getC_Order().getM_PriceList_ID());
+    	param1.add(ioLine.getM_Product_ID());
+    	MLGProductPriceRate pprl = new Query(getCtx(), MLGProductPriceRate.Table_Name, whereClause, get_TrxName())
+    		.setOnlyActiveRecords(true)
+    		.setParameters(param1)
+    		.first();
+    	if (pprl == null)
+    		return false;
+		return true;
 	}
 	
 	//Mandatory Product Attribute Set Instance

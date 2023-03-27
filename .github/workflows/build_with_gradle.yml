@@ -7,7 +7,7 @@ name: ADempiere Build With gradle
 on:
   # Triggers the workflow on push or pull request events but only for the develop branch
   push:
-   branches: [ "master", "develop", "bugfix/*", "feature/*" ]
+   branches: [ "master", "develop", "bugfix/*", "feature/*", "hotfix/*" ]
   pull_request:
     branches: [ "master", "develop", "bugfix/*", "feature/*" ]
 

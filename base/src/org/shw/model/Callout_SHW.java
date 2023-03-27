@@ -32,7 +32,6 @@ import org.compiere.model.MPayment;
 import org.compiere.model.MProject;
 import org.compiere.model.MWarehouse;
 import org.compiere.util.Env;
-import org.eevolution.hr.model.MHRPeriod;
 
 /**
  *
@@ -99,17 +98,7 @@ public class Callout_SHW extends CalloutEngine
    }
    
 
-   public String setHRProcessName(Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value) {
-
-	   Integer HR_Period_ID = (Integer)value;
-	   if (HR_Period_ID == 0 || HR_Period_ID == null)
-		   return "";
-	   MHRPeriod per = new MHRPeriod(ctx, HR_Period_ID,null);
-
-	   mTab.setValue("Name", per.getName()); 
-	   mTab.setValue("DateAcct", per.getEndDate()); 
-	   return "";
-   }
+   
    
    public String setInvoiceBatchLineValues(Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value) {
 

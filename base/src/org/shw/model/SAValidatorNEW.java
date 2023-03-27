@@ -29,12 +29,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.logging.Level;
 
+import org.adempiere.core.domains.models.I_C_BPartner;
+import org.adempiere.core.domains.models.X_C_Order;
 import org.adempiere.exceptions.AdempiereException;
 import org.compiere.acct.Doc;
 import org.compiere.acct.Fact;
 import org.compiere.acct.FactLine;
-import org.adempiere.core.domains.models.I_C_BPartner;
-import org.adempiere.core.domains.models.I_C_Project;
 import org.compiere.model.MAllocationHdr;
 import org.compiere.model.MAllocationLine;
 import org.compiere.model.MBPartner;
@@ -67,7 +67,6 @@ import org.compiere.model.ModelValidationEngine;
 import org.compiere.model.ModelValidator;
 import org.compiere.model.PO;
 import org.compiere.model.Query;
-import org.adempiere.core.domains.models.X_C_Order;
 import org.compiere.process.DocAction;
 import org.compiere.util.CLogger;
 import org.compiere.util.DB;
@@ -76,7 +75,6 @@ import org.compiere.util.Env;
 import org.compiere.util.Ini;
 import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
-import org.eevolution.hr.model.MHRProcess;
 
 /**
  * Validator Example Implementation
@@ -319,10 +317,6 @@ public class SAValidatorNEW implements ModelValidator {
 		if (po.get_TableName().equals(MBankStatement.Table_Name)) {
 		}
 
-		if (po.get_TableName().equals(MHRProcess.Table_Name)) {
-			if (timing == TIMING_BEFORE_POST)
-				;
-		}
 
 		return error;
 	} // docValidate

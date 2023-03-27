@@ -42,8 +42,6 @@ import org.compiere.model.Query;
 import org.compiere.util.CLogger;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
-import org.eevolution.hr.model.MHREmployee;
-
 
 /**
  *	Validator Example Implementation

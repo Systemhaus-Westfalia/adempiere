@@ -17,6 +17,7 @@
 
 package org.shw.model;
 
+import java.sql.Timestamp;
 import java.util.Properties;
 
 import org.compiere.model.CalloutEngine;
@@ -31,6 +32,7 @@ import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MPayment;
 import org.compiere.model.MProject;
 import org.compiere.model.MWarehouse;
+import org.compiere.util.DB;
 import org.compiere.util.Env;
 
 /**
@@ -98,7 +100,19 @@ public class Callout_SHW extends CalloutEngine
    }
    
 
-   
+   public String setHRProcessName(Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value) {
+
+	   Integer HR_Period_ID = (Integer)value;
+	   if (HR_Period_ID == 0 || HR_Period_ID == null)
+		   return "";
+	   
+	   String perName = DB.getSQLValueStringEx(null, "SELECT Name from HR_Period where HR_Period_ID = ?", HR_Period_ID);
+	   Timestamp DateAcct = DB.getSQLValueTSEx(null, "SELECT EndDate from HR_Period where HR_Period_ID = ?", HR_Period_ID);
+
+	   mTab.setValue("Name", perName); 
+	   mTab.setValue("DateAcct", DateAcct); 
+	   return "";
+   }
    
    public String setInvoiceBatchLineValues(Properties ctx, int WindowNo, GridTab mTab, GridField mField, Object value) {
 

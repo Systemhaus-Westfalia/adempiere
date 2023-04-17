@@ -1925,7 +1925,21 @@ public final class MPayment extends X_C_Payment
 			else
 				aLine = new MAllocationLine (alloc, pa.getAmount().negate(), 
 					pa.getDiscountAmt().negate(), pa.getWriteOffAmt().negate(), pa.getOverUnderAmt().negate());
-			aLine.setDocInfo(pa.getC_BPartner_ID(), 0, pa.getC_Invoice_ID());
+			//SHW
+			aLine.setC_Payment_ID(getC_Payment_ID());
+			if (pa.getC_Invoice_ID() != 0)
+			{
+				aLine.setDocInfo(pa.getC_BPartner_ID(), 0, pa.getC_Invoice_ID());
+				aLine.setPaymentInfo(getC_Payment_ID(), 0);				
+			}
+			else if (pa.get_ValueAsInt("C_Charge_ID") != 0)
+			{
+				aLine.set_CustomColumn("C_Charge_ID", pa.get_ValueAsInt("C_Charge_ID"));
+				//aLine.set_CustomColumn("ChargeAmt", chargeAmt);
+				aLine.setC_BPartner_ID(pa.getC_Payment().getC_BPartner_ID());
+				aLine.set_CustomColumn("C_Project_ID", pa.get_ValueAsInt("C_Project_ID"));
+			}
+			//aLine.setDocInfo(pa.getC_BPartner_ID(), 0, pa.getC_Invoice_ID());
 			aLine.setPaymentInfo(getC_Payment_ID(), 0);
 			if (!aLine.save(get_TrxName()))
 				log.warning("P.Allocations - line not saved");

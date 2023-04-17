@@ -44,6 +44,7 @@ import org.compiere.model.MBankStatement;
 import org.compiere.model.MBankStatementLine;
 import org.compiere.model.MCharge;
 import org.compiere.model.MClient;
+import org.compiere.model.MConversionRate;
 import org.compiere.model.MDocType;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
@@ -1152,6 +1153,9 @@ public class SAValidatorNEW implements ModelValidator {
 			return "";
 		}
 		BigDecimal p_DistributionAmt = pay.getPayAmt();
+		BigDecimal distributionAmtConverted = MConversionRate.convert (order.getCtx(),
+				p_DistributionAmt, pay.getC_Currency_ID(), order.getC_Currency_ID(),
+				order.getDateAcct(), order.getC_ConversionType_ID(), order.getAD_Client_ID(), order.getAD_Org_ID());
 		MOrderLine oLine = new Query(pay.getCtx(), MOrderLine.Table_Name, "c_order_ID=? and c_payment_ID=?",
 				pay.get_TrxName()).setParameters(order.getC_Order_ID(), pay.getC_Payment_ID()).first();
 		if (oLine != null)
@@ -1165,7 +1169,7 @@ public class SAValidatorNEW implements ModelValidator {
 		oLine.setC_Tax_ID(tc.getDefaultTax().getC_Tax_ID());
 
 		oLine.setQty(Env.ONE);
-		oLine.setPrice(p_DistributionAmt);
+		oLine.setPrice(distributionAmtConverted);
 		oLine.set_ValueOfColumn(MPayment.COLUMNNAME_C_Payment_ID, pay.getC_Payment_ID());
 		oLine.setC_Project_ID(pay.getC_Project_ID());
 		MBPartner bpartner = (MBPartner) oLine.getC_Order().getC_BPartner();
@@ -1217,7 +1221,11 @@ public class SAValidatorNEW implements ModelValidator {
 			MTaxCategory tc = (MTaxCategory) charge.getC_TaxCategory();
 			oLine.setC_Tax_ID(tc.getDefaultTax().getC_Tax_ID());
 			oLine.setQty(Env.ONE);
-			oLine.setPrice(alloc.getAmount());
+			BigDecimal distributionAmtConverted = MConversionRate.convert (order.getCtx(),
+					alloc.getAmount(), pay.getC_Currency_ID(), order.getC_Currency_ID(),
+					order.getDateAcct(), order.getC_ConversionType_ID(), order.getAD_Client_ID(), order.getAD_Org_ID());
+			
+			oLine.setPrice(distributionAmtConverted);
 			oLine.set_ValueOfColumn(MPaymentAllocate.COLUMNNAME_C_PaymentAllocate_ID, alloc.getC_PaymentAllocate_ID());
 			oLine.set_ValueOfColumn(MPaymentAllocate.COLUMNNAME_C_Payment_ID, pay.getC_Payment_ID());
 			oLine.setC_Project_ID(alloc.get_ValueAsInt("C_Project_ID"));
@@ -1243,8 +1251,6 @@ public class SAValidatorNEW implements ModelValidator {
 		if (!invoice.getC_DocType().getDocBaseType().equals("API"))
 			return "";
 
-		if (!(invoice.getC_DocTypeTarget_ID() == 1000441 || invoice.getC_DocTypeTarget_ID() == 1000442))
-			return "";
 
 		String whereClause = "c_project_ID=? and issotrx = 'Y' and docstatus in ('DR','IP') and c_doctypetarget_ID not in (1000424, 1000375)";
 		for (MInvoiceLine iLine : invoice.getLines()) {

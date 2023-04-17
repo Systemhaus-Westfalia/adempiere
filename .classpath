@@ -443,5 +443,7 @@
 	<classpathentry kind="lib" path="tools/lib/openid/json-smart-2.4.8.jar"/>
 	<classpathentry kind="lib" path="tools/lib/openid/nimbus-jose-jwt-9.22.jar"/>
 	<classpathentry kind="lib" path="tools/lib/openid/oauth2-oidc-sdk-9.35.jar"/>
+	<classpathentry kind="lib" path="C:/data2/app/Adempiere_SistemasAereos/packages/WithHolding/lib/WithHoldings.jar"/>
+	<classpathentry kind="lib" path="lib/WithHoldings.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

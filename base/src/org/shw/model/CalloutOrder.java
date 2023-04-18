@@ -364,7 +364,7 @@ public class CalloutOrder extends CalloutEngine
 				if (shipTo_ID == 0)
 					mTab.setValue("C_BPartner_Location_ID", null);
 				else
-					mTab.setValue("C_BPartner_Location_ID", new Integer(shipTo_ID));
+					mTab.setValue("C_BPartner_Location_ID", Integer.valueOf(shipTo_ID));
 
 				//	Contact - overwritten by InfoBP selection
 				int contID = rs.getInt("AD_User_ID");

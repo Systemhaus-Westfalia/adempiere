@@ -827,18 +827,7 @@ public class SAValidatorNEW implements ModelValidator {
 			int r_status = 0;
 			Boolean processed = false;
 
-			if (isinvoiced) {
-				if (Env.getAD_Client_ID(Env.getCtx()) == 1000001)
-					r_status = 1000007;
-				else if (Env.getAD_Client_ID(Env.getCtx()) == 1000012)
-					r_status = 1000013;
-				processed = true;
-			} else {
-				if (Env.getAD_Client_ID(Env.getCtx()) == 1000001)
-					r_status = 1000023;
-				else if (Env.getAD_Client_ID(Env.getCtx()) == 1000012)
-					r_status = 1000022;
-			}
+			
 			whereClause = "c_order_ID=? and r_requesttype_ID in (1000002,1000004)";
 			MRequest req = new Query(inv.getCtx(), MRequest.Table_Name, whereClause, inv.get_TrxName())
 					.setParameters(order.getC_Order_ID()).first();
@@ -982,22 +971,7 @@ public class SAValidatorNEW implements ModelValidator {
 		String result = CreateCTAJPayment(req, pay);
 		if (result != "")
 			return result;
-		// else
-		// CreateCTAJPaymentAllocs(req, pay);
-		// }
-		int r_status = 0;
-		if (Env.getAD_Client_ID(Env.getCtx()) == 1000001)
-			r_status = 1000001;
-		else if (Env.getAD_Client_ID(Env.getCtx()) == 1000012)
-			r_status = 1000011;
-		if (r_status == 0)
-			return "";
-		// for (MRequest req:reqs)
-		// {
-		req.setR_Status_ID(r_status);
-		req.setSalesRep_ID(req.getCreatedBy());
-		req.saveEx();
-		// }
+		
 		return "";
 	}
 
@@ -1187,10 +1161,7 @@ public class SAValidatorNEW implements ModelValidator {
 	private void CreateCTAJPaymentAllocs(MPayment pay) {
 		String description = "";
 		int r_status = 0;
-		if (Env.getAD_Client_ID(Env.getCtx()) == 1000001)
-			r_status = 1000001;
-		else if (Env.getAD_Client_ID(Env.getCtx()) == 1000012)
-			r_status = 1000011;
+		
 		if (r_status == 0)
 			return;
 		int chargeID;
@@ -1287,10 +1258,6 @@ public class SAValidatorNEW implements ModelValidator {
 		if (req.getR_Status().isClosed())
 			return "";
 		int r_status = 0;
-		if (Env.getAD_Client_ID(Env.getCtx()) == 1000001)
-			r_status = 1000001;
-		else if (Env.getAD_Client_ID(Env.getCtx()) == 1000012)
-			r_status = 1000011;
 		if (r_status == 0)
 			return "";
 		// for (MRequest req:reqs)
@@ -1329,9 +1296,8 @@ public class SAValidatorNEW implements ModelValidator {
 			if (c_charge_ID == 0)
 				return "";
 			int c_doctype_ID = 0;
-			// if (alo.getAD_Client_ID()== 1000001)
+			
 			{
-				// c_charge_ID =1000314;
 				String docbasetype = payOrg.getC_DocType().getDocBaseType().equals(MDocType.DOCBASETYPE_ARReceipt)
 						? MDocType.DOCBASETYPE_APPayment
 						: MDocType.DOCBASETYPE_ARReceipt;

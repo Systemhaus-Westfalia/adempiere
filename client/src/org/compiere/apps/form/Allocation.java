@@ -489,7 +489,7 @@ public class Allocation
 				+ "FROM C_Invoice_v i"		//  corrected for CM/Split
 				+ " INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) "
 				+ "WHERE i.IsPaid='N' AND i.Processed='Y'"
-				+ " AND i.C_BPartner_ID=?");                                            //  #7
+				+ " AND (i.C_BPartner_ID=? OR i>remitee_ID+?)");                                            //  #7
 		if (!isMultiCurrency)
 			sql.append(" AND i.C_Currency_ID=?");                                   //  #8
 		if (orgId != 0 ) 

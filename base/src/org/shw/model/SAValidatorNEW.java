@@ -80,7 +80,7 @@ import org.compiere.util.TimeUtil;
 /**
  * Validator Example Implementation
  * 
- * @author Susanne Calderon
+ * @author Susanne Calderon aktualisiert für 3.9.4
  */
 public class SAValidatorNEW implements ModelValidator {
 	/**

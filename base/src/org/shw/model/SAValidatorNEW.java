@@ -123,6 +123,7 @@ public class SAValidatorNEW implements ModelValidator {
 		engine.addModelChange(MOrderLine.Table_Name, this);
 		engine.addModelChange(MPaymentAllocate.Table_Name, this);
 		engine.addModelChange(MRequest.Table_Name, this);
+		engine.addModelChange(MProject.Table_Name, this);
 
 		// We want to validate Order before preparing
 		engine.addDocValidate(MOrder.Table_Name, this);
@@ -144,10 +145,19 @@ public class SAValidatorNEW implements ModelValidator {
 	 */
 	public String modelChange(PO po, int type) throws Exception {
 		String error = null;
+		
+		if (po.get_TableName().equals(MProject.Table_Name)) {
+			Boolean changed = po.is_ValueChanged("UpdateQtyCount");
+			if (changed && type == TYPE_BEFORE_CHANGE) {
+				MProject project = (MProject)po;
+				updateProject(project);
+			}
+		}
 		if (po.get_TableName().equals(MPayment.Table_Name)) {
 
 			
 		}
+		
 		if (po.get_TableName().equals(MOrderLine.Table_Name)) {
 			if (type == TYPE_BEFORE_NEW || type==TYPE_BEFORE_CHANGE)
 				error = orderLine_setLineNetAmt(po);
@@ -161,7 +171,9 @@ public class SAValidatorNEW implements ModelValidator {
 			}
 			if (type == TYPE_AFTER_DELETE)
 				;
-			if (type == TYPE_BEFORE_DELETE)
+			if (type == TYPE_BEFORE_DELETE) {
+				error = updateRequest(po);
+			}
 				
 				;
 			if (type == TYPE_DELETE)
@@ -201,6 +213,9 @@ public class SAValidatorNEW implements ModelValidator {
 		}
 
 		if (po.get_TableName().equals(MRequest.Table_Name)) {
+			
+			if (type == TYPE_BEFORE_NEW)
+				error = requestUpdateBpartner(po);
 			
 		}
 
@@ -693,7 +708,10 @@ public class SAValidatorNEW implements ModelValidator {
 		}
 		for (int c_project_ID : ProjectIds) {
 			MProject project = new MProject(A_PO.getCtx(), c_project_ID, A_PO.get_TrxName());
-			updateProject(project);
+			//updateProject(project);
+			int UpdateQtyCount = project.get_ValueAsInt("UpdateQtyCount") + 1;
+			project.set_ValueOfColumn("UpdateQtyCount", UpdateQtyCount);
+			project.saveEx();
 		}
 		return "";
 	}
@@ -710,19 +728,7 @@ public class SAValidatorNEW implements ModelValidator {
 	private String ProjectOrderComplete(PO A_PO) {
 		List<Integer> ProjectIds = new ArrayList<Integer>();
 		MOrder order = (MOrder) A_PO;
-        for (MOrderLine oLine: order.getLines())
-        {
-            if (oLine.get_ValueAsInt("C_Payment_ID") == 0)
-                return "";
-            if (oLine.getC_Charge_ID() == 0)
-                return "";
-            if (!(oLine.getC_Charge().getC_ChargeType_ID()== 1000002
-                    || oLine.getC_Charge().getC_ChargeType_ID()== 1000003))
-                return "";
-            MPayment pay = new MPayment(A_PO.getCtx(), oLine.get_ValueAsInt("C_Payment_ID"), A_PO.get_TrxName());
-            pay.set_ValueOfColumn("ControlAmt", oLine.getLineNetAmt());
-            pay.saveEx();                    
-        }
+       
 		
 		if (!order.getC_DocType().getDocSubTypeSO().equals("SO"))
 			return "";
@@ -736,9 +742,23 @@ public class SAValidatorNEW implements ModelValidator {
 
 		for (int c_project_ID : ProjectIds) {
 			MProject project = new MProject(A_PO.getCtx(), c_project_ID, A_PO.get_TrxName());
-			//project.updateProject();
 			updateProject(project);
+			//int UpdateQtyCount = project.get_ValueAsInt("UpdateQtyCount") + 1;
+			//project.set_ValueOfColumn("UpdateQtyCount", UpdateQtyCount);
+			//project.saveEx();
 		}
+		 for (MOrderLine oLine: order.getLines())
+	        {
+	            if (oLine.get_ValueAsInt("C_Payment_ID") == 0)
+	                return "";
+	            if (oLine.getC_Charge_ID() == 0)
+	                return "";
+	            if (!(oLine.getC_Charge().getC_ChargeType().getName().contains("CTAJ")))
+	                return "";
+	            MPayment pay = new MPayment(A_PO.getCtx(), oLine.get_ValueAsInt("C_Payment_ID"), A_PO.get_TrxName());
+	            pay.set_ValueOfColumn("ControlAmt", oLine.getLineNetAmt());
+	            pay.saveEx();                    
+	        }
 		return "";
 	}
 
@@ -1568,8 +1588,9 @@ public class SAValidatorNEW implements ModelValidator {
 				" and (c_charge_ID is null or c_charge_ID not in (select c_charge_ID from c_charge where c_chargetype_ID in (1000003,1000002)))");
 		whereClause.append(" and c_project_ID in (?)");
 		BigDecimal result = Env.ZERO;
-		result = new Query(project.getCtx(), MInvoiceLine.Table_Name, whereClause.toString(), project.get_TrxName())
-				.setParameters(project.getC_Project_ID()).aggregate(expresion, Query.AGGREGATE_SUM);
+		List<MInvoiceLine> iLine = new Query(project.getCtx(), MInvoiceLine.Table_Name, whereClause.toString(), null)
+				.setParameters(project.getC_Project_ID())
+						.list();
 		return result;
 	}
 
@@ -1944,5 +1965,37 @@ public class SAValidatorNEW implements ModelValidator {
 		 invoiceLine.setLineNetAmt (lineNetAmount);
 		 return "";
 	 }
+	 
+	 private String requestUpdateBpartner(PO A_PO) {
+		 MRequest request = (MRequest)A_PO;
+		 if (request.getC_Order_ID() == 0)
+			 return "";
+		 if (!request.getC_Order().isSOTrx()) {
+			 request.set_ValueOfColumn("C_BPartnerVendor_ID", request.getC_Order().getC_BPartner_ID());
+		 }
+		 return "";
+	 }
+	 
+
+	 
+	 private String updateRequest(PO A_PO) {
+		 String error = "";
+		 MOrderLine orderLine = (MOrderLine)A_PO;
+		 if (orderLine.getC_Order().isSOTrx()) {
+
+				int paymentID= orderLine.get_ValueAsInt("C_Payment_ID");
+				int no = DB.getSQLValueEx(orderLine.get_TrxName(), 
+						"Select count(*) from c_Payment where docstatus in ('CO','CL') AND C_Payment_ID=" + paymentID, orderLine.getCtx());
+				if (no > 0)
+					return "Esta línea está asignada a un pago completado";
+				
+		 }
+		 return error;
+	 }
+	 
+	 
+	 
+	 
+	 
 
 } // MyValidator

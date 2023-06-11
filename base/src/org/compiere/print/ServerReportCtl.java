@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.compiere.model.MProcess;
 import org.compiere.model.MQuery;
+import org.compiere.model.MRefList;
 import org.compiere.model.MTable;
 import org.compiere.model.PrintInfo;
 import org.compiere.process.ProcessInfo;
@@ -157,7 +158,8 @@ public class ServerReportCtl {
 		//	Export		
 		try {
 			ReportExportHandler exportHandler = new ReportExportHandler(Env.getCtx(), reportEngine);
-			AbstractExportFormat exporter = exportHandler.getExporterFromExtension(processInfo.getReportType());
+			String extension = MRefList.getListName(Env.getCtx(), 53767, processInfo.getReportType()).toLowerCase();
+			AbstractExportFormat exporter = exportHandler.getExporterFromExtension(extension);
 			//	Get File
 			File tempFile = File.createTempFile(reportEngine.getName() + "_" + System.currentTimeMillis(), "." + exporter.getExtension());
 			exporter.exportTo(tempFile);

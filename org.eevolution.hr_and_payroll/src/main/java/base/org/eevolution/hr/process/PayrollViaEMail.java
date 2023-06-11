@@ -31,6 +31,7 @@ import org.compiere.model.MClient;
 import org.compiere.model.MMailText;
 import org.compiere.model.MPInstance;
 import org.compiere.model.MPInstancePara;
+import org.compiere.model.MPayment;
 import org.compiere.model.MProcess;
 import org.compiere.model.MUser;
 import org.compiere.model.Query;
@@ -39,6 +40,7 @@ import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
 import org.compiere.util.Env;
 import org.compiere.util.Trx;
+import org.eevolution.services.dsl.ProcessBuilder;
 import org.spin.queue.notification.DefaultNotifier;
 import org.spin.queue.util.QueueLoader;
 
@@ -130,7 +132,12 @@ public class PayrollViaEMail extends SvrProcess
             if (employee == null)
                 throw new Exception("@C_BPartner_ID@=" + bPartnerId + " @NotFound@");
 
-				sendIndividualMail (bPartnerId, null);
+				Boolean ok = sendIndividualMail (bPartnerId, null);
+				if (ok) {
+	                m_counter++;
+	            } else {
+	                m_errors++;
+	            }
 		} else
 			sendBPGroup();
 
@@ -246,20 +253,28 @@ public class PayrollViaEMail extends SvrProcess
 		MPInstance instance = new MPInstance(Env.getCtx(), AD_Process_ID, bPartnerId);
 		instance.saveEx();
 
-		ProcessInfo pi = new ProcessInfo("PH_SendEmail", AD_Process_ID);
-		pi.setAD_PInstance_ID (instance.getAD_PInstance_ID());
+		/*
+		 * ProcessInfo pi = new ProcessInfo("PH_SendEmail", AD_Process_ID);
+		 * pi.setAD_PInstance_ID (instance.getAD_PInstance_ID());
+		 * 
+		 * // Add Parameter - Selection=Y MPInstancePara ip = new
+		 * MPInstancePara(instance, 10);
+		 * ip.setParameter(X_HR_Process.COLUMNNAME_HR_Process_ID, payrollProcessId);
+		 * ip.saveEx();
+		 * 
+		 * pi.setRecord_ID(bPartnerId); pi.setIsBatch(true); MProcess worker = new
+		 * MProcess(getCtx(),AD_Process_ID,get_TrxName()); worker.processIt(pi,
+		 * Trx.get(get_TrxName(), true)); attachment=pi.getPDFReport();
+		 */
+		
+		 ProcessInfo processInfo = ProcessBuilder.create(getCtx()).process(reportProcessId)
+	                .withTitle("PayrollViaEmail")
+	                .withParameter("HR_Process_ID", payrollProcessId)
+	                .withParameter("C_BPartner_ID", bPartnerId)
+	                .execute();
 
-		//	Add Parameter - Selection=Y
-		MPInstancePara ip = new MPInstancePara(instance, 10);
-		ip.setParameter(X_HR_Process.COLUMNNAME_HR_Process_ID, payrollProcessId);
-        ip.saveEx();
-
-		pi.setRecord_ID(bPartnerId);
-		pi.setIsBatch(true);
-		MProcess worker = new MProcess(getCtx(),AD_Process_ID,get_TrxName());
-		worker.processIt(pi, Trx.get(get_TrxName(), true));
-		attachment=pi.getPDFReport();
-		return attachment;
+	        return processInfo.getPDFReport();
+		//return attachment;
 	}
 
 }	//	SendMailText

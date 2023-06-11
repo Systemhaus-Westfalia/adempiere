@@ -89,6 +89,9 @@ public class CalloutRequestSA extends CalloutEngine
 		mTab.setValue("C_Campaign_ID", ord.getC_Campaign_ID());
 		mTab.setValue("User1_ID", ord.getUser1_ID());
 		mTab.setValue("RequestAmt", ord.getGrandTotal());
+		if (!ord.isSOTrx()) {
+			mTab.setValue("C_BPartnerVendor_ID", ord.getC_BPartner_ID());
+		}
 
 
 		return "";

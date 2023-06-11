@@ -215,7 +215,8 @@ public class SAValidatorNEW implements ModelValidator {
 		if (po.get_TableName().equals(MRequest.Table_Name)) {
 			
 			if (type == TYPE_BEFORE_NEW)
-				error = requestUpdateBpartner(po);
+				//error = requestUpdateBpartner(po)
+				;
 			
 		}
 
@@ -1985,7 +1986,7 @@ public class SAValidatorNEW implements ModelValidator {
 
 				int paymentID= orderLine.get_ValueAsInt("C_Payment_ID");
 				int no = DB.getSQLValueEx(orderLine.get_TrxName(), 
-						"Select count(*) from c_Payment where docstatus in ('CO','CL') AND C_Payment_ID=" + paymentID, orderLine.getCtx());
+						"Select count(*) from c_Payment where docstatus in ('CO','CL') AND C_Payment_ID=?", paymentID);
 				if (no > 0)
 					return "Esta línea está asignada a un pago completado";
 				

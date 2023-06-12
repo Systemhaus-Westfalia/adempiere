@@ -34,6 +34,7 @@ import org.adempiere.webui.component.Rows;
 import org.adempiere.webui.component.Textbox;
 import org.adempiere.webui.editor.WEditor;
 import org.adempiere.webui.editor.WSearchEditor;
+import org.adempiere.core.domains.models.X_C_Payment;
 import org.adempiere.exceptions.ValueChangeListener;
 import org.compiere.apps.search.Info_Column;
 import org.compiere.minigrid.ColumnInfo;
@@ -545,7 +546,9 @@ public class InfoPaymentPanel extends InfoPanel implements ValueChangeListener, 
 		MQuery query = new MQuery("C_Payment");
 		query.addRestriction("C_Payment_ID", MQuery.EQUAL, C_Payment_ID);
 		query.setRecordCount(1);
-		int AD_WindowNo = getAD_Window_ID("C_Payment", fCheckReceipt.isSelected());
+		X_C_Payment payment = new X_C_Payment(Env.getCtx(), C_Payment_ID, null);
+		Boolean defaultWindow = !payment.getC_BankAccount().getC_Bank().getBankType().equals("C");
+		int AD_WindowNo = getAD_Window_ID("C_Payment", defaultWindow);
 		AEnv.zoom (AD_WindowNo, query);
 	}	//	zoom
 	//

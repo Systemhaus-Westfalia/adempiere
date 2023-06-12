@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 
+import org.adempiere.core.domains.models.X_C_BankStatement;
 import org.compiere.util.CLogMgt;
 import org.compiere.util.DB;
 import org.compiere.util.DisplayType;
@@ -541,9 +542,19 @@ public final class MLookup extends Lookup implements Serializable
 			return m_info.ZoomWindow;
 		//	Need to check SO/PO
 		boolean isSOTrx = DB.isSOTrx(m_info.TableName, query.getWhereClause(false));
+		if (query.getZoomTableName().equals("C_BankStatement")) {
+			String sql  = "select count(*) from c_Bankstatement WHERE "
+					+ query.getWhereClause()
+					+ " AND EXISTS(SELECT 1 FROM C_BankAccount ba INNER JOIN C_Bank b ON(b.C_Bank_ID = ba.C_Bank_ID) "
+					+ "WHERE ba.C_BankAccount_ID = C_BankStatement.C_BankAccount_ID AND b.BankType = 'C')";
+			
+			int count = DB.getSQLValue(null, sql);
+			isSOTrx = count<=0;
+		}
 		//
 		if (!isSOTrx)
 			return m_info.ZoomWindowPO;
+		
 		return m_info.ZoomWindow;
 	}	//	getZoom
 

@@ -276,7 +276,7 @@ public class WTrialBalance_AcctSchema extends TrialBalanceDrill_AcctSchema imple
 						"C_ElementValue.IsActive='Y' AND C_ElementValue.AD_Client_ID="+m_AD_Client_ID 
 						+ " AND C_ElementValue.C_Element_ID in (SELECT C_Element_ID from C_Element WHERE IsActive = 'Y' AND elementtype = 'A')"
 						+ " AND EXISTS (SELECT * FROM C_AcctSchema_Element ae WHERE C_ElementValue.C_Element_ID=ae.C_Element_ID AND ae.ElementType='AC' "
-						+ " AND ae.C_AcctSchema_ID=?" + c_AcctSchema_ID + " )");
+						+ " AND ae.C_AcctSchema_ID= " + c_AcctSchema_ID + " )");
 		
 		fieldAcctFrom = new WTableDirEditor("Account_ID", false	, false, true, lookupAcct); 
 		

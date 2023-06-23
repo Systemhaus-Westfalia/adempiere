@@ -264,7 +264,7 @@ public class HRActionNotice
 				"SELECT hrpc.HR_Concept_ID, hrpc.Value || ' - ' || hrpc.Name, hrpc.Value "
 					+ "FROM HR_Concept hrpc ",
 					"hrpc",MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO) + " "
-			+ "AND hrpc.AD_Client_ID = " + process.getAD_Client_ID() + " "
+			+ "AND hrpc.AD_Client_ID in(0, " + process.getAD_Client_ID() + ") "
 			+ "AND hrpc.IsActive = 'Y' "
 			+ "AND hrpc.IsManual = 'Y' "
 			+ "AND hrpc.Type != 'E' "

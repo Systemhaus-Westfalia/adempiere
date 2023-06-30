@@ -61,6 +61,8 @@ public class CalloutProjectSA extends CalloutEngine
             mTab.setValue("C_Activity_ID", bpartner.get_ValueAsInt("C_Activity_ID"));
             mTab.setValue("User1_ID", bpartner.get_ValueAsInt("User1_ID"));
             mTab.setValue("SalesRep_ID", bpartner.get_ValueAsInt("SalesRep_ID"));
+            if (bpartner.getAD_Org_ID()!=0)
+            	mTab.setValue("AD_Org_ID", bpartner.getAD_Org_ID());
             if (bpartner.get_ValueAsInt("SuperVisor_Custom") != 0)
             	mTab.setValue("SuperVisor_Custom", bpartner.get_ValueAsInt("SuperVisor_Custom"));
             if (bpartner.get_ValueAsInt("SuperVisor_Shipment") !=0)

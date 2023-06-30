@@ -88,6 +88,7 @@ public class CalloutRequestSA extends CalloutEngine
 		mTab.setValue("C_Activity_ID", ord.getC_Activity_ID());
 		mTab.setValue("C_Campaign_ID", ord.getC_Campaign_ID());
 		mTab.setValue("User1_ID", ord.getUser1_ID());
+		mTab.setValue("AD_User_ID", Env.getContext(Env.getCtx(), "#AD_User_ID"));
 		mTab.setValue("RequestAmt", ord.getGrandTotal());
 		if (!ord.isSOTrx()) {
 			mTab.setValue("C_BPartnerVendor_ID", ord.getC_BPartner_ID());
@@ -109,6 +110,7 @@ public class CalloutRequestSA extends CalloutEngine
 		mTab.setValue("C_Campaign_ID", invoice.getC_Campaign_ID());
 		mTab.setValue("User1_ID", invoice.getUser1_ID());
 		mTab.setValue("RequestAmt", invoice.getGrandTotal());
+		mTab.setValue("AD_User_ID", Env.getContext(Env.getCtx(), "#AD_User_ID"));
 		return "";
 	}	//	type
 	
@@ -121,6 +123,7 @@ public class CalloutRequestSA extends CalloutEngine
 			return "";
 		X_C_Project project = new X_C_Project(ctx, C_Project_ID, null);
 		mTab.setValue("AD_Org_ID", project.getAD_Org_ID());
+		mTab.setValue("AD_User_ID", Env.getContext(Env.getCtx(), "#AD_User_ID"));
 		return "";
 	}	//	type
 	

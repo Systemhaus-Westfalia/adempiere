@@ -50,26 +50,7 @@ public class CloseRequest  extends SvrProcess
     {
     	int r_status_ID = 0;
     	Boolean processed = true;
-    	MOrder order = new MOrder(getCtx(), getRecord_ID(), get_TrxName());
-    	if (!order.getDocStatus().equals(MOrder.DOCSTATUS_Completed))
-    		return "";
-       	if (order.getC_DocType().getDocSubTypeSO().equals(MDocType.DOCSUBTYPESO_StandardOrder))
-       	{
-       		if (Env.getAD_Client_ID(getCtx())== 1000001)
-       			r_status_ID = 1000023;
-       		else if (Env.getAD_Client_ID(getCtx()) == 1000012)
-       			r_status_ID = 1000022;
-       		processed = false;
-       	}
-
-       	else if (order.getC_DocType().getDocSubTypeSO().equals(MDocType.DOCSUBTYPESO_OnCreditOrder))
-       	{
-       		if (Env.getAD_Client_ID(getCtx())== 1000001)
-       			r_status_ID = 1000007;
-       		else if (Env.getAD_Client_ID(getCtx()) == 1000012)
-       			r_status_ID = 1000013;
-       	}
-       	if (r_status_ID == 0)
+    	MOrder order = new MOrder(getCtx(), getRecord_ID(), get_TrxName());       	if (r_status_ID == 0)
        		return "";
     	String whereClause = "c_order_ID =? and r_requesttype_ID in (1000002,1000004) and processed = 'N'";
     	ArrayList<Object> params = new ArrayList<Object>();

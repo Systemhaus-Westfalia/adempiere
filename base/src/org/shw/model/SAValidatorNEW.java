@@ -1181,10 +1181,6 @@ public class SAValidatorNEW implements ModelValidator {
 
 	private void CreateCTAJPaymentAllocs(MPayment pay) {
 		String description = "";
-		int r_status = 0;
-		
-		if (r_status == 0)
-			return;
 		int chargeID;
 		MPaymentAllocate[] pAllocs = MPaymentAllocate.get(pay);
 		for (MPaymentAllocate alloc : pAllocs) {
@@ -1225,8 +1221,8 @@ public class SAValidatorNEW implements ModelValidator {
 			oLine.set_ValueOfColumn("isSplitInvoice", bpartner.get_ValueAsBoolean("isSplitInvoice"));
 			oLine.saveEx();
 			req.setC_Payment_ID(pay.getC_Payment_ID());
-			req.setR_Status_ID(r_status);
 			req.setSalesRep_ID(req.getCreatedBy());
+			req.setC_OrderLine_ID(oLine.getC_OrderLine_ID());
 			req.saveEx();
 			description = description + " " + order.getDocumentNo();
 			alloc.set_ValueOfColumn("ControlAmt", oLine.getLineNetAmt());

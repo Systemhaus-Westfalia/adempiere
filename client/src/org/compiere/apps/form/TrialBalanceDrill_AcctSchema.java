@@ -313,11 +313,11 @@ public class TrialBalanceDrill_AcctSchema
 			para.save();
 		}
 
-		
+		if (m_AD_Org_ID>0) {
 		para = new MPInstancePara(mpInstance, 30);
 		para.setParameter("AD_Org_ID", m_AD_Org_ID);
 		para.save();
-		
+		}
 		para = new MPInstancePara(mpInstance, 40);
 		para.setParameter("PostingType", (column == 4 || column == 7) ? "A" : "B");
 		para.save();

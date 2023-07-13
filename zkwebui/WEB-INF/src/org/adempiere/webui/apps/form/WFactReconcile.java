@@ -355,17 +355,21 @@ public class WFactReconcile extends CustomForm
 		//
 		Row row = new Row();
 		rows.appendChild(row);
-		row.setSpans("1, 1, 1, 1");
+		//row.setSpans("1, 1, 1, 1");
+		row.appendChild(labelOrg.rightAlign());
+		row.appendChild(fieldOrg.getComponent());
 		row.appendChild(labelAcctSchema.rightAlign());
 		row.appendChild(fieldAcctSchema.getComponent());
 		row.appendChild(labelBPartner.rightAlign());
 		row.appendChild(fieldBPartner.getComponent());
 		//
+		//row = new Row();
+		//rows.appendChild(row);
+		//row.setSpans("1, 1, 1, 1");
+		//
 		row = new Row();
 		rows.appendChild(row);
-		row.setSpans("1, 1, 1, 1");
-		row.appendChild(labelOrg.rightAlign());
-		row.appendChild(fieldOrg.getComponent());
+		//row.setSpans("1, 1, 1, 1");
 		row.appendChild(labelProduct.rightAlign());
 		row.appendChild(fieldProduct.getComponent());
 		//

@@ -103,6 +103,8 @@ public class DPFavourites extends DashboardPanel implements EventListener {
 			AD_Tree_ID = 10;	//	Menu
 		
 		m_AD_Tree_ID = AD_Tree_ID;
+
+		int AD_User_ID = Env.getContextAsInt(Env.getCtx(), "#AD_User_ID");
 		
 		MTree vTree = new MTree(Env.getCtx(), AD_Tree_ID, false, true, null);
 		MTreeNode m_root = vTree.getRoot();
@@ -113,8 +115,13 @@ public class DPFavourites extends DashboardPanel implements EventListener {
 			Enumeration<?> en = ndTop.preorderEnumeration();
 			while (en.hasMoreElements())
 			{
-				MTreeNode nd = (MTreeNode)en.nextElement();
-				if (nd.isOnBar()) {
+				MTreeNode nd = (MTreeNode)en.nextElement();		
+				StringBuffer sql = new StringBuffer();
+				sql.append("SELECT COUNT(*) FROM AD_TreeBar WHERE AD_Tree_ID=?")
+				.append(" AND AD_User_ID=").append(AD_User_ID)
+				.append(" AND Node_ID=").append(nd.getNode_ID());
+				int no = DB.getSQLValueEx(null, sql.toString(), m_AD_Tree_ID);
+				if (no>0) {
 					String label = nd.toString().trim();
 					ToolBarButton btnFavItem = new ToolBarButton(String.valueOf(nd.getNode_ID()));
 					btnFavItem.setLabel(label);

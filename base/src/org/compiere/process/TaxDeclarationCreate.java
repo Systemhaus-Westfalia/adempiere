@@ -28,6 +28,7 @@ import org.compiere.model.MTaxDeclarationAcct;
 import org.compiere.model.MTaxDeclarationLine;
 import org.compiere.util.AdempiereSystemError;
 import org.compiere.util.DB;
+import org.compiere.util.Env;
 
 
 /**
@@ -81,25 +82,26 @@ public class TaxDeclarationCreate extends TaxDeclarationCreateAbstract
 		}
 
 		//	Get Invoices
-		StringBuffer sqlCreate = new StringBuffer("SELECT * FROM C_Invoice i ");
+		StringBuffer sqlCreate = new StringBuffer("SELECT * FROM C_Invoice i WHERE AD_Client_ID=? ");
 		
 		if (isUseDateAcct())
-			sqlCreate.append(" WHERE TRUNC(i.DateAcct, 'DD') >= ? AND TRUNC(i.DateAcct, 'DD') <= ? ");
+			sqlCreate.append(" AND TRUNC(i.DateAcct, 'DD') >= ? AND TRUNC(i.DateAcct, 'DD') <= ? ");
 		else
-			sqlCreate.append(" WHERE TRUNC(i.DateInvoiced, 'DD') >= ? AND TRUNC(i.DateInvoiced, 'DD') <= ? ");
+			sqlCreate.append(" AND TRUNC(i.DateInvoiced, 'DD') >= ? AND TRUNC(i.DateInvoiced, 'DD') <= ? ");
 		sqlCreate.append(" AND Processed = 'Y' ");
 		if (isOnlyPosted())
 			sqlCreate.append(" AND i.Posted = 'Y' ");
 		sqlCreate.append(" AND NOT EXISTS (SELECT * FROM C_TaxDeclarationLine tdl "
-				+ "WHERE i.C_Invoice_ID=tdl.C_Invoice_ID)");			
+				+ "WHERE i.C_Invoice_ID=tdl.C_Invoice_ID) ORDER BY i.issotrx, i.dateacct ");			
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int noInvoices = 0;
 		try
 		{
 			pstmt = DB.prepareStatement (sqlCreate.toString(), get_TrxName());
-			pstmt.setTimestamp(1, taxDeclaration.getDateFrom());
-			pstmt.setTimestamp(2, taxDeclaration.getDateTo());
+			pstmt.setInt(1, Env.getAD_Client_ID(getCtx()));
+			pstmt.setTimestamp(2, taxDeclaration.getDateFrom());
+			pstmt.setTimestamp(3, taxDeclaration.getDateTo());
 			rs = pstmt.executeQuery ();
 			while (rs.next ())
 			{

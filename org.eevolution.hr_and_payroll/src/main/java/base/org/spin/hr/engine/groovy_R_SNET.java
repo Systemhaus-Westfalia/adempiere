@@ -46,10 +46,13 @@ public class groovy_R_SNET implements RuleInterface {
 		double deducciones = process.getConceptCategory("DeduccionesLegales");
 
 		double celular =  process.getConcept("O_Celular");
+        double reposicion = process.getConcept("O_Reposicion"); 
+        double isr = process.getConcept("O_CorrecionISR"); 
 
 		double prestamos = process.getConcept("R_PrestamosTotal");
+		double presperso = process.getConcept("O_PrestamoPersonal");
 
-		result =  salarioTotal - deducciones - celular - prestamos;
+		result =  salarioTotal  - celular - prestamos + reposicion  - deducciones + presperso;
 		return result;
 	}
 

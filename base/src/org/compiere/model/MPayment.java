@@ -1743,7 +1743,7 @@ public final class MPayment extends X_C_Payment
 				return DocAction.STATUS_Invalid;
 			}
 			// Find or create a suitable bank statement which is or will become the Cash Journal of this day
-			MBankStatement.addPayment(this);
+			//MBankStatement.addPayment(this);
 		}
 		// End Trifon - CashPayments
 		

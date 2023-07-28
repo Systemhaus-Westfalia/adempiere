@@ -274,10 +274,14 @@ public class WFactReconcile_SHW extends CustomForm
 		// The Account combo.  A bit more involved if we try to filter out the summary accounts.
 		MLookup lookup;
 		try{
+
+			int acctSchemaID = MClient.get(Env.getCtx()).getAcctSchema().getC_AcctSchema_ID();
+			String sql = "SELECT c_element_ID FROM C_AcctSchema_Element WHERE C_AcctSchema_ID = ? and elementtype = 'AC'";
+			int elementID = DB.getSQLValueEx(null, sql, acctSchemaID);
 			lookup = MLookupFactory.get (Env.getCtx(), m_WindowNo, 
 					MColumn.getColumn_ID(MFactAcct.Table_Name, MFactAcct.COLUMNNAME_Account_ID),
 					DisplayType.TableDir, Env.getLanguage(Env.getCtx()), MFactAcct.COLUMNNAME_Account_ID, 
-					0, false, "C_ElementValue.IsSummary = 'N'");
+					0, false, "C_ElementValue.IsSummary = 'N' AND C_Element_ID=" + elementID);
 		}
 		catch (Exception e)
 		{

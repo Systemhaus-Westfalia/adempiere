@@ -126,15 +126,8 @@ public class SHWValidator_BASICSNEW implements ModelValidator
 		{
 			if (timing == TIMING_BEFORE_POST)
 			{
-				error = updatePostingAllocation(po);
+				//error = updatePostingAllocation(po);
 				error = AfterPost_CorrectGL_Category(po);
-			}
-		}if (po.get_TableName().equals(MPayment.Table_Name))
-		{
-
-			if (timing == TIMING_BEFORE_POST)
-			{
-				error = updatePostingPayment(po);				
 			}
 		}
 
@@ -228,139 +221,8 @@ public class SHWValidator_BASICSNEW implements ModelValidator
 
 	//-----------------------------------------------------------------------------------	
 
-	private String updatePostingPayment(PO A_PO)
-	{
-		String error = "";
-        
-		MPayment pay = (MPayment)A_PO;
-		Boolean isEmployee = pay.getC_BPartner().isEmployee();
-		Boolean isPrepayment = pay.isPrepayment();
-		Boolean istoUpdate = isEmployee && isPrepayment;
-		Boolean isreceipt = pay.getC_DocType().getDocBaseType().equals(MDocType.DOCBASETYPE_ARInvoice);
-		if (!istoUpdate)
-			return "";
-		Doc doc = pay.getDoc();
+	
 
-		ArrayList<Fact> facts = doc.getFacts();
-		// one fact per acctschema
-		for (int i = 0; i < facts.size(); i++)
-		{
-			Fact fact = facts.get(i);
-			MAcctSchema as = fact.getAcctSchema();
-			MAccount Prepayment = null;
-			if (isreceipt)
-				Prepayment = doc.getAccount(Doc.ACCTTYPE_C_Prepayment, as);
-			else
-				Prepayment = doc.getAccount(Doc.ACCTTYPE_V_Prepayment, as);
-			String sql = "SELECT  e_prepayment_acct FROM c_bp_employee_acct WHERE C_BPartner_ID=? AND C_AcctSchema_ID=?";
-			int C_ValidCombination_ID = DB.getSQLValueEx(null, sql,pay.getC_BPartner_ID(), as.getC_AcctSchema_ID());
-			MAccount Emp_PrePayment = MAccount.get (as.getCtx(), C_ValidCombination_ID, null);
-			//MAccount Emp_PrePayment =  doc.getAccount(Doc.ACCTTYPE_e_prepayment_acct, as);
-			for (FactLine fline : fact.getLines())
-			{
-				if (fline.getAccount_ID() != Prepayment.getAccount_ID())
-					continue;
-				fline.setAccount_ID(Emp_PrePayment.getAccount_ID());
-			}			
-		}		
-		return error;
-	}
-
-
-
-	private String updatePostingAllocation(PO A_PO)
-	{
-		String error = "";
-		MAllocationHdr ah = (MAllocationHdr)A_PO;
-		Doc doc = ah.getDoc();
-		for (MAllocationLine aLine : ah.getLines(true))
-		{
-			if (aLine.getC_Payment_ID() ==0 && aLine.getC_Invoice_ID() !=0)
-			{
-				continue;
-			}
-			if ((aLine.getC_Payment_ID() != 0 && aLine.getC_Payment().isPrepayment())
-					|| (aLine.getC_Invoice_ID() !=0))
-			{
-
-
-				MPayment pay = (MPayment)aLine.getC_Payment();
-				Boolean isEmployee = pay.getC_BPartner().isEmployee();
-				Boolean isPrepayment = pay.isPrepayment();
-				MInvoice invoice = (MInvoice)aLine.getC_Invoice();
-				if (!(invoice.getDocStatus().equals("CO")||invoice.getDocStatus().equals("CL")))
-					continue;
-				Boolean istoUpdate = ((isEmployee && isPrepayment) || 
-						(invoice.get_ValueAsBoolean("isContract") && isEmployee));
-				Boolean isreceipt = pay.getC_DocType().getDocBaseType().equals(MDocType.DOCBASETYPE_ARInvoice);
-				if (!istoUpdate)
-					continue;
-
-				ArrayList<Fact> facts = doc.getFacts();
-				for (int i = 0; i < facts.size(); i++)
-				{
-					MAccount Prepayment = null;
-					Fact fact = facts.get(i);
-					MAcctSchema as = fact.getAcctSchema();
-					doc.setC_BPartner_ID(aLine.getC_BPartner_ID());
-
-					if (isPrepayment)
-					{
-						if (isreceipt)
-							Prepayment = doc.getAccount(Doc.ACCTTYPE_C_Prepayment, as);
-						else
-							Prepayment = doc.getAccount(Doc.ACCTTYPE_V_Prepayment, as);					
-					}
-					else
-					{
-						if (isreceipt)
-							Prepayment = doc.getAccount(Doc.ACCTTYPE_UnallocatedCash, as);
-						else
-							Prepayment = doc.getAccount(Doc.ACCTTYPE_PaymentSelect, as);					
-					}					
-					doc.setC_BPartner_ID(aLine.getC_Payment().getC_BPartner_ID());
-					MAccount Emp_PrePayment = null;
-					if (isEmployee)
-					{
-						String sql = "SELECT  e_prepayment_acct FROM c_bp_employee_acct WHERE C_BPartner_ID=? AND C_AcctSchema_ID=?";
-						int C_ValidCombination_ID = DB.getSQLValueEx(null, sql,pay.getC_BPartner_ID(), as.getC_AcctSchema_ID());
-						Emp_PrePayment = MAccount.get (as.getCtx(), C_ValidCombination_ID);
-					}
-
-					for (FactLine fline : fact.getLines())
-					{
-						if (fline.getLine_ID() != aLine.getC_AllocationLine_ID())
-							continue;
-						if (fline.getAccount_ID() != Prepayment.getAccount_ID())
-							continue;
-						fline.setAccount_ID(Emp_PrePayment.getAccount_ID());
-						fline.setC_BPartner_ID(pay.getC_BPartner_ID());
-					}	
-				}
-				// one fact per acctschema
-			}
-		}		
-		return error;
-	}
-
-	private String PaymentUpdatePrepayment(PO A_PO)
-	{
-		MPayment pay = (MPayment)A_PO;
-		MPaymentAllocate[] pAllocs = MPaymentAllocate.get(pay);
-		int pas = pAllocs.length;
-		Boolean isEmployee = pay.getC_BPartner().isEmployee();
-		Boolean isfreePayment = pay.getC_Charge_ID() == 0 && pay.getC_Invoice_ID() == 0 && isEmployee && pas == 0;
-		if (isfreePayment){
-			pay.setIsPrepayment(true);	
-			pay.saveEx();
-			return"";
-		}	
-		if (pay.getC_Charge_ID() == 0 && pay.getC_Invoice_ID() != 0 && pay.getC_Order_ID()!= 0)
-		{
-			pay.setIsPrepayment(false);
-		}
-		return "";
-	}
 
 
 

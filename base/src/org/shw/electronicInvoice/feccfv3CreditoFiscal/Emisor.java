@@ -1,5 +1,7 @@
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.util.regex.Pattern;
+
 import org.shw.util.pojoAdempiere.Direccion;
 
 public class Emisor {
@@ -9,7 +11,7 @@ public class Emisor {
 	String nombre;
 	String codActividad;
 	String descActividad;
-	String nombreComercial;
+	String nombreComercial=null;  // null possible
 	String tipoEstablecimiento;
     Direccion direccion;
     String telefono;
@@ -36,10 +38,18 @@ public class Emisor {
 
 
 	/**
-	 * @param nit the nit to set
+	 * @param nit the nit to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^([0-9]{14}|[0-9]{9})$"
 	 */
 	public void setNit(String nit) {
-		this.nit = nit;
+		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
+		boolean patternOK = Pattern.matches(PATTERN, nit);  
+		
+		if(patternOK)
+			this.nit = nit;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
 	}
 
 
@@ -52,10 +62,18 @@ public class Emisor {
 
 
 	/**
-	 * @param nrc the nrc to set
+	 * @param nrc the nrc to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^[0-9]{1,8}$"
 	 */
 	public void setNrc(String nrc) {
-		this.nrc = nrc;
+		final String PATTERN = "^[0-9]{1,8}$";
+		boolean patternOK = Pattern.matches(PATTERN, nrc);  
+		
+		if(patternOK)
+			this.nrc = nrc;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in setNrc()");
 	}
 
 
@@ -68,10 +86,19 @@ public class Emisor {
 
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre the nombre to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 36
 	 */
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		final int MINLENGTH = 3;
+		final int MAXLENGTH = 200;
+		int length = nombre.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.nombre = nombre;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
 	}
 
 
@@ -84,10 +111,18 @@ public class Emisor {
 
 
 	/**
-	 * @param codActividad the codActividad to set
+	 * @param codActividad the codActividad to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^[0-9]{2,6}$"
 	 */
 	public void setCodActividad(String codActividad) {
-		this.codActividad = codActividad;
+		final String PATTERN = "^[0-9]{2,6}$";
+		boolean patternOK = Pattern.matches(PATTERN, codActividad);  
+		
+		if(patternOK)
+			this.codActividad = codActividad;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in setCodActividad()");
 	}
 
 
@@ -100,10 +135,19 @@ public class Emisor {
 
 
 	/**
-	 * @param descActividad the descActividad to set
+	 * @param descActividad the descActividad to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 150
 	 */
 	public void setDescActividad(String descActividad) {
-		this.descActividad = descActividad;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 150;
+		int length = descActividad.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.descActividad = descActividad;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
 	}
 
 
@@ -116,10 +160,19 @@ public class Emisor {
 
 
 	/**
-	 * @param nombreComercial the nombreComercial to set
+	 * @param nombreComercial the nombreComercial to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 36; null also possible
 	 */
 	public void setNombreComercial(String nombreComercial) {
-		this.nombreComercial = nombreComercial;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 150;
+		int length = nombreComercial.length();
+		
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
+			this.nombreComercial = nombreComercial;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in setNombreComercial()");
 	}
 
 
@@ -132,10 +185,15 @@ public class Emisor {
 
 
 	/**
-	 * @param tipoEstablecimiento the tipoEstablecimiento to set
+	 * @param tipoEstablecimiento the tipoEstablecimiento to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : ["01", "02", "04", "07", "20"]
 	 */
 	public void setTipoEstablecimiento(String tipoEstablecimiento) {
-		this.tipoEstablecimiento = tipoEstablecimiento;
+		if (tipoEstablecimiento.compareTo("01")==0 || tipoEstablecimiento.compareTo("02")==0 || tipoEstablecimiento.compareTo("04")==0 || tipoEstablecimiento.compareTo("07")==0 || tipoEstablecimiento.compareTo("20")==0)
+			this.tipoEstablecimiento = tipoEstablecimiento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in setTipoEstablecimiento()");
 	}
 
 
@@ -164,10 +222,19 @@ public class Emisor {
 
 
 	/**
-	 * @param telefono the telefono to set
+	 * @param telefono the telefono to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 30
 	 */
 	public void setTelefono(String telefono) {
-		this.telefono = telefono;
+		final int MINLENGTH = 8;
+		final int MAXLENGTH = 30;
+		int length = telefono.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.telefono = telefono;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
 	}
 
 
@@ -180,10 +247,19 @@ public class Emisor {
 
 
 	/**
-	 * @param correo the correo to set
+	 * @param correo the correo to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 3, "maxLength" : 100
 	 */
 	public void setCorreo(String correo) {
-		this.correo = correo;
+		final int MINLENGTH = 3;
+		final int MAXLENGTH = 100;
+		int length = correo.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.correo = correo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
 	}
 
 
@@ -196,10 +272,19 @@ public class Emisor {
 
 
 	/**
-	 * @param codEstableMH the codEstableMH to set
+	 * @param codEstableMH the codEstableMH to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 4, "maxLength" : 4, null also possible
 	 */
 	public void setCodEstableMH(String codEstableMH) {
-		this.codEstableMH = codEstableMH;
+		final int MINLENGTH = 4;
+		final int MAXLENGTH = 4;
+		int length = codEstableMH.length();
+
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstableMH==null) )
+			this.codEstableMH = codEstableMH;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codEstableMH' in setCodEstableMH()");
 	}
 
 
@@ -212,10 +297,19 @@ public class Emisor {
 
 
 	/**
-	 * @param codEstable the codEstable to set
+	 * @param codEstable the codEstable to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 10, null also possible
 	 */
 	public void setCodEstable(String codEstable) {
-		this.codEstable = codEstable;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 10;
+		int length = codEstable.length();
+
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstable==null) )
+			this.codEstable = codEstable;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codEstable' in setCodEstable()");
 	}
 
 
@@ -228,10 +322,19 @@ public class Emisor {
 
 
 	/**
-	 * @param codPuntoVentaMH the codPuntoVentaMH to set
+	 * @param codPuntoVentaMH the codPuntoVentaMH to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 4, "maxLength" : 4, null also possible
 	 */
 	public void setCodPuntoVentaMH(String codPuntoVentaMH) {
-		this.codPuntoVentaMH = codPuntoVentaMH;
+		final int MINLENGTH = 4;
+		final int MAXLENGTH = 4;
+		int length = codPuntoVentaMH.length();
+
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVentaMH==null) )
+			this.codPuntoVentaMH = codPuntoVentaMH;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVentaMH' in setCodPuntoVentaMH()");
 	}
 
 
@@ -244,10 +347,19 @@ public class Emisor {
 
 
 	/**
-	 * @param codPuntoVenta the codPuntoVenta to set
+	 * @param codPuntoVenta the codPuntoVenta to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 15, null also possible
 	 */
 	public void setCodPuntoVenta(String codPuntoVenta) {
-		this.codPuntoVenta = codPuntoVenta;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 15;
+		int length = codPuntoVenta.length();
+
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVenta==null) )
+			this.codPuntoVenta = codPuntoVenta;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVenta' in setCodPuntoVenta()");
 	}
 
 

@@ -88,7 +88,7 @@ public class Emisor {
 	/**
 	 * @param nombre the nombre to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 36
+	 * "minLength" : 3, "maxLength" : 200
 	 */
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 3;
@@ -162,7 +162,7 @@ public class Emisor {
 	/**
 	 * @param nombreComercial the nombreComercial to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 36; null also possible
+	 * "minLength" : 1, "maxLength" : 150; null also possible
 	 */
 	public void setNombreComercial(String nombreComercial) {
 		final int MINLENGTH = 1;
@@ -224,7 +224,7 @@ public class Emisor {
 	/**
 	 * @param telefono the telefono to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 30
+	 * "minLength" : 8, "maxLength" : 30
 	 */
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;

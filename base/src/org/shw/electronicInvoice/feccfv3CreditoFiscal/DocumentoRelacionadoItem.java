@@ -1,5 +1,7 @@
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.util.regex.Pattern;
+
 public class DocumentoRelacionadoItem {
 	String tipoDocumento;
 	int tipoGeneracion;
@@ -13,14 +15,8 @@ public class DocumentoRelacionadoItem {
 	 * @param numeroDocumento
 	 * @param fechaEmision
 	 */
-	public DocumentoRelacionadoItem(String tipoDocumento, int tipoGeneracion, String numeroDocumento,
-			String fechaEmision) {
-		super();
-		this.tipoDocumento = tipoDocumento;
-		this.tipoGeneracion = tipoGeneracion;
-		this.numeroDocumento = numeroDocumento;
-		this.fechaEmision = fechaEmision;
-	}
+	public DocumentoRelacionadoItem() {
+}
 
 	/**
 	 * @return the tipoDocumento
@@ -30,10 +26,15 @@ public class DocumentoRelacionadoItem {
 	}
 
 	/**
-	 * @param tipoDocumento the tipoDocumento to set
+	 * @param tipoDocumento the tipoDocumento to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : ["04", "08", "09"]
 	 */
 	public void setTipoDocumento(String tipoDocumento) {
-		this.tipoDocumento = tipoDocumento;
+		if (tipoDocumento.compareTo("04")==0 || tipoDocumento.compareTo("08")==0 || tipoDocumento.compareTo("09")==0)
+			this.tipoDocumento = tipoDocumento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in setTipoDocumento()");
 	}
 	
 	/**
@@ -44,10 +45,25 @@ public class DocumentoRelacionadoItem {
 	}
 
 	/**
-	 * @param tipoGeneracion the tipoGeneracion to set
+	 * @param tipoGeneracion the tipoGeneracion to set.<br>
+	 * The parameter is validated.<br>
+	 * "enum" : [1,2]<br>
+	 * The content is also validated (Schema conditions).
 	 */
-	public void setTipoGeneracion(int tipoGeneracion) {
-		this.tipoGeneracion = tipoGeneracion;
+	public void setTipoGeneracion(int tipoGeneracion) {	
+		if (tipoGeneracion==1 || tipoGeneracion==2)
+			this.tipoGeneracion = tipoGeneracion;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoGeneracion' in setTipoGeneracion()");
+		
+		// Schema conditions
+		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
+		if(getTipoGeneracion()==2) {
+			boolean patternOK = Pattern.matches(PATTERN, getNumeroDocumento());  
+			
+			if(!patternOK)
+				throw new IllegalArgumentException("Wrong expression 'numeroDocumento' in setTipoGeneracion()");
+		}
 	}
 
 	/**
@@ -58,10 +74,19 @@ public class DocumentoRelacionadoItem {
 	}
 
 	/**
-	 * @param numeroDocumento the numeroDocumento to set
+	 * @param numeroDocumento the numeroDocumento to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 36
 	 */
 	public void setNumeroDocumento(String numeroDocumento) {
-		this.numeroDocumento = numeroDocumento;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 36;
+		int length = numeroDocumento.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.numeroDocumento = numeroDocumento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in setNumeroDocumento()");
 	}
 
 	/**

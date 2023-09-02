@@ -46,8 +46,8 @@ public class Identificacion {
 
 
 	/**
-	 * @param ambiente the ambiente to set
-	 * The content is validated.
+	 * @param ambiente the ambiente to set<br>
+	 * The parameter is validated.<br>
 	 * "enum" : ["00", "01"]
 	 */
 	public void setAmbiente(String ambiente) {
@@ -82,7 +82,8 @@ public class Identificacion {
 
 
 	/**
-	 * @param numeroControl the numeroControl to set
+	 * @param numeroControl the numeroControl to set<br>
+	 * The parameter is validated.<br>
 	 * "pattern" : "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$"
 	 */
 	public void setNumeroControl(String numeroControl) {
@@ -111,7 +112,8 @@ public class Identificacion {
 	}
 
 	/**
-	 * @param tipoContingencia the tipoContingencia to set
+	 * @param tipoContingencia the tipoContingencia to set<br>
+	 * The parameter is validated.<br>
 	 * "enum" : [1,2,3,4,5], null
 	 */
 	public void setTipoContingencia(Integer tipoContingencia) {
@@ -127,7 +129,8 @@ public class Identificacion {
 	}
 
 	/**
-	 * @param codigoGeneracion the codigoGeneracion to set
+	 * @param codigoGeneracion the codigoGeneracion to set<br>
+	 * The parameter is validated.<br>
 	 * "pattern" : "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$"
 	 */
 	public void setCodigoGeneracion(String codigoGeneracion) {
@@ -150,10 +153,19 @@ public class Identificacion {
 
 
 	/**
-	 * @param motivoContin the motivoContin to set
+	 * @param motivoContin the motivoContin to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 150
 	 */
 	public void setMotivoContin(String motivoContin) {
-		this.motivoContin = motivoContin;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 150;
+		int length = motivoContin.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.motivoContin = motivoContin;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'motivoContin' in setMotivoContin()");
 	}
 
 
@@ -182,7 +194,8 @@ public class Identificacion {
 
 
 	/**
-	 * @param horEmi the horEmi to set
+	 * @param horEmi the horEmi to set<br>
+	 * The parameter is validated.<br>
 	 * "pattern" : "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]?$"
 	 */
 	public void setHorEmi(String horEmi) {
@@ -219,8 +232,8 @@ public class Identificacion {
 	}
 
 	/**
-	 * @param tipoModelo the tipoModelo to set
-	 * The content is validated.
+	 * @param tipoModelo the tipoModelo to set<br>
+	 * The parameter is validated.<br>
 	 * "enum" : [1,2]
 	 */
 	public void setTipoModelo(int tipoModelo) {
@@ -238,9 +251,10 @@ public class Identificacion {
 	}
 
 	/**
-	 * @param tipoOperacion the tipoOperacion to set
-	 * The content is validated.
-	 * "enum" : [1,2]
+	 * @param tipoOperacion the tipoOperacion to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : [1,2]<br>
+	 * The content is also validated (Schema conditions).
 	 */
 	public void setTipoOperacion(int tipoOperacion) {
 		if (tipoOperacion==1 || tipoOperacion==2)

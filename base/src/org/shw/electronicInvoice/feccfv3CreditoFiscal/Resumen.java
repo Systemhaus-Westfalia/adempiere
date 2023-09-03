@@ -3,6 +3,7 @@
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,28 +15,28 @@ import org.shw.util.pojoAdempiere.TributosItem;
  */
 public class Resumen {
 	
-	String totalNoSuj;
-	String totalExenta;
-	String totalGravada;
-	String subTotalVentas;
-	String descuNoSuj;
-	String descuExenta;
-	String descuGravada;
-	String porcentajeDescuento;
-	String totalDescu;
+	BigDecimal totalNoSuj;
+	BigDecimal totalExenta;
+	BigDecimal totalGravada;
+	BigDecimal subTotalVentas;
+	BigDecimal descuNoSuj;
+	BigDecimal descuExenta;
+	BigDecimal descuGravada;
+	BigDecimal porcentajeDescuento;
+	BigDecimal totalDescu;
 	List<TributosItem> tributos;
-    String subTotal;
-    String ivaPerci1;
-    String ivaRete1;
-    String reteRenta;
-    String montoTotalOperacion;
-    String totalNoGravado;
-    String totalPagar;
+	BigDecimal subTotal;
+	BigDecimal ivaPerci1;
+	BigDecimal ivaRete1;
+	BigDecimal reteRenta;
+	BigDecimal montoTotalOperacion;
+	BigDecimal totalNoGravado;
+	BigDecimal totalPagar;
     String totalLetras;
-    String saldoFavor;
-    String condicionOperacion;
-	List<PagosItem> pagos ;
-   String numPagoElectronico;
+    BigDecimal saldoFavor;
+    int condicionOperacion;
+	List<PagosItem> pagos ;  // there must be at least one item
+   String numPagoElectronico=null;  // null allowed
    
    
 
@@ -46,131 +47,157 @@ public Resumen() {
 	this.pagos = new ArrayList<PagosItem>();
 }
 
+/**
+ * Validate the Schema conditions
+ */
+public boolean validateValues() {
+	// TODO: write code according to schema	
+	
+	return true;
+}
 	/**
 	 * @return the totalNoSuj
 	 */
-	public String getTotalNoSuj() {
+	public BigDecimal getTotalNoSuj() {
 		return totalNoSuj;
 	}
+
 
 	/**
 	 * @param totalNoSuj the totalNoSuj to set
 	 */
-	public void setTotalNoSuj(String totalNoSuj) {
+	public void setTotalNoSuj(BigDecimal totalNoSuj) {
 		this.totalNoSuj = totalNoSuj;
 	}
+
 
 	/**
 	 * @return the totalExenta
 	 */
-	public String getTotalExenta() {
+	public BigDecimal getTotalExenta() {
 		return totalExenta;
 	}
+
 
 	/**
 	 * @param totalExenta the totalExenta to set
 	 */
-	public void setTotalExenta(String totalExenta) {
+	public void setTotalExenta(BigDecimal totalExenta) {
 		this.totalExenta = totalExenta;
 	}
+
 
 	/**
 	 * @return the totalGravada
 	 */
-	public String getTotalGravada() {
+	public BigDecimal getTotalGravada() {
 		return totalGravada;
 	}
+
 
 	/**
 	 * @param totalGravada the totalGravada to set
 	 */
-	public void setTotalGravada(String totalGravada) {
+	public void setTotalGravada(BigDecimal totalGravada) {
 		this.totalGravada = totalGravada;
 	}
+
 
 	/**
 	 * @return the subTotalVentas
 	 */
-	public String getSubTotalVentas() {
+	public BigDecimal getSubTotalVentas() {
 		return subTotalVentas;
 	}
+
 
 	/**
 	 * @param subTotalVentas the subTotalVentas to set
 	 */
-	public void setSubTotalVentas(String subTotalVentas) {
+	public void setSubTotalVentas(BigDecimal subTotalVentas) {
 		this.subTotalVentas = subTotalVentas;
 	}
+
 
 	/**
 	 * @return the descuNoSuj
 	 */
-	public String getDescuNoSuj() {
+	public BigDecimal getDescuNoSuj() {
 		return descuNoSuj;
 	}
+
 
 	/**
 	 * @param descuNoSuj the descuNoSuj to set
 	 */
-	public void setDescuNoSuj(String descuNoSuj) {
+	public void setDescuNoSuj(BigDecimal descuNoSuj) {
 		this.descuNoSuj = descuNoSuj;
 	}
+
 
 	/**
 	 * @return the descuExenta
 	 */
-	public String getDescuExenta() {
+	public BigDecimal getDescuExenta() {
 		return descuExenta;
 	}
+
 
 	/**
 	 * @param descuExenta the descuExenta to set
 	 */
-	public void setDescuExenta(String descuExenta) {
+	public void setDescuExenta(BigDecimal descuExenta) {
 		this.descuExenta = descuExenta;
 	}
+
 
 	/**
 	 * @return the descuGravada
 	 */
-	public String getDescuGravada() {
+	public BigDecimal getDescuGravada() {
 		return descuGravada;
 	}
+
 
 	/**
 	 * @param descuGravada the descuGravada to set
 	 */
-	public void setDescuGravada(String descuGravada) {
+	public void setDescuGravada(BigDecimal descuGravada) {
 		this.descuGravada = descuGravada;
 	}
+
 
 	/**
 	 * @return the porcentajeDescuento
 	 */
-	public String getPorcentajeDescuento() {
+	public BigDecimal getPorcentajeDescuento() {
 		return porcentajeDescuento;
 	}
+
 
 	/**
 	 * @param porcentajeDescuento the porcentajeDescuento to set
 	 */
-	public void setPorcentajeDescuento(String porcentajeDescuento) {
+	public void setPorcentajeDescuento(BigDecimal porcentajeDescuento) {
 		this.porcentajeDescuento = porcentajeDescuento;
 	}
+
 
 	/**
 	 * @return the totalDescu
 	 */
-	public String getTotalDescu() {
+	public BigDecimal getTotalDescu() {
 		return totalDescu;
 	}
+
 
 	/**
 	 * @param totalDescu the totalDescu to set
 	 */
-	public void setTotalDescu(String totalDescu) {
+	public void setTotalDescu(BigDecimal totalDescu) {
 		this.totalDescu = totalDescu;
 	}
+
 
 	/**
 	 * @return the tributos
@@ -179,6 +206,7 @@ public Resumen() {
 		return tributos;
 	}
 
+
 	/**
 	 * @param tributos the tributos to set
 	 */
@@ -186,103 +214,117 @@ public Resumen() {
 		this.tributos = tributos;
 	}
 
+
 	/**
 	 * @return the subTotal
 	 */
-	public String getSubTotal() {
+	public BigDecimal getSubTotal() {
 		return subTotal;
 	}
+
 
 	/**
 	 * @param subTotal the subTotal to set
 	 */
-	public void setSubTotal(String subTotal) {
+	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
 	}
+
 
 	/**
 	 * @return the ivaPerci1
 	 */
-	public String getIvaPerci1() {
+	public BigDecimal getIvaPerci1() {
 		return ivaPerci1;
 	}
+
 
 	/**
 	 * @param ivaPerci1 the ivaPerci1 to set
 	 */
-	public void setIvaPerci1(String ivaPerci1) {
+	public void setIvaPerci1(BigDecimal ivaPerci1) {
 		this.ivaPerci1 = ivaPerci1;
 	}
+
 
 	/**
 	 * @return the ivaRete1
 	 */
-	public String getIvaRete1() {
+	public BigDecimal getIvaRete1() {
 		return ivaRete1;
 	}
+
 
 	/**
 	 * @param ivaRete1 the ivaRete1 to set
 	 */
-	public void setIvaRete1(String ivaRete1) {
+	public void setIvaRete1(BigDecimal ivaRete1) {
 		this.ivaRete1 = ivaRete1;
 	}
+
 
 	/**
 	 * @return the reteRenta
 	 */
-	public String getReteRenta() {
+	public BigDecimal getReteRenta() {
 		return reteRenta;
 	}
 
 	/**
 	 * @param reteRenta the reteRenta to set
 	 */
-	public void setReteRenta(String reteRenta) {
+	public void setReteRenta(BigDecimal reteRenta) {
 		this.reteRenta = reteRenta;
 	}
+
 
 	/**
 	 * @return the montoTotalOperacion
 	 */
-	public String getMontoTotalOperacion() {
+	public BigDecimal getMontoTotalOperacion() {
 		return montoTotalOperacion;
 	}
+
 
 	/**
 	 * @param montoTotalOperacion the montoTotalOperacion to set
 	 */
-	public void setMontoTotalOperacion(String montoTotalOperacion) {
+	public void setMontoTotalOperacion(BigDecimal montoTotalOperacion) {
 		this.montoTotalOperacion = montoTotalOperacion;
 	}
+
 
 	/**
 	 * @return the totalNoGravado
 	 */
-	public String getTotalNoGravado() {
+	public BigDecimal getTotalNoGravado() {
 		return totalNoGravado;
 	}
+
 
 	/**
 	 * @param totalNoGravado the totalNoGravado to set
 	 */
-	public void setTotalNoGravado(String totalNoGravado) {
+	public void setTotalNoGravado(BigDecimal totalNoGravado) {
 		this.totalNoGravado = totalNoGravado;
 	}
+
 
 	/**
 	 * @return the totalPagar
 	 */
-	public String getTotalPagar() {
+	public BigDecimal getTotalPagar() {
 		return totalPagar;
 	}
+
 
 	/**
 	 * @param totalPagar the totalPagar to set
 	 */
-	public void setTotalPagar(String totalPagar) {
+	public void setTotalPagar(BigDecimal totalPagar) {
 		this.totalPagar = totalPagar;
 	}
+
 
 	/**
 	 * @return the totalLetras
@@ -291,40 +333,59 @@ public Resumen() {
 		return totalLetras;
 	}
 
+
 	/**
-	 * @param totalLetras the totalLetras to set
+	 * @param totalLetras the totalLetras to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 200
 	 */
 	public void setTotalLetras(String totalLetras) {
-		this.totalLetras = totalLetras;
+		final int MAXLENGTH = 200;
+		int length = totalLetras.length();
+		
+		if( length<=MAXLENGTH)
+			this.totalLetras = totalLetras;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in setTotalLetras()");
 	}
+
 
 	/**
 	 * @return the saldoFavor
 	 */
-	public String getSaldoFavor() {
+	public BigDecimal getSaldoFavor() {
 		return saldoFavor;
 	}
+
 
 	/**
 	 * @param saldoFavor the saldoFavor to set
 	 */
-	public void setSaldoFavor(String saldoFavor) {
+	public void setSaldoFavor(BigDecimal saldoFavor) {
 		this.saldoFavor = saldoFavor;
 	}
+
 
 	/**
 	 * @return the condicionOperacion
 	 */
-	public String getCondicionOperacion() {
+	public int getCondicionOperacion() {
 		return condicionOperacion;
 	}
 
+
 	/**
-	 * @param condicionOperacion the condicionOperacion to set
+	 * @param condicionOperacion the condicionOperacion to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : [1,2, 3]
 	 */
-	public void setCondicionOperacion(String condicionOperacion) {
-		this.condicionOperacion = condicionOperacion;
+	public void setCondicionOperacion(int condicionOperacion) {
+		if (condicionOperacion==1 || condicionOperacion==2 || condicionOperacion==2)
+			this.condicionOperacion = condicionOperacion;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in setCondicionOperacion()");
 	}
+
 
 	/**
 	 * @return the pagos
@@ -333,12 +394,14 @@ public Resumen() {
 		return pagos;
 	}
 
+
 	/**
 	 * @param pagos the pagos to set
 	 */
 	public void setPagos(List<PagosItem> pagos) {
 		this.pagos = pagos;
 	}
+
 
 	/**
 	 * @return the numPagoElectronico
@@ -347,11 +410,20 @@ public Resumen() {
 		return numPagoElectronico;
 	}
 
+
 	/**
-	 * @param numPagoElectronico the numPagoElectronico to set
+	 * @param numPagoElectronico the numPagoElectronico to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 100; null also possible
 	 */
 	public void setNumPagoElectronico(String numPagoElectronico) {
-		this.numPagoElectronico = numPagoElectronico;
+		final int MAXLENGTH = 100;
+		int length = numPagoElectronico.length();
+		
+		if( (length<=MAXLENGTH) || (numPagoElectronico==null) )
+			this.numPagoElectronico = numPagoElectronico;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in setNumPagoElectronico()");
 	}
 
 

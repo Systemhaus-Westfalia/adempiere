@@ -3,6 +3,8 @@
  */
 package org.shw.util.pojoAdempiere;
 
+import java.math.BigDecimal;
+
 /**
  * 
  */
@@ -10,8 +12,21 @@ public class TributosItem {
 	
 	String codigo;
 	String descripcion;
-	String valor;
+	BigDecimal valor;
 	
+	
+	/**
+	 * @param codigo
+	 * @param descripcion
+	 * @param valor
+	 */
+	public TributosItem(String codigo, String descripcion, BigDecimal valor) {
+		super();
+		this.codigo = codigo;
+		this.descripcion = descripcion;
+		this.valor = valor;
+	}
+
 	/**
 	 * @return the codigo
 	 */
@@ -20,10 +35,19 @@ public class TributosItem {
 	}
 
 	/**
-	 * @param codigo the codigo to set
+	 * @param codigo the codigo to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 2, "maxLength" : 2
 	 */
 	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+		final int MINLENGTH = 2;
+		final int MAXLENGTH = 2;
+		int length = codigo.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.codigo = codigo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codigo' in setCodigo()");
 	}
 
 	/**
@@ -34,26 +58,36 @@ public class TributosItem {
 	}
 
 	/**
-	 * @param descripcion the descripcion to set
+	 * @param descripcion the descripcion to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 2, "maxLength" : 150
 	 */
 	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+		final int MINLENGTH = 2;
+		final int MAXLENGTH = 150;
+		int length = descripcion.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.descripcion = descripcion;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in setDescripcion()");
 	}
+
 
 	/**
 	 * @return the valor
 	 */
-	public String getValor() {
+	public BigDecimal getValor() {
 		return valor;
 	}
 
 	/**
 	 * @param valor the valor to set
+	 * Condition according to schema: "multipleOf" : 0.01
 	 */
-	public void setValor(String valor) {
+	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
-
 
 	/**
 	 * @param args

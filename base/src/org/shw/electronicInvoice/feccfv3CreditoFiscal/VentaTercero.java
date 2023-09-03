@@ -3,10 +3,15 @@
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.util.regex.Pattern;
+
 /**
  * 
  */
 public class VentaTercero {
+
+	String nit;
+	String nombre;
 	
 	/**
 	 * No parameters
@@ -14,10 +19,17 @@ public class VentaTercero {
 	public VentaTercero() {
 	}
 
-
-	String nit;
-	String nombre;
 	
+	/**
+	 * @param nit
+	 * @param nombre
+	 */
+	public VentaTercero(String nit, String nombre) {
+		super();
+		this.nit = nit;
+		this.nombre = nombre;
+	}
+
 	/**
 	 * @return the nombre
 	 */
@@ -26,10 +38,19 @@ public class VentaTercero {
 	}
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre the nombre to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 3, "maxLength" : 200
 	 */
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		final int MINLENGTH = 3;
+		final int MAXLENGTH = 200;
+		int length = nombre.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.nombre = nombre;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
 	}
 
 	/**
@@ -40,10 +61,18 @@ public class VentaTercero {
 	}
 
 	/**
-	 * @param nit the nit to set
+	 * @param nit the nit to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^([0-9]{14}|[0-9]{9})$"
 	 */
 	public void setNit(String nit) {
-		this.nit = nit;
+		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
+		boolean patternOK = Pattern.matches(PATTERN, nit);  
+		
+		if(patternOK)
+			this.nit = nit;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
 	}
 
 

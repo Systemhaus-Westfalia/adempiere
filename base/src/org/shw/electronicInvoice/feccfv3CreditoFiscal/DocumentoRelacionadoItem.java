@@ -20,6 +20,7 @@ public class DocumentoRelacionadoItem {
 	 * @param numeroDocumento
 	 * @param fechaEmision
 	 */
+	
 	public DocumentoRelacionadoItem(String tipoDocumento, int tipoGeneracion, String numeroDocumento,
 			String fechaEmision) {
 		this.tipoDocumento = tipoDocumento;
@@ -27,7 +28,6 @@ public class DocumentoRelacionadoItem {
 		this.numeroDocumento = numeroDocumento;
 		this.fechaEmision = fechaEmision;
 	}
-
 
 
 	/**

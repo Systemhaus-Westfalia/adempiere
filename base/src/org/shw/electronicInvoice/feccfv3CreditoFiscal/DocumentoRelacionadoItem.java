@@ -13,8 +13,23 @@ public class DocumentoRelacionadoItem {
 	 */
 	public DocumentoRelacionadoItem() {
 	}
-
 	
+	/**
+	 * @param tipoDocumento
+	 * @param tipoGeneracion
+	 * @param numeroDocumento
+	 * @param fechaEmision
+	 */
+	public DocumentoRelacionadoItem(String tipoDocumento, int tipoGeneracion, String numeroDocumento,
+			String fechaEmision) {
+		this.tipoDocumento = tipoDocumento;
+		this.tipoGeneracion = tipoGeneracion;
+		this.numeroDocumento = numeroDocumento;
+		this.fechaEmision = fechaEmision;
+	}
+
+
+
 	/**
 	 * Validate the Schema conditions
 	 */

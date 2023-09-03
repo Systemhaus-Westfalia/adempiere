@@ -249,14 +249,13 @@ public class Emisor {
 	/**
 	 * @param correo the correo to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 3, "maxLength" : 100
+	 * "maxLength" : 100
 	 */
 	public void setCorreo(String correo) {
-		final int MINLENGTH = 3;
 		final int MAXLENGTH = 100;
 		int length = correo.length();
 		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
+		if(length<=MAXLENGTH)
 			this.correo = correo;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");

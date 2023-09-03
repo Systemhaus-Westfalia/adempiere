@@ -6,7 +6,7 @@ package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 /**
  * 
  */
-public class Apendice {
+public class ApendiceItem {
 	
 	String campo;
 	String etiqueta;
@@ -15,7 +15,7 @@ public class Apendice {
 	/**
 	 * No Parameters Actualizado	
 	 */
-	public Apendice() {
+	public ApendiceItem() {
 
 	}
 

@@ -19,7 +19,7 @@ public class ComprobanteCreditoFiscal {
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
-	Apendice apendice;
+	ApendiceItem apendice;
 
 	/**
 	 * No parameters
@@ -34,7 +34,7 @@ public class ComprobanteCreditoFiscal {
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
-		this.apendice             = new Apendice();
+		this.apendice             = new ApendiceItem();
 	}
 	
 
@@ -192,7 +192,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the apendice
 	 */
-	public Apendice getApendice() {
+	public ApendiceItem getApendice() {
 		return apendice;
 	}
 
@@ -200,7 +200,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param apendice the apendice to set
 	 */
-	public void setApendice(Apendice apendice) {
+	public void setApendice(ApendiceItem apendice) {
 		this.apendice = apendice;
 	}
 	

@@ -27,10 +27,19 @@ public class ApendiceItem {
 	}
 
 	/**
-	 * @param campo the campo to set
+	 * @param campo the campo to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 2, "maxLength" : 25
 	 */
 	public void setCampo(String campo) {
-		this.campo = campo;
+		final int MINLENGTH = 2;
+		final int MAXLENGTH = 25;
+		int length = campo.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.campo = campo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'campo' in setCampo()");
 	}
 
 	/**
@@ -41,10 +50,19 @@ public class ApendiceItem {
 	}
 
 	/**
-	 * @param etiqueta the etiqueta to set
+	 * @param etiqueta the etiqueta to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 3, "maxLength" : 50
 	 */
 	public void setEtiqueta(String etiqueta) {
-		this.etiqueta = etiqueta;
+		final int MINLENGTH = 3;
+		final int MAXLENGTH = 50;
+		int length = etiqueta.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.etiqueta = etiqueta;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'etiqueta' in setEtiqueta()");
 	}
 
 	/**
@@ -55,10 +73,19 @@ public class ApendiceItem {
 	}
 
 	/**
-	 * @param valor the valor to set
+	 * @param valor the valor to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 150
 	 */
 	public void setValor(String valor) {
-		this.valor = valor;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 150;
+		int length = valor.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.valor = valor;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'valor' in setValor()");
 	}
 
 

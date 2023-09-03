@@ -10,7 +10,7 @@ import org.shw.util.pojoAdempiere.Medico;
 /**
  * 
  */
-public class OtrosDocumentos {
+public class OtrosDocumentosItem {
 
 	int codDocAsociado;
 	String descDocumento=null;  // null allowed
@@ -20,7 +20,7 @@ public class OtrosDocumentos {
 	/**
 	 * No Parameters
 	 */
-	public OtrosDocumentos() {
+	public OtrosDocumentosItem() {
 		this.medico = new Medico();
 	}
 

@@ -2,7 +2,7 @@
  * 
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 
@@ -10,12 +10,12 @@ import java.util.List;
 public class ComprobanteCreditoFiscal {
 
 	Identificacion identificacion;
-	List<DocumentoRelacionadoItem> documentoRelacionado;
+	ArrayList<DocumentoRelacionadoItem> documentoRelacionado;
 	Emisor emisor;
 	Receptor receptor;
-	OtrosDocumentos otrosDocumentos;
+	ArrayList<OtrosDocumentosItem> otrosDocumentos;
 	VentaTercero ventaTercero;
-	List<CuerpoDocumentoItem> cuerpoDocumento;
+	ArrayList<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
 	Apendice apendice;
@@ -24,41 +24,34 @@ public class ComprobanteCreditoFiscal {
 	 * No parameters
 	 */
 	public ComprobanteCreditoFiscal() {
-		this.identificacion = new Identificacion();
-		// documentoRelacionado not possible to initialize
-		this.emisor = new Emisor();
-		this.receptor = new Receptor();
-		this.otrosDocumentos = new OtrosDocumentos();
-		this.ventaTercero = new VentaTercero();
-		// cuerpoDocumento not possible to initialize
-		this.resumen = new Resumen();
-		this.extension = new Extension();
-		this.apendice = new Apendice();
+		this.identificacion       = new Identificacion();
+		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
+		this.emisor               = new Emisor();
+		this.receptor             = new Receptor();
+		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
+		this.ventaTercero         = new VentaTercero();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		this.resumen              = new Resumen();
+		this.extension            = new Extension();
+		this.apendice             = new Apendice();
 	}
 	
-	/**
-	 * @return the cuerpoDocumento
-	 */
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
-		return cuerpoDocumento;
-	}
 
 	/**
-	 * @param cuerpoDocumento the cuerpoDocumento to set
+	 * @param args
 	 */
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
-		this.cuerpoDocumento = cuerpoDocumento;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
 	}
-	
-	
+
+
 	/**
 	 * @return the identificacion
 	 */
 	public Identificacion getIdentificacion() {
 		return identificacion;
 	}
-
-
 
 
 	/**
@@ -69,26 +62,20 @@ public class ComprobanteCreditoFiscal {
 	}
 
 
-
-
 	/**
 	 * @return the documentoRelacionado
 	 */
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
+	public ArrayList<DocumentoRelacionadoItem> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
-
-
 
 
 	/**
 	 * @param documentoRelacionado the documentoRelacionado to set
 	 */
-	public void setDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void setDocumentoRelacionado(ArrayList<DocumentoRelacionadoItem> documentoRelacionado) {
 		this.documentoRelacionado = documentoRelacionado;
 	}
-
-
 
 
 	/**
@@ -99,16 +86,12 @@ public class ComprobanteCreditoFiscal {
 	}
 
 
-
-
 	/**
 	 * @param emisor the emisor to set
 	 */
 	public void setEmisor(Emisor emisor) {
 		this.emisor = emisor;
 	}
-
-
 
 
 	/**
@@ -119,8 +102,6 @@ public class ComprobanteCreditoFiscal {
 	}
 
 
-
-
 	/**
 	 * @param receptor the receptor to set
 	 */
@@ -129,26 +110,20 @@ public class ComprobanteCreditoFiscal {
 	}
 
 
-
-
 	/**
 	 * @return the otrosDocumentos
 	 */
-	public OtrosDocumentos getOtrosDocumentos() {
+	public ArrayList<OtrosDocumentosItem> getOtrosDocumentos() {
 		return otrosDocumentos;
 	}
-
-
 
 
 	/**
 	 * @param otrosDocumentos the otrosDocumentos to set
 	 */
-	public void setOtrosDocumentos(OtrosDocumentos otrosDocumentos) {
+	public void setOtrosDocumentos(ArrayList<OtrosDocumentosItem> otrosDocumentos) {
 		this.otrosDocumentos = otrosDocumentos;
 	}
-
-
 
 
 	/**
@@ -157,8 +132,6 @@ public class ComprobanteCreditoFiscal {
 	public VentaTercero getVentaTercero() {
 		return ventaTercero;
 	}
-
-
 
 
 	/**
@@ -170,13 +143,27 @@ public class ComprobanteCreditoFiscal {
 
 
 	/**
+	 * @return the cuerpoDocumento
+	 */
+	public ArrayList<CuerpoDocumentoItem> getCuerpoDocumento() {
+		return cuerpoDocumento;
+	}
+
+
+	/**
+	 * @param cuerpoDocumento the cuerpoDocumento to set
+	 */
+	public void setCuerpoDocumento(ArrayList<CuerpoDocumentoItem> cuerpoDocumento) {
+		this.cuerpoDocumento = cuerpoDocumento;
+	}
+
+
+	/**
 	 * @return the resumen
 	 */
 	public Resumen getResumen() {
 		return resumen;
 	}
-
-
 
 
 	/**
@@ -187,16 +174,12 @@ public class ComprobanteCreditoFiscal {
 	}
 
 
-
-
 	/**
 	 * @return the extension
 	 */
 	public Extension getExtension() {
 		return extension;
 	}
-
-
 
 
 	/**
@@ -207,8 +190,6 @@ public class ComprobanteCreditoFiscal {
 	}
 
 
-
-
 	/**
 	 * @return the apendice
 	 */
@@ -217,21 +198,13 @@ public class ComprobanteCreditoFiscal {
 	}
 
 
-
-
 	/**
 	 * @param apendice the apendice to set
 	 */
 	public void setApendice(Apendice apendice) {
 		this.apendice = apendice;
 	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+	
+	
 
 }

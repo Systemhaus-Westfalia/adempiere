@@ -3,6 +3,8 @@
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.util.regex.Pattern;
+
 import org.shw.util.pojoAdempiere.Direccion;
 
 /**
@@ -10,6 +12,8 @@ import org.shw.util.pojoAdempiere.Direccion;
  */
 public class Receptor {
 
+	String nit;
+	String nrc;
 	String nombre;
 	String codActividad;
 	String descActividad;
@@ -23,6 +27,50 @@ public class Receptor {
 	 */
 	public Receptor() {
 	}
+	
+	
+    /**
+	 * @return the nit
+	 */
+    public String getNit() {
+		return nit;
+	}
+
+	/**
+	 * @param nit the nit to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^([0-9]{14}|[0-9]{9})$"
+	 */
+	public void setNit(String nit) {
+		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
+		boolean patternOK = Pattern.matches(PATTERN, nit);  
+		
+		if(patternOK)
+			this.nit = nit;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
+	}
+	/**
+	 * @return the nrc
+	 */
+	public String getNrc() {
+		return nrc;
+	}
+
+	/**
+	 * @param nrc the nrc to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^[0-9]{1,8}$"
+	 */
+	public void setNrc(String nrc) {
+		final String PATTERN = "^[0-9]{1,8}$";
+		boolean patternOK = Pattern.matches(PATTERN, nrc);  
+		
+		if(patternOK)
+			this.nrc = nrc;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in setNrc()");
+	}
     
 	/**
 	 * @return the nombre
@@ -32,10 +80,19 @@ public class Receptor {
 	}
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre the nombre to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 250
 	 */
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 250;
+		int length = nombre.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.nombre = nombre;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
 	}
 
 	/**
@@ -46,10 +103,18 @@ public class Receptor {
 	}
 
 	/**
-	 * @param codActividad the codActividad to set
+	 * @param codActividad the codActividad to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^[0-9]{2,6}$"
 	 */
 	public void setCodActividad(String codActividad) {
-		this.codActividad = codActividad;
+		final String PATTERN = "^[0-9]{2,6}$";
+		boolean patternOK = Pattern.matches(PATTERN, codActividad);  
+		
+		if(patternOK)
+			this.codActividad = codActividad;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in setCodActividad()");
 	}
 
 	/**
@@ -60,10 +125,19 @@ public class Receptor {
 	}
 
 	/**
-	 * @param descActividad the descActividad to set
+	 * @param descActividad the descActividad to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 150
 	 */
 	public void setDescActividad(String descActividad) {
-		this.descActividad = descActividad;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 150;
+		int length = descActividad.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.descActividad = descActividad;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
 	}
 
 	/**
@@ -74,10 +148,19 @@ public class Receptor {
 	}
 
 	/**
-	 * @param nombreComercial the nombreComercial to set
+	 * @param nombreComercial the nombreComercial to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 150; null also possible
 	 */
 	public void setNombreComercial(String nombreComercial) {
-		this.nombreComercial = nombreComercial;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 150;
+		int length = nombreComercial.length();
+		
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
+			this.nombreComercial = nombreComercial;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in setNombreComercial()");
 	}
 
 	/**
@@ -102,10 +185,19 @@ public class Receptor {
 	}
 
 	/**
-	 * @param telefono the telefono to set
+	 * @param telefono the telefono to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 8, "maxLength" : 30
 	 */
 	public void setTelefono(String telefono) {
-		this.telefono = telefono;
+		final int MINLENGTH = 8;
+		final int MAXLENGTH = 30;
+		int length = telefono.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.telefono = telefono;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
 	}
 
 	/**

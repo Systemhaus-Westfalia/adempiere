@@ -3,6 +3,7 @@
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 public class ComprobanteCreditoFiscal {
 
 	Identificacion identificacion;
-	ArrayList<DocumentoRelacionadoItem> documentoRelacionado;
+	List<DocumentoRelacionadoItem> documentoRelacionado;
 	Emisor emisor;
 	Receptor receptor;
-	ArrayList<OtrosDocumentosItem> otrosDocumentos;
+	List<OtrosDocumentosItem> otrosDocumentos;
 	VentaTercero ventaTercero;
-	ArrayList<CuerpoDocumentoItem> cuerpoDocumento;
+	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
 	Apendice apendice;
@@ -61,11 +62,10 @@ public class ComprobanteCreditoFiscal {
 		this.identificacion = identificacion;
 	}
 
-
 	/**
 	 * @return the documentoRelacionado
 	 */
-	public ArrayList<DocumentoRelacionadoItem> getDocumentoRelacionado() {
+	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
 
@@ -73,7 +73,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param documentoRelacionado the documentoRelacionado to set
 	 */
-	public void setDocumentoRelacionado(ArrayList<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
 		this.documentoRelacionado = documentoRelacionado;
 	}
 
@@ -113,7 +113,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the otrosDocumentos
 	 */
-	public ArrayList<OtrosDocumentosItem> getOtrosDocumentos() {
+	public List<OtrosDocumentosItem> getOtrosDocumentos() {
 		return otrosDocumentos;
 	}
 
@@ -121,7 +121,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param otrosDocumentos the otrosDocumentos to set
 	 */
-	public void setOtrosDocumentos(ArrayList<OtrosDocumentosItem> otrosDocumentos) {
+	public void setOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
 		this.otrosDocumentos = otrosDocumentos;
 	}
 
@@ -141,11 +141,10 @@ public class ComprobanteCreditoFiscal {
 		this.ventaTercero = ventaTercero;
 	}
 
-
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	public ArrayList<CuerpoDocumentoItem> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
@@ -153,7 +152,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param cuerpoDocumento the cuerpoDocumento to set
 	 */
-	public void setCuerpoDocumento(ArrayList<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 

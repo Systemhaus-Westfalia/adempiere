@@ -3,6 +3,8 @@
  */
 package org.shw.util.pojoAdempiere;
 
+import java.util.regex.Pattern;
+
 /**
  * 
  */
@@ -11,7 +13,7 @@ public class Medico {
 	String nombre;
 	String nit;
 	String docIdentificacion;
-	String tipoServicio;
+	int tipoServicio;  // en schema: "type" : "number", "minimum" : 1, "maximum" : 6. Das wÄre double, wäre aber unsinnig 
 	
 	/**
 	 * No parameters
@@ -19,7 +21,20 @@ public class Medico {
 	public Medico() {
 	}
 
-
+	public boolean validateValues() {
+		if(getNit()==null) {
+			if (getDocIdentificacion()==null) {
+				return false;
+			}
+		}
+		
+		if(getDocIdentificacion()==null) {
+			if (getNit()==null) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	/**
 	 * @return the nombre
@@ -29,10 +44,18 @@ public class Medico {
 	}
 
 	/**
-	 * @param nombre the nombre to set
+	 * @param nombre the nombre to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 100
 	 */
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		final int MAXLENGTH = 100;
+		int length = nombre.length();
+		
+		if(length<=MAXLENGTH)
+			this.nombre = nombre;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
 	}
 
 	/**
@@ -43,10 +66,18 @@ public class Medico {
 	}
 
 	/**
-	 * @param nit the nit to set
+	 * @param nit the nit to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^([0-9]{14}|[0-9]{9})$"
 	 */
 	public void setNit(String nit) {
-		this.nit = nit;
+		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
+		boolean patternOK = Pattern.matches(PATTERN, nit);  
+		
+		if(patternOK)
+			this.nit = nit;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
 	}
 
 	/**
@@ -57,25 +88,46 @@ public class Medico {
 	}
 
 	/**
-	 * @param docIdentificacion the docIdentificacion to set
+	 * @param docIdentificacion the docIdentificacion to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 2, "maxLength" : 25
 	 */
 	public void setDocIdentificacion(String docIdentificacion) {
-		this.docIdentificacion = docIdentificacion;
+		final int MINLENGTH = 2;
+		final int MAXLENGTH = 25;
+		int length = docIdentificacion.length();
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.docIdentificacion = docIdentificacion;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'docIdentificacion' in setDocIdentificacion()");
 	}
+
 
 	/**
 	 * @return the tipoServicio
 	 */
-	public String getTipoServicio() {
+	public int getTipoServicio() {
 		return tipoServicio;
 	}
 
+
+
 	/**
-	 * @param tipoServicio the tipoServicio to set
+	 * @param tipoServicio the tipoServicio to set<br>
+	 * The parameter is validated.<br>
+	 * "minimum" : 1, "maximum" : 6
 	 */
-	public void setTipoServicio(String tipoServicio) {
-		this.tipoServicio = tipoServicio;
+	public void setTipoServicio(int tipoServicio) {
+		final int MINIMUM = 1;
+		final int MAXIMUM = 6;
+		
+		if(tipoServicio>=MINIMUM && tipoServicio<=MAXIMUM)
+			this.tipoServicio = tipoServicio;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoServicio' in setTipoServicio()");
 	}
+
 
 
 	/**

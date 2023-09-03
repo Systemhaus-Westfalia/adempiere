@@ -50,6 +50,7 @@ public class Receptor {
 		else
 	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
 	}
+	
 	/**
 	 * @return the nrc
 	 */

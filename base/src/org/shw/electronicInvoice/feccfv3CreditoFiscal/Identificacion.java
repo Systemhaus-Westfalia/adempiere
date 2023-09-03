@@ -25,6 +25,31 @@ public class Identificacion {
 	 */
 	public Identificacion() {
 	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public boolean validateValues() {
+		if(this.tipoOperacion==1) {
+			if (getTipoModelo() != 1) 
+				return false;
+			if (getTipoContingencia() != null) 
+				return false;
+			if (getMotivoContin() != null) 
+				return false;
+		} else  {
+			if (getTipoModelo() != 2) 
+				return false;
+		}
+		
+		if(this.tipoOperacion==2) {
+			// In schema: "tipoContingencia" : {"type" : "integer"}
+			if(getTipoContingencia()==null)
+		        return false;
+		}
+		
+		return true;
+	}
 
 
 	public int getVersion() {
@@ -254,29 +279,12 @@ public class Identificacion {
 	 * @param tipoOperacion the tipoOperacion to set<br>
 	 * The parameter is validated.<br>
 	 * "enum" : [1,2]<br>
-	 * The content is also validated (Schema conditions).
 	 */
 	public void setTipoOperacion(int tipoOperacion) {
 		if (tipoOperacion==1 || tipoOperacion==2)
 			this.tipoOperacion = tipoOperacion;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoOperacion' in setTipoOperacion()");
-
-		// Schema conditions
-		if(this.tipoOperacion==1) {
-			setTipoModelo(1);
-			setTipoContingencia(null);
-			setMotivoContin(null);
-		} else  {
-			this.setTipoModelo(2);
-		}
-		
-		// Schema conditions
-		if(this.tipoOperacion==2) {
-			// In schema: "tipoContingencia" : {"type" : "integer"}
-			if(getTipoContingencia()==null)
-		        throw new IllegalArgumentException("Wrong expression in setTipoOperacion(): tipoContingencia must be integer");
-		}
 	}
 
 	public static void main(String[] args) {

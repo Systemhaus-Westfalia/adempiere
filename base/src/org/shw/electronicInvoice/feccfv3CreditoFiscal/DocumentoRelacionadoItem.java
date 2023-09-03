@@ -10,13 +10,24 @@ public class DocumentoRelacionadoItem {
 	
 
 	/**
-	 * @param tipoDocumento
-	 * @param tipoGeneracion
-	 * @param numeroDocumento
-	 * @param fechaEmision
 	 */
 	public DocumentoRelacionadoItem() {
-}
+	}
+
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public boolean validateValues() {
+		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
+		if(getTipoGeneracion()==2) {
+			boolean patternOK = Pattern.matches(PATTERN, getNumeroDocumento());  
+			
+			if(!patternOK)
+				return false;
+		}
+		return true;
+	}
 
 	/**
 	 * @return the tipoDocumento
@@ -47,23 +58,13 @@ public class DocumentoRelacionadoItem {
 	/**
 	 * @param tipoGeneracion the tipoGeneracion to set.<br>
 	 * The parameter is validated.<br>
-	 * "enum" : [1,2]<br>
-	 * The content is also validated (Schema conditions).
+	 * "enum" : [1,2]
 	 */
 	public void setTipoGeneracion(int tipoGeneracion) {	
 		if (tipoGeneracion==1 || tipoGeneracion==2)
 			this.tipoGeneracion = tipoGeneracion;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoGeneracion' in setTipoGeneracion()");
-		
-		// Schema conditions
-		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
-		if(getTipoGeneracion()==2) {
-			boolean patternOK = Pattern.matches(PATTERN, getNumeroDocumento());  
-			
-			if(!patternOK)
-				throw new IllegalArgumentException("Wrong expression 'numeroDocumento' in setTipoGeneracion()");
-		}
 	}
 
 	/**

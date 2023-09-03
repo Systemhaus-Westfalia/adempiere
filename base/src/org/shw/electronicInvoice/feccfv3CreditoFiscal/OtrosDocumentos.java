@@ -3,6 +3,8 @@
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.util.Objects;
+
 import org.shw.util.pojoAdempiere.Medico;
 
 /**
@@ -22,6 +24,28 @@ public class OtrosDocumentos {
 		this.medico = new Medico();
 	}
 
+	/**
+	 * Validate the Schema conditions
+	 */
+	public boolean validateValues() {
+		if(getCodDocAsociado()==3) {
+			if (Objects.isNull(getMedico()))
+				return false;
+			if (getDescDocumento()!=null)
+				return false;
+			if (getDetalleDocumento()!=null)
+				return false;
+		} else  {
+			if (!Objects.isNull(getMedico()))
+				return false;
+			if (getDescDocumento()==null)
+				return false;
+			if (getDetalleDocumento()==null)
+				return false;
+		}
+		
+		return true;
+	}
 
 	/**
 	 * @return the codDocAsociado

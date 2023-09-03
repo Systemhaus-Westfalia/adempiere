@@ -21,6 +21,9 @@ public class Medico {
 	public Medico() {
 	}
 
+	/**
+	 * Validate the Schema conditions
+	 */
 	public boolean validateValues() {
 		if(getNit()==null) {
 			if (getDocIdentificacion()==null) {

@@ -278,7 +278,7 @@ public class Identificacion {
 	/**
 	 * @param tipoOperacion the tipoOperacion to set<br>
 	 * The parameter is validated.<br>
-	 * "enum" : [1,2]<br>
+	 * "enum" : [1,2]
 	 */
 	public void setTipoOperacion(int tipoOperacion) {
 		if (tipoOperacion==1 || tipoOperacion==2)

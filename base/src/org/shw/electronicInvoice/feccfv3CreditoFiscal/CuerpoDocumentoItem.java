@@ -3,6 +3,7 @@
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -10,25 +11,32 @@ import java.util.List;
  */
 public class CuerpoDocumentoItem {
 	
-	String numItem;
-	String tipoItem;
-	String numeroDocumento;
-	String cantidad;
-	String codigo;
-	String codTributo;
-	String uniMedida;
+	int numItem;
+	int tipoItem;
+	String numeroDocumento=null;  // null allowed
+	String codigo=null;  // null allowed
+	String codTributo=null;  // null allowed
+	int uniMedida;
 	String descripcion;
-	String precioUni;
-	String montoDescu;
-	String ventaNoSuj;
-	String ventaExenta;
-	String ventaGravada;
-	List<String> tributos;
-    String psv;
-    String noGravado;
-    String ivaItem;
+	BigDecimal cantidad;
+	BigDecimal precioUni;
+	BigDecimal montoDescu;
+	BigDecimal ventaNoSuj;
+	BigDecimal ventaExenta;
+	BigDecimal ventaGravada;
+	List<String> tributos=null;  // null allowed
+	BigDecimal psv;
+	BigDecimal noGravado;
+    
     
     /**
+	 * Constructor without parameters. 
+	 */
+	public CuerpoDocumentoItem() {
+		
+	}
+
+	/**
 	 * @param numItem
 	 * @param tipoItem
 	 * @param numeroDocumento
@@ -47,11 +55,10 @@ public class CuerpoDocumentoItem {
 	 * @param noGravado
 	 * @param ivaItem
 	 */
-	public CuerpoDocumentoItem(String numItem, String tipoItem, String numeroDocumento, String cantidad, String codigo,
-			String codTributo, String uniMedida, String descripcion, String precioUni, String montoDescu,
-			String ventaNoSuj, String ventaExenta, String ventaGravada, List<String> tributos, String psv,
-			String noGravado, String ivaItem) {
-		super();
+	public CuerpoDocumentoItem(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
+			String codTributo, int uniMedida, String descripcion, BigDecimal precioUni, BigDecimal montoDescu,
+			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, List<String> tributos, BigDecimal psv,
+			BigDecimal noGravado) {
 		this.numItem = numItem;
 		this.tipoItem = tipoItem;
 		this.numeroDocumento = numeroDocumento;
@@ -68,35 +75,50 @@ public class CuerpoDocumentoItem {
 		this.tributos = tributos;
 		this.psv = psv;
 		this.noGravado = noGravado;
-		this.ivaItem = ivaItem;
 	}
+
+	
 
 	/**
 	 * @return the numItem
 	 */
-	public String getNumItem() {
+	public int getNumItem() {
 		return numItem;
 	}
 
 	/**
-	 * @param numItem the numItem to set
+	 * @param numItem the numItem to set<br>
+	 * The parameter is validated.<br>
+	 * "minimum" : 1, "maximum" : 2000
 	 */
-	public void setNumItem(String numItem) {
-		this.numItem = numItem;
+	public void setNumItem(int numItem) {
+		final int MINIMUM = 1;
+		final int MAXIMUM = 2000;
+		
+		if(numItem>=MINIMUM && numItem<=MAXIMUM)
+			this.numItem = numItem;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'numItem' in setNumItem()");
 	}
+
 
 	/**
 	 * @return the tipoItem
 	 */
-	public String getTipoItem() {
+	public int getTipoItem() {
 		return tipoItem;
 	}
 
 	/**
-	 * @param tipoItem the tipoItem to set
+	 * @param tipoItem the tipoItem to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : [1,2,3,4]
 	 */
-	public void setTipoItem(String tipoItem) {
-		this.tipoItem = tipoItem;
+	public void setTipoItem(int tipoItem) {
+		if (tipoItem==1 || tipoItem==2 || tipoItem==3 || tipoItem==4)
+			this.tipoItem = tipoItem;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoItem' in setTipoItem()");
 	}
 
 	/**
@@ -107,23 +129,34 @@ public class CuerpoDocumentoItem {
 	}
 
 	/**
-	 * @param numeroDocumento the numeroDocumento to set
+	 * @param numeroDocumento the numeroDocumento to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 36; null also possible
 	 */
 	public void setNumeroDocumento(String numeroDocumento) {
-		this.numeroDocumento = numeroDocumento;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 36;
+		int length = numeroDocumento.length();
+		
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numeroDocumento==null) )
+			this.numeroDocumento = numeroDocumento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in setNumeroDocumento()");
 	}
+
 
 	/**
 	 * @return the cantidad
 	 */
-	public String getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
 	/**
 	 * @param cantidad the cantidad to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	public void setCantidad(String cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 
@@ -135,10 +168,19 @@ public class CuerpoDocumentoItem {
 	}
 
 	/**
-	 * @param codigo the codigo to set
+	 * @param codigo the codigo to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 25; null also possible
 	 */
 	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 25;
+		int length = codigo.length();
+		
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codigo==null) )
+			this.codigo = codigo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codigo' in setCodigo()");
 	}
 
 	/**
@@ -149,24 +191,39 @@ public class CuerpoDocumentoItem {
 	}
 
 	/**
-	 * @param codTributo the codTributo to set
+	 * @param codTributo the codTributo to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : ["A8", "57", "90", "D4", "D5", "25", "A6"], null also allowed
 	 */
 	public void setCodTributo(String codTributo) {
-		this.codTributo = codTributo;
+		if (codTributo.compareTo("A8")==0 || codTributo.compareTo("57")==0 || codTributo.compareTo("90")==0 || codTributo.compareTo("D4")==0 || 
+				codTributo.compareTo("D5")==0 || codTributo.compareTo("25")==0 || codTributo.compareTo("A6")==0 || codTributo==null)
+			this.codTributo = codTributo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codTributo' in setCodTributo()");
 	}
+
 
 	/**
 	 * @return the uniMedida
 	 */
-	public String getUniMedida() {
+	public int getUniMedida() {
 		return uniMedida;
 	}
 
 	/**
-	 * @param uniMedida the uniMedida to set
+	 * @param uniMedida the uniMedida to set<br>
+	 * The parameter is validated.<br>
+	 * "minimum" : 1, "maximum" : 99
 	 */
-	public void setUniMedida(String uniMedida) {
-		this.uniMedida = uniMedida;
+	public void setUniMedida(int uniMedida) {
+		final int MINIMUM = 1;
+		final int MAXIMUM = 99;
+		
+		if(uniMedida>=MINIMUM && uniMedida<=MAXIMUM)
+			this.uniMedida = uniMedida;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'uniMedida' in setUniMedida()");
 	}
 
 	/**
@@ -177,80 +234,123 @@ public class CuerpoDocumentoItem {
 	}
 
 	/**
-	 * @param descripcion the descripcion to set
+	 * @param descripcion the descripcion to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 1000
 	 */
 	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+		final int MAXLENGTH = 1000;
+		int length = descripcion.length();
+		
+		if(length<=MAXLENGTH)
+			this.descripcion = descripcion;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in setDescripcion()");
 	}
-
+	
 	/**
 	 * @return the precioUni
 	 */
-	public String getPrecioUni() {
+	public BigDecimal getPrecioUni() {
 		return precioUni;
 	}
 
 	/**
 	 * @param precioUni the precioUni to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	public void setPrecioUni(String precioUni) {
+	public void setPrecioUni(BigDecimal precioUni) {
 		this.precioUni = precioUni;
 	}
 
 	/**
 	 * @return the montoDescu
 	 */
-	public String getMontoDescu() {
+	public BigDecimal getMontoDescu() {
 		return montoDescu;
 	}
 
 	/**
 	 * @param montoDescu the montoDescu to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	public void setMontoDescu(String montoDescu) {
+	public void setMontoDescu(BigDecimal montoDescu) {
 		this.montoDescu = montoDescu;
 	}
 
 	/**
 	 * @return the ventaNoSuj
 	 */
-	public String getVentaNoSuj() {
+	public BigDecimal getVentaNoSuj() {
 		return ventaNoSuj;
 	}
 
 	/**
 	 * @param ventaNoSuj the ventaNoSuj to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	public void setVentaNoSuj(String ventaNoSuj) {
+	public void setVentaNoSuj(BigDecimal ventaNoSuj) {
 		this.ventaNoSuj = ventaNoSuj;
 	}
 
 	/**
 	 * @return the ventaExenta
 	 */
-	public String getVentaExenta() {
+	public BigDecimal getVentaExenta() {
 		return ventaExenta;
 	}
 
 	/**
 	 * @param ventaExenta the ventaExenta to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	public void setVentaExenta(String ventaExenta) {
+	public void setVentaExenta(BigDecimal ventaExenta) {
 		this.ventaExenta = ventaExenta;
 	}
 
 	/**
 	 * @return the ventaGravada
 	 */
-	public String getVentaGravada() {
+	public BigDecimal getVentaGravada() {
 		return ventaGravada;
 	}
 
 	/**
 	 * @param ventaGravada the ventaGravada to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	public void setVentaGravada(String ventaGravada) {
+	public void setVentaGravada(BigDecimal ventaGravada) {
 		this.ventaGravada = ventaGravada;
+	}
+
+	/**
+	 * @return the psv
+	 */
+	public BigDecimal getPsv() {
+		return psv;
+	}
+
+	/**
+	 * @param psv the psv to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
+	 */
+	public void setPsv(BigDecimal psv) {
+		this.psv = psv;
+	}
+
+	/**
+	 * @return the noGravado
+	 */
+	public BigDecimal getNoGravado() {
+		return noGravado;
+	}
+
+	/**
+	 * @param noGravado the noGravado to set
+	 * Condition according to schema: "multipleOf" : 0.00000001
+	 */
+	public void setNoGravado(BigDecimal noGravado) {
+		this.noGravado = noGravado;
 	}
 
 	/**
@@ -262,51 +362,11 @@ public class CuerpoDocumentoItem {
 
 	/**
 	 * @param tributos the tributos to set
+	 * Very complex logic: either null or a two-character string
+	 * "type" : ["array", "null"], "items" : {"type" : "string", "maxLength" : 2, "minLength" : 2}
 	 */
 	public void setTributos(List<String> tributos) {
 		this.tributos = tributos;
-	}
-
-	/**
-	 * @return the psv
-	 */
-	public String getPsv() {
-		return psv;
-	}
-
-	/**
-	 * @param psv the psv to set
-	 */
-	public void setPsv(String psv) {
-		this.psv = psv;
-	}
-
-	/**
-	 * @return the noGravado
-	 */
-	public String getNoGravado() {
-		return noGravado;
-	}
-
-	/**
-	 * @param noGravado the noGravado to set
-	 */
-	public void setNoGravado(String noGravado) {
-		this.noGravado = noGravado;
-	}
-
-	/**
-	 * @return the ivaItem
-	 */
-	public String getIvaItem() {
-		return ivaItem;
-	}
-
-	/**
-	 * @param ivaItem the ivaItem to set
-	 */
-	public void setIvaItem(String ivaItem) {
-		this.ivaItem = ivaItem;
 	}
 
 

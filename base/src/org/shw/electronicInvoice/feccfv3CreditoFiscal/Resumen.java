@@ -3,6 +3,7 @@
  */
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.util.pojoAdempiere.PagosItem;
@@ -33,7 +34,7 @@ public class Resumen {
     String totalLetras;
     String saldoFavor;
     String condicionOperacion;
-	List<PagosItem> pagos;
+	List<PagosItem> pagos ;
    String numPagoElectronico;
    
    
@@ -42,6 +43,7 @@ public class Resumen {
 	 * No parameters
 	 */
 public Resumen() {
+	this.pagos = new ArrayList<PagosItem>();
 }
 
 	/**

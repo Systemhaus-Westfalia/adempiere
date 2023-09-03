@@ -4,6 +4,7 @@
 package org.shw.electronicInvoice.feccfv3CreditoFiscal;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class CuerpoDocumentoItem {
 	BigDecimal ventaNoSuj;
 	BigDecimal ventaExenta;
 	BigDecimal ventaGravada;
-	List<String> tributos=null;  // null allowed
+	ArrayList<String> tributos=null;  // null allowed
 	BigDecimal psv;
 	BigDecimal noGravado;
     
@@ -57,7 +58,7 @@ public class CuerpoDocumentoItem {
 	 */
 	public CuerpoDocumentoItem(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
 			String codTributo, int uniMedida, String descripcion, BigDecimal precioUni, BigDecimal montoDescu,
-			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, List<String> tributos, BigDecimal psv,
+			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, ArrayList<String> tributos, BigDecimal psv,
 			BigDecimal noGravado) {
 		this.numItem = numItem;
 		this.tipoItem = tipoItem;
@@ -77,7 +78,40 @@ public class CuerpoDocumentoItem {
 		this.noGravado = noGravado;
 	}
 
-	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public boolean validateValues() {
+		if(getVentaGravada()==BigDecimal.ZERO) {
+			if (getTributos()!=null)
+				return false;
+		} else {
+			if ( (getTributos()==null) || (getTributos().isEmpty())  )
+				return false;
+		}
+		
+		if(getTipoItem()==4) {
+			if (getUniMedida()!=99)
+				return false;
+			if (getCodTributo()==null)
+				return false;
+			if ( (getTributos()==null) || (getTributos().isEmpty())  || (getTributos().get(0)!="20") )
+				return false;
+		} else {
+			if (getCodTributo()!=null)
+				return false;
+			
+			ArrayList<String> expectedValues=  new ArrayList<>(List.of(   "20", "C3", "59", "71", "D1", "C5", "C6", "C7", "C8", "D5",
+					"D4", "19", "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "42", "43", "44", "50", "51", "52", "53",
+                    "54", "55", "58", "77", "78", "79", "85", "86", "91", "92", "A1", "A5", "A7", "A9"));
+			// Here, is only ONE item expected; where there are MANY items expected, the query must be changed.
+			if ((getTributos()==null) || (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1) )
+				return false;
+			
+		}
+		
+		return true;
+	}
 
 	/**
 	 * @return the numItem
@@ -356,7 +390,7 @@ public class CuerpoDocumentoItem {
 	/**
 	 * @return the tributos
 	 */
-	public List<String> getTributos() {
+	public ArrayList<String> getTributos() {
 		return tributos;
 	}
 
@@ -365,10 +399,9 @@ public class CuerpoDocumentoItem {
 	 * Very complex logic: either null or a two-character string
 	 * "type" : ["array", "null"], "items" : {"type" : "string", "maxLength" : 2, "minLength" : 2}
 	 */
-	public void setTributos(List<String> tributos) {
+	public void setTributos(ArrayList<String> tributos) {
 		this.tributos = tributos;
 	}
-
 
 	/**
 	 * @param args

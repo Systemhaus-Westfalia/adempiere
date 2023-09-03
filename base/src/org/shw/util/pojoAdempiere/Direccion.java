@@ -1,22 +1,24 @@
 package org.shw.util.pojoAdempiere;
 
+import java.util.regex.Pattern;
+
 public class Direccion {
-		/**
-	 * @param departamento
-	 * @param municipio
-	 * @param complemento
-	 */
+
+	String departamento;
+	String municipio;
+    String complemento;
+
+	/**
+ * @param departamento
+ * @param municipio
+ * @param complemento
+ */
 	public Direccion(String departamento, String municipio, String complemento) {
 		this.departamento = departamento;
 		this.municipio = municipio;
 		this.complemento = complemento;
 	}
 
-
-		String departamento;
-		String municipio;
-        String complemento;
-        
 		/**
 		 * @return the departamento
 		 */
@@ -25,10 +27,18 @@ public class Direccion {
 		}
 
 		/**
-		 * @param departamento the departamento to set
+		 * @param departamento the departamento to set<br>
+	     * The parameter is validated.<br>
+	     * "pattern" : "^0[1-9]|1[0-4]$"
 		 */
 		public void setDepartamento(String departamento) {
-			this.departamento = departamento;
+			final String PATTERN = "^0[1-9]|1[0-4]$";
+			boolean patternOK = Pattern.matches(PATTERN, departamento);  
+			
+			if(patternOK)
+				this.departamento = departamento;
+			else
+		        throw new IllegalArgumentException("Wrong expression 'departamento' in setDepartamento()");
 		}
 
 		/**
@@ -39,10 +49,18 @@ public class Direccion {
 		}
 
 		/**
-		 * @param municipio the municipio to set
+		 * @param municipio the municipio to set<br>
+	     * The parameter is validated.<br>
+	     * "pattern" : "^[0-9]{2}$"
 		 */
 		public void setMunicipio(String municipio) {
-			this.municipio = municipio;
+			final String PATTERN = "^[0-9]{2}$";
+			boolean patternOK = Pattern.matches(PATTERN, municipio);  
+			
+			if(patternOK)
+				this.municipio = municipio;
+			else
+		        throw new IllegalArgumentException("Wrong expression 'municipio' in setMunicipio()");
 		}
 
 		/**
@@ -53,10 +71,19 @@ public class Direccion {
 		}
 
 		/**
-		 * @param complemento the complemento to set
+		 * @param complemento the complemento to set<br>
+		 * The parameter is validated.<br>
+		 * "minLength" : 1, "maxLength" : 200
 		 */
 		public void setComplemento(String complemento) {
-			this.complemento = complemento;
+			final int MINLENGTH = 1;
+			final int MAXLENGTH = 200;
+			int length = complemento.length();
+			
+			if(length>=MINLENGTH && length<=MAXLENGTH)
+				this.complemento = complemento;
+			else
+		        throw new IllegalArgumentException("Wrong parameter 'complemento' in setComplemento()");
 		}
 
 

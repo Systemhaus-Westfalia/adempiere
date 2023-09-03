@@ -208,10 +208,18 @@ public class Receptor {
 	}
 
 	/**
-	 * @param correo the correo to set
+	 * @param correo the correo to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 100
 	 */
 	public void setCorreo(String correo) {
-		this.correo = correo;
+		final int MAXLENGTH = 100;
+		int length = correo.length();
+		
+		if(length<=MAXLENGTH)
+			this.correo = correo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
 	}
 
 	/**

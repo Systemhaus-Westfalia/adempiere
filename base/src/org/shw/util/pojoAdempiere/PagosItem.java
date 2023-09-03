@@ -3,16 +3,19 @@
  */
 package org.shw.util.pojoAdempiere;
 
+import java.math.BigDecimal;
+import java.util.regex.Pattern;
+
 /**
  * 
  */
 public class PagosItem {
 	
 	String codigo;
-	String montoPago;
-	String referencia;
+	BigDecimal montoPago;
+	String referencia=null;  // null possible;
 	String plazo;
-	String periodo;
+	Integer periodo=null;  // null possible;
 	
 	
 	/**
@@ -22,7 +25,7 @@ public class PagosItem {
 	 * @param plazo
 	 * @param periodo
 	 */
-	public PagosItem(String codigo, String montoPago, String referencia, String plazo, String periodo) {
+	public PagosItem(String codigo, BigDecimal montoPago, String referencia, String plazo, Integer periodo) {
 		super();
 		this.codigo = codigo;
 		this.montoPago = montoPago;
@@ -39,23 +42,32 @@ public class PagosItem {
 	}
 
 	/**
-	 * @param codigo the codigo to set
+	 * @param codigo the codigo to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^(0[1-9]||1[0-4]||99)$"
 	 */
 	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+		final String PATTERN = "^(0[1-9]||1[0-4]||99)$";
+		final int LENGTH = 2;
+		boolean patternOK = Pattern.matches(PATTERN, codigo);  
+		
+		if(patternOK && codigo.length()==LENGTH)
+			this.codigo = codigo;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'codigo' in setCodigo()");
 	}
 
 	/**
 	 * @return the montoPago
 	 */
-	public String getMontoPago() {
+	public BigDecimal getMontoPago() {
 		return montoPago;
 	}
 
 	/**
 	 * @param montoPago the montoPago to set
 	 */
-	public void setMontoPago(String montoPago) {
+	public void setMontoPago(BigDecimal montoPago) {
 		this.montoPago = montoPago;
 	}
 
@@ -67,10 +79,18 @@ public class PagosItem {
 	}
 
 	/**
-	 * @param referencia the referencia to set
+	 * @param referencia the referencia to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 50; null also possible
 	 */
 	public void setReferencia(String referencia) {
-		this.referencia = referencia;
+		final int MAXLENGTH = 50;
+		int length = referencia.length();
+		
+		if( (length<=MAXLENGTH) || (referencia==null) )
+			this.referencia = referencia;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'referencia' in setReferencia()");
 	}
 
 	/**
@@ -81,26 +101,33 @@ public class PagosItem {
 	}
 
 	/**
-	 * @param plazo the plazo to set
+	 * @param plazo the plazo to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^0[1-3]$"
 	 */
 	public void setPlazo(String plazo) {
-		this.plazo = plazo;
+		final String PATTERN = "^0[1-3]$";
+		boolean patternOK = Pattern.matches(PATTERN, plazo);  
+		
+		if(patternOK)
+			this.plazo = plazo;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'plazo' in setPlazo()");
 	}
 
 	/**
 	 * @return the periodo
 	 */
-	public String getPeriodo() {
+	public Integer getPeriodo() {
 		return periodo;
 	}
 
 	/**
 	 * @param periodo the periodo to set
 	 */
-	public void setPeriodo(String periodo) {
+	public void setPeriodo(Integer periodo) {
 		this.periodo = periodo;
 	}
-
 
 	/**
 	 * @param args

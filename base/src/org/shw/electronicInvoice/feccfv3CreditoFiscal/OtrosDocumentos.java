@@ -10,9 +10,9 @@ import org.shw.util.pojoAdempiere.Medico;
  */
 public class OtrosDocumentos {
 
-	String codDocAsociado;
-	String descDocumento;
-	String detalleDocumento;
+	int codDocAsociado;
+	String descDocumento=null;  // null allowed
+	String detalleDocumento=null;  // null allowed
 	Medico medico;
 	
 	/**
@@ -22,20 +22,30 @@ public class OtrosDocumentos {
 		this.medico = new Medico();
 	}
 
-	
+
 	/**
 	 * @return the codDocAsociado
 	 */
-	public String getCodDocAsociado() {
+	public int getCodDocAsociado() {
 		return codDocAsociado;
 	}
 
+
 	/**
-	 * @param codDocAsociado the codDocAsociado to set
+	 * @param codDocAsociado the codDocAsociado to set<br>
+	 * The parameter is validated.<br>
+	 * "minimum" : 1, "maximum" : 4
 	 */
-	public void setCodDocAsociado(String codDocAsociado) {
-		this.codDocAsociado = codDocAsociado;
+	public void setCodDocAsociado(int codDocAsociado) {
+		final int MINIMUM = 1;
+		final int MAXIMUM = 4;
+		
+		if(codDocAsociado>=MINIMUM && codDocAsociado<=MAXIMUM)
+			this.codDocAsociado = codDocAsociado;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codDocAsociado' in setCodDocAsociado()");
 	}
+
 
 	/**
 	 * @return the descDocumento
@@ -45,10 +55,18 @@ public class OtrosDocumentos {
 	}
 
 	/**
-	 * @param descDocumento the descDocumento to set
+	 * @param descDocumento the descDocumento to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 100
 	 */
 	public void setDescDocumento(String descDocumento) {
-		this.descDocumento = descDocumento;
+		final int MAXLENGTH = 100;
+		int length = descDocumento.length();
+		
+		if(length<=MAXLENGTH)
+			this.descDocumento = descDocumento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'descDocumento' in setDescDocumento()");
 	}
 
 	/**
@@ -59,10 +77,18 @@ public class OtrosDocumentos {
 	}
 
 	/**
-	 * @param detalleDocumento the detalleDocumento to set
+	 * @param detalleDocumento the detalleDocumento to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 300
 	 */
 	public void setDetalleDocumento(String detalleDocumento) {
-		this.detalleDocumento = detalleDocumento;
+		final int MAXLENGTH = 300;
+		int length = detalleDocumento.length();
+		
+		if(length<=MAXLENGTH)
+			this.detalleDocumento = detalleDocumento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'detalleDocumento' in setDetalleDocumento()");
 	}
 
 	/**

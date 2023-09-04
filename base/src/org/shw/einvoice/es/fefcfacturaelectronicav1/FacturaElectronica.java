@@ -7,22 +7,23 @@ import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Identificacion;
+import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 
 /**
  * 
  */
 public class FacturaElectronica {
 
-	static final int    VERSION          = 1;
-	static final String TIPODTE_FACTURA   = "01";
+	static final int    VERSION         = 1;
+	static final String TIPODTE_FACTURA = "01";
 	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
 	Emisor emisor;
 	Receptor receptor;
+	List<OtrosDocumentosItem> otrosDocumentos;
 	/*
-	 *   List<OtrosDocumentosItem> otrosDocumentos;
-	 * VentaTercero ventaTercero; List<CuerpoDocumentoItem> cuerpoDocumento; Resumen
+	 *   VentaTercero ventaTercero; List<CuerpoDocumentoItem> cuerpoDocumento; Resumen
 	 * resumen; Extension extension; List<ApendiceItem> apendice;
 	 */
 
@@ -34,8 +35,8 @@ public class FacturaElectronica {
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
-		/*this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
-		this.ventaTercero         = new VentaTercero();
+		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
+		/*this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();

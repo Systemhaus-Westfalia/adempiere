@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.util.envoicing.pojos.es;
+package org.shw.einvoice.es.util.pojo;
 
 import java.math.BigDecimal;
 

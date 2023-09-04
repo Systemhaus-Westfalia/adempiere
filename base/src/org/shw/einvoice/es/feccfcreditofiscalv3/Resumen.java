@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.util.envoicing.pojos.es.PagosItem;
-import org.shw.util.envoicing.pojos.es.TributosItem;
+import org.shw.einvoice.es.util.pojo.PagosItem;
+import org.shw.einvoice.es.util.pojo.TributosItem;
 
 /**
  * 

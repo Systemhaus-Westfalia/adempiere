@@ -5,7 +5,7 @@ package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.util.regex.Pattern;
 
-import org.shw.util.envoicing.pojos.es.Direccion;
+import org.shw.einvoice.es.util.pojo.Direccion;
 
 /**
  * 

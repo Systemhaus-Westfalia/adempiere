@@ -5,7 +5,7 @@ package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.util.Objects;
 
-import org.shw.util.envoicing.pojos.es.Medico;
+import org.shw.einvoice.es.util.pojo.Medico;
 
 /**
  * 

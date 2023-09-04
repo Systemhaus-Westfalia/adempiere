@@ -24,8 +24,9 @@ public class FacturaElectronica {
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos;
 	VentaTercero ventaTercero;
+	List<CuerpoDocumentoItem> cuerpoDocumento;
 	/*
-	 * List<CuerpoDocumentoItem> cuerpoDocumento; Resumen
+	 * Resumen
 	 * resumen; Extension extension; List<ApendiceItem> apendice;
 	 */
 
@@ -39,8 +40,8 @@ public class FacturaElectronica {
 		this.receptor             = new Receptor();
 		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		this.ventaTercero         = new VentaTercero();
-		/*this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
-		this.resumen              = new Resumen();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		/*this.resumen              = new Resumen();
 		this.extension            = new Extension();
 		this.apendice             = new ArrayList<ApendiceItem>();*/
 	}

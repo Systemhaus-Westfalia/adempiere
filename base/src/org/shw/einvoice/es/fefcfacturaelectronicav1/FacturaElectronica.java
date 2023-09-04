@@ -8,6 +8,7 @@ import java.util.List;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Identificacion;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
+import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 /**
  * 
@@ -22,8 +23,9 @@ public class FacturaElectronica {
 	Emisor emisor;
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos;
+	VentaTercero ventaTercero;
 	/*
-	 *   VentaTercero ventaTercero; List<CuerpoDocumentoItem> cuerpoDocumento; Resumen
+	 * List<CuerpoDocumentoItem> cuerpoDocumento; Resumen
 	 * resumen; Extension extension; List<ApendiceItem> apendice;
 	 */
 
@@ -36,8 +38,8 @@ public class FacturaElectronica {
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
 		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
-		/*this.ventaTercero         = new VentaTercero();
-		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		this.ventaTercero         = new VentaTercero();
+		/*this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
 		this.apendice             = new ArrayList<ApendiceItem>();*/

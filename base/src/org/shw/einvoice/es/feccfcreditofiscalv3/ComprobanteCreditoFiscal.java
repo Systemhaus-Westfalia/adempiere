@@ -8,6 +8,7 @@ import java.util.List;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Identificacion;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
+import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 /**
  * 

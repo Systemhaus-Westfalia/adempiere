@@ -3,13 +3,13 @@ import java.util.regex.Pattern;
 
 public class Identificacion {
 
-	static final int    VERSION           = 3;
-	static final String TIPODTE           = "03";
+	static final String TIPODTE_FACTURA   = "01";
+	static final String TIPODTE_CCFF      = "03";
 	static final String TIPOMONEDA        = "USD";
 	
-	int version     = VERSION;
+	int version;
 	String ambiente;
-	String tipoDte  = TIPODTE;
+	String tipoDte ;
 	String numeroControl;
 	String codigoGeneracion;
 	int tipoModelo;
@@ -23,7 +23,8 @@ public class Identificacion {
 	/**
 	 * No Parameters
 	 */
-	public Identificacion() {
+	public Identificacion(int version, String tipoDte) {
+		this.version = version;
 	}
 	
 	/**
@@ -52,15 +53,19 @@ public class Identificacion {
 	}
 
 
+	/**
+	 * @return the version
+	 */
 	public int getVersion() {
 		return version;
 	}
 
-
+	/**
+	 * @param version the version to set
+	 */
 	public void setVersion(int version) {
 		this.version = version;
 	}
-
 
 	/**
 	 * @return the ambiente
@@ -180,14 +185,19 @@ public class Identificacion {
 	/**
 	 * @param motivoContin the motivoContin to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 150
+	 * "minLength" : [1,3], "maxLength" : 150
 	 */
 	public void setMotivoContin(String motivoContin) {
-		final int MINLENGTH = 1;
+		int minLength=1;
+		if(getTipoDte()==TIPODTE_CCFF)  // Credito Fiscal
+			minLength = 1;
+		else if(getTipoDte()==TIPODTE_FACTURA) // Factura
+			minLength = 5;
+		
 		final int MAXLENGTH = 150;
 		int length = motivoContin.length();
 		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
+		if(length>=minLength && length<=MAXLENGTH)
 			this.motivoContin = motivoContin;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'motivoContin' in setMotivoContin()");

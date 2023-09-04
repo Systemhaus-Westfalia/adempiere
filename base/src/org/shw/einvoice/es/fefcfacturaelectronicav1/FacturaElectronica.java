@@ -19,8 +19,9 @@ public class FacturaElectronica {
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
 	Emisor emisor;
+	Receptor receptor;
 	/*
-	 *  Receptor receptor; List<OtrosDocumentosItem> otrosDocumentos;
+	 *   List<OtrosDocumentosItem> otrosDocumentos;
 	 * VentaTercero ventaTercero; List<CuerpoDocumentoItem> cuerpoDocumento; Resumen
 	 * resumen; Extension extension; List<ApendiceItem> apendice;
 	 */
@@ -32,8 +33,8 @@ public class FacturaElectronica {
 		this.identificacion       = new Identificacion(VERSION, TIPODTE_FACTURA);
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.emisor               = new Emisor();
-		/*this.receptor             = new Receptor();
-		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
+		this.receptor             = new Receptor();
+		/*this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();

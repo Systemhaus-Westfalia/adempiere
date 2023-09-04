@@ -30,6 +30,36 @@ public class Receptor {
 	public Receptor() {
 	}
 	
+
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public boolean validateValues() {
+		String pattern;
+		boolean patternOK;
+
+		// In schema: "pattern" : "^0[1-9]|1[0-2]$"
+		if(getTipoDocumento()=="36") {
+			pattern = "^([0-9]{14}|[0-9]{9})$";
+			patternOK = Pattern.matches(pattern, getNumDocumento());
+			if(!patternOK)
+				return false;
+		} else {
+			if(getNrc()!=null)
+				return false;
+		}
+
+		// In schema: "pattern" : "^[0-9]{8}-[0-9]{1}$"
+		if(getTipoDocumento()=="13") {
+			pattern = "^[0-9]{8}-[0-9]{1}$";
+			patternOK = Pattern.matches(pattern, getNumDocumento());
+			if(!patternOK)
+				return false;
+		}
+		
+		return true;
+	}
 	
 	/**
 	 * @return the tipoDocumento

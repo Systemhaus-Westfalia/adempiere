@@ -21,12 +21,21 @@ public class Identificacion {
 	String fecEmi;
 	String horEmi;
 	String tipoMoneda = TIPOMONEDA;
-		
+
 	/**
 	 * No Parameters
 	 */
+	public Identificacion() {
+
+	}
+
+	/**
+	 * @param version version of schema
+	 * @param tipoDte Tipo de Documento
+	 */
 	public Identificacion(int version, String tipoDte) {
 		this.version = version;
+		this.tipoDte = tipoDte;
 	}
 	
 	/**

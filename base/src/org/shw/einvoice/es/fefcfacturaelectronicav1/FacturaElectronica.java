@@ -12,6 +12,9 @@ import org.shw.einvoice.es.util.pojo.Identificacion;
  */
 public class FacturaElectronica {
 
+	static final int    VERSION          = 1;
+	static final String TIPODTE_FACTURA   = "01";
+	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
 	/*
@@ -24,7 +27,7 @@ public class FacturaElectronica {
 	 * No parameters
 	 */
 	public FacturaElectronica() {
-		this.identificacion       = new Identificacion();
+		this.identificacion       = new Identificacion(VERSION, TIPODTE_FACTURA);
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		/*this.emisor               = new Emisor();
 		this.receptor             = new Receptor();

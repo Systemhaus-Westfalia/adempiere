@@ -12,6 +12,9 @@ import org.shw.einvoice.es.util.pojo.Identificacion;
  */
 public class ComprobanteCreditoFiscal {
 
+	static final int    VERSION       = 3;
+	static final String TIPODTE_CCFF  = "03";
+	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
 	Emisor emisor;
@@ -27,7 +30,7 @@ public class ComprobanteCreditoFiscal {
 	 * No parameters
 	 */
 	public ComprobanteCreditoFiscal() {
-		this.identificacion       = new Identificacion();
+		this.identificacion       = new Identificacion(VERSION, TIPODTE_CCFF);
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.math.BigDecimal;
 
@@ -21,7 +21,6 @@ public class TributosItem {
 	 * @param valor
 	 */
 	public TributosItem(String codigo, String descripcion, BigDecimal valor) {
-		super();
 		this.codigo = codigo;
 		this.descripcion = descripcion;
 		this.valor = valor;

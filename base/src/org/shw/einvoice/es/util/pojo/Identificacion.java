@@ -3,8 +3,10 @@ import java.util.regex.Pattern;
 
 public class Identificacion {
 
+	// motivoContin min length depends on value of "tipoDte
 	static final String TIPODTE_FACTURA   = "01";
 	static final String TIPODTE_CCFF      = "03";
+	
 	static final String TIPOMONEDA        = "USD";
 	
 	int version;

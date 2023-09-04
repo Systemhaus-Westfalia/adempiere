@@ -1,4 +1,4 @@
-package org.shw.util.pojoAdempiere;
+package org.shw.util.envoicing.pojos.es;
 
 import java.util.regex.Pattern;
 

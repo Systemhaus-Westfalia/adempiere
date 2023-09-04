@@ -1,14 +1,14 @@
 /**
  * 
  */
-package org.shw.electronicInvoice.feccfv3CreditoFiscal;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.util.pojoAdempiere.PagosItem;
-import org.shw.util.pojoAdempiere.TributosItem;
+import org.shw.util.envoicing.pojos.es.PagosItem;
+import org.shw.util.envoicing.pojos.es.TributosItem;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package org.shw.electronicInvoice.feccfv3CreditoFiscal;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.util.regex.Pattern;
 

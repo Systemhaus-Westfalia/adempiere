@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.shw.electronicInvoice.feccfv3CreditoFiscal;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.util.Objects;
 
-import org.shw.util.pojoAdempiere.Medico;
+import org.shw.util.envoicing.pojos.es.Medico;
 
 /**
  * 

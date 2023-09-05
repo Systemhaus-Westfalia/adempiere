@@ -13,6 +13,7 @@ public class FacturaExportacion {
 	
 	Identificacion identificacion;
 	Emisor emisor;
+	Receptor receptor;
 
 	/**
 	 * No parameters
@@ -20,6 +21,7 @@ public class FacturaExportacion {
 	public FacturaExportacion() {
 		this.identificacion       = new Identificacion();
 		this.emisor				  = new Emisor();
+		this.receptor             = new Receptor();
 	}
 
 	/**

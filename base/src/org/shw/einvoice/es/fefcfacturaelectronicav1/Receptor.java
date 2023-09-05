@@ -14,14 +14,14 @@ import org.shw.einvoice.es.util.pojo.Direccion;
  */
 public class Receptor {
 
-	String tipoDocumento;
-	String numDocumento;
+	String tipoDocumento=null; // null possible
+	String numDocumento=null; // null possible
 	String nrc;
 	String nombre=null; // null possible
 	String codActividad;
-	String descActividad;
+	String descActividad=null; // null possible
 	Direccion direccion;
-    String telefono;
+    String telefono=null; // null possible
     String correo;
 	
 	/**
@@ -39,7 +39,7 @@ public class Receptor {
 		String pattern;
 		boolean patternOK;
 
-		// In schema: "pattern" : "^0[1-9]|1[0-2]$"
+		// In schema: "pattern" : "^([0-9]{14}|[0-9]{9})$"
 		if(getTipoDocumento()=="36") {
 			pattern = "^([0-9]{14}|[0-9]{9})$";
 			patternOK = Pattern.matches(pattern, getNumDocumento());
@@ -72,7 +72,7 @@ public class Receptor {
 	/**
 	 * @param tipoDocumento the tipoDocumento to set<br>
 	 * The parameter is validated.<br>
-	 * "enum" : [null,"36","13","02","03","37"]
+	 * "enum" : [null,"36","13","02","03","37"]; null permitted.
 	 */
 	public void setTipoDocumento(String tipoDocumento) {
 		String[] validTipoDocumento = { "36", "13", "02", "03", "37" };
@@ -186,14 +186,14 @@ public class Receptor {
 	/**
 	 * @param descActividad the descActividad to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 150
+	 * "minLength" : 5, "maxLength" : 150; null also possible
 	 */
 	public void setDescActividad(String descActividad) {
-		final int MINLENGTH = 1;
+		final int MINLENGTH = 5;
 		final int MAXLENGTH = 150;
 		int length = descActividad.length();
 		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (descActividad==null) )
 			this.descActividad = descActividad;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
@@ -223,14 +223,14 @@ public class Receptor {
 	/**
 	 * @param telefono the telefono to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 8, "maxLength" : 30
+	 * "minLength" : 8, "maxLength" : 30; null also possible
 	 */
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 30;
 		int length = telefono.length();
 		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (telefono==null) )
 			this.telefono = telefono;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");

@@ -1,0 +1,342 @@
+package org.shw.einvoice.es.anulacionv2;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.regex.Pattern;
+
+/**
+ * Just for class Anulacion
+ */
+public class Documento {
+
+	String tipoDte;
+	String codigoGeneracion;
+	String selloRecibido;
+	String numeroControl;
+	String fecEmi;
+	BigDecimal montoIva;
+	String codigoGeneracionR;
+	String tipoDocumento;
+	String numDocumento;
+	String nombre;
+	String telefono;
+	String correo;
+
+    
+	/**
+	 * 
+	 */
+	public Documento() {
+	}
+    
+
+	/**
+	 * @return the tipoDte
+	 */
+	public String getTipoDte() {
+		return tipoDte;
+	}
+
+
+	/**
+	 * @param tipoDte the tipoDte to set<br>
+	 * The parameter is validated.<br>
+	 * Specific values allowed according to schema: ["01", "03", "04", .....].
+	 * Pattern in schema is "^0[0-9]|1[0-5]$", but this contradicts the enum.
+	 * The enum was chosen for validation.
+	 */
+	public void setTipoDte(String tipoDte) {
+		String[] validTipoDtes = { "01", "03", "04", "05", "06",
+				         "07", "08", "09","10","11", "14","15" };		
+		boolean isTipoDteValid = Arrays.stream(validTipoDtes).anyMatch(tipoDte::equals);
+		
+		if(isTipoDteValid)
+			this.tipoDte = tipoDte;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDte' in setTipoDte()");
+	}
+
+
+
+
+	/**
+	 * @return the codigoGeneracion
+	 */
+	public String getCodigoGeneracion() {
+		return codigoGeneracion;
+	}
+
+
+	/**
+	 * @param codigoGeneracion the codigoGeneracion to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 36, "maxLength" : 36<br>
+	 * "pattern" : "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$"
+	 */
+	public void setCodigoGeneracion(String codigoGeneracion) {
+		final int MINLENGTH = 36;
+		final int MAXLENGTH = 36;
+		int length = codigoGeneracion.length();
+		
+		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
+		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracion);  
+				
+		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
+			this.codigoGeneracion = codigoGeneracion;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codigoGeneracion' in setCodigoGeneracion()");
+	}
+
+
+	/**
+	 * @return the selloRecibido
+	 */
+	public String getSelloRecibido() {
+		return selloRecibido;
+	}
+
+
+	/**
+	 * @param selloRecibido the selloRecibido to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 40, "maxLength" : 40<br>
+	 * "pattern" : "^[A-Z0-9]{40}$"
+	 */
+	public void setSelloRecibido(String selloRecibido) {
+		final int MINLENGTH = 40;
+		final int MAXLENGTH = 40;
+		int length = selloRecibido.length();
+		
+		final String PATTERN = "^[A-Z0-9]{40}$";
+		boolean patternOK = Pattern.matches(PATTERN, selloRecibido);  
+				
+		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
+			this.selloRecibido = selloRecibido;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'selloRecibido' in setSelloRecibido()");
+	}
+
+
+	/**
+	 * @return the numeroControl
+	 */
+	public String getNumeroControl() {
+		return numeroControl;
+	}
+
+
+	/**
+	 * @param numeroControl the numeroControl to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 31, "maxLength" : 31<br>
+	 * "pattern" : "^DTE-0[0-9]|1[0-2]-[A-Z0-9]{8}-[0-9]{15}$"
+	 */
+	public void setNumeroControl(String numeroControl) {
+		final int MINLENGTH = 31;
+		final int MAXLENGTH = 31;
+		int length = numeroControl.length();
+		
+		final String PATTERN = "^DTE-0[0-9]|1[0-2]-[A-Z0-9]{8}-[0-9]{15}$";
+		boolean patternOK = Pattern.matches(PATTERN, numeroControl);  
+				
+		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
+			this.numeroControl = numeroControl;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'numeroControl' in setNumeroControl()");
+	}
+
+
+	/**
+	 * @return the fecEmi
+	 */
+	public String getFecEmi() {
+		return fecEmi;
+	}
+
+
+	/**
+	 * @param fecEmi the fecEmi to set
+	 */
+	public void setFecEmi(String fecEmi) {
+		this.fecEmi = fecEmi;
+	}
+
+
+	/**
+	 * @return the montoIva
+	 */
+	public BigDecimal getMontoIva() {
+		return montoIva;
+	}
+
+
+	/**
+	 * @param montoIva the montoIva to set
+	 */
+	public void setMontoIva(BigDecimal montoIva) {
+		this.montoIva = montoIva;
+	}
+
+
+	/**
+	 * @return the codigoGeneracionR
+	 */
+	public String getCodigoGeneracionR() {
+		return codigoGeneracionR;
+	}
+
+
+	/**
+	 * @param codigoGeneracionR the codigoGeneracionR to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 36, "maxLength" : 36<br>
+	 * "pattern" : "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$"
+	 */
+	public void setCodigoGeneracionR(String codigoGeneracionR) {
+		final int MINLENGTH = 36;
+		final int MAXLENGTH = 36;
+		int length = codigoGeneracionR.length();
+		
+		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
+		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracionR);  
+				
+		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
+			this.codigoGeneracionR = codigoGeneracionR;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'codigoGeneracionR' in setCodigoGeneracionR()");
+	}
+
+
+	/**
+	 * @return the tipoDocumento
+	 */
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+
+	/**
+	 * @param tipoDocumento the tipoDocumento to set<br>
+	 * The parameter is validated.<br>
+	 * Specific values allowed according to schema: ["36", "13", "02", .....].
+	 * The enum was chosen for validation.
+	 */
+	public void setTipoDocumento(String tipoDocumento) {
+		String[] validTipoDocumento = { "36", "13", "02", "03", "37" };		
+		boolean isTipoDocumentoValid = Arrays.stream(validTipoDocumento).anyMatch(tipoDocumento::equals);
+
+		if(isTipoDocumentoValid)
+			this.tipoDocumento = tipoDocumento;
+		else
+			throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in setTipoDocumento()");
+	}
+
+
+	/**
+	 * @return the numDocumento
+	 */
+	public String getNumDocumento() {
+		return numDocumento;
+	}
+
+
+	/**
+	 * @param numDocumento the numDocumento to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 3, "maxLength" : 20<br>
+	 */
+	public void setNumDocumento(String numDocumento) {
+		final int MINLENGTH = 3;
+		final int MAXLENGTH = 20;
+		int length = numDocumento.length();
+				
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.numDocumento = numDocumento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in setNumDocumento()");
+	}
+
+
+	/**
+	 * @return the nombre
+	 */
+	public String getNombre() {
+		return nombre;
+	}
+
+
+	/**
+	 * @param nombre the nombre to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 5, "maxLength" : 200<br>
+	 */
+	public void setNombre(String nombre) {
+		final int MINLENGTH = 5;
+		final int MAXLENGTH = 200;
+		int length = nombre.length();
+				
+		if(length>=MINLENGTH && length<=MAXLENGTH)
+			this.nombre = nombre;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	}
+
+	/**
+	 * @return the telefono
+	 */
+	public String getTelefono() {
+		return telefono;
+	}
+
+
+	/**
+	 * @param telefono the telefono to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 8, "maxLength" : 50<br>
+	 * "pattern" : "^[0-9+;]{8,50}$"
+	 */
+	public void setTelefono(String telefono) {
+		final int MINLENGTH = 8;
+		final int MAXLENGTH = 50;
+		int length = telefono.length();
+
+		final String PATTERN = "^[0-9+;]{8,50}$";
+		boolean patternOK = Pattern.matches(PATTERN, telefono);  
+		
+		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
+			this.telefono = telefono;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
+	}
+
+
+	/**
+	 * @return the correo
+	 */
+	public String getCorreo() {
+		return correo;
+	}
+
+
+	/**
+	 * @param correo the correo to set<br>
+	 * The parameter is validated.<br>
+	 * "maxLength" : 100
+	 */
+	public void setCorreo(String correo) {
+		final int MAXLENGTH = 100;
+		int length = correo.length();
+		
+		if(length<=MAXLENGTH)
+			this.correo = correo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
+	}	
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -15,8 +15,8 @@ public class Identificacion {
 	String codigoGeneracion;
 	int tipoModelo;
 	int tipoOperacion;
-	Integer tipoContingencia=null;  // null erlaubt
-	String motivoContingencia=null;       // null erlaubt
+	Integer tipoContingencia=null;  // null possible
+	String motivoContingencia=null; // null possible
 	String fecEmi;
 	String horEmi;
 	String tipoMoneda = TIPOMONEDA;
@@ -38,7 +38,7 @@ public class Identificacion {
 				return false;
 			if (getTipoContingencia() != null) 
 				return false;
-			if (getMotivoContin() != null) 
+			if (getMotivoContingencia() != null) 
 				return false;
 		} else  {
 			if (getTipoModelo() != 2) 
@@ -187,7 +187,7 @@ public class Identificacion {
 	/**
 	 * @param motivoContingencia the motivoContingencia to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 500
+	 * "minLength" : 1, "maxLength" : 500; null permitted
 	 */
 	public void setMotivoContingencia(String motivoContingencia) {
 		final int MINLENGTH = 1;		

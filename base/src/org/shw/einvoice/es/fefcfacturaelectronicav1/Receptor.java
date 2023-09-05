@@ -17,7 +17,7 @@ public class Receptor {
 	String tipoDocumento;
 	String numDocumento;
 	String nrc;
-	String nombre;
+	String nombre=null; // null possible
 	String codActividad;
 	String descActividad;
 	Direccion direccion;
@@ -141,14 +141,14 @@ public class Receptor {
 	/**
 	 * @param nombre the nombre to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 250
+	 * "minLength" : 1, "maxLength" : 250; null permitted
 	 */
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 250;
 		int length = nombre.length();
 		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
+		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (nombre==null) )
 			this.nombre = nombre;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");

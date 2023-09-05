@@ -16,7 +16,7 @@ public class Identificacion {
 	int tipoModelo;
 	int tipoOperacion;
 	Integer tipoContingencia=null;  // null erlaubt
-	String motivoContin=null;       // null erlaubt
+	String motivoContingencia=null;       // null erlaubt
 	String fecEmi;
 	String horEmi;
 	String tipoMoneda = TIPOMONEDA;
@@ -177,27 +177,27 @@ public class Identificacion {
 
 
 	/**
-	 * @return the motivoContin
+	 * @return the motivoContingencia
 	 */
-	public String getMotivoContin() {
-		return motivoContin;
+	public String getMotivoContingencia() {
+		return motivoContingencia;
 	}
 
 
 	/**
-	 * @param motivoContin the motivoContin to set<br>
+	 * @param motivoContingencia the motivoContingencia to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 5, "maxLength" : 150
+	 * "minLength" : 1, "maxLength" : 500
 	 */
-	public void setMotivoContin(String motivoContin) {
+	public void setMotivoContingencia(String motivoContingencia) {
 		final int MINLENGTH = 1;		
 		final int MAXLENGTH = 500;
-		int length = motivoContin.length();
+		int length = motivoContingencia.length();
 		
-		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (motivoContin==null) )
-			this.motivoContin = motivoContin;
+		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (motivoContingencia==null) )
+			this.motivoContingencia = motivoContingencia;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'motivoContin' in setMotivoContin()");
+	        throw new IllegalArgumentException("Wrong parameter 'motivoContingencia' in setMotivoContingencia()");
 	}
 
 

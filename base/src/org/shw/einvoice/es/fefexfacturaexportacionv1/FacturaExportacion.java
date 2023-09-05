@@ -12,12 +12,14 @@ import java.util.List;
 public class FacturaExportacion {
 	
 	Identificacion identificacion;
+	Emisor emisor;
 
 	/**
 	 * No parameters
 	 */
 	public FacturaExportacion() {
 		this.identificacion       = new Identificacion();
+		this.emisor				  = new Emisor();
 	}
 
 	/**

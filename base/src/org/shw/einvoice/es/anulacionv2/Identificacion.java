@@ -1,0 +1,138 @@
+package org.shw.einvoice.es.anulacionv2;
+import java.util.regex.Pattern;  
+
+/**
+ * Just for class Anulacion
+ */
+public class Identificacion {
+	
+	int version;
+	String ambiente;
+	String codigoGeneracion;
+	String fecAnula;
+	String horAnula;
+
+	/**
+	 * @param version version of schema
+	 * @param tipoDte Tipo de Documento
+	 */
+	public Identificacion(int version) {
+		this.version = version;
+	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public boolean validateValues() {
+		return true;
+	}
+
+
+	/**
+	 * @return the version
+	 */
+	public int getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
+	/**
+	 * @return the ambiente
+	 */
+	public String getAmbiente() {
+		return ambiente;
+	}
+
+
+	/**
+	 * @param ambiente the ambiente to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : ["00", "01"]
+	 */
+	public void setAmbiente(String ambiente) {
+		if (ambiente.compareTo("00")==0 || ambiente.compareTo("01")==0)
+			this.ambiente = ambiente;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'ambiente' in setAmbiente()");
+	}
+
+	
+	/**
+	 * @return the codigoGeneracion
+	 */
+	public String getCodigoGeneracion() {
+		return codigoGeneracion;
+	}
+
+
+	/**
+	 * @param codigoGeneracion the codigoGeneracion to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$"
+	 */
+	public void setCodigoGeneracion(String codigoGeneracion) {
+		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
+		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracion);  
+		
+		if(patternOK)
+			this.codigoGeneracion = codigoGeneracion;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'codigoGeneracion' in setCodigoGeneracion()");
+	}
+
+
+
+	/**
+	 * @return the fecAnula
+	 */
+	public String getFecAnula() {
+		return fecAnula;
+	}
+
+
+	/**
+	 * @param fecEmi the fecAnula to set
+	 */
+	public void setFecEmi(String fecAnula) {
+		this.fecAnula = fecAnula;
+	}
+
+
+	/**
+	 * @return the horAnula
+	 */
+	public String getHorAnula() {
+		return horAnula;
+	}
+
+
+	/**
+	 * @param horEmi the horAnula to set<br>
+	 * The parameter is validated.<br>
+	 * "pattern" : "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]?$"
+	 */
+	public void setHorAnula(String horAnula) {
+		final String PATTERN = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]?$";
+		boolean patternOK = Pattern.matches(PATTERN, horAnula);  
+		
+		if(patternOK)
+			this.horAnula = horAnula;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'horAnula' in setHorAnula()");
+	}
+
+
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

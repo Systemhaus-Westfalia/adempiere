@@ -8,7 +8,6 @@ import java.util.List;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.Identificacion;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
@@ -35,7 +34,7 @@ public class FacturaElectronica {
 	 * No parameters
 	 */
 	public FacturaElectronica() {
-		this.identificacion       = new Identificacion(VERSION, TIPODTE_FACTURA);
+		this.identificacion       = new Identificacion();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();

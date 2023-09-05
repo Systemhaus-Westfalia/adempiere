@@ -1,12 +1,11 @@
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.util.regex.Pattern;  
 
 public class Identificacion {
 
 	// motivoContin min length depends on value of "tipoDte
-	static final String TIPODTE_FACTURA   = "01";
-	static final String TIPODTE_CCFF      = "03";
-	
+	static final int VERSION   = 1;
+	static final String TIPOD_DE_DOCUMENTO = "01";
 	static final String TIPOMONEDA        = "USD";
 	
 	int version;
@@ -23,19 +22,11 @@ public class Identificacion {
 	String tipoMoneda = TIPOMONEDA;
 
 	/**
-	 * No Parameters
+	 * No parameters
 	 */
 	public Identificacion() {
-
-	}
-
-	/**
-	 * @param version version of schema
-	 * @param tipoDte Tipo de Documento
-	 */
-	public Identificacion(int version, String tipoDte) {
-		this.version = version;
-		this.tipoDte = tipoDte;
+		this.version = VERSION;
+		this.tipoDte = TIPOD_DE_DOCUMENTO;
 	}
 	
 	/**
@@ -125,10 +116,10 @@ public class Identificacion {
 	/**
 	 * @param numeroControl the numeroControl to set<br>
 	 * The parameter is validated.<br>
-	 * "pattern" : "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$"
+	 * "pattern" : "^DTE-01-[A-Z0-9]{8}-[0-9]{15}$"
 	 */
 	public void setNumeroControl(String numeroControl) {
-		final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";
+		final String PATTERN = "^DTE-01-[A-Z0-9]{8}-[0-9]{15}$";
 		boolean patternOK = Pattern.matches(PATTERN, numeroControl);  
 		
 		if(patternOK)
@@ -196,19 +187,14 @@ public class Identificacion {
 	/**
 	 * @param motivoContin the motivoContin to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : [1,3], "maxLength" : 150
+	 * "minLength" : 5, "maxLength" : 150
 	 */
 	public void setMotivoContin(String motivoContin) {
-		int minLength=1;
-		if(getTipoDte()==TIPODTE_CCFF)  // Credito Fiscal
-			minLength = 1;
-		else if(getTipoDte()==TIPODTE_FACTURA) // Factura
-			minLength = 5;
-		
+		final int MINLENGTH = 5;		
 		final int MAXLENGTH = 150;
 		int length = motivoContin.length();
 		
-		if(length>=minLength && length<=MAXLENGTH)
+		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (motivoContin==null) )
 			this.motivoContin = motivoContin;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'motivoContin' in setMotivoContin()");

@@ -9,8 +9,6 @@ package org.shw.einvoice.es.anulacionv2;
  */
 public class Anulacion {
 
-	static final int    VERSION       = 2;
-	
 	Identificacion identificacion;
 	Emisor emisor;
 	Documento documento;
@@ -20,7 +18,7 @@ public class Anulacion {
 	 * No parameters
 	 */
 	public Anulacion() {
-		this.identificacion = new Identificacion(VERSION);
+		this.identificacion = new Identificacion();
 		this.emisor         = new Emisor();
 		this.documento      = new Documento();
 		this.motivo         = new Motivo();

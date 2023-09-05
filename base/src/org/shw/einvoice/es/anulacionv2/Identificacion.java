@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
  * Just for class Anulacion
  */
 public class Identificacion {
-	
+
+	static final int VERSION   = 2;
 	int version;
 	String ambiente;
 	String codigoGeneracion;
@@ -16,8 +17,8 @@ public class Identificacion {
 	 * @param version version of schema
 	 * @param tipoDte Tipo de Documento
 	 */
-	public Identificacion(int version) {
-		this.version = version;
+	public Identificacion() {
+		this.version = VERSION;
 	}
 	
 	/**

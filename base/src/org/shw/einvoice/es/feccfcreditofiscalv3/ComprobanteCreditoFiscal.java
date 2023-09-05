@@ -15,9 +15,6 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class ComprobanteCreditoFiscal {
-
-	static final int    VERSION       = 3;
-	static final String TIPODTE_CCFF  = "03";
 	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;

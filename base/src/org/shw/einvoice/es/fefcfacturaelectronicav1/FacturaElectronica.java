@@ -5,6 +5,7 @@ package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.fefexfacturaexportacionv1.Identificacion;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;
@@ -15,9 +16,6 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class FacturaElectronica {
-
-	static final int    VERSION         = 1;
-	static final String TIPODTE_FACTURA = "01";
 	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;

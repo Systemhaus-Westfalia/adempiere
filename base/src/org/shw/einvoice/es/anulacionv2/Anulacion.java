@@ -27,6 +27,23 @@ public class Anulacion {
 	}
 
 
+
+/**
+ * Validate the Schema conditions
+ */
+public boolean validateValues() {
+	
+	if(getMotivo().getTipoAnulacion()==2) {
+		if ( getDocumento().getCodigoGeneracionR()!= null)
+			return false;
+	} else {
+		if ( getDocumento().getCodigoGeneracionR()== null)
+			return false;
+	}
+	
+	return true;
+}
+	
 	/**
 	 * @return the identificacion
 	 */

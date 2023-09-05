@@ -5,7 +5,6 @@ package org.shw.einvoice.es.anulacionv2;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.Emisor;
 
 /**
  * 

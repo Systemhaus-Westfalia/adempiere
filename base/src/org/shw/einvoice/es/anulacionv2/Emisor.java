@@ -10,7 +10,7 @@ public class Emisor {
 	String nit;
 	String nombre;
 	String tipoEstablecimiento;
-	String nomEstablecimiento;
+	String nomEstablecimiento=null; // null permitted
     String telefono;
     String correo;
     String codEstableMH;

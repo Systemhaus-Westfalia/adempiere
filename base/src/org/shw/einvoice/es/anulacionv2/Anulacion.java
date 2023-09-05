@@ -2,8 +2,6 @@
  * 
  */
 package org.shw.einvoice.es.anulacionv2;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -11,17 +9,21 @@ import java.util.List;
  */
 public class Anulacion {
 
-	static final int    VERSION       = 3;
+	static final int    VERSION       = 2;
 	
 	Identificacion identificacion;
 	Emisor emisor;
+	Documento documento;
+	Motivo motivo;
 
 	/**
 	 * No parameters
 	 */
 	public Anulacion() {
-		this.identificacion       = new Identificacion(VERSION);
-		this.emisor               = new Emisor();
+		this.identificacion = new Identificacion(VERSION);
+		this.emisor         = new Emisor();
+		this.documento      = new Documento();
+		this.motivo         = new Motivo();
 	}
 
 
@@ -57,6 +59,38 @@ public class Anulacion {
 	}
 
 	
+
+	/**
+	 * @return the documento
+	 */
+	public Documento getDocumento() {
+		return documento;
+	}
+
+
+	/**
+	 * @param documento the documento to set
+	 */
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
+	}
+
+
+	/**
+	 * @return the motivo
+	 */
+	public Motivo getMotivo() {
+		return motivo;
+	}
+
+
+	/**
+	 * @param motivo the motivo to set
+	 */
+	public void setMotivo(Motivo motivo) {
+		this.motivo = motivo;
+	}
+
 
 	/**
 	 * @param args

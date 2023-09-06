@@ -5,6 +5,7 @@ package org.shw.einvoice.es.fefexfacturaexportacionv1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
@@ -19,6 +20,7 @@ public class FacturaExportacion {
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos;
 	VentaTercero ventaTercero;
+	List<CuerpoDocumentoItem> cuerpoDocumento;
 
 	/**
 	 * No parameters
@@ -29,6 +31,7 @@ public class FacturaExportacion {
 		this.receptor             = new Receptor();
 		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		this.ventaTercero         = new VentaTercero();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 	}
 
 	/**

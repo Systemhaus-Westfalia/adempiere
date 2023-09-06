@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fefcfacturaelectronicav1;
+package org.shw.einvoice.es.fefexfacturaexportacionv1;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,22 +13,15 @@ import java.util.List;
 public class CuerpoDocumentoItem {
 	
 	int numItem;
-	int tipoItem;
-	String numeroDocumento=null;  // null allowed
 	BigDecimal cantidad;
 	String codigo=null;  // null allowed
-	String codTributo=null;  // null allowed
 	int uniMedida;
 	String descripcion;
 	BigDecimal precioUni;
 	BigDecimal montoDescu;
-	BigDecimal ventaNoSuj;
-	BigDecimal ventaExenta;
 	BigDecimal ventaGravada;
 	ArrayList<String> tributos=null;  // null allowed
-	BigDecimal psv;
 	BigDecimal noGravado;
-	BigDecimal ivaItem;
     
     
     /**
@@ -36,77 +29,45 @@ public class CuerpoDocumentoItem {
 	 */
 	public CuerpoDocumentoItem() {
 		
-	}
+	}	
 
 	/**
 	 * @param numItem
-	 * @param tipoItem
-	 * @param numeroDocumento
 	 * @param cantidad
 	 * @param codigo
-	 * @param codTributo
 	 * @param uniMedida
 	 * @param descripcion
 	 * @param precioUni
 	 * @param montoDescu
-	 * @param ventaNoSuj
-	 * @param ventaExenta
 	 * @param ventaGravada
 	 * @param tributos
-	 * @param psv
 	 * @param noGravado
-	 * @param ivaItem
 	 */
-	public CuerpoDocumentoItem(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
-			String codTributo, int uniMedida, String descripcion, BigDecimal precioUni, BigDecimal montoDescu,
-			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, ArrayList<String> tributos, BigDecimal psv,
+	public CuerpoDocumentoItem(int numItem, BigDecimal cantidad, String codigo, int uniMedida, String descripcion,
+			BigDecimal precioUni, BigDecimal montoDescu, BigDecimal ventaGravada, ArrayList<String> tributos,
 			BigDecimal noGravado) {
 		this.numItem = numItem;
-		this.tipoItem = tipoItem;
-		this.numeroDocumento = numeroDocumento;
 		this.cantidad = cantidad;
 		this.codigo = codigo;
-		this.codTributo = codTributo;
 		this.uniMedida = uniMedida;
 		this.descripcion = descripcion;
 		this.precioUni = precioUni;
 		this.montoDescu = montoDescu;
-		this.ventaNoSuj = ventaNoSuj;
-		this.ventaExenta = ventaExenta;
 		this.ventaGravada = ventaGravada;
 		this.tributos = tributos;
-		this.psv = psv;
 		this.noGravado = noGravado;
 	}
+
+
 
 	/**
 	 * Validate the Schema conditions
 	 */
 	public boolean validateValues() {
-		if(getVentaGravada()==BigDecimal.ZERO) {
-			if ( (getTributos()!=null) || (getIvaItem().compareTo(BigDecimal.ZERO) == 1) )
+		if(getNoGravado()==BigDecimal.ZERO) {
+			if ( (getPrecioUni()== null)  || getTributos().size()!=1  || (getTributos().get(0) !="C3") )
 				return false;
 		} 
-
-		if(getTipoItem()==4) {
-			if (getUniMedida()!=99)
-				return false;
-			if (getCodTributo()==null)
-				return false;
-			if (getTributos()!=null)
-				return false;
-		} else {
-			if (getCodTributo()!=null)
-				return false;
-			
-			ArrayList<String> expectedValues=  new ArrayList<>(List.of(   "C3", "59", "71", "D1", "C5", "C6", "C7", "C8", "D5",
-					"D4", "19", "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "42", "43", "44", "50", "51", "52",
-					"53", "54", "55", "58", "77", "78", "79", "85", "86", "91", "92", "A1", "A5", "A7", "A9"));
-			// Here, is only ONE item expected; where there are MANY items expected, the query must be changed.
-			if ((getTributos()==null) || (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1) )
-				return false;
-			
-		}
 		
 		return true;
 	}
@@ -135,49 +96,6 @@ public class CuerpoDocumentoItem {
 
 
 	/**
-	 * @return the tipoItem
-	 */
-	public int getTipoItem() {
-		return tipoItem;
-	}
-
-	/**
-	 * @param tipoItem the tipoItem to set<br>
-	 * The parameter is validated.<br>
-	 * "enum" : [1,2,3,4]
-	 */
-	public void setTipoItem(int tipoItem) {
-		if (tipoItem==1 || tipoItem==2 || tipoItem==3 || tipoItem==4)
-			this.tipoItem = tipoItem;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoItem' in setTipoItem()");
-	}
-
-	/**
-	 * @return the numeroDocumento
-	 */
-	public String getNumeroDocumento() {
-		return numeroDocumento;
-	}
-
-	/**
-	 * @param numeroDocumento the numeroDocumento to set<br>
-	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 36; null also possible
-	 */
-	public void setNumeroDocumento(String numeroDocumento) {
-		final int MINLENGTH = 1;
-		final int MAXLENGTH = 36;
-		int length = numeroDocumento==null?0:numeroDocumento.length();
-		
-		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numeroDocumento==null) )
-			this.numeroDocumento = numeroDocumento;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in setNumeroDocumento()");
-	}
-
-
-	/**
 	 * @return the cantidad
 	 */
 	public BigDecimal getCantidad() {
@@ -202,11 +120,11 @@ public class CuerpoDocumentoItem {
 	/**
 	 * @param codigo the codigo to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 25; null also possible
+	 * "minLength" : 1, "maxLength" : 200; null also possible
 	 */
 	public void setCodigo(String codigo) {
 		final int MINLENGTH = 1;
-		final int MAXLENGTH = 25;
+		final int MAXLENGTH = 200;
 		int length = codigo==null?0:codigo.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codigo==null) )
@@ -214,27 +132,6 @@ public class CuerpoDocumentoItem {
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'codigo' in setCodigo()");
 	}
-
-	/**
-	 * @return the codTributo
-	 */
-	public String getCodTributo() {
-		return codTributo;
-	}
-
-	/**
-	 * @param codTributo the codTributo to set<br>
-	 * The parameter is validated.<br>
-	 * "enum" : ["A8", "57", "90", "D4", "D5", "25", "A6"], null also allowed
-	 */
-	public void setCodTributo(String codTributo) {
-		if (codTributo==null || codTributo.compareTo("A8")==0 || codTributo.compareTo("57")==0 || codTributo.compareTo("90")==0 || codTributo.compareTo("D4")==0 || 
-				codTributo.compareTo("D5")==0 || codTributo.compareTo("25")==0 || codTributo.compareTo("A6")==0)
-			this.codTributo = codTributo;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'codTributo' in setCodTributo()");
-	}
-
 
 	/**
 	 * @return the uniMedida
@@ -311,36 +208,6 @@ public class CuerpoDocumentoItem {
 	}
 
 	/**
-	 * @return the ventaNoSuj
-	 */
-	public BigDecimal getVentaNoSuj() {
-		return ventaNoSuj;
-	}
-
-	/**
-	 * @param ventaNoSuj the ventaNoSuj to set
-	 * Condition according to schema: "multipleOf" : 0.00000001
-	 */
-	public void setVentaNoSuj(BigDecimal ventaNoSuj) {
-		this.ventaNoSuj = ventaNoSuj;
-	}
-
-	/**
-	 * @return the ventaExenta
-	 */
-	public BigDecimal getVentaExenta() {
-		return ventaExenta;
-	}
-
-	/**
-	 * @param ventaExenta the ventaExenta to set
-	 * Condition according to schema: "multipleOf" : 0.00000001
-	 */
-	public void setVentaExenta(BigDecimal ventaExenta) {
-		this.ventaExenta = ventaExenta;
-	}
-
-	/**
 	 * @return the ventaGravada
 	 */
 	public BigDecimal getVentaGravada() {
@@ -355,20 +222,6 @@ public class CuerpoDocumentoItem {
 		this.ventaGravada = ventaGravada;
 	}
 
-	/**
-	 * @return the psv
-	 */
-	public BigDecimal getPsv() {
-		return psv;
-	}
-
-	/**
-	 * @param psv the psv to set
-	 * Condition according to schema: "multipleOf" : 0.00000001
-	 */
-	public void setPsv(BigDecimal psv) {
-		this.psv = psv;
-	}
 
 	/**
 	 * @return the noGravado
@@ -408,19 +261,6 @@ public class CuerpoDocumentoItem {
 	}
 	
 
-	/**
-	 * @return the ivaItem
-	 */
-	public BigDecimal getIvaItem() {
-		return ivaItem;
-	}
-
-	/**
-	 * @param ivaItem the ivaItem to set
-	 */
-	public void setIvaItem(BigDecimal ivaItem) {
-		this.ivaItem = ivaItem;
-	}
 
 	/**
 	 * @param args

@@ -397,10 +397,16 @@ public class CuerpoDocumentoItem {
 	/**
 	 * @param tributos the tributos to set
 	 * Very complex logic: either null or a two-character string
-	 * "type" : ["array", "null"], "items" : {"type" : "string", "maxLength" : 2, "minLength" : 2}
+	 * "type" : ["array", "null"], "items" : {"type" : "string", "maxLength" : 2, "minLength" : 2}, "minItems": 1
 	 */
 	public void setTributos(ArrayList<String> tributos) {
-		this.tributos = tributos;
+		final int MINLENGTH = 1;
+		
+		// TODO : Check contents of strings ("maxLength": 2,, "minLength": 2)
+		if( (tributos==null) || (tributos.size()>=MINLENGTH) )
+			this.tributos = tributos;
+		else
+	        throw new IllegalArgumentException("Wrong expression 'tributos' in setTributos()");
 	}
 
 	/**

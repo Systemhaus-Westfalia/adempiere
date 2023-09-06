@@ -83,7 +83,7 @@ public boolean validateValues() {
 	public void setMotivoAnulacion(String motivoAnulacion) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 250;
-		int length = motivoAnulacion.length();
+		int length = motivoAnulacion==null?0:motivoAnulacion.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (motivoAnulacion==null) )
 			this.motivoAnulacion = motivoAnulacion;
@@ -112,7 +112,7 @@ public boolean validateValues() {
 	public void setNombreResponsable(String nombreResponsable) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 100;
-		int length = nombreResponsable.length();
+		int length = nombreResponsable==null?0:nombreResponsable.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombreResponsable = nombreResponsable;
@@ -171,7 +171,7 @@ public boolean validateValues() {
 	public void setNumDocResponsable(String numDocResponsable) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
-		int length = numDocResponsable.length();
+		int length = numDocResponsable==null?0:numDocResponsable.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocResponsable = numDocResponsable;
@@ -200,7 +200,7 @@ public boolean validateValues() {
 	public void setNombreSolicita(String nombreSolicita) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 100;
-		int length = nombreSolicita.length();
+		int length = nombreSolicita==null?0:nombreSolicita.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombreSolicita = nombreSolicita;
@@ -259,7 +259,7 @@ public boolean validateValues() {
 	public void setNumDocSolicita(String numDocSolicita) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
-		int length = numDocSolicita.length();
+		int length = numDocSolicita==null?0:numDocSolicita.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocSolicita = numDocSolicita;

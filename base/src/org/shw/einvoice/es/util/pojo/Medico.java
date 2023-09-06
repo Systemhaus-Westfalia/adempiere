@@ -53,7 +53,7 @@ public class Medico {
 	 */
 	public void setNombre(String nombre) {
 		final int MAXLENGTH = 100;
-		int length = nombre.length();
+		int length = nombre==null?0:nombre.length();
 		
 		if(length<=MAXLENGTH)
 			this.nombre = nombre;
@@ -98,7 +98,7 @@ public class Medico {
 	public void setDocIdentificacion(String docIdentificacion) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 25;
-		int length = docIdentificacion.length();
+		int length = docIdentificacion==null?0:docIdentificacion.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.docIdentificacion = docIdentificacion;

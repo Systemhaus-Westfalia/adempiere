@@ -170,7 +170,7 @@ public class CuerpoDocumentoItem {
 	public void setNumeroDocumento(String numeroDocumento) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 36;
-		int length = numeroDocumento.length();
+		int length = numeroDocumento==null?0:numeroDocumento.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numeroDocumento==null) )
 			this.numeroDocumento = numeroDocumento;
@@ -209,7 +209,7 @@ public class CuerpoDocumentoItem {
 	public void setCodigo(String codigo) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
-		int length = codigo.length();
+		int length = codigo==null?0:codigo.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codigo==null) )
 			this.codigo = codigo;
@@ -274,7 +274,7 @@ public class CuerpoDocumentoItem {
 	 */
 	public void setDescripcion(String descripcion) {
 		final int MAXLENGTH = 1000;
-		int length = descripcion.length();
+		int length = descripcion==null?0:descripcion.length();
 		
 		if(length<=MAXLENGTH)
 			this.descripcion = descripcion;

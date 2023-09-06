@@ -111,7 +111,7 @@ public boolean validateValues() {
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 200;
-		int length = nombre.length();
+		int length = nombre==null?0:nombre.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
@@ -160,7 +160,7 @@ public boolean validateValues() {
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
-		int length = descActividad.length();
+		int length = descActividad==null?0:descActividad.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
@@ -185,7 +185,7 @@ public boolean validateValues() {
 	public void setNombreComercial(String nombreComercial) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
-		int length = nombreComercial.length();
+		int length = nombreComercial==null?0:nombreComercial.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
@@ -247,7 +247,7 @@ public boolean validateValues() {
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 30;
-		int length = telefono.length();
+		int length = telefono==null?0:telefono.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.telefono = telefono;
@@ -272,7 +272,7 @@ public boolean validateValues() {
 	public void setCorreo(String correo) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 100;
-		int length = correo.length();
+		int length = correo==null?0:correo.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.correo = correo;
@@ -297,7 +297,7 @@ public boolean validateValues() {
 	public void setCodEstableMH(String codEstableMH) {
 		final int MINLENGTH = 4;
 		final int MAXLENGTH = 4;
-		int length = codEstableMH.length();
+		int length = codEstableMH==null?0:codEstableMH.length();
 
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstableMH==null) )
 			this.codEstableMH = codEstableMH;
@@ -322,7 +322,7 @@ public boolean validateValues() {
 	public void setCodEstable(String codEstable) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 10;
-		int length = codEstable.length();
+		int length = codEstable==null?0:codEstable.length();
 
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstable==null) )
 			this.codEstable = codEstable;
@@ -347,7 +347,7 @@ public boolean validateValues() {
 	public void setCodPuntoVentaMH(String codPuntoVentaMH) {
 		final int MINLENGTH = 4;
 		final int MAXLENGTH = 4;
-		int length = codPuntoVentaMH.length();
+		int length = codPuntoVentaMH==null?0:codPuntoVentaMH.length();
 
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVentaMH==null) )
 			this.codPuntoVentaMH = codPuntoVentaMH;
@@ -372,7 +372,7 @@ public boolean validateValues() {
 	public void setCodPuntoVenta(String codPuntoVenta) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 15;
-		int length = codPuntoVenta.length();
+		int length = codPuntoVenta==null?0:codPuntoVenta.length();
 
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVenta==null) )
 			this.codPuntoVenta = codPuntoVenta;
@@ -420,7 +420,7 @@ public boolean validateValues() {
 	public void setRecintoFiscal(String recintoFiscal) {
 		final int MINLENGTH = 2;		
 		final int MAXLENGTH = 2;
-		int length = recintoFiscal.length();
+		int length = recintoFiscal==null?0:recintoFiscal.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (recintoFiscal==null) )
 			this.recintoFiscal = recintoFiscal;
@@ -445,7 +445,7 @@ public boolean validateValues() {
 	public void setRegimen(String regimen) {
 		final int MINLENGTH = 1;		
 		final int MAXLENGTH = 13;
-		int length = regimen.length();
+		int length = regimen==null?0:regimen.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (regimen==null) )
 			this.regimen = regimen;

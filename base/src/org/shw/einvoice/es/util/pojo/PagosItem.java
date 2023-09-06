@@ -51,7 +51,7 @@ public class PagosItem {
 		final int LENGTH = 2;
 		boolean patternOK = Pattern.matches(PATTERN, codigo);  
 		
-		if(patternOK && codigo.length()==LENGTH)
+		if(patternOK && codigo!=null && codigo.length()==LENGTH)
 			this.codigo = codigo;
 		else
 	        throw new IllegalArgumentException("Wrong expression 'codigo' in setCodigo()");
@@ -85,7 +85,7 @@ public class PagosItem {
 	 */
 	public void setReferencia(String referencia) {
 		final int MAXLENGTH = 50;
-		int length = referencia.length();
+		int length = referencia==null?0:referencia.length();
 		
 		if( (length<=MAXLENGTH) || (referencia==null) )
 			this.referencia = referencia;

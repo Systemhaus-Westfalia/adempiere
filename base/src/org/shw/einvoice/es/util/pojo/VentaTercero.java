@@ -45,7 +45,7 @@ public class VentaTercero {
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 200;
-		int length = nombre.length();
+		int length = nombre==null?0:nombre.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;

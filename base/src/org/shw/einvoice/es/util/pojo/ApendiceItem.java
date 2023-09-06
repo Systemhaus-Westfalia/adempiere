@@ -34,7 +34,7 @@ public class ApendiceItem {
 	public void setCampo(String campo) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 25;
-		int length = campo.length();
+		int length = campo==null?0:campo.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.campo = campo;

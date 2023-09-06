@@ -37,7 +37,7 @@ public class Extension {
 	public void setNombEntrega(String nombEntrega) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 100;
-		int length = nombEntrega.length();
+		int length = nombEntrega==null?0:nombEntrega.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombEntrega==null) )
 			this.nombEntrega = nombEntrega;
@@ -60,7 +60,7 @@ public class Extension {
 	public void setDocuEntrega(String docuEntrega) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
-		int length = docuEntrega.length();
+		int length = docuEntrega==null?0:docuEntrega.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuEntrega==null) )
 			this.docuEntrega = docuEntrega;
@@ -83,7 +83,7 @@ public class Extension {
 	public void setNombRecibe(String nombRecibe) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 100;
-		int length = nombRecibe.length();
+		int length = nombRecibe==null?0:nombRecibe.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombRecibe==null) )
 			this.nombRecibe = nombRecibe;
@@ -106,7 +106,7 @@ public class Extension {
 	public void setDocuRecibe(String docuRecibe) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
-		int length = docuRecibe.length();
+		int length = docuRecibe==null?0:docuRecibe.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuRecibe==null) )
 			this.docuRecibe = docuRecibe;
@@ -128,7 +128,7 @@ public class Extension {
 	 */
 	public void setObservaciones(String observaciones) {
 		final int MAXLENGTH = 3000;
-		int length = observaciones.length();
+		int length = observaciones==null?0:observaciones.length();
 		
 		if( (length<=MAXLENGTH) || (observaciones==null) )
 			this.observaciones = observaciones;
@@ -151,7 +151,7 @@ public class Extension {
 	public void setPlacaVehiculo(String placaVehiculo) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 10;
-		int length = placaVehiculo.length();
+		int length = placaVehiculo==null?0:placaVehiculo.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (placaVehiculo==null) )
 			this.placaVehiculo = placaVehiculo;

@@ -43,12 +43,12 @@ public class TributosItem {
 	public void setCodigo(String codigo) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 2;
-		int length = codigo.length();		
+		int length = codigo==null?0:codigo.length();		
 
 		String[] validCodigos = { "C3", "59", "71", "D1", "C8", "C5", "C6", "C7", "D5", "19", "28", "31", "32",
 				"33", "34", "35", "36", "37", "38", "39", "42", "43", "44", "50", "51", "52", "53", "54", "55",
                 "58", "77", "78", "79", "85", "86", "91", "92", "A1", "A5", "A7", "A9" };		
-		boolean isCodigoValid = ((codigo==null) || Arrays.stream(validCodigos).anyMatch(codigo::equals));
+		boolean isCodigoValid = (!(codigo==null) && Arrays.stream(validCodigos).anyMatch(codigo::equals));
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH && isCodigoValid)
 			this.codigo = codigo;
@@ -71,7 +71,7 @@ public class TributosItem {
 	public void setDescripcion(String descripcion) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 150;
-		int length = descripcion.length();
+		int length = descripcion==null?0:descripcion.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descripcion = descripcion;

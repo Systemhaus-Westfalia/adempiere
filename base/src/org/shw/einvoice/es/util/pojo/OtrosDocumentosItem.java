@@ -83,7 +83,7 @@ public class OtrosDocumentosItem {
 	 */
 	public void setDescDocumento(String descDocumento) {
 		final int MAXLENGTH = 100;
-		int length = descDocumento.length();
+		int length = descDocumento==null?0:descDocumento.length();
 		
 		if( (length<=MAXLENGTH)  || (descDocumento==null) )
 			this.descDocumento = descDocumento;
@@ -105,7 +105,7 @@ public class OtrosDocumentosItem {
 	 */
 	public void setDetalleDocumento(String detalleDocumento) {
 		final int MAXLENGTH = 300;
-		int length = detalleDocumento.length();
+		int length = detalleDocumento==null?0:detalleDocumento.length();
 		
 		if( (length<=MAXLENGTH)  || (detalleDocumento==null) )
 			this.detalleDocumento = detalleDocumento;

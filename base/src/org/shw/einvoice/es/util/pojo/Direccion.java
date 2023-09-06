@@ -175,7 +175,7 @@ public class Direccion {
 	public void setComplemento(String complemento) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 200;
-		int length = complemento.length();
+		int length = complemento==null?0:complemento.length();
 
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.complemento = complemento;

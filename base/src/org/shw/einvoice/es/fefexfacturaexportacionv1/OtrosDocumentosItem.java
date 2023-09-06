@@ -98,7 +98,7 @@ public class OtrosDocumentosItem {
 	 */
 	public void setDescDocumento(String descDocumento) {
 		final int MAXLENGTH = 100;
-		int length = descDocumento.length();
+		int length = descDocumento==null?0:descDocumento.length();
 		
 		if( (length<=MAXLENGTH)  || (descDocumento==null) )
 			this.descDocumento = descDocumento;
@@ -120,7 +120,7 @@ public class OtrosDocumentosItem {
 	 */
 	public void setDetalleDocumento(String detalleDocumento) {
 		final int MAXLENGTH = 300;
-		int length = detalleDocumento.length();
+		int length = detalleDocumento==null?0:detalleDocumento.length();
 		
 		if( (length<=MAXLENGTH)  || (detalleDocumento==null) )
 			this.detalleDocumento = detalleDocumento;
@@ -144,7 +144,7 @@ public class OtrosDocumentosItem {
 	public void setPlacaTrans(String placaTrans) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 70;
-		int length = placaTrans.length();
+		int length = placaTrans==null?0:placaTrans.length();
 		
 		if( (placaTrans==null) || (length>=MINLENGTH && length<=MAXLENGTH) )
 			this.placaTrans = placaTrans;
@@ -187,7 +187,7 @@ public class OtrosDocumentosItem {
 	public void setNumConductor(String numConductor) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 100;
-		int length = placaTrans.length();
+		int length = numConductor==null?0:placaTrans.length();
 		
 		if( (numConductor==null) || (length>=MINLENGTH && length<=MAXLENGTH) )
 			this.numConductor = numConductor;
@@ -210,7 +210,7 @@ public class OtrosDocumentosItem {
 	public void setNombreConductor(String nombreConductor) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 200;
-		int length = nombreConductor.length();
+		int length = nombreConductor==null?0:nombreConductor.length();
 		
 		if( (nombreConductor==null) || (length>=MINLENGTH && length<=MAXLENGTH) )
 			this.nombreConductor = nombreConductor;

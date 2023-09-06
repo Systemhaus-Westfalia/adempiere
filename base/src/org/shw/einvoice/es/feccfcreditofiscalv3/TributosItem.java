@@ -41,7 +41,7 @@ public class TributosItem {
 	public void setCodigo(String codigo) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 2;
-		int length = codigo.length();
+		int length = codigo==null?0:codigo.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.codigo = codigo;
@@ -64,7 +64,7 @@ public class TributosItem {
 	public void setDescripcion(String descripcion) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 150;
-		int length = descripcion.length();
+		int length = descripcion==null?0:descripcion.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descripcion = descripcion;

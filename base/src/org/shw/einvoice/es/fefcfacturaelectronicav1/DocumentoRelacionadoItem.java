@@ -35,7 +35,7 @@ public class DocumentoRelacionadoItem {
 	public boolean validateValues() {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		if(getTipoGeneracion()==2) {
-			boolean patternOK = Pattern.matches(PATTERN, getNumeroDocumento());  
+			boolean patternOK = (getNumeroDocumento()!=null) && (Pattern.matches(PATTERN, getNumeroDocumento()));  
 			
 			if(!patternOK)
 				return false;
@@ -43,7 +43,7 @@ public class DocumentoRelacionadoItem {
 		if(getTipoGeneracion()==1) {
 			final int MINLENGTH = 1;
 			final int MAXLENGTH = 20;
-			int length = getNumeroDocumento().length();
+			int length = getNumeroDocumento()==null?0:getNumeroDocumento().length();
 
 			if(!(length>=MINLENGTH && length<=MAXLENGTH))
 				return false;
@@ -104,7 +104,7 @@ public class DocumentoRelacionadoItem {
 	public void setNumeroDocumento(String numeroDocumento) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 36;
-		int length = numeroDocumento.length();
+		int length = numeroDocumento==null?0:numeroDocumento.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numeroDocumento = numeroDocumento;

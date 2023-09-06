@@ -192,7 +192,7 @@ public class Identificacion {
 	public void setMotivoContingencia(String motivoContingencia) {
 		final int MINLENGTH = 1;		
 		final int MAXLENGTH = 500;
-		int length = motivoContingencia.length();
+		int length = motivoContingencia==null?0:motivoContingencia.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (motivoContingencia==null) )
 			this.motivoContingencia = motivoContingencia;

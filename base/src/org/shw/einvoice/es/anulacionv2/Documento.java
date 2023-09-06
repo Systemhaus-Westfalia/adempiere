@@ -76,7 +76,7 @@ public class Documento {
 	public void setCodigoGeneracion(String codigoGeneracion) {
 		final int MINLENGTH = 36;
 		final int MAXLENGTH = 36;
-		int length = codigoGeneracion.length();
+		int length = codigoGeneracion==null?0:codigoGeneracion.length();
 		
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracion);  
@@ -105,7 +105,7 @@ public class Documento {
 	public void setSelloRecibido(String selloRecibido) {
 		final int MINLENGTH = 40;
 		final int MAXLENGTH = 40;
-		int length = selloRecibido.length();
+		int length = selloRecibido==null?0:selloRecibido.length();
 		
 		final String PATTERN = "^[A-Z0-9]{40}$";
 		boolean patternOK = Pattern.matches(PATTERN, selloRecibido);  
@@ -134,7 +134,7 @@ public class Documento {
 	public void setNumeroControl(String numeroControl) {
 		final int MINLENGTH = 31;
 		final int MAXLENGTH = 31;
-		int length = numeroControl.length();
+		int length = numeroControl==null?0:numeroControl.length();
 		
 		final String PATTERN = "^DTE-0[0-9]|1[0-2]-[A-Z0-9]{8}-[0-9]{15}$";
 		boolean patternOK = Pattern.matches(PATTERN, numeroControl);  
@@ -195,7 +195,7 @@ public class Documento {
 	public void setCodigoGeneracionR(String codigoGeneracionR) {
 		final int MINLENGTH = 36;
 		final int MAXLENGTH = 36;
-		int length = codigoGeneracionR.length();
+		int length = codigoGeneracionR==null?0:codigoGeneracionR.length();
 		
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracionR);  
@@ -248,7 +248,7 @@ public class Documento {
 	public void setNumDocumento(String numDocumento) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
-		int length = numDocumento.length();
+		int length = numDocumento==null?0:numDocumento.length();
 				
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocumento = numDocumento;
@@ -273,7 +273,7 @@ public class Documento {
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 200;
-		int length = nombre.length();
+		int length = nombre==null?0:nombre.length();
 				
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
@@ -298,7 +298,7 @@ public class Documento {
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 50;
-		int length = telefono.length();
+		int length = telefono==null?0:telefono.length();
 
 		final String PATTERN = "^[0-9+;]{8,50}$";
 		boolean patternOK = Pattern.matches(PATTERN, telefono);  
@@ -325,7 +325,7 @@ public class Documento {
 	 */
 	public void setCorreo(String correo) {
 		final int MAXLENGTH = 100;
-		int length = correo.length();
+		int length = correo==null?0:correo.length();
 		
 		if(length<=MAXLENGTH)
 			this.correo = correo;

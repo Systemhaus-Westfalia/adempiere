@@ -192,7 +192,7 @@ public class Identificacion {
 	public void setMotivoContin(String motivoContin) {
 		final int MINLENGTH = 1;		
 		final int MAXLENGTH = 150;
-		int length = motivoContin.length();
+		int length = motivoContin==null?0:motivoContin.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.motivoContin = motivoContin;

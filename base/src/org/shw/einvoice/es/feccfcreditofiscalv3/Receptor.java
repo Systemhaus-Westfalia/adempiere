@@ -88,7 +88,7 @@ public class Receptor {
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 250;
-		int length = nombre.length();
+		int length = nombre==null?0:nombre.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
@@ -133,7 +133,7 @@ public class Receptor {
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
-		int length = descActividad.length();
+		int length = descActividad==null?0:descActividad.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
@@ -156,7 +156,7 @@ public class Receptor {
 	public void setNombreComercial(String nombreComercial) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
-		int length = nombreComercial.length();
+		int length = nombreComercial==null?0:nombreComercial.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
@@ -193,7 +193,7 @@ public class Receptor {
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 30;
-		int length = telefono.length();
+		int length = telefono==null?0:telefono.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.telefono = telefono;
@@ -215,7 +215,7 @@ public class Receptor {
 	 */
 	public void setCorreo(String correo) {
 		final int MAXLENGTH = 100;
-		int length = correo.length();
+		int length = correo==null?0:correo.length();
 		
 		if(length<=MAXLENGTH)
 			this.correo = correo;

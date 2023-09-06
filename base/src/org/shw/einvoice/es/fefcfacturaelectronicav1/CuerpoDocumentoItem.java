@@ -168,7 +168,7 @@ public class CuerpoDocumentoItem {
 	public void setNumeroDocumento(String numeroDocumento) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 36;
-		int length = numeroDocumento.length();
+		int length = numeroDocumento==null?0:numeroDocumento.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numeroDocumento==null) )
 			this.numeroDocumento = numeroDocumento;

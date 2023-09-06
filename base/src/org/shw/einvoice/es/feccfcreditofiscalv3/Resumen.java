@@ -340,7 +340,7 @@ public boolean validateValues() {
 	 */
 	public void setTotalLetras(String totalLetras) {
 		final int MAXLENGTH = 200;
-		int length = totalLetras.length();
+		int length = totalLetras==null?0:totalLetras.length();
 		
 		if( length<=MAXLENGTH)
 			this.totalLetras = totalLetras;
@@ -417,7 +417,7 @@ public boolean validateValues() {
 	 */
 	public void setNumPagoElectronico(String numPagoElectronico) {
 		final int MAXLENGTH = 100;
-		int length = numPagoElectronico.length();
+		int length = numPagoElectronico==null?0:numPagoElectronico.length();
 		
 		if( (length<=MAXLENGTH) || (numPagoElectronico==null) )
 			this.numPagoElectronico = numPagoElectronico;

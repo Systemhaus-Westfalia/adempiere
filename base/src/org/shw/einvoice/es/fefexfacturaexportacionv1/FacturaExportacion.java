@@ -5,6 +5,8 @@ package org.shw.einvoice.es.fefexfacturaexportacionv1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
+
 
 /**
  * 
@@ -14,6 +16,7 @@ public class FacturaExportacion {
 	Identificacion identificacion;
 	Emisor emisor;
 	Receptor receptor;
+	List<OtrosDocumentosItem> otrosDocumentos;
 
 	/**
 	 * No parameters
@@ -22,6 +25,7 @@ public class FacturaExportacion {
 		this.identificacion       = new Identificacion();
 		this.emisor				  = new Emisor();
 		this.receptor             = new Receptor();
+		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 	}
 
 	/**

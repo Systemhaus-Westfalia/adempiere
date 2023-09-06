@@ -13,7 +13,7 @@ public class OtrosDocumentosItem {
 	int codDocAsociado;
 	String descDocumento=null;  // null allowed
 	String detalleDocumento=null;  // null allowed
-	Medico medico;
+	Medico medico=null;  // null allowed
 	
 	/**
 	 * No Parameters
@@ -78,14 +78,14 @@ public class OtrosDocumentosItem {
 
 	/**
 	 * @param descDocumento the descDocumento to set<br>
-	 * The parameter is validated.<br>
+	 * The parameter is validated; null also possible.<br>
 	 * "maxLength" : 100
 	 */
 	public void setDescDocumento(String descDocumento) {
 		final int MAXLENGTH = 100;
 		int length = descDocumento.length();
 		
-		if(length<=MAXLENGTH)
+		if( (length<=MAXLENGTH)  || (descDocumento==null) )
 			this.descDocumento = descDocumento;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'descDocumento' in setDescDocumento()");
@@ -100,14 +100,14 @@ public class OtrosDocumentosItem {
 
 	/**
 	 * @param detalleDocumento the detalleDocumento to set<br>
-	 * The parameter is validated.<br>
+	 * The parameter is validated; null also possible.<br>.<br>
 	 * "maxLength" : 300
 	 */
 	public void setDetalleDocumento(String detalleDocumento) {
 		final int MAXLENGTH = 300;
 		int length = detalleDocumento.length();
 		
-		if(length<=MAXLENGTH)
+		if( (length<=MAXLENGTH)  || (detalleDocumento==null) )
 			this.detalleDocumento = detalleDocumento;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'detalleDocumento' in setDetalleDocumento()");

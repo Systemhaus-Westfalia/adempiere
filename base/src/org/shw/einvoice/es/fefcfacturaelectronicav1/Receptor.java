@@ -77,7 +77,7 @@ public class Receptor {
 	public void setTipoDocumento(String tipoDocumento) {
 		String[] validTipoDocumento = { "36", "13", "02", "03", "37" };
 		
-		if( (Arrays.stream(validTipoDocumento).anyMatch(tipoDocumento::equals)) || (tipoDocumento==null) )
+		if((tipoDocumento==null) || (Arrays.stream(validTipoDocumento).anyMatch(tipoDocumento::equals)) )
 			this.tipoDocumento = tipoDocumento;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in setTipoDocumento()");

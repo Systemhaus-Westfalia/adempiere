@@ -230,8 +230,8 @@ public class CuerpoDocumentoItem {
 	 * "enum" : ["A8", "57", "90", "D4", "D5", "25", "A6"], null also allowed
 	 */
 	public void setCodTributo(String codTributo) {
-		if (codTributo.compareTo("A8")==0 || codTributo.compareTo("57")==0 || codTributo.compareTo("90")==0 || codTributo.compareTo("D4")==0 || 
-				codTributo.compareTo("D5")==0 || codTributo.compareTo("25")==0 || codTributo.compareTo("A6")==0 || codTributo==null)
+		if (codTributo==null || codTributo.compareTo("A8")==0 || codTributo.compareTo("57")==0 || codTributo.compareTo("90")==0 || codTributo.compareTo("D4")==0 || 
+				codTributo.compareTo("D5")==0 || codTributo.compareTo("25")==0 || codTributo.compareTo("A6")==0)
 			this.codTributo = codTributo;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'codTributo' in setCodTributo()");

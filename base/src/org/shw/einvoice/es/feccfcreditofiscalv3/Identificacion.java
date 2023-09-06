@@ -149,7 +149,7 @@ public class Identificacion {
 	 * "enum" : [1,2,3,4,5], null
 	 */
 	public void setTipoContingencia(Integer tipoContingencia) {
-		if (tipoContingencia==1 || tipoContingencia==2 || tipoContingencia==3 || tipoContingencia==4 || tipoContingencia==5 || tipoContingencia==null)
+		if (tipoContingencia==null || tipoContingencia==1 || tipoContingencia==2 || tipoContingencia==3 || tipoContingencia==4 || tipoContingencia==5)
 			this.tipoContingencia = tipoContingencia;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoContingencia' in setTipoContingencia()");

@@ -35,7 +35,7 @@ public class DocumentoRelacionadoItem {
 	public boolean validateValues() {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		if(getTipoGeneracion()==2) {
-			boolean patternOK = Pattern.matches(PATTERN, getNumeroDocumento());  
+			boolean patternOK = (getNumeroDocumento()!=null) && Pattern.matches(PATTERN, getNumeroDocumento());  
 			
 			if(!patternOK)
 				return false;

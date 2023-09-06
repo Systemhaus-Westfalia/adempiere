@@ -49,7 +49,7 @@ public class PagosItem {
 	public void setCodigo(String codigo) {
 		final String PATTERN = "^(0[1-9]||1[0-4]||99)$";
 		final int LENGTH = 2;
-		boolean patternOK = Pattern.matches(PATTERN, codigo);  
+		boolean patternOK = (codigo!=null) && Pattern.matches(PATTERN, codigo);  
 		
 		if(patternOK && codigo!=null && codigo.length()==LENGTH)
 			this.codigo = codigo;
@@ -107,7 +107,7 @@ public class PagosItem {
 	 */
 	public void setPlazo(String plazo) {
 		final String PATTERN = "^0[1-3]$";
-		boolean patternOK = Pattern.matches(PATTERN, plazo);  
+		boolean patternOK = (plazo!=null) && Pattern.matches(PATTERN, plazo);  
 		
 		if(patternOK)
 			this.plazo = plazo;

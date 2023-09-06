@@ -41,7 +41,7 @@ public class Emisor {
 	 */
 	public void setNit(String nit) {
 		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
-		boolean patternOK = Pattern.matches(PATTERN, nit);  
+		boolean patternOK = (nit!=null) && Pattern.matches(PATTERN, nit);  
 		
 		if(patternOK)
 			this.nit = nit;
@@ -142,7 +142,7 @@ public class Emisor {
 		int length = telefono==null?0:telefono.length();
 
 		final String PATTERN = "^[0-9+;]{8,26}$";
-		boolean patternOK = Pattern.matches(PATTERN, telefono);  
+		boolean patternOK = (telefono!=null) && Pattern.matches(PATTERN, telefono);  
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.telefono = telefono;

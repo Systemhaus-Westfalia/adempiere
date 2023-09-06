@@ -42,7 +42,7 @@ public class Receptor {
 		// In schema: "pattern" : "^([0-9]{14}|[0-9]{9})$"
 		if(getTipoDocumento()=="36") {
 			pattern = "^([0-9]{14}|[0-9]{9})$";
-			patternOK = Pattern.matches(pattern, getNumDocumento());
+			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
 				return false;
 		} else {
@@ -53,7 +53,7 @@ public class Receptor {
 		// In schema: "pattern" : "^[0-9]{8}-[0-9]{1}$"
 		if(getTipoDocumento()=="13") {
 			pattern = "^[0-9]{8}-[0-9]{1}$";
-			patternOK = Pattern.matches(pattern, getNumDocumento());
+			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
 				return false;
 		}
@@ -123,7 +123,7 @@ public class Receptor {
 	 */
 	public void setNrc(String nrc) {
 		final String PATTERN = "^[0-9]{1,8}$";
-		boolean patternOK = Pattern.matches(PATTERN, nrc);  
+		boolean patternOK = (nrc!=null) && Pattern.matches(PATTERN, nrc);  
 		
 		if(patternOK)
 			this.nrc = nrc;
@@ -168,7 +168,7 @@ public class Receptor {
 	 */
 	public void setCodActividad(String codActividad) {
 		final String PATTERN = "^[0-9]{2,6}$";
-		boolean patternOK = Pattern.matches(PATTERN, codActividad);  
+		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
 		
 		if(patternOK)
 			this.codActividad = codActividad;

@@ -67,7 +67,7 @@ public class VentaTercero {
 	 */
 	public void setNit(String nit) {
 		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
-		boolean patternOK = Pattern.matches(PATTERN, nit);  
+		boolean patternOK = (nit!=null) && Pattern.matches(PATTERN, nit);  
 		
 		if(patternOK)
 			this.nit = nit;

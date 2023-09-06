@@ -79,7 +79,7 @@ public class Documento {
 		int length = codigoGeneracion==null?0:codigoGeneracion.length();
 		
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
-		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracion);  
+		boolean patternOK = (codigoGeneracion!=null) && Pattern.matches(PATTERN, codigoGeneracion);  
 				
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.codigoGeneracion = codigoGeneracion;
@@ -108,7 +108,7 @@ public class Documento {
 		int length = selloRecibido==null?0:selloRecibido.length();
 		
 		final String PATTERN = "^[A-Z0-9]{40}$";
-		boolean patternOK = Pattern.matches(PATTERN, selloRecibido);  
+		boolean patternOK = (selloRecibido!=null) && Pattern.matches(PATTERN, selloRecibido);  
 				
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.selloRecibido = selloRecibido;
@@ -137,7 +137,7 @@ public class Documento {
 		int length = numeroControl==null?0:numeroControl.length();
 		
 		final String PATTERN = "^DTE-0[0-9]|1[0-2]-[A-Z0-9]{8}-[0-9]{15}$";
-		boolean patternOK = Pattern.matches(PATTERN, numeroControl);  
+		boolean patternOK = (numeroControl!=null) && Pattern.matches(PATTERN, numeroControl);  
 				
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.numeroControl = numeroControl;
@@ -198,7 +198,7 @@ public class Documento {
 		int length = codigoGeneracionR==null?0:codigoGeneracionR.length();
 		
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
-		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracionR);  
+		boolean patternOK = (codigoGeneracionR!=null) && Pattern.matches(PATTERN, codigoGeneracionR);  
 				
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.codigoGeneracionR = codigoGeneracionR;
@@ -301,7 +301,7 @@ public class Documento {
 		int length = telefono==null?0:telefono.length();
 
 		final String PATTERN = "^[0-9+;]{8,50}$";
-		boolean patternOK = Pattern.matches(PATTERN, telefono);  
+		boolean patternOK = (telefono!=null) && Pattern.matches(PATTERN, telefono);  
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.telefono = telefono;

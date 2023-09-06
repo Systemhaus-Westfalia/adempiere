@@ -43,7 +43,7 @@ public class Receptor {
 	 */
 	public void setNit(String nit) {
 		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
-		boolean patternOK = Pattern.matches(PATTERN, nit);  
+		boolean patternOK = (nit!=null) && Pattern.matches(PATTERN, nit);  
 		
 		if(patternOK)
 			this.nit = nit;
@@ -65,7 +65,7 @@ public class Receptor {
 	 */
 	public void setNrc(String nrc) {
 		final String PATTERN = "^[0-9]{1,8}$";
-		boolean patternOK = Pattern.matches(PATTERN, nrc);  
+		boolean patternOK = (nrc!=null) && Pattern.matches(PATTERN, nrc);  
 		
 		if(patternOK)
 			this.nrc = nrc;
@@ -110,7 +110,7 @@ public class Receptor {
 	 */
 	public void setCodActividad(String codActividad) {
 		final String PATTERN = "^[0-9]{2,6}$";
-		boolean patternOK = Pattern.matches(PATTERN, codActividad);  
+		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
 		
 		if(patternOK)
 			this.codActividad = codActividad;

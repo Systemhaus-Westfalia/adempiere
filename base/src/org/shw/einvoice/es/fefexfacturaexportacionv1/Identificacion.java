@@ -120,7 +120,7 @@ public class Identificacion {
 	 */
 	public void setNumeroControl(String numeroControl) {
 		final String PATTERN = "^DTE-11-[A-Z0-9]{8}-[0-9]{15}$";
-		boolean patternOK = Pattern.matches(PATTERN, numeroControl);  
+		boolean patternOK = (numeroControl!=null) && Pattern.matches(PATTERN, numeroControl);  
 		
 		if(patternOK)
 			this.numeroControl = numeroControl;
@@ -167,7 +167,7 @@ public class Identificacion {
 	 */
 	public void setCodigoGeneracion(String codigoGeneracion) {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
-		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracion);  
+		boolean patternOK = (codigoGeneracion!=null) && Pattern.matches(PATTERN, codigoGeneracion);  
 		
 		if(patternOK)
 			this.codigoGeneracion = codigoGeneracion;
@@ -232,7 +232,7 @@ public class Identificacion {
 	 */
 	public void setHorEmi(String horEmi) {
 		final String PATTERN = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]?$";
-		boolean patternOK = Pattern.matches(PATTERN, horEmi);  
+		boolean patternOK = (horEmi!=null) && Pattern.matches(PATTERN, horEmi);  
 		
 		if(patternOK)
 			this.horEmi = horEmi;

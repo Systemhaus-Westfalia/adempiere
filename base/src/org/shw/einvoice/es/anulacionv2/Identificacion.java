@@ -79,7 +79,7 @@ public class Identificacion {
 	 */
 	public void setCodigoGeneracion(String codigoGeneracion) {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
-		boolean patternOK = Pattern.matches(PATTERN, codigoGeneracion);  
+		boolean patternOK = (codigoGeneracion!=null) && Pattern.matches(PATTERN, codigoGeneracion);  
 		
 		if(patternOK)
 			this.codigoGeneracion = codigoGeneracion;
@@ -120,7 +120,7 @@ public class Identificacion {
 	 */
 	public void setHorAnula(String horAnula) {
 		final String PATTERN = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]?$";
-		boolean patternOK = Pattern.matches(PATTERN, horAnula);  
+		boolean patternOK = (horAnula!=null) && Pattern.matches(PATTERN, horAnula);  
 		
 		if(patternOK)
 			this.horAnula = horAnula;

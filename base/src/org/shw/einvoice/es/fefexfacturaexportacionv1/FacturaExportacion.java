@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
+import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 
 /**
@@ -17,6 +18,7 @@ public class FacturaExportacion {
 	Emisor emisor;
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos;
+	VentaTercero ventaTercero;
 
 	/**
 	 * No parameters
@@ -26,6 +28,7 @@ public class FacturaExportacion {
 		this.emisor				  = new Emisor();
 		this.receptor             = new Receptor();
 		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
+		this.ventaTercero         = new VentaTercero();
 	}
 
 	/**

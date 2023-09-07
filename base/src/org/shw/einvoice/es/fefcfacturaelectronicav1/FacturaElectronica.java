@@ -5,7 +5,6 @@ package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.fefexfacturaexportacionv1.Identificacion;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;

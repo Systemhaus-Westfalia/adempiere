@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.adempiere.legacy.apache.ecs.xhtml.big;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItem;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.Resumen;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;

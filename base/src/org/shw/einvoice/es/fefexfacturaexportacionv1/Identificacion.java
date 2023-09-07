@@ -4,8 +4,8 @@ import java.util.regex.Pattern;
 public class Identificacion {
 
 	// motivoContin min length depends on value of "tipoDte
-	static final int VERSION   = 1;
-	static final String TIPOD_DE_DOCUMENTO = "11";
+	static final int VERSION              = 1;
+	static final String TIPO_DE_DOCUMENTO = "11";
 	static final String TIPOMONEDA        = "USD";
 	
 	int version;
@@ -26,7 +26,7 @@ public class Identificacion {
 	 */
 	public Identificacion() {
 		this.version = VERSION;
-		this.tipoDte = TIPOD_DE_DOCUMENTO;
+		this.tipoDte = TIPO_DE_DOCUMENTO;
 	}
 	
 	/**

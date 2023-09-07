@@ -1,22 +1,23 @@
-package org.shw.einvoice.es.feccfcreditofiscalv3;
+package org.shw.einvoice.es.fecrretencionv1;
 import java.util.regex.Pattern;  
 
 public class Identificacion {
 
-	// motivoContin min length depends on value of "tipoDte
-	static final int VERSION              = 3;
-	static final String TIPO_DE_DOCUMENTO = "03";
+	static final int VERSION              = 1;
+	static final String TIPO_DE_DOCUMENTO = "07";
 	static final String TIPOMONEDA        = "USD";
+	static final int TIPOMODELO           = 1;
+	static final int TIPOOPERACION        = 1;
 	
-	int version;
+	int version=VERSION;
 	String ambiente;
-	String tipoDte ;
+	String tipoDte=TIPO_DE_DOCUMENTO;
 	String numeroControl;
 	String codigoGeneracion;
-	int tipoModelo;
-	int tipoOperacion;
-	Integer tipoContingencia=null;  // null erlaubt
-	String motivoContin=null;       // null erlaubt
+	int tipoModelo=TIPOMODELO;
+	int tipoOperacion=TIPOOPERACION;
+	Integer tipoContingencia=null;  // null mandatory
+	String motivoContingencia=null; // null mandatory
 	String fecEmi;
 	String horEmi;
 	String tipoMoneda = TIPOMONEDA;
@@ -25,32 +26,18 @@ public class Identificacion {
 	 * No parameters
 	 */
 	public Identificacion() {
-		this.version = VERSION;
-		this.tipoDte = TIPO_DE_DOCUMENTO;
+		this.version            = VERSION;
+		this.tipoDte            = TIPO_DE_DOCUMENTO;
+		this.tipoModelo         = TIPOMODELO;
+		this.tipoOperacion      = TIPOOPERACION;
+		this.tipoContingencia   = null;
+		this.motivoContingencia = null;
 	}
 	
 	/**
-	 * Validate the Schema conditions
+	 * Validate the Schema conditions: no conditions in version #1
 	 */
-	public boolean validateValues() {
-		if(this.tipoOperacion==1) {
-			if (getTipoModelo() != 1) 
-				return false;
-			if (getTipoContingencia() != null) 
-				return false;
-			if (getMotivoContin() != null) 
-				return false;
-		} else  {
-			if (getTipoModelo() != 2) 
-				return false;
-		}
-		
-		if(this.tipoOperacion==2) {
-			// In schema: "tipoContingencia" : {"type" : "integer"}
-			if(getTipoContingencia()==null)
-		        return false;
-		}
-		
+	public boolean validateValues() {	
 		return true;
 	}
 
@@ -116,10 +103,10 @@ public class Identificacion {
 	/**
 	 * @param numeroControl the numeroControl to set<br>
 	 * The parameter is validated.<br>
-	 * "pattern" : "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$"
+	 * "pattern" : "^DTE-07-[A-Z0-9]{8}-[0-9]{15}$"
 	 */
 	public void setNumeroControl(String numeroControl) {
-		final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";
+		final String PATTERN = "^DTE-07-[A-Z0-9]{8}-[0-9]{15}$";
 		boolean patternOK = (numeroControl!=null) && Pattern.matches(PATTERN, numeroControl);  
 		
 		if(patternOK)
@@ -146,10 +133,10 @@ public class Identificacion {
 	/**
 	 * @param tipoContingencia the tipoContingencia to set<br>
 	 * The parameter is validated.<br>
-	 * "enum" : [1,2,3,4,5], null
+	 * null mandatory
 	 */
 	public void setTipoContingencia(Integer tipoContingencia) {
-		if (tipoContingencia==null || tipoContingencia==1 || tipoContingencia==2 || tipoContingencia==3 || tipoContingencia==4 || tipoContingencia==5)
+		if (tipoContingencia==null)
 			this.tipoContingencia = tipoContingencia;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoContingencia' in setTipoContingencia()");
@@ -177,27 +164,23 @@ public class Identificacion {
 
 
 	/**
-	 * @return the motivoContin
+	 * @return the motivoContingencia
 	 */
-	public String getMotivoContin() {
-		return motivoContin;
+	public String getMotivoContingencia() {
+		return motivoContingencia;
 	}
 
 
 	/**
-	 * @param motivoContin the motivoContin to set<br>
+	 * @param motivoContingencia the motivoContingencia to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 150
+	 * null mandatory
 	 */
-	public void setMotivoContin(String motivoContin) {
-		final int MINLENGTH = 1;		
-		final int MAXLENGTH = 150;
-		int length = motivoContin==null?0:motivoContin.length();
-		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
-			this.motivoContin = motivoContin;
+	public void setMotivoContingencia(String motivoContingencia) {
+		if(motivoContingencia==null)
+			this.motivoContingencia = motivoContingencia;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'motivoContin' in setMotivoContin()");
+	        throw new IllegalArgumentException("Wrong parameter 'motivoContingencia' in setMotivoContingencia()");
 	}
 
 
@@ -253,7 +236,11 @@ public class Identificacion {
 	 * @param tipoMoneda the tipoMoneda to set
 	 */
 	public void setTipoMoneda(String tipoMoneda) {
-		this.tipoMoneda = tipoMoneda;
+		if (tipoMoneda==TIPOMONEDA)
+			this.tipoMoneda = tipoMoneda;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoMoneda' in setTipoMoneda()");
+		
 	}
 
 	/**
@@ -266,10 +253,10 @@ public class Identificacion {
 	/**
 	 * @param tipoModelo the tipoModelo to set<br>
 	 * The parameter is validated.<br>
-	 * "enum" : [1,2]
+	 * "enum" : [1]
 	 */
 	public void setTipoModelo(int tipoModelo) {
-		if (tipoModelo==1 || tipoModelo==2)
+		if (tipoModelo==TIPOMODELO)
 			this.tipoModelo = tipoModelo;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoModelo' in setTipoModelo()");
@@ -285,10 +272,10 @@ public class Identificacion {
 	/**
 	 * @param tipoOperacion the tipoOperacion to set<br>
 	 * The parameter is validated.<br>
-	 * "enum" : [1,2]
+	 * "enum" : [1]
 	 */
 	public void setTipoOperacion(int tipoOperacion) {
-		if (tipoOperacion==1 || tipoOperacion==2)
+		if (tipoOperacion==TIPOOPERACION)
 			this.tipoOperacion = tipoOperacion;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoOperacion' in setTipoOperacion()");

@@ -5,8 +5,6 @@ package org.shw.einvoice.es.fecrretencionv1;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.fefcfacturaelectronicav1.Receptor;
-
 
 
 

@@ -20,6 +20,7 @@ public class Receptor {
 	String nombre=null; // null possible
 	String codActividad;
 	String descActividad=null; // null possible
+	String nombreComercial=null; // null possible
 	Direccion direccion;
     String telefono=null; // null possible
     String correo;
@@ -33,6 +34,35 @@ public class Receptor {
 
 	
 	/**
+	 * @param tipoDocumento
+	 * @param numDocumento
+	 * @param nrc
+	 * @param nombre
+	 * @param codActividad
+	 * @param descActividad
+	 * @param nombreComercial
+	 * @param direccion
+	 * @param telefono
+	 * @param correo
+	 */
+	public Receptor(String tipoDocumento, String numDocumento, String nrc, String nombre, String codActividad,
+			String descActividad, String nombreComercial, Direccion direccion, String telefono, String correo) {
+		super();
+		this.tipoDocumento = tipoDocumento;
+		this.numDocumento = numDocumento;
+		this.nrc = nrc;
+		this.nombre = nombre;
+		this.codActividad = codActividad;
+		this.descActividad = descActividad;
+		this.nombreComercial = nombreComercial;
+		this.direccion = direccion;
+		this.telefono = telefono;
+		this.correo = correo;
+	}
+
+
+
+	/**
 	 * Validate the Schema conditions
 	 */
 	public boolean validateValues() {
@@ -45,19 +75,24 @@ public class Receptor {
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
 				return false;
-		} else {
-			if(getNrc()!=null)
-				return false;
 		}
 
-		// In schema: "pattern" : "^[0-9]{8}-[0-9]{1}$"
+		// In schema: "pattern" : "^[0-9]{9}$"
 		if(getTipoDocumento()=="13") {
-			pattern = "^[0-9]{8}-[0-9]{1}$";
+			pattern = "^[0-9]{9}$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
 				return false;
+		} 
+
+		// In schema: "pattern" : "^[0-9]{1,8}$"
+		if(getTipoDocumento()=="36") {
+			pattern = "^[0-9]{1,8}$";
+			patternOK = (getNrc()!=null) && Pattern.matches(pattern, getNrc());
+			if(!patternOK)
+				return false;
 		}
-		
+
 		return true;
 	}
 	
@@ -80,7 +115,7 @@ public class Receptor {
 		if((tipoDocumento==null) || (Arrays.stream(validTipoDocumento).anyMatch(tipoDocumento::equals)) )
 			this.tipoDocumento = tipoDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in Factura.Receptor.setTipoDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in Retencion.Receptor.setTipoDocumento()");
 	}
 
 
@@ -95,17 +130,17 @@ public class Receptor {
 	/**
 	 * @param numDocumento the numDocumento to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 3, "maxLength" : 20; null also possible
+	 * "minLength" : 3, "maxLength" : 20; null not possible
 	 */
 	public void setNumDocumento(String numDocumento) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
 		int length = numDocumento==null?0:numDocumento.length();
 		
-		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numDocumento==null) )
+		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocumento = numDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in Factura.Receptor.setNumDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in Retencion.Receptor.setNumDocumento()");
 	}
 
 
@@ -128,7 +163,7 @@ public class Receptor {
 		if(patternOK)
 			this.nrc = nrc;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in Factura.Receptor.setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in Retencion.Receptor.setNrc()");
 	}
     
 	/**
@@ -141,17 +176,17 @@ public class Receptor {
 	/**
 	 * @param nombre the nombre to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 250; null permitted
+	 * "minLength" : 1, "maxLength" : 250; null not permitted
 	 */
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 250;
 		int length = nombre==null?0:nombre.length();
 		
-		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (nombre==null) )
+		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in Factura.Receptor.setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in Retencion.Receptor.setNombre()");
 	}
 
 	/**
@@ -164,16 +199,16 @@ public class Receptor {
 	/**
 	 * @param codActividad the codActividad to set<br>
 	 * The parameter is validated.<br>
-	 * "pattern" : "^[0-9]{2,6}$"
+	 * "pattern" : "^[0-9]{5,6}$"
 	 */
 	public void setCodActividad(String codActividad) {
-		final String PATTERN = "^[0-9]{2,6}$";
+		final String PATTERN = "^[0-9]{5,6}$";
 		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
 		
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in Factura.Receptor.setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in Retencion.Receptor.setCodActividad()");
 	}
 
 	/**
@@ -186,18 +221,45 @@ public class Receptor {
 	/**
 	 * @param descActividad the descActividad to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 5, "maxLength" : 150; null also possible
+	 * "minLength" : 5, "maxLength" : 150; null not possible
 	 */
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 150;
 		int length = descActividad==null?0:descActividad.length();
 		
-		if( (length>=MINLENGTH && length<=MAXLENGTH) || (descActividad==null) )
+		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in Factura.Receptor.setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in Retencion.Receptor.setDescActividad()");
 	}
+
+	/**
+	 * @return the nombreComercial
+	 */
+	public String getNombreComercial() {
+		return nombreComercial;
+	}
+
+
+
+	/**
+	 * @param nombreComercial the nombreComercial to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 1, "maxLength" : 150; null also possible
+	 */
+	public void setNombreComercial(String nombreComercial) {
+		final int MINLENGTH = 1;
+		final int MAXLENGTH = 150;
+		int length = nombreComercial==null?0:nombreComercial.length();
+		
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
+			this.nombreComercial = nombreComercial;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in Retencion.Receptor.setNombreComercial()");
+	}
+
+
 
 	/**
 	 * @return the direccion
@@ -233,7 +295,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (telefono==null) )
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in Factura.Receptor.setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in Retencion.Receptor.setTelefono()");
 	}
 
 	/**
@@ -255,7 +317,7 @@ public class Receptor {
 		if(length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in Factura.Receptor.setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in Retencion.Receptor.setCorreo()");
 	}
 
 	/**

@@ -2,6 +2,7 @@
  * 
  */
 package org.shw.einvoice.es.fefcfacturaelectronicav1;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,23 @@ public class FacturaElectronica {
 	 */
 	public Identificacion getIdentificacion() {
 		return identificacion;
+	}
+
+	/**
+	 * Validate the Schema conditions
+	 */
+	public boolean validateValues() {
+		final int MINIMUM = 1095;
+		if(getResumen().getMontoTotalOperacion().compareTo(BigDecimal.valueOf(MINIMUM))==1) {
+			if ( getReceptor().getTipoDocumento()== null)
+				return false;
+			if ( getReceptor().getNumDocumento()== null)
+				return false;
+			if ( getReceptor().getNombre()== null)
+				return false;
+		} 
+		
+		return true;
 	}
 
 

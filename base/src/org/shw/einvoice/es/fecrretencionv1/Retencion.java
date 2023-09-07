@@ -5,6 +5,8 @@ package org.shw.einvoice.es.fecrretencionv1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.util.pojo.ApendiceItem;
+
 
 /**
  * 
@@ -17,6 +19,7 @@ public class Retencion {
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
+	List<ApendiceItem> apendice=null;  // null allowed
 
 	/**
 	 * No parameters
@@ -28,6 +31,7 @@ public class Retencion {
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
+		this.apendice             = new ArrayList<ApendiceItem>();
 	}
 
 	/**

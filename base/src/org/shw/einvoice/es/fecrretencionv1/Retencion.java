@@ -7,7 +7,6 @@ import java.util.List;
 
 
 
-
 /**
  * 
  */
@@ -17,6 +16,7 @@ public class Retencion {
 	Emisor emisor;
 	Receptor receptor;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
+	Resumen resumen;
 
 	/**
 	 * No parameters
@@ -26,6 +26,7 @@ public class Retencion {
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		this.resumen              = new Resumen();
 	}
 
 	/**

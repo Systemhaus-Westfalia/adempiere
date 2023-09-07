@@ -32,6 +32,7 @@ public class Identificacion {
 		this.tipoOperacion      = TIPOOPERACION;
 		this.tipoContingencia   = null;
 		this.motivoContingencia = null;
+		this.tipoMoneda         = TIPOMONEDA;
 	}
 	
 	/**

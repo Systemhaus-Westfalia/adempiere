@@ -3,7 +3,6 @@ import java.util.regex.Pattern;
 
 public class Identificacion {
 
-	// motivoContin min length depends on value of "tipoDte
 	static final int VERSION              = 1;
 	static final String TIPO_DE_DOCUMENTO = "01";
 	static final String TIPOMONEDA        = "USD";
@@ -25,15 +24,16 @@ public class Identificacion {
 	 * No parameters
 	 */
 	public Identificacion() {
-		this.version = VERSION;
-		this.tipoDte = TIPO_DE_DOCUMENTO;
+		this.version    = VERSION;
+		this.tipoDte    = TIPO_DE_DOCUMENTO;
+		this.tipoMoneda = TIPOMONEDA;
 	}
 	
 	/**
 	 * Validate the Schema conditions
 	 */
 	public boolean validateValues() {
-		if(this.tipoOperacion==1) {
+		if(getTipoOperacion()==1) {
 			if (getTipoModelo() != 1) 
 				return false;
 			if (getTipoContingencia() != null) 
@@ -45,9 +45,15 @@ public class Identificacion {
 				return false;
 		}
 		
-		if(this.tipoOperacion==2) {
+		if(getTipoOperacion()==2) {
 			// In schema: "tipoContingencia" : {"type" : "integer"}
 			if(getTipoContingencia()==null)
+		        return false;
+		}
+		
+		if(getTipoContingencia()==5) {
+			// In schema: "motivoContin" : {"type" : "string"}
+			if(getMotivoContin()==null)
 		        return false;
 		}
 		

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * 
  */
@@ -17,6 +16,7 @@ public class Retencion {
 	Receptor receptor;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
+	Extension extension;
 
 	/**
 	 * No parameters
@@ -27,6 +27,7 @@ public class Retencion {
 		this.receptor             = new Receptor();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
+		this.extension            = new Extension();
 	}
 
 	/**

@@ -345,7 +345,7 @@ public boolean validateValues() {
 		if( length<=MAXLENGTH)
 			this.totalLetras = totalLetras;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in setTotalLetras()");
+	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in CreditoFiscal.Resumen.setTotalLetras()");
 	}
 
 
@@ -382,7 +382,7 @@ public boolean validateValues() {
 		if (condicionOperacion==1 || condicionOperacion==2 || condicionOperacion==2)
 			this.condicionOperacion = condicionOperacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in setCondicionOperacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in CreditoFiscal.Resumen.setCondicionOperacion()");
 	}
 
 
@@ -422,7 +422,7 @@ public boolean validateValues() {
 		if( (length<=MAXLENGTH) || (numPagoElectronico==null) )
 			this.numPagoElectronico = numPagoElectronico;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in setNumPagoElectronico()");
+	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in CreditoFiscal.Resumen.setNumPagoElectronico()");
 	}
 
 

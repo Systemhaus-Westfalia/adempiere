@@ -54,7 +54,7 @@ public class PagosItem {
 		if(patternOK && codigo!=null && codigo.length()==LENGTH)
 			this.codigo = codigo;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codigo' in setCodigo()");
+	        throw new IllegalArgumentException("Wrong expression 'codigo' in (POJO).PagosItem.setCodigo()");
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class PagosItem {
 		if( (length<=MAXLENGTH) || (referencia==null) )
 			this.referencia = referencia;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'referencia' in setReferencia()");
+	        throw new IllegalArgumentException("Wrong parameter 'referencia' in (POJO).PagosItem.setReferencia()");
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class PagosItem {
 		if(patternOK)
 			this.plazo = plazo;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'plazo' in setPlazo()");
+	        throw new IllegalArgumentException("Wrong expression 'plazo' in (POJO).PagosItem.setPlazo()");
 	}
 
 	/**

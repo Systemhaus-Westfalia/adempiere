@@ -60,7 +60,7 @@ public class Identificacion {
 		if (ambiente.compareTo("00")==0 || ambiente.compareTo("01")==0)
 			this.ambiente = ambiente;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'ambiente' in setAmbiente()");
+	        throw new IllegalArgumentException("Wrong parameter 'ambiente' in Anulacion.identificacion.setAmbiente()");
 	}
 
 	
@@ -84,7 +84,7 @@ public class Identificacion {
 		if(patternOK)
 			this.codigoGeneracion = codigoGeneracion;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codigoGeneracion' in setCodigoGeneracion()");
+	        throw new IllegalArgumentException("Wrong expression 'codigoGeneracion' in Anulacion.identificacion.setCodigoGeneracion()");
 	}
 
 
@@ -125,7 +125,7 @@ public class Identificacion {
 		if(patternOK)
 			this.horAnula = horAnula;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'horAnula' in setHorAnula()");
+	        throw new IllegalArgumentException("Wrong expression 'horAnula' in Anulacion.identificacion.setHorAnula()");
 	}
 
 

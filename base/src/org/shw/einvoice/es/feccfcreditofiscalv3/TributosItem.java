@@ -46,7 +46,7 @@ public class TributosItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.codigo = codigo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codigo' in setCodigo()");
+	        throw new IllegalArgumentException("Wrong parameter 'codigo' in CreditoFiscal.TributosItem.setCodigo()");
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class TributosItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descripcion = descripcion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in setDescripcion()");
+	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in CreditoFiscal.TributosItem.setDescripcion()");
 	}
 
 

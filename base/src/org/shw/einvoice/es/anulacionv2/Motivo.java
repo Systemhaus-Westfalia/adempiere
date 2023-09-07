@@ -59,7 +59,7 @@ public boolean validateValues() {
 		if (tipoAnulacion==1 || tipoAnulacion==2 || tipoAnulacion==3)
 			this.tipoAnulacion = tipoAnulacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoAnulacion' in setTipoAnulacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoAnulacion' in Anulacion.Motivo.setTipoAnulacion()");
 	}
 
 
@@ -88,7 +88,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (motivoAnulacion==null) )
 			this.motivoAnulacion = motivoAnulacion;
 		else
-		    throw new IllegalArgumentException("Wrong parameter 'motivoAnulacion' in setMotivoAnulacion()");
+		    throw new IllegalArgumentException("Wrong parameter 'motivoAnulacion' in Anulacion.Motivo.setMotivoAnulacion()");
 	}
 
 
@@ -117,7 +117,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombreResponsable = nombreResponsable;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreResponsable' in setNombreResponsable()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreResponsable' in Anulacion.Motivo.setNombreResponsable()");
 	}
 
 
@@ -147,7 +147,7 @@ public boolean validateValues() {
 		if(isTipoDocResponsableValid)
 			this.tipDocResponsable = tipDocResponsable;
 		else
-			throw new IllegalArgumentException("Wrong parameter 'tipDocResponsable' in setTipDocResponsable()");
+			throw new IllegalArgumentException("Wrong parameter 'tipDocResponsable' in Anulacion.Motivo.setTipDocResponsable()");
 	}
 
 
@@ -176,7 +176,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocResponsable = numDocResponsable;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocResponsable' in setNumDocResponsable()");
+	        throw new IllegalArgumentException("Wrong parameter 'numDocResponsable' in Anulacion.Motivo.setNumDocResponsable()");
 	}
 
 
@@ -205,7 +205,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombreSolicita = nombreSolicita;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreSolicita' in setNombreSolicita()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreSolicita' in Anulacion.Motivo.setNombreSolicita()");
 	}
 
 
@@ -235,7 +235,7 @@ public boolean validateValues() {
 		if(isTipoDocSolicitaValid)
 			this.tipDocSolicita = tipDocSolicita;
 		else
-			throw new IllegalArgumentException("Wrong parameter 'tipDocSolicita' in setTipDocSolicita()");
+			throw new IllegalArgumentException("Wrong parameter 'tipDocSolicita' in Anulacion.Motivo.setTipDocSolicita()");
 	}
 
 
@@ -264,7 +264,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocSolicita = numDocSolicita;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocSolicita' in setNumDocSolicita()");
+	        throw new IllegalArgumentException("Wrong parameter 'numDocSolicita' in Anulacion.Motivo.setNumDocSolicita()");
 	}
 
 

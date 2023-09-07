@@ -203,7 +203,7 @@ public boolean validateValues() {
 		if( length<=MAXLENGTH)
 			this.totalLetras = totalLetras;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in setTotalLetras()");
+	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in Factura.Resumen.setTotalLetras()");
 	}
 
 
@@ -224,7 +224,7 @@ public boolean validateValues() {
 		if (condicionOperacion==1 || condicionOperacion==2 || condicionOperacion==2)
 			this.condicionOperacion = condicionOperacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in setCondicionOperacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in Factura.Resumen.setCondicionOperacion()");
 	}
 
 
@@ -280,7 +280,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (descIncoterms==null) )
 			this.descIncoterms = descIncoterms;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descIncoterms' in setDescIncoterms()");
+	        throw new IllegalArgumentException("Wrong parameter 'descIncoterms' in Factura.Resumen.setDescIncoterms()");
 	}
 
 	/**
@@ -303,7 +303,7 @@ public boolean validateValues() {
 		if( (length<=MAXLENGTH) || (numPagoElectronico==null) )
 			this.numPagoElectronico = numPagoElectronico;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in setNumPagoElectronico()");
+	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in Factura.Resumen.setNumPagoElectronico()");
 	}
 
 
@@ -326,7 +326,7 @@ public boolean validateValues() {
 		if( (length<=MAXLENGTH) || (observaciones==null) )
 			this.observaciones = observaciones;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in setObservaciones()");
+	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in Factura.Resumen.setObservaciones()");
 	}
 
 	/**

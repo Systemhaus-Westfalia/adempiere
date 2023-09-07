@@ -53,7 +53,7 @@ public class Documento {
 		if(isTipoDteValid)
 			this.tipoDte = tipoDte;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoDte' in setTipoDte()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDte' in Anulacion.Documento.setTipoDte()");
 	}
 
 
@@ -84,7 +84,7 @@ public class Documento {
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.codigoGeneracion = codigoGeneracion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codigoGeneracion' in setCodigoGeneracion()");
+	        throw new IllegalArgumentException("Wrong parameter 'codigoGeneracion' in Anulacion.Documento.setCodigoGeneracion()");
 	}
 
 
@@ -113,7 +113,7 @@ public class Documento {
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.selloRecibido = selloRecibido;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'selloRecibido' in setSelloRecibido()");
+	        throw new IllegalArgumentException("Wrong parameter 'selloRecibido' in Anulacion.Documento.setSelloRecibido()");
 	}
 
 
@@ -142,7 +142,7 @@ public class Documento {
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.numeroControl = numeroControl;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numeroControl' in setNumeroControl()");
+	        throw new IllegalArgumentException("Wrong parameter 'numeroControl' in Anulacion.Documento.setNumeroControl()");
 	}
 
 
@@ -203,7 +203,7 @@ public class Documento {
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.codigoGeneracionR = codigoGeneracionR;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codigoGeneracionR' in setCodigoGeneracionR()");
+	        throw new IllegalArgumentException("Wrong parameter 'codigoGeneracionR' in Anulacion.Documento.setCodigoGeneracionR()");
 	}
 
 
@@ -228,7 +228,7 @@ public class Documento {
 		if(isTipoDocumentoValid)
 			this.tipoDocumento = tipoDocumento;
 		else
-			throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in setTipoDocumento()");
+			throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in Anulacion.Documento.setTipoDocumento()");
 	}
 
 
@@ -253,7 +253,7 @@ public class Documento {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocumento = numDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in setNumDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in Anulacion.Documento.setNumDocumento()");
 	}
 
 
@@ -278,7 +278,7 @@ public class Documento {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in Anulacion.Documento.setNombre()");
 	}
 
 	/**
@@ -306,7 +306,7 @@ public class Documento {
 		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in Anulacion.Documento.setTelefono()");
 	}
 
 
@@ -330,7 +330,7 @@ public class Documento {
 		if(length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in Anulacion.Documento.setCorreo()");
 	}	
 	
 	

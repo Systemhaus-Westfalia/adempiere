@@ -135,7 +135,7 @@ public class Direccion {
 		if(patternOK)
 			this.departamento = departamento;
 		else
-			throw new IllegalArgumentException("Wrong expression 'departamento' in setDepartamento()");
+			throw new IllegalArgumentException("Wrong expression 'departamento' in (POJO).Direccion.setDepartamento()");
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class Direccion {
 		if(patternOK)
 			this.municipio = municipio;
 		else
-			throw new IllegalArgumentException("Wrong expression 'municipio' in setMunicipio()");
+			throw new IllegalArgumentException("Wrong expression 'municipio' in (POJO).Direccion.setMunicipio()");
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class Direccion {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.complemento = complemento;
 		else
-			throw new IllegalArgumentException("Wrong parameter 'complemento' in setComplemento()");
+			throw new IllegalArgumentException("Wrong parameter 'complemento' in (POJO).Direccion.setComplemento()");
 	}
 
 

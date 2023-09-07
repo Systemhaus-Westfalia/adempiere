@@ -80,7 +80,7 @@ public class Receptor {
 		if((tipoDocumento==null) || (Arrays.stream(validTipoDocumento).anyMatch(tipoDocumento::equals)) )
 			this.tipoDocumento = tipoDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in setTipoDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in Factura.Receptor.setTipoDocumento()");
 	}
 
 
@@ -105,7 +105,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numDocumento==null) )
 			this.numDocumento = numDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in setNumDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in Factura.Receptor.setNumDocumento()");
 	}
 
 
@@ -128,7 +128,7 @@ public class Receptor {
 		if(patternOK)
 			this.nrc = nrc;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in Factura.Receptor.setNrc()");
 	}
     
 	/**
@@ -151,7 +151,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (nombre==null) )
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in Factura.Receptor.setNombre()");
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class Receptor {
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in Factura.Receptor.setCodActividad()");
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (descActividad==null) )
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in Factura.Receptor.setDescActividad()");
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (telefono==null) )
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in Factura.Receptor.setTelefono()");
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class Receptor {
 		if(length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in Factura.Receptor.setCorreo()");
 	}
 
 	/**

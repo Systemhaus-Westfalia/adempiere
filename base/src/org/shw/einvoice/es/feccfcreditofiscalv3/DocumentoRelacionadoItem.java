@@ -59,7 +59,7 @@ public class DocumentoRelacionadoItem {
 		if (tipoDocumento.compareTo("04")==0 || tipoDocumento.compareTo("08")==0 || tipoDocumento.compareTo("09")==0)
 			this.tipoDocumento = tipoDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in setTipoDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in CreditoFiscal.DocumentoRelacionadoItem.setTipoDocumento()");
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class DocumentoRelacionadoItem {
 		if (tipoGeneracion==1 || tipoGeneracion==2)
 			this.tipoGeneracion = tipoGeneracion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoGeneracion' in setTipoGeneracion()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoGeneracion' in CreditoFiscal.DocumentoRelacionadoItem.setTipoGeneracion()");
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class DocumentoRelacionadoItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numeroDocumento = numeroDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in setNumeroDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in CreditoFiscal.DocumentoRelacionadoItem.setNumeroDocumento()");
 	}
 
 	/**

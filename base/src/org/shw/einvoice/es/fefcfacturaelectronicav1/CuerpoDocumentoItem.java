@@ -130,7 +130,7 @@ public class CuerpoDocumentoItem {
 		if(numItem>=MINIMUM && numItem<=MAXIMUM)
 			this.numItem = numItem;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numItem' in setNumItem()");
+	        throw new IllegalArgumentException("Wrong parameter 'numItem' in Factura.CuerpoDocumentoItem.setNumItem()");
 	}
 
 
@@ -150,7 +150,7 @@ public class CuerpoDocumentoItem {
 		if (tipoItem==1 || tipoItem==2 || tipoItem==3 || tipoItem==4)
 			this.tipoItem = tipoItem;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoItem' in setTipoItem()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoItem' in Factura.CuerpoDocumentoItem.setTipoItem()");
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class CuerpoDocumentoItem {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numeroDocumento==null) )
 			this.numeroDocumento = numeroDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in setNumeroDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in Factura.CuerpoDocumentoItem.setNumeroDocumento()");
 	}
 
 
@@ -212,7 +212,7 @@ public class CuerpoDocumentoItem {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codigo==null) )
 			this.codigo = codigo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codigo' in setCodigo()");
+	        throw new IllegalArgumentException("Wrong parameter 'codigo' in Factura.CuerpoDocumentoItem.setCodigo()");
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class CuerpoDocumentoItem {
 				codTributo.compareTo("D5")==0 || codTributo.compareTo("25")==0 || codTributo.compareTo("A6")==0)
 			this.codTributo = codTributo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codTributo' in setCodTributo()");
+	        throw new IllegalArgumentException("Wrong parameter 'codTributo' in Factura.CuerpoDocumentoItem.setCodTributo()");
 	}
 
 
@@ -255,7 +255,7 @@ public class CuerpoDocumentoItem {
 		if(uniMedida>=MINIMUM && uniMedida<=MAXIMUM)
 			this.uniMedida = uniMedida;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'uniMedida' in setUniMedida()");
+	        throw new IllegalArgumentException("Wrong parameter 'uniMedida' in Factura.CuerpoDocumentoItem.setUniMedida()");
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class CuerpoDocumentoItem {
 		if(length<=MAXLENGTH)
 			this.descripcion = descripcion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in setDescripcion()");
+	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in Factura.CuerpoDocumentoItem.setDescripcion()");
 	}
 	
 	/**
@@ -404,7 +404,7 @@ public class CuerpoDocumentoItem {
 		if( (tributos==null) || (tributos.size()>=MINLENGTH) )
 			this.tributos = tributos;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'tributos' in setTributos()");
+	        throw new IllegalArgumentException("Wrong expression 'tributos' in Factura.CuerpoDocumentoItem.setTributos()");
 	}
 	
 

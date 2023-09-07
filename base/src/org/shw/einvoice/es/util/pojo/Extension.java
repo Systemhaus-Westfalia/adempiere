@@ -42,7 +42,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombEntrega==null) )
 			this.nombEntrega = nombEntrega;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombEntrega' in setNombEntrega()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombEntrega' in (POJO).Extension.setNombEntrega()");
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuEntrega==null) )
 			this.docuEntrega = docuEntrega;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'docuEntrega' in setDocuEntrega()");
+	        throw new IllegalArgumentException("Wrong parameter 'docuEntrega' in (POJO).Extension.setDocuEntrega()");
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombRecibe==null) )
 			this.nombRecibe = nombRecibe;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombRecibe' in setNombRecibe()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombRecibe' in (POJO).Extension.setNombRecibe()");
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuRecibe==null) )
 			this.docuRecibe = docuRecibe;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'docuRecibe' in setDocuRecibe()");
+	        throw new IllegalArgumentException("Wrong parameter 'docuRecibe' in (POJO).Extension.setDocuRecibe()");
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class Extension {
 		if( (length<=MAXLENGTH) || (observaciones==null) )
 			this.observaciones = observaciones;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in setObservaciones()");
+	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in (POJO).Extension.setObservaciones()");
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (placaVehiculo==null) )
 			this.placaVehiculo = placaVehiculo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'placaVehiculo' in setPlacaVehiculo()");
+	        throw new IllegalArgumentException("Wrong parameter 'placaVehiculo' in (POJO).Extension.setPlacaVehiculo()");
 	}
 
 

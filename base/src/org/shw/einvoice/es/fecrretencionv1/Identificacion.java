@@ -74,7 +74,7 @@ public class Identificacion {
 		if (ambiente.compareTo("00")==0 || ambiente.compareTo("01")==0)
 			this.ambiente = ambiente;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'ambiente' in setAmbiente()");
+	        throw new IllegalArgumentException("Wrong parameter 'ambiente' in Retencion.Identificacion.setAmbiente()");
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class Identificacion {
 		if(patternOK)
 			this.numeroControl = numeroControl;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'numeroControl' in setNumeroControl()");
+	        throw new IllegalArgumentException("Wrong expression 'numeroControl' in Retencion.Identificacion.setNumeroControl()");
 	}
 
 
@@ -140,7 +140,7 @@ public class Identificacion {
 		if (tipoContingencia==null)
 			this.tipoContingencia = tipoContingencia;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoContingencia' in setTipoContingencia()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoContingencia' in Retencion.Identificacion.setTipoContingencia()");
 
 		// Schema conditions
 		//if(getTipoContingencia()==5) {
@@ -160,7 +160,7 @@ public class Identificacion {
 		if(patternOK)
 			this.codigoGeneracion = codigoGeneracion;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codigoGeneracion' in setCodigoGeneracion()");
+	        throw new IllegalArgumentException("Wrong expression 'codigoGeneracion' in Retencion.Identificacion.setCodigoGeneracion()");
 	}
 
 
@@ -181,7 +181,7 @@ public class Identificacion {
 		if(motivoContingencia==null)
 			this.motivoContingencia = motivoContingencia;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'motivoContingencia' in setMotivoContingencia()");
+	        throw new IllegalArgumentException("Wrong parameter 'motivoContingencia' in Retencion.Identificacion.setMotivoContingencia()");
 	}
 
 
@@ -221,7 +221,7 @@ public class Identificacion {
 		if(patternOK)
 			this.horEmi = horEmi;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'horEmi' in setHorEmi()");
+	        throw new IllegalArgumentException("Wrong expression 'horEmi' in Retencion.Identificacion.setHorEmi()");
 	}
 
 
@@ -240,7 +240,7 @@ public class Identificacion {
 		if (tipoMoneda==TIPOMONEDA)
 			this.tipoMoneda = tipoMoneda;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoMoneda' in setTipoMoneda()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoMoneda' in Retencion.Identificacion.setTipoMoneda()");
 		
 	}
 
@@ -260,7 +260,7 @@ public class Identificacion {
 		if (tipoModelo==TIPOMODELO)
 			this.tipoModelo = tipoModelo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoModelo' in setTipoModelo()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoModelo' in Retencion.Identificacion.setTipoModelo()");
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class Identificacion {
 		if (tipoOperacion==TIPOOPERACION)
 			this.tipoOperacion = tipoOperacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoOperacion' in setTipoOperacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoOperacion' in Retencion.Identificacion.setTipoOperacion()");
 	}
 
 	public static void main(String[] args) {

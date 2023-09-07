@@ -39,7 +39,7 @@ public class ApendiceItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.campo = campo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'campo' in setCampo()");
+	        throw new IllegalArgumentException("Wrong parameter 'campo' in (POJO).ApendiceItem.setCampo()");
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class ApendiceItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.etiqueta = etiqueta;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'etiqueta' in setEtiqueta()");
+	        throw new IllegalArgumentException("Wrong parameter 'etiqueta' in (POJO).ApendiceItem.setEtiqueta()");
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class ApendiceItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.valor = valor;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'valor' in setValor()");
+	        throw new IllegalArgumentException("Wrong parameter 'valor' in (POJO).ApendiceItem.setValor()");
 	}
 
 

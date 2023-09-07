@@ -58,7 +58,7 @@ public class Medico {
 		if(length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in (POJO).Medico.setNombre()");
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class Medico {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in (POJO).Medico.setNit()");
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class Medico {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.docIdentificacion = docIdentificacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'docIdentificacion' in setDocIdentificacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'docIdentificacion' in (POJO).Medico.setDocIdentificacion()");
 	}
 
 
@@ -128,7 +128,7 @@ public class Medico {
 		if(tipoServicio>=MINIMUM && tipoServicio<=MAXIMUM)
 			this.tipoServicio = tipoServicio;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoServicio' in setTipoServicio()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoServicio' in (POJO).Medico.setTipoServicio()");
 	}
 
 

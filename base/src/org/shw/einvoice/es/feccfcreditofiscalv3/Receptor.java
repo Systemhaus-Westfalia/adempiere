@@ -48,7 +48,7 @@ public class Receptor {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in CreditoFiscal.Receptor.setNit()");
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class Receptor {
 		if(patternOK)
 			this.nrc = nrc;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in CreditoFiscal.Receptor.setNrc()");
 	}
     
 	/**
@@ -93,7 +93,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in CreditoFiscal.Receptor.setNombre()");
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class Receptor {
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in CreditoFiscal.Receptor.setCodActividad()");
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in CreditoFiscal.Receptor.setDescActividad()");
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in setNombreComercial()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in CreditoFiscal.Receptor.setNombreComercial()");
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in CreditoFiscal.Receptor.setTelefono()");
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class Receptor {
 		if(length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in CreditoFiscal.Receptor.setCorreo()");
 	}
 
 	/**

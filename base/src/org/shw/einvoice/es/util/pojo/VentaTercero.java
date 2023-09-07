@@ -50,7 +50,7 @@ public class VentaTercero {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in (POJO).VentaTercero.setNombre()");
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class VentaTercero {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in (POJO).VentaTercero.setNit()");
 	}
 
 

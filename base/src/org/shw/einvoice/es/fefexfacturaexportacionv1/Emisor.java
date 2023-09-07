@@ -67,7 +67,7 @@ public boolean validateValues() {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in FacturaExportacion.Emisor.setNit()");
 	}
 
 
@@ -91,7 +91,7 @@ public boolean validateValues() {
 		if(patternOK)
 			this.nrc = nrc;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in FacturaExportacion.Emisor.setNrc()");
 	}
 
 
@@ -116,7 +116,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in FacturaExportacion.Emisor.setNombre()");
 	}
 
 
@@ -140,7 +140,7 @@ public boolean validateValues() {
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in FacturaExportacion.Emisor.setCodActividad()");
 	}
 
 
@@ -165,7 +165,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in FacturaExportacion.Emisor.setDescActividad()");
 	}
 
 
@@ -190,7 +190,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in setNombreComercial()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in FacturaExportacion.Emisor.setNombreComercial()");
 	}
 
 
@@ -211,7 +211,7 @@ public boolean validateValues() {
 		if (tipoEstablecimiento.compareTo("01")==0 || tipoEstablecimiento.compareTo("02")==0 || tipoEstablecimiento.compareTo("04")==0 || tipoEstablecimiento.compareTo("07")==0 || tipoEstablecimiento.compareTo("20")==0)
 			this.tipoEstablecimiento = tipoEstablecimiento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in setTipoEstablecimiento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in FacturaExportacion.Emisor.setTipoEstablecimiento()");
 	}
 
 
@@ -252,7 +252,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in FacturaExportacion.Emisor.setTelefono()");
 	}
 
 
@@ -277,7 +277,7 @@ public boolean validateValues() {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in FacturaExportacion.Emisor.setCorreo()");
 	}
 
 
@@ -302,7 +302,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstableMH==null) )
 			this.codEstableMH = codEstableMH;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codEstableMH' in setCodEstableMH()");
+	        throw new IllegalArgumentException("Wrong parameter 'codEstableMH' in FacturaExportacion.Emisor.setCodEstableMH()");
 	}
 
 
@@ -327,7 +327,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstable==null) )
 			this.codEstable = codEstable;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codEstable' in setCodEstable()");
+	        throw new IllegalArgumentException("Wrong parameter 'codEstable' in FacturaExportacion.Emisor.setCodEstable()");
 	}
 
 
@@ -352,7 +352,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVentaMH==null) )
 			this.codPuntoVentaMH = codPuntoVentaMH;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVentaMH' in setCodPuntoVentaMH()");
+	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVentaMH' in FacturaExportacion.Emisor.setCodPuntoVentaMH()");
 	}
 
 
@@ -377,7 +377,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVenta==null) )
 			this.codPuntoVenta = codPuntoVenta;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVenta' in setCodPuntoVenta()");
+	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVenta' in FacturaExportacion.Emisor.setCodPuntoVenta()");
 	}
 
 
@@ -400,7 +400,7 @@ public boolean validateValues() {
 		if (tipoItemExpor==1 || tipoItemExpor==2 || tipoItemExpor==3)
 			this.tipoItemExpor = tipoItemExpor;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoItemExpor' in setTipoItemExpor()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoItemExpor' in FacturaExportacion.Emisor.setTipoItemExpor()");
 	}
 
 
@@ -425,7 +425,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (recintoFiscal==null) )
 			this.recintoFiscal = recintoFiscal;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'recintoFiscal' in setRecintoFiscal()");
+	        throw new IllegalArgumentException("Wrong parameter 'recintoFiscal' in FacturaExportacion.Emisor.setRecintoFiscal()");
 	}
 
 
@@ -450,7 +450,7 @@ public boolean validateValues() {
 		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (regimen==null) )
 			this.regimen = regimen;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'regimen' in setRegimen()");
+	        throw new IllegalArgumentException("Wrong parameter 'regimen' in FacturaExportacion.Emisor.setRegimen()");
 	}
 
 

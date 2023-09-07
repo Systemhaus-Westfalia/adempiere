@@ -80,7 +80,7 @@ public class Receptor {
 		if( Arrays.stream(validTipoDocumento).anyMatch(tipoDocumento::equals) )
 			this.tipoDocumento = tipoDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in setTipoDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in FacturaExportacion.Receptor.setTipoDocumento()");
 	}
 
 
@@ -105,7 +105,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH )
 			this.numDocumento = numDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in setNumDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in FacturaExportacion.Receptor.setNumDocumento()");
 	}
     
 	/**
@@ -130,7 +130,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in setNombreComercial()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in FacturaExportacion.Receptor.setNombreComercial()");
 	}
 
 
@@ -173,7 +173,7 @@ public class Receptor {
 		if(Arrays.stream(validPais).anyMatch(codPais::equals))
 			this.codPais = codPais;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codPais' in setCodPais()");
+	        throw new IllegalArgumentException("Wrong parameter 'codPais' in FacturaExportacion.Receptor.setCodPais()");
 	}
 
 
@@ -200,7 +200,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombrePais = nombrePais;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombrePais' in setNombrePais()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombrePais' in FacturaExportacion.Receptor.setNombrePais()");
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.complemento = complemento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'complemento' in setComplemento()");
+	        throw new IllegalArgumentException("Wrong parameter 'complemento' in FacturaExportacion.Receptor.setComplemento()");
 	}
 
 
@@ -243,7 +243,7 @@ public class Receptor {
 		if (tipoPersona==1 || tipoPersona==2)
 			this.tipoPersona = tipoPersona;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoPersona' in setTipoPersona()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoPersona' in FacturaExportacion.Receptor.setTipoPersona()");
 	}
 
 
@@ -268,7 +268,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in FacturaExportacion.Receptor.setNombre()");
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class Receptor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in FacturaExportacion.Receptor.setDescActividad()");
 	}
 
 	/**
@@ -328,7 +328,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (telefono==null) )
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in FacturaExportacion.Receptor.setTelefono()");
 	}
 
 	/**
@@ -351,7 +351,7 @@ public class Receptor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (correo==null) )
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in FacturaExportacion.Receptor.setCorreo()");
 	}
 
 	/**

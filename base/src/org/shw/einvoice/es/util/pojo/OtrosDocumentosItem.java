@@ -65,7 +65,7 @@ public class OtrosDocumentosItem {
 		if(codDocAsociado>=MINIMUM && codDocAsociado<=MAXIMUM)
 			this.codDocAsociado = codDocAsociado;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codDocAsociado' in setCodDocAsociado()");
+	        throw new IllegalArgumentException("Wrong parameter 'codDocAsociado' in (POJO).OtrosDocumentosItem.setCodDocAsociado()");
 	}
 
 
@@ -88,7 +88,7 @@ public class OtrosDocumentosItem {
 		if( (length<=MAXLENGTH)  || (descDocumento==null) )
 			this.descDocumento = descDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descDocumento' in setDescDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'descDocumento' in (POJO).OtrosDocumentosItem.setDescDocumento()");
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class OtrosDocumentosItem {
 		if( (length<=MAXLENGTH)  || (detalleDocumento==null) )
 			this.detalleDocumento = detalleDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'detalleDocumento' in setDetalleDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'detalleDocumento' in (POJO).OtrosDocumentosItem.setDetalleDocumento()");
 	}
 
 	/**

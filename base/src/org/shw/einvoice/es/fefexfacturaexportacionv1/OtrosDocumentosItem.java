@@ -80,7 +80,7 @@ public class OtrosDocumentosItem {
 		if(codDocAsociado>=MINIMUM && codDocAsociado<=MAXIMUM)
 			this.codDocAsociado = codDocAsociado;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codDocAsociado' in setCodDocAsociado()");
+	        throw new IllegalArgumentException("Wrong parameter 'codDocAsociado' in FacturaExportacion.OtrosDocumentosItem.setCodDocAsociado()");
 	}
 
 
@@ -103,7 +103,7 @@ public class OtrosDocumentosItem {
 		if( (length<=MAXLENGTH)  || (descDocumento==null) )
 			this.descDocumento = descDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descDocumento' in setDescDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'descDocumento' in FacturaExportacion.OtrosDocumentosItem.setDescDocumento()");
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class OtrosDocumentosItem {
 		if( (length<=MAXLENGTH)  || (detalleDocumento==null) )
 			this.detalleDocumento = detalleDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'detalleDocumento' in setDetalleDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'detalleDocumento' in FacturaExportacion.OtrosDocumentosItem.setDetalleDocumento()");
 	}
 
 
@@ -149,7 +149,7 @@ public class OtrosDocumentosItem {
 		if( (placaTrans==null) || (length>=MINLENGTH && length<=MAXLENGTH) )
 			this.placaTrans = placaTrans;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'placaTrans' in setPlacaTrans()");
+	        throw new IllegalArgumentException("Wrong parameter 'placaTrans' in FacturaExportacion.OtrosDocumentosItem.setPlacaTrans()");
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class OtrosDocumentosItem {
 		if ( (modoTransp==null) || (modoTransp>=1 && modoTransp<=7) )
 			this.modoTransp = modoTransp;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'modoTransp' in setModoTransp()");
+	        throw new IllegalArgumentException("Wrong parameter 'modoTransp' in FacturaExportacion.OtrosDocumentosItem.setModoTransp()");
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class OtrosDocumentosItem {
 		if( (numConductor==null) || (length>=MINLENGTH && length<=MAXLENGTH) )
 			this.numConductor = numConductor;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numConductor' in setNumConductor()");
+	        throw new IllegalArgumentException("Wrong parameter 'numConductor' in FacturaExportacion.OtrosDocumentosItem.setNumConductor()");
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class OtrosDocumentosItem {
 		if( (nombreConductor==null) || (length>=MINLENGTH && length<=MAXLENGTH) )
 			this.nombreConductor = nombreConductor;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreConductor' in setNombreConductor()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreConductor' in FacturaExportacion.OtrosDocumentosItem.setNombreConductor()");
 	}
 
 	/**

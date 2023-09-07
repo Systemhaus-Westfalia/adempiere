@@ -48,7 +48,7 @@ public class Emisor {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in setNit()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in Retencion.Emisor.setNit()");
 	}
 
 
@@ -72,7 +72,7 @@ public class Emisor {
 		if(patternOK)
 			this.nrc = nrc;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in Retencion.Emisor.setNrc()");
 	}
 
 
@@ -97,7 +97,7 @@ public class Emisor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in Retencion.Emisor.setNombre()");
 	}
 
 
@@ -122,7 +122,7 @@ public class Emisor {
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in Retencion.Emisor.setCodActividad()");
 	}
 
 
@@ -147,7 +147,7 @@ public class Emisor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in Retencion.Emisor.setDescActividad()");
 	}
 
 
@@ -172,7 +172,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in setNombreComercial()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in Retencion.Emisor.setNombreComercial()");
 	}
 
 
@@ -193,7 +193,7 @@ public class Emisor {
 		if (tipoEstablecimiento.compareTo("01")==0 || tipoEstablecimiento.compareTo("02")==0 || tipoEstablecimiento.compareTo("04")==0 || tipoEstablecimiento.compareTo("20")==0)
 			this.tipoEstablecimiento = tipoEstablecimiento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in setTipoEstablecimiento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in Retencion.Emisor.setTipoEstablecimiento()");
 	}
 
 
@@ -239,7 +239,7 @@ public class Emisor {
 		if(patternOK)
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in Retencion.Emisor.setTelefono()");
 	}
 
 
@@ -264,7 +264,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codigoMH==null) )
 			this.codigoMH = codigoMH;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codigoMH' in setCodigoMH()");
+	        throw new IllegalArgumentException("Wrong parameter 'codigoMH' in Retencion.Emisor.setCodigoMH()");
 	}
 
 
@@ -289,7 +289,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codigo==null) )
 			this.codigo = codigo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codigo' in setCodigo()");
+	        throw new IllegalArgumentException("Wrong parameter 'codigo' in Retencion.Emisor.setCodigo()");
 	}
 
 
@@ -314,7 +314,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (puntoVentaMH==null) )
 			this.puntoVentaMH = puntoVentaMH;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'puntoVentaMH' in setPuntoVentaMH()");
+	        throw new IllegalArgumentException("Wrong parameter 'puntoVentaMH' in Retencion.Emisor.setPuntoVentaMH()");
 	}
 
 
@@ -339,7 +339,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (puntoVenta==null) )
 			this.puntoVenta = puntoVenta;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'puntoVenta' in setPuntoVenta()");
+	        throw new IllegalArgumentException("Wrong parameter 'puntoVenta' in Retencion.Emisor.setPuntoVenta()");
 	}
 
 
@@ -364,7 +364,7 @@ public class Emisor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in Retencion.Emisor.setCorreo()");
 	}
 
 

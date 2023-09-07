@@ -14,8 +14,7 @@ public class Identificacion {
 	String horAnula;
 
 	/**
-	 * @param version version of schema
-	 * @param tipoDte Tipo de Documento
+	 * No parameters
 	 */
 	public Identificacion() {
 		this.version = VERSION;
@@ -98,10 +97,14 @@ public class Identificacion {
 
 
 	/**
-	 * @param fecEmi the fecAnula to set
+	 * @param fecEmi the fecAnula to set<br>
+	 * null not allowed
 	 */
 	public void setFecEmi(String fecAnula) {
+		if(fecAnula!=null)
 		this.fecAnula = fecAnula;
+	else
+        throw new IllegalArgumentException("Wrong parameter 'fecAnula' in Anulacion.Identificacion.setFecEmi()");
 	}
 
 

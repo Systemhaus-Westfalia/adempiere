@@ -194,10 +194,14 @@ public class Identificacion {
 
 
 	/**
-	 * @param fecEmi the fecEmi to set
+	 * @param fecEmi the fecEmi to set<br>
+	 * null not allowed
 	 */
 	public void setFecEmi(String fecEmi) {
-		this.fecEmi = fecEmi;
+		if (fecEmi!=null)
+			this.fecEmi = fecEmi;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'fecEmi' in Retencion.Identificacion.setFecEmi()");
 	}
 
 

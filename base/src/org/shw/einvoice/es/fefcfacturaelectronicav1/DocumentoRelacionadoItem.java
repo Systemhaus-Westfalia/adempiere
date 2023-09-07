@@ -120,10 +120,14 @@ public class DocumentoRelacionadoItem {
 	}
 
 	/**
-	 * @param fechaEmision the fechaEmision to set
+	 * @param fechaEmision the fechaEmision to set<br>
+	 * null not allowed
 	 */
 	public void setFechaEmision(String fechaEmision) {
-		this.fechaEmision = fechaEmision;
+		if (fechaEmision!=null)
+			this.fechaEmision = fechaEmision;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'fechaEmision' in Factura.DocumentoRelacionadoItem.setFechaEmision()");
 	}
 
 

@@ -5,6 +5,7 @@ package org.shw.einvoice.es.fecrretencionv1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.Emisor;
 
 
@@ -15,6 +16,7 @@ public class Retencion {
 	
 	Identificacion identificacion;
 	Emisor emisor;
+	List<CuerpoDocumentoItem> cuerpoDocumento;
 
 	/**
 	 * No parameters
@@ -22,6 +24,7 @@ public class Retencion {
 	public Retencion() {
 		this.identificacion       = new Identificacion();
 		this.emisor               = new Emisor();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 	}
 
 	/**

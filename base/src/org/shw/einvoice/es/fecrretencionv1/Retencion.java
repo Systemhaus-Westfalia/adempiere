@@ -5,6 +5,8 @@ package org.shw.einvoice.es.fecrretencionv1;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.util.pojo.Emisor;
+
 
 /**
  * 
@@ -12,12 +14,14 @@ import java.util.List;
 public class Retencion {
 	
 	Identificacion identificacion;
+	Emisor emisor;
 
 	/**
 	 * No parameters
 	 */
 	public Retencion() {
 		this.identificacion       = new Identificacion();
+		this.emisor               = new Emisor();
 	}
 
 	/**

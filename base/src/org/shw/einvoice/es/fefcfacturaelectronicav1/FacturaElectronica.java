@@ -26,7 +26,7 @@ public class FacturaElectronica {
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
-	List<ApendiceItem> apendice;
+	List<ApendiceItem> apendice=null;  // null allowed
 
 	/**
 	 * No parameters

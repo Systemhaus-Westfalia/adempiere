@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItem;
+import org.shw.einvoice.es.fefcfacturaelectronicav1.Resumen;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
@@ -21,6 +22,7 @@ public class FacturaExportacion {
 	List<OtrosDocumentosItem> otrosDocumentos;
 	VentaTercero ventaTercero;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
+	Resumen resumen;
 
 	/**
 	 * No parameters
@@ -32,6 +34,7 @@ public class FacturaExportacion {
 		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		this.resumen              = new Resumen();
 	}
 
 	/**

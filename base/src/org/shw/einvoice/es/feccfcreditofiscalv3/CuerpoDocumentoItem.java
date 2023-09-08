@@ -113,7 +113,7 @@ public class CuerpoDocumentoItem {
 					"D4", "19", "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "42", "43", "44", "50", "51", "52", "53",
                     "54", "55", "58", "77", "78", "79", "85", "86", "91", "92", "A1", "A5", "A7", "A9"));
 			// Here, is only ONE item expected; where there are MANY items expected, the query must be changed.
-			if ((getTributos()==null) || (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1) )
+			if ( (getTributos()!=null) && ( (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1)) )
 				return VALIDATION_TRIBUTOS_PATTERN_FAILED;			
 		}
 		

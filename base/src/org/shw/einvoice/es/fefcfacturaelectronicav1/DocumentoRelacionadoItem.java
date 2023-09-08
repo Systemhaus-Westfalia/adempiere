@@ -3,6 +3,10 @@ package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.util.regex.Pattern;
 
 public class DocumentoRelacionadoItem {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED = "Documento: Factura, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";
+	static final String VALIDATION_NUMERODOCUMENTO_LENGTH_FAILED  = "Documento: Factura, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento'  debe  contener de 1 a 20 caracteres";
+	
 	String tipoDocumento;
 	int tipoGeneracion;
 	String numeroDocumento;
@@ -32,13 +36,13 @@ public class DocumentoRelacionadoItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		if(getTipoGeneracion()==2) {
 			boolean patternOK = (getNumeroDocumento()!=null) && (Pattern.matches(PATTERN, getNumeroDocumento()));  
 			
 			if(!patternOK)
-				return false;
+				return VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED;
 		}
 		if(getTipoGeneracion()==1) {
 			final int MINLENGTH = 1;
@@ -46,9 +50,9 @@ public class DocumentoRelacionadoItem {
 			int length = getNumeroDocumento()==null?0:getNumeroDocumento().length();
 
 			if(!(length>=MINLENGTH && length<=MAXLENGTH))
-				return false;
+				return VALIDATION_NUMERODOCUMENTO_LENGTH_FAILED;
 		}
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

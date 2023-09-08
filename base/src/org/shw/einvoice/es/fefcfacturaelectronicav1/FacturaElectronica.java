@@ -19,6 +19,12 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 public class FacturaElectronica {
 	static final int MINIMUM_TOTOTAL_OF_OPERATION = 1095;
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
+
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_TIPODOCUMENTO_IS_NULL      = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'tipoDocumento' no debe ser ='null'";
+	static final String VALIDATION_NUMDOCUMENTO_IS_NULL       = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'numDocumento' no debe ser ='null'";
+	static final String VALIDATION_NOMBRE_IS_NULL             = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'NOMBRE' no debe ser ='null'";
+	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'cuerpoDocumento' debe  contener máximo " + CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
@@ -57,21 +63,21 @@ public class FacturaElectronica {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if(getResumen().getMontoTotalOperacion().compareTo(BigDecimal.valueOf(MINIMUM_TOTOTAL_OF_OPERATION))==1) {
 			if ( getReceptor().getTipoDocumento()== null)
-				return false;
+				return VALIDATION_TIPODOCUMENTO_IS_NULL;
 			if ( getReceptor().getNumDocumento()== null)
-				return false;
+				return VALIDATION_NUMDOCUMENTO_IS_NULL;
 			if ( getReceptor().getNombre()== null)
-				return false;
+				return VALIDATION_NOMBRE_IS_NULL;
 		} 
 		
 		if( (getCuerpoDocumento()==null) ||  (getCuerpoDocumento().size()==0)  ||  (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
-			return false;
+			return VALIDATION_CUERPODOCUMENTO_MAX_ITEMS;
 		}
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 

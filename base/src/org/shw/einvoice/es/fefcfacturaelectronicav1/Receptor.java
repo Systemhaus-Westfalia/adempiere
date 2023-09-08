@@ -13,6 +13,9 @@ import org.shw.einvoice.es.util.pojo.Direccion;
  * 
  */
 public class Receptor {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Factura, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
+	static final String VALIDATION_NRC_NOT_NULL                    = "Documento: Factura, clase: Receptor. Validacion falló: valor de 'nrc' debe ser ='null'";
 
 	String tipoDocumento=null; // null possible
 	String numDocumento=null; // null possible
@@ -35,7 +38,7 @@ public class Receptor {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		String pattern;
 		boolean patternOK;
 
@@ -44,10 +47,10 @@ public class Receptor {
 			pattern = "^([0-9]{14}|[0-9]{9})$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
-				return false;
+				return VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED;
 		} else {
 			if(getNrc()!=null)
-				return false;
+				return VALIDATION_NRC_NOT_NULL;
 		}
 
 		// In schema: "pattern" : "^[0-9]{8}-[0-9]{1}$"
@@ -55,10 +58,10 @@ public class Receptor {
 			pattern = "^[0-9]{8}-[0-9]{1}$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
-				return false;
+				return VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED;
 		}
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 	
 	/**

@@ -13,6 +13,8 @@ import org.shw.einvoice.es.util.pojo.PagosItem;
  * 
  */
 public class Resumen {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Factura, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
 	
 	BigDecimal totalNoSuj;
 	BigDecimal totalExenta;
@@ -50,14 +52,14 @@ public Resumen() {
 /**
  * Validate the Schema conditions
  */
-public boolean validateValues() {
+public String validateValues() {
 	
 	if(getTotalGravada()==BigDecimal.ZERO) {
 		if ( getIvaRete1().compareTo(BigDecimal.ZERO) == 1 )
-			return false;
+			return VALIDATION_TOTALGRAVADA_IVARETE1;
 	} 
 	
-	return true;
+	return VALIDATION_RESULT_OK;
 }
 	/**
 	 * @return the totalNoSuj

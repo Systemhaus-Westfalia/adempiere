@@ -11,6 +11,13 @@ import java.util.List;
  * 
  */
 public class CuerpoDocumentoItem {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_TRIBUTOS_NOT_NULL        = "Documento: Factura, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='null'";
+	static final String VALIDATION_UDM_NOT_99               = "Documento: Factura, clase: CuerpoDocumentoItem. Validacion falló: valor de 'uniMedida' debe ser =99";
+	static final String VALIDATION_IVAITEM                  = "Documento: Factura, clase: CuerpoDocumentoItem. Validacion falló: valor de 'ivaItem' no debe ser mayor que cero";
+	static final String VALIDATION_CODTRIBUTO_IS_NULL      = "Documento: Factura, clase: CuerpoDocumentoItem. Validacion falló: valor de 'codTributo' no debe ser ='null'";
+	static final String VALIDATION_CODTRIBUTO_NOT_NULL      = "Documento: Factura, clase: CuerpoDocumentoItem. Validacion falló: valor de 'codTributo' debe ser ='null'";
+	static final String VALIDATION_TRIBUTOS_PATTERN_FAILED  = "Documento: Factura, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no corresponde a patrón";
 	
 	int numItem;
 	int tipoItem;
@@ -82,33 +89,34 @@ public class CuerpoDocumentoItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if(getVentaGravada()==BigDecimal.ZERO) {
-			if ( (getTributos()!=null) || (getIvaItem().compareTo(BigDecimal.ZERO) == 1) )
-				return false;
+			if (getTributos()!=null)
+				return VALIDATION_TRIBUTOS_NOT_NULL;
+			if (getIvaItem().compareTo(BigDecimal.ZERO) == 1)
+				return VALIDATION_IVAITEM;
 		} 
 
 		if(getTipoItem()==4) {
 			if (getUniMedida()!=99)
-				return false;
+				return VALIDATION_UDM_NOT_99;
 			if (getCodTributo()==null)
-				return false;
+				return VALIDATION_CODTRIBUTO_IS_NULL;
 			if (getTributos()!=null)
-				return false;
+				return VALIDATION_TRIBUTOS_NOT_NULL;
 		} else {
 			if (getCodTributo()!=null)
-				return false;
+				return VALIDATION_CODTRIBUTO_NOT_NULL;
 			
 			ArrayList<String> expectedValues=  new ArrayList<>(List.of(   "C3", "59", "71", "D1", "C5", "C6", "C7", "C8", "D5",
 					"D4", "19", "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "42", "43", "44", "50", "51", "52",
 					"53", "54", "55", "58", "77", "78", "79", "85", "86", "91", "92", "A1", "A5", "A7", "A9"));
 			// Here, is only ONE item expected; where there are MANY items expected, the query must be changed.
 			if ((getTributos()==null) || (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1) )
-				return false;
-			
+				return VALIDATION_TRIBUTOS_PATTERN_FAILED;
 		}
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

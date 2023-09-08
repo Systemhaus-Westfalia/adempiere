@@ -13,23 +13,31 @@ import org.shw.einvoice.es.util.pojo.PagosItem;
  * 
  */
 public class Resumen {
-
+	
+	BigDecimal totalNoSuj;
+	BigDecimal totalExenta;
 	BigDecimal totalGravada;
-	BigDecimal descuento;
+	BigDecimal subTotalVentas;
+	BigDecimal descuNoSuj;
+	BigDecimal descuExenta;
+	BigDecimal descuGravada;
 	BigDecimal porcentajeDescuento;
 	BigDecimal totalDescu;
-	BigDecimal seguro=null;  // null allowed
-	BigDecimal flete=null;  // null allowed
+	List<TributosItem> tributos;
+	BigDecimal subTotal;
+	BigDecimal ivaPerci1;
+	BigDecimal ivaRete1;
+	BigDecimal reteRenta;
 	BigDecimal montoTotalOperacion;
 	BigDecimal totalNoGravado;
 	BigDecimal totalPagar;
     String totalLetras;
+	BigDecimal totalIva;
+    BigDecimal saldoFavor;
     int condicionOperacion;
 	List<PagosItem> pagos ;  // there must be at least one item
-	String codIncoterms=null;  // null allowed
-	String descIncoterms=null;  // null allowed
-	String numPagoElectronico=null;  // null allowed
-	String observaciones=null;  // null allowed   
+   String numPagoElectronico=null;  // null allowed
+   
    
 
 	/**
@@ -40,12 +48,48 @@ public Resumen() {
 }
 
 /**
- * Validate the Schema conditions: as of Version #1, there are no conditions.
+ * Validate the Schema conditions
  */
 public boolean validateValues() {
 	
+	if(getTotalGravada()==BigDecimal.ZERO) {
+		if ( getIvaRete1().compareTo(BigDecimal.ZERO) == 1 )
+			return false;
+	} 
+	
 	return true;
 }
+	/**
+	 * @return the totalNoSuj
+	 */
+	public BigDecimal getTotalNoSuj() {
+		return totalNoSuj;
+	}
+
+
+	/**
+	 * @param totalNoSuj the totalNoSuj to set
+	 */
+	public void setTotalNoSuj(BigDecimal totalNoSuj) {
+		this.totalNoSuj = totalNoSuj;
+	}
+
+
+	/**
+	 * @return the totalExenta
+	 */
+	public BigDecimal getTotalExenta() {
+		return totalExenta;
+	}
+
+
+	/**
+	 * @param totalExenta the totalExenta to set
+	 */
+	public void setTotalExenta(BigDecimal totalExenta) {
+		this.totalExenta = totalExenta;
+	}
+
 
 	/**
 	 * @return the totalGravada
@@ -62,19 +106,70 @@ public boolean validateValues() {
 		this.totalGravada = totalGravada;
 	}
 
-	/**
-	 * @return the descuento
-	 */
-	public BigDecimal getDescuento() {
-		return descuento;
-	}
 
 	/**
-	 * @param descuento the descuento to set
+	 * @return the subTotalVentas
 	 */
-	public void setDescuento(BigDecimal descuento) {
-		this.descuento = descuento;
+	public BigDecimal getSubTotalVentas() {
+		return subTotalVentas;
 	}
+
+
+	/**
+	 * @param subTotalVentas the subTotalVentas to set
+	 */
+	public void setSubTotalVentas(BigDecimal subTotalVentas) {
+		this.subTotalVentas = subTotalVentas;
+	}
+
+
+	/**
+	 * @return the descuNoSuj
+	 */
+	public BigDecimal getDescuNoSuj() {
+		return descuNoSuj;
+	}
+
+
+	/**
+	 * @param descuNoSuj the descuNoSuj to set
+	 */
+	public void setDescuNoSuj(BigDecimal descuNoSuj) {
+		this.descuNoSuj = descuNoSuj;
+	}
+
+
+	/**
+	 * @return the descuExenta
+	 */
+	public BigDecimal getDescuExenta() {
+		return descuExenta;
+	}
+
+
+	/**
+	 * @param descuExenta the descuExenta to set
+	 */
+	public void setDescuExenta(BigDecimal descuExenta) {
+		this.descuExenta = descuExenta;
+	}
+
+
+	/**
+	 * @return the descuGravada
+	 */
+	public BigDecimal getDescuGravada() {
+		return descuGravada;
+	}
+
+
+	/**
+	 * @param descuGravada the descuGravada to set
+	 */
+	public void setDescuGravada(BigDecimal descuGravada) {
+		this.descuGravada = descuGravada;
+	}
+
 
 	/**
 	 * @return the porcentajeDescuento
@@ -90,7 +185,7 @@ public boolean validateValues() {
 	public void setPorcentajeDescuento(BigDecimal porcentajeDescuento) {
 		this.porcentajeDescuento = porcentajeDescuento;
 	}
-	
+
 
 	/**
 	 * @return the totalDescu
@@ -99,6 +194,7 @@ public boolean validateValues() {
 		return totalDescu;
 	}
 
+
 	/**
 	 * @param totalDescu the totalDescu to set
 	 */
@@ -106,32 +202,83 @@ public boolean validateValues() {
 		this.totalDescu = totalDescu;
 	}
 
+
 	/**
-	 * @return the seguro
+	 * @return the tributos
 	 */
-	public BigDecimal getSeguro() {
-		return seguro;
+	public List<TributosItem> getTributos() {
+		return tributos;
+	}
+
+
+	/**
+	 * @param tributos the tributos to set
+	 */
+	public void setTributos(List<TributosItem> tributos) {
+		this.tributos = tributos;
+	}
+
+
+	/**
+	 * @return the subTotal
+	 */
+	public BigDecimal getSubTotal() {
+		return subTotal;
+	}
+
+
+	/**
+	 * @param subTotal the subTotal to set
+	 */
+	public void setSubTotal(BigDecimal subTotal) {
+		this.subTotal = subTotal;
+	}
+
+
+	/**
+	 * @return the ivaPerci1
+	 */
+	public BigDecimal getIvaPerci1() {
+		return ivaPerci1;
+	}
+
+
+	/**
+	 * @param ivaPerci1 the ivaPerci1 to set
+	 */
+	public void setIvaPerci1(BigDecimal ivaPerci1) {
+		this.ivaPerci1 = ivaPerci1;
+	}
+
+
+	/**
+	 * @return the ivaRete1
+	 */
+	public BigDecimal getIvaRete1() {
+		return ivaRete1;
+	}
+
+
+	/**
+	 * @param ivaRete1 the ivaRete1 to set
+	 */
+	public void setIvaRete1(BigDecimal ivaRete1) {
+		this.ivaRete1 = ivaRete1;
+	}
+
+
+	/**
+	 * @return the reteRenta
+	 */
+	public BigDecimal getReteRenta() {
+		return reteRenta;
 	}
 
 	/**
-	 * @param seguro the seguro to set
+	 * @param reteRenta the reteRenta to set
 	 */
-	public void setSeguro(BigDecimal seguro) {
-		this.seguro = seguro;
-	}
-
-	/**
-	 * @return the flete
-	 */
-	public BigDecimal getFlete() {
-		return flete;
-	}
-
-	/**
-	 * @param flete the flete to set
-	 */
-	public void setFlete(BigDecimal flete) {
-		this.flete = flete;
+	public void setReteRenta(BigDecimal reteRenta) {
+		this.reteRenta = reteRenta;
 	}
 
 
@@ -203,7 +350,37 @@ public boolean validateValues() {
 		if( length<=MAXLENGTH)
 			this.totalLetras = totalLetras;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in Factura.Resumen.setTotalLetras()");
+	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in FacturaExportacion.Resumen.setTotalLetras()");
+	}
+
+
+	/**
+	 * @return the totalIva
+	 */
+	public BigDecimal getTotalIva() {
+		return totalIva;
+	}
+
+	/**
+	 * @param totalIva the totalIva to set
+	 */
+	public void setTotalIva(BigDecimal totalIva) {
+		this.totalIva = totalIva;
+	}
+
+	/**
+	 * @return the saldoFavor
+	 */
+	public BigDecimal getSaldoFavor() {
+		return saldoFavor;
+	}
+
+
+	/**
+	 * @param saldoFavor the saldoFavor to set
+	 */
+	public void setSaldoFavor(BigDecimal saldoFavor) {
+		this.saldoFavor = saldoFavor;
 	}
 
 
@@ -218,13 +395,13 @@ public boolean validateValues() {
 	/**
 	 * @param condicionOperacion the condicionOperacion to set<br>
 	 * The parameter is validated.<br>
-	 * "enum" : [1,2,3]
+	 * "enum" : [1,2, 3]
 	 */
 	public void setCondicionOperacion(int condicionOperacion) {
 		if (condicionOperacion==1 || condicionOperacion==2 || condicionOperacion==2)
 			this.condicionOperacion = condicionOperacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in Factura.Resumen.setCondicionOperacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in FacturaExportacion.Resumen.setCondicionOperacion()");
 	}
 
 
@@ -243,45 +420,6 @@ public boolean validateValues() {
 		this.pagos = pagos;
 	}
 
-
-	/**
-	 * @return the codIncoterms
-	 */
-	public String getCodIncoterms() {
-		return codIncoterms;
-	}
-
-	/**
-	 * @param codIncoterms the codIncoterms to set<br>
-	 * The parameter is validated.<br>
-	 * null is possible
-	 */
-	public void setCodIncoterms(String codIncoterms) {
-		this.codIncoterms = codIncoterms;
-	}
-
-	/**
-	 * @return the descIncoterms
-	 */
-	public String getDescIncoterms() {
-		return descIncoterms;
-	}
-
-	/**
-	 * @param descIncoterms the descIncoterms to set<br>
-	 * The parameter is validated.<br>
-	 * "minLength" : 3, "maxLength" : 150; null also possible
-	 */
-	public void setDescIncoterms(String descIncoterms) {
-		final int MINLENGTH = 3;
-		final int MAXLENGTH = 150;
-		int length = descIncoterms==null?0:descIncoterms.length();
-		
-		if( (length>=MINLENGTH && length<=MAXLENGTH) || (descIncoterms==null) )
-			this.descIncoterms = descIncoterms;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'descIncoterms' in Factura.Resumen.setDescIncoterms()");
-	}
 
 	/**
 	 * @return the numPagoElectronico
@@ -303,31 +441,9 @@ public boolean validateValues() {
 		if( (length<=MAXLENGTH) || (numPagoElectronico==null) )
 			this.numPagoElectronico = numPagoElectronico;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in Factura.Resumen.setNumPagoElectronico()");
+	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in FacturaExportacion.Resumen.setNumPagoElectronico()");
 	}
 
-
-	/**
-	 * @return the observaciones
-	 */
-	public String getObservaciones() {
-		return observaciones;
-	}
-
-	/**
-	 * @param observaciones the observaciones to set<br>
-	 * The parameter is validated.<br>
-	 * "maxLength" : 500; null also possible
-	 */
-	public void setObservaciones(String observaciones) {
-		final int MAXLENGTH = 500;
-		int length = observaciones==null?0:observaciones.length();
-		
-		if( (length<=MAXLENGTH) || (observaciones==null) )
-			this.observaciones = observaciones;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in Factura.Resumen.setObservaciones()");
-	}
 
 	/**
 	 * @param args

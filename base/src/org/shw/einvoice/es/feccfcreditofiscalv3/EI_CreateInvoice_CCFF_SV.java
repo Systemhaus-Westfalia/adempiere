@@ -42,9 +42,8 @@ import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
-
 import org.shw.einvoice.es.util.pojo.Receptor;
+import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

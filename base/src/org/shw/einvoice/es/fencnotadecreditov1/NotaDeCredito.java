@@ -5,7 +5,7 @@ package org.shw.einvoice.es.fencnotadecreditov1;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-;
+
 import org.shw.einvoice.es.util.pojo.Receptor;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
@@ -23,6 +23,7 @@ public class NotaDeCredito {
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
+	Extension extension;
 
 	/**
 	 * No parameters
@@ -34,6 +35,7 @@ public class NotaDeCredito {
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
+		this.extension            = new Extension();
 	}
 
 	/**

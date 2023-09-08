@@ -7,18 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
+
 /**
  * 
  */
 public class NotaDeCredito {
 	
 	Identificacion identificacion;
+	List<DocumentoRelacionadoItem> documentoRelacionado;
 
 	/**
 	 * No parameters
 	 */
 	public NotaDeCredito() {
 		this.identificacion       = new Identificacion();
+		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 	}
 
 	/**

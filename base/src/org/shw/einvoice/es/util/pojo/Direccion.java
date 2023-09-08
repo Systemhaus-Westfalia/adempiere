@@ -3,6 +3,8 @@ package org.shw.einvoice.es.util.pojo;
 import java.util.regex.Pattern;
 
 public class Direccion {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_MUNICIPIO_PATTERN_FAILED = "Documento: POJO, clase: Direccion. Validacion falló: valor de 'municipio' no corresponde a patrón";
 
 	String departamento;
 	String municipio;
@@ -22,7 +24,7 @@ public class Direccion {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		String pattern;
 		boolean patternOK;
 
@@ -31,7 +33,7 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-2]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}
 
 		// In schema: "pattern" : "^0[1-9]|1[0-3]$"
@@ -39,7 +41,7 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-3]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		} 
 
 		// In schema: "pattern" : "^0[1-9]|1[0-6]$"
@@ -47,7 +49,7 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-6]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}  
 		
 		// In schema: "pattern" : "^0[1-9]|[12][0-9]|3[0-3]$"
@@ -55,7 +57,7 @@ public class Direccion {
 			pattern = "^0[1-9]|[12][0-9]|3[0-3]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		} 
 		
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|2[0-2]$"
@@ -63,7 +65,7 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-9]|2[0-2]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}  
 		
 		// In schema: "pattern" : "^0[1-9]|1[0-9]$"
@@ -71,7 +73,7 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-9]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}  
 
 		// In schema: "pattern" : "^0[1-9]$"
@@ -79,7 +81,7 @@ public class Direccion {
 			pattern = "^0[1-9]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}
 
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|2[0-3]$"
@@ -87,7 +89,7 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-9]|2[0-3]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}
 		
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|20$"
@@ -95,7 +97,7 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-9]|20$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}
 
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|2[0-6]$"
@@ -103,17 +105,17 @@ public class Direccion {
 			pattern = "^0[1-9]|1[0-9]|2[0-6]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}
 		// In schema: "pattern" : "^0[1-9]|1[0-8]$"
 		if(getDepartamento()=="14") {
 			pattern = "^0[1-9]|1[0-8]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
-				return false;
+				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}
 
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

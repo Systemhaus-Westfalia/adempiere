@@ -9,6 +9,13 @@ import java.util.Objects;
  * 
  */
 public class OtrosDocumentosItem {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_MEDICO_IS_NULL            = "Documento: POJO, clase: OtrosDocumentosItem. Validacion falló: valor de 'medico' no debe ser ='null'";
+	static final String VALIDATION_DESCDOCUMENTO_NOT_NULL    = "Documento: POJO, clase: OtrosDocumentosItem. Validacion falló: valor de 'descDocumento' debe ser ='null'";
+	static final String VALIDATION_DETALLEDOCUMENTO_NOT_NULL = "Documento: POJO, clase: OtrosDocumentosItem. Validacion falló: valor de 'detalleDocumento' debe ser ='null'";
+	static final String VALIDATION_MEDICO_NOT_NULL           = "Documento: POJO, clase: OtrosDocumentosItem. Validacion falló: valor de 'medico' debe ser ='null'";
+	static final String VALIDATION_DESCDOCUMENTO_IS_NULL     = "Documento: POJO, clase: OtrosDocumentosItem. Validacion falló: valor de 'descDocumento' no debe ser ='null'";
+	static final String VALIDATION_DETALLEDOCUMENTO_IS_NULL  = "Documento: POJO, clase: OtrosDocumentosItem. Validacion falló: valor de 'detalleDocumento' no debe ser ='null'";
 
 	int codDocAsociado;
 	String descDocumento=null;  // null allowed
@@ -25,24 +32,24 @@ public class OtrosDocumentosItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if(getCodDocAsociado()==3) {
 			if (Objects.isNull(getMedico()))
-				return false;
+				return VALIDATION_MEDICO_IS_NULL;
 			if (getDescDocumento()!=null)
-				return false;
+				return VALIDATION_DESCDOCUMENTO_NOT_NULL;
 			if (getDetalleDocumento()!=null)
-				return false;
+				return VALIDATION_DETALLEDOCUMENTO_NOT_NULL;
 		} else  {
 			if (!Objects.isNull(getMedico()))
-				return false;
+				return VALIDATION_MEDICO_NOT_NULL;
 			if (getDescDocumento()==null)
-				return false;
+				return VALIDATION_DESCDOCUMENTO_IS_NULL;
 			if (getDetalleDocumento()==null)
-				return false;
+				return VALIDATION_DETALLEDOCUMENTO_IS_NULL;
 		}
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

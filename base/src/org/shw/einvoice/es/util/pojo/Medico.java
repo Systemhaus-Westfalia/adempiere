@@ -9,6 +9,9 @@ import java.util.regex.Pattern;
  * 
  */
 public class Medico {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_DOCIDENTIFICATION_IS_NULL = "Documento: POJO, clase: Medico. Validacion falló: valor de 'docIdentificacion' no debe ser ='null'";
+	static final String VALIDATION_NIT_IS_NULL               = "Documento: POJO, clase: Medico. Validacion falló: valor de 'nit' no debe ser ='null'";
 	
 	String nombre;
 	String nit;
@@ -24,19 +27,19 @@ public class Medico {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if(getNit()==null) {
 			if (getDocIdentificacion()==null) {
-				return false;
+				return VALIDATION_DOCIDENTIFICATION_IS_NULL;
 			}
 		}
 		
 		if(getDocIdentificacion()==null) {
 			if (getNit()==null) {
-				return false;
+				return VALIDATION_NIT_IS_NULL;
 			}
 		}
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 	
 	/**

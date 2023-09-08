@@ -7,6 +7,14 @@ public class Identificacion {
 	static final String TIPO_DE_DOCUMENTO = "05";
 	static final String TIPOMONEDA        = "USD";
 	
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_TIPOMODELO_FAILED_1         = "Documento: Nota de Credito, clase: Identificacion. Validacion falló: valor de 'tipoModelo' no debe ser diferente a 1";
+	static final String VALIDATION_TIPOCONTINGENCIA_NOT_NULL   = "Documento: Nota de Credito, clase: Identificacion. Validacion falló: valor de 'tipoContingencia' debe ser ='null'";
+	static final String VALIDATION_MOTIVOCONTINGENCIA_NOT_NULL = "Documento: Nota de Credito, clase: Identificacion. Validacion falló: valor de 'motivoContingencia' debe ser ='null'";
+	static final String VALIDATION_TIPOMODELO_FAILED_2         = "Documento: Nota de Credito, clase: Identificacion. Validacion falló: valor de 'tipoModelo' no debe ser diferente a 2";
+	static final String VALIDATION_TIPOOCONTINGENCIA_IS_NULL   = "Documento: Nota de Credito, clase: Identificacion. Validacion falló: valor de 'tipoContingencia' no debe ser ='null'";
+	static final String VALIDATION_MOTIVOCONTINGENCIA_IS_NULL  = "Documento: Nota de Credito, clase: Identificacion. Validacion falló: valor de 'motivoContingencia' no debe ser ='null'";
+	
 	int version;
 	String ambiente;
 	String tipoDte ;
@@ -32,32 +40,32 @@ public class Identificacion {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if(getTipoOperacion()==1) {
 			if (getTipoModelo() != 1) 
-				return false;
+				return VALIDATION_TIPOMODELO_FAILED_1;
 			if (getTipoContingencia() != null) 
-				return false;
+				return VALIDATION_TIPOCONTINGENCIA_NOT_NULL;
 			if (getMotivoContin() != null) 
-				return false;
+				return VALIDATION_MOTIVOCONTINGENCIA_NOT_NULL;
 		} else  {
 			if (getTipoModelo() != 2) 
-				return false;
+				return VALIDATION_TIPOMODELO_FAILED_2;
 		}
 		
 		if(getTipoOperacion()==2) {
 			// In schema: "tipoContingencia" : {"type" : "integer"}
 			if(getTipoContingencia()==null)
-		        return false;
+		        return VALIDATION_TIPOOCONTINGENCIA_IS_NULL;
 		}
 		
 		if(getTipoContingencia()==5) {
 			// In schema: "motivoContin" : {"type" : "string"}
 			if(getMotivoContin()==null)
-		        return false;
+		        return VALIDATION_MOTIVOCONTINGENCIA_IS_NULL;
 		}
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 

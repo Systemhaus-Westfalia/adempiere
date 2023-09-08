@@ -20,8 +20,8 @@ public class OtrosDocumentosItem {
 	static final String VALIDATION_NOMBRECONDUCTOR_NOT_NULL = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'nombreConductor' debe ser ='null'";
 	static final String VALIDATION_PLACATRANS_NOT_NULL      = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'placaTrans' debe ser ='null'";
 	static final String VALIDATION_MODOTRANSP_NOT_NULL      = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'modoTransp' no debe ser ='null'";
-	static final String VALIDATION_DESCDOCUMENTO_IS_NULL     = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'descDocumento' no debe ser ='null'";
-	static final String VALIDATION_DETALLEDOCUMENTO_IS_NULL     = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'detalleDocumento' no debe ser ='null'";
+	static final String VALIDATION_DESCDOCUMENTO_IS_NULL    = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'descDocumento' no debe ser ='null'";
+	static final String VALIDATION_DETALLEDOCUMENTO_IS_NULL = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'detalleDocumento' no debe ser ='null'";
 	
 
 	int codDocAsociado;

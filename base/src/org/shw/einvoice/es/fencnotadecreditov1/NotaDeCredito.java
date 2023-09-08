@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.util.pojo.Receptor;
+
 
 
 
@@ -16,6 +18,7 @@ public class NotaDeCredito {
 	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
+	Receptor receptor;
 
 	/**
 	 * No parameters
@@ -23,6 +26,7 @@ public class NotaDeCredito {
 	public NotaDeCredito() {
 		this.identificacion       = new Identificacion();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
+		this.receptor             = new Receptor();
 	}
 
 	/**

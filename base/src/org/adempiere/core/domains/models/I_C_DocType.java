@@ -90,6 +90,8 @@ public interface I_C_DocType
 
 	public org.adempiere.core.domains.models.I_C_DocBaseType getC_DocBaseType() throws RuntimeException;
 
+	public org.adempiere.core.domains.models.I_E_DocType getE_DocType() throws RuntimeException;
+
     /** Column name C_DocType_ID */
     public static final String COLUMNNAME_C_DocType_ID = "C_DocType_ID";
 

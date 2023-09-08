@@ -570,6 +570,12 @@ public class X_C_DocType extends PO implements I_C_DocType, I_Persistent
 
 	/** Set CAT-002 Tipo de Documento .
 		@param E_DocType_ID CAT-002 Tipo de Documento 	  */
+	
+	public org.adempiere.core.domains.models.I_E_DocType getE_DocType() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_E_DocType)MTable.get(getCtx(), I_E_DocType.Table_Name)
+			.getPO(getE_DocType_ID(), get_TrxName());	}
+
 	public void setE_DocType_ID (int E_DocType_ID)
 	{
 		if (E_DocType_ID < 1) 

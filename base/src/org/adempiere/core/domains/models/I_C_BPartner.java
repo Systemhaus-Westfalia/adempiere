@@ -490,6 +490,9 @@ public interface I_C_BPartner
 
     /** Column name E_Recipient_Identification_ID */
     public static final String COLUMNNAME_E_Recipient_Identification_ID = "E_Recipient_Identification_ID";
+    
+	public org.adempiere.core.domains.models.I_E_Recipient_Identification getE_Recipient_Identification() throws RuntimeException;
+
 
 	/** Set CAT-022 Tipo de documento de identificación del Receptor	  */
 	public void setE_Recipient_Identification_ID (int E_Recipient_Identification_ID);

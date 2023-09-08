@@ -89,7 +89,7 @@ public class CuerpoDocumentoItem {
 			if (getTributos()!=null)
 				return VALIDATION_TRIBUTOS_NOT_NULL;
 		} else {
-			if ( (getTributos()==null) || (getTributos().isEmpty())  )
+			if ( (getTributos()==null) || (getTributos().isEmpty()) )
 				return VALIDATION_TRIBUTOS_EMPTY;
 		}
 		
@@ -104,11 +104,9 @@ public class CuerpoDocumentoItem {
 			if (getCodTributo()!=null)
 				return VALIDATION_CODTRIBUTO_NOT_NULL;
 			
-			ArrayList<String> expectedValues=  new ArrayList<>(List.of(   "20", "C3", "59", "71", "D1", "C5", "C6", "C7", "C8", "D5",
-					"D4", "19", "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "42", "43", "44", "50", "51", "52", "53",
-                    "54", "55", "58", "77", "78", "79", "85", "86", "91", "92", "A1", "A5", "A7", "A9"));
+			ArrayList<String> expectedValues=  new ArrayList<>(List.of( "20", "C3", "59", "71", "D1", "C8", "D5", "D4"));
 			// Here, is only ONE item expected; where there are MANY items expected, the query must be changed.
-			if ((getTributos()==null) || (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1) )
+			if ( (getTributos()!=null) && ( (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1)) )
 				return VALIDATION_TRIBUTOS_PATTERN_FAILED;			
 		}
 		
@@ -167,14 +165,14 @@ public class CuerpoDocumentoItem {
 	/**
 	 * @param numeroDocumento the numeroDocumento to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 36; null also possible
+	 * "minLength" : 1, "maxLength" : 36
 	 */
 	public void setNumeroDocumento(String numeroDocumento) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 36;
 		int length = numeroDocumento==null?0:numeroDocumento.length();
 		
-		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numeroDocumento==null) )
+		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numeroDocumento = numeroDocumento;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in CreditoFiscal.CuerpoDocumentoItem.setNumeroDocumento()");
@@ -206,7 +204,7 @@ public class CuerpoDocumentoItem {
 	/**
 	 * @param codigo the codigo to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 25; null also possible
+	 * "minLength" : 1, "maxLength" : 25; null also allowed
 	 */
 	public void setCodigo(String codigo) {
 		final int MINLENGTH = 1;
@@ -229,7 +227,7 @@ public class CuerpoDocumentoItem {
 	/**
 	 * @param codTributo the codTributo to set<br>
 	 * The parameter is validated.<br>
-	 * "enum" : ["A8", "57", "90", "D4", "D5", "25", "A6"], null also allowed
+	 * "enum" : ["A8", "57", "90", "D4", "D5", "25", "A6"]; null also allowed
 	 */
 	public void setCodTributo(String codTributo) {
 		if (codTributo==null || codTributo.compareTo("A8")==0 || codTributo.compareTo("57")==0 || codTributo.compareTo("90")==0 || codTributo.compareTo("D4")==0 || 
@@ -272,13 +270,14 @@ public class CuerpoDocumentoItem {
 	/**
 	 * @param descripcion the descripcion to set<br>
 	 * The parameter is validated.<br>
-	 * "maxLength" : 1000
+	 * "maxLength" : 1000; null also allowed
 	 */
 	public void setDescripcion(String descripcion) {
 		final int MAXLENGTH = 1000;
 		int length = descripcion==null?0:descripcion.length();
 		
 		if(length<=MAXLENGTH)
+		if( (length<=MAXLENGTH) || (descripcion==null) )
 			this.descripcion = descripcion;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in CreditoFiscal.CuerpoDocumentoItem.setDescripcion()");

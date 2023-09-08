@@ -50,10 +50,30 @@ public Resumen() {
  * Validate the Schema conditions
  */
 public boolean validateValues() {
-	// TODO: write code according to schema	
+	if(getCondicionOperacion()==2) {
+		if ( (getPagos()==null) ||  (getPagos().size()==0) ||  (getPagos().get(0).getPlazo()==null) )
+			return false;
+	} else {
+		if ( (getPagos()==null) ||  (getPagos().size()==0) ||  (getPagos().get(0).getPeriodo()==null) )
+			return false;
+	}	
+
+	if(getTotalGravada()==BigDecimal.ZERO) {
+		if ( getIvaPerci1().compareTo(BigDecimal.ZERO) == 1 )
+			return false;
+	} 
+
+	if(getTotalGravada()==BigDecimal.ZERO) {
+		if ( getIvaRete1().compareTo(BigDecimal.ZERO) == 1 )
+			return false;
+	} 
+
+	if(getTotalPagar()==BigDecimal.ZERO) {
+		if ( getCondicionOperacion() != 1 )
+			return false;
+	}
 	
-	return true;
-}
+	return true;}
 	/**
 	 * @return the totalNoSuj
 	 */

@@ -17,6 +17,8 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class FacturaElectronica {
+	static final int MINIMUM_TOTOTAL_OF_OPERATION = 1095;
+	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 	
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
@@ -56,8 +58,7 @@ public class FacturaElectronica {
 	 * Validate the Schema conditions
 	 */
 	public boolean validateValues() {
-		final int MINIMUM = 1095;
-		if(getResumen().getMontoTotalOperacion().compareTo(BigDecimal.valueOf(MINIMUM))==1) {
+		if(getResumen().getMontoTotalOperacion().compareTo(BigDecimal.valueOf(MINIMUM_TOTOTAL_OF_OPERATION))==1) {
 			if ( getReceptor().getTipoDocumento()== null)
 				return false;
 			if ( getReceptor().getNumDocumento()== null)
@@ -65,6 +66,10 @@ public class FacturaElectronica {
 			if ( getReceptor().getNombre()== null)
 				return false;
 		} 
+		
+		if( (getCuerpoDocumento()==null) ||  (getCuerpoDocumento().size()==0)  ||  (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
+			return false;
+		}
 		
 		return true;
 	}

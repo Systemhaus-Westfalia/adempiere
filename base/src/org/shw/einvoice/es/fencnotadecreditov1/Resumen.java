@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.PagosItem;
+import org.shw.einvoice.es.util.pojo.TributosItem;
 
 /**
  * 
@@ -28,7 +28,7 @@ public class Resumen {
 	BigDecimal descuExenta;
 	BigDecimal descuGravada;
 	BigDecimal totalDescu;
-	//List<TributosItem> tributos;
+	List<TributosItem> tributos;
 	BigDecimal subTotal;
 	BigDecimal ivaPerci1;
 	BigDecimal ivaRete1;

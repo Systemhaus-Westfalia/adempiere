@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.feccfcreditofiscalv3;
+package org.shw.einvoice.es.util.pojo;
 
 import java.math.BigDecimal;
 

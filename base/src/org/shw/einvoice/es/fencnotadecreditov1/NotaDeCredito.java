@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.Receptor;
+import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 
 
@@ -19,6 +20,7 @@ public class NotaDeCredito {
 	Identificacion identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
 	Receptor receptor;
+	VentaTercero ventaTercero = null;
 
 	/**
 	 * No parameters
@@ -27,6 +29,7 @@ public class NotaDeCredito {
 		this.identificacion       = new Identificacion();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.receptor             = new Receptor();
+		//this.ventaTercero         = new VentaTercero();
 	}
 
 	/**

@@ -17,11 +17,11 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 public class ComprobanteCreditoFiscal {
 	
 	Identificacion identificacion;
-	List<DocumentoRelacionadoItem> documentoRelacionado;
+	List<DocumentoRelacionadoItem> documentoRelacionado = null;
 	Emisor emisor;
 	Receptor receptor;
-	List<OtrosDocumentosItem> otrosDocumentos;
-	VentaTercero ventaTercero;
+	List<OtrosDocumentosItem> otrosDocumentos = null;
+	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
@@ -32,11 +32,11 @@ public class ComprobanteCreditoFiscal {
 	 */
 	public ComprobanteCreditoFiscal() {
 		this.identificacion       = new Identificacion();
-		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
+		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();		
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
-		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
-		this.ventaTercero         = new VentaTercero();
+		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
+		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();

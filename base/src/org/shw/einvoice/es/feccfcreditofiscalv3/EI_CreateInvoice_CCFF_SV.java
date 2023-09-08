@@ -24,6 +24,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
 import org.apache.commons.lang.StringUtils;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
@@ -43,6 +44,8 @@ import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
+import org.shw.einvoice.es.util.pojo.Receptor;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Generated Process for (SHW_Create_ElectronicInvoice)
@@ -51,7 +54,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 {
-	
+	static final String VALIDATION_RESULT_OK = "OK";
 
 	String 				numeroControl;
 	String 				codigoGeneracion;
@@ -71,6 +74,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	@Override
 	protected String doIt() throws Exception
 	{	
+		StringBuffer error = new StringBuffer();
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
@@ -87,10 +91,24 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
 		
-		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();			
+		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
+				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
+			error.append("el documento no es Credito Fiscal");
+			return error.toString();
+		}
+		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();
+
+		try
+		{
+			fillReceptor(comprobanteCreditoFiscal.getReceptor(), invoice);  
+		}
+		catch (Exception e)
+		{
+			error.append(e);
+		}
     	fillemisor(comprobanteCreditoFiscal.getEmisor(), invoice);  	
-    	fillResumen(comprobanteCreditoFiscal.getResumen(), invoice);    	
-    	fillReceptor(comprobanteCreditoFiscal.getReceptor(), invoice);    	
+    	fillResumen(comprobanteCreditoFiscal.getResumen(), invoice);     	
+    	//fillReceptor(comprobanteCreditoFiscal.getReceptor(), invoice);    	
     	fillIdentification(comprobanteCreditoFiscal.getIdentificacion(), invoice);
     	    	
     	//Durch InvoiceZeilen laufen
@@ -125,9 +143,19 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
     				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, tributosItems, psv, noGravado); 
     		cuerpoDocumentoItem.validateValues();
     		comprobanteCreditoFiscal.getCuerpoDocumento().add(cuerpoDocumentoItem);
-    		
+    	}  
 
-    	}    
+    	validateValues(comprobanteCreditoFiscal, error);
+    	
+    	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
+    	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
+    	invoiceElectronic.setei_ValidationStatus("01");
+    	if (error.length() > 0) {
+    		invoiceElectronic.seterrMsgIntern(error.toString());
+    		return error.toString();
+    	}
+    		
+    	invoiceElectronic.saveEx();
 	
     	
     	ObjectMapper objectMapper = new ObjectMapper();
@@ -136,6 +164,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
     	//String newjson = "{\"nit\":\"FFFQQQ\",\"nrc\":null,\"nombre\":null,\"codActividad\":\"OK\",\"descActividad\":null,\"nombreComercial\":null,\"tipoEstablecimiento\":null,\"direccion\":null,\"telefono\":null,\"correo\":null,\"codEstableMH\":null,\"codEstable\":null,\"codPuntoVentaMH\":null,\"codPuntoVenta\":null}";
     	//Emisor newEmisor= objectMapper.readValue(newjson, Emisor.class);
     	//String newNIT = newEmisor.getNit();
+    	invoiceElectronic.setjson(json);
+    	invoiceElectronic.saveEx();
     	log.config(json);
     	System.out.println(json);
     	
@@ -143,7 +173,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		return "";
 	}
 
-	private Boolean fillIdentification(Identificacion identificacion, MInvoice invoice) {
+	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
 		
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);
@@ -156,7 +186,6 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		identificacion.setHorEmi("00:00:00");
 		identificacion.setTipoMoneda("USD");
 		identificacion.setAmbiente("00");
-		return identificacion.validateValues();
 
 	}
 	
@@ -231,11 +260,12 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		BigDecimal MontoTotalOperacion = invoice.getGrandTotal();
 		BigDecimal TotalPagar =invoice.getGrandTotal();
 		BigDecimal totalIVA = Env.ZERO;
-		
+
+		int CondicionOperacion =2;
 		List<PagosItem> pagosItems = new ArrayList<PagosItem>();
-    	PagosItem pagoitem = new PagosItem(invoice.getC_PaymentTerm().getE_TimeSpan().getValue(),
+    	PagosItem pagoitem = new PagosItem("05",
     			zero, 
-    			"", 
+    			"Transferencia_ Depósito Bancario", 
     			invoice.getC_PaymentTerm().getE_TimeSpan().getValue(),
     			invoice.getC_PaymentTerm().getNetDays());
 		pagosItems.add(pagoitem);
@@ -243,7 +273,6 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		
 		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().toString());
 		BigDecimal SaldoFavor = Env.ZERO;
-		int CondicionOperacion =1;
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				TotalNoSuj = invoiceTax.getTaxBaseAmt();
@@ -276,8 +305,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		resumen.setCondicionOperacion(1);
 		resumen.setTotalDescu(Env.ZERO);
 		resumen.setReteRenta(Env.ZERO);
-		resumen.validateValues();
-		
+			
 	}
 	
 	private void fillExtension(Extension extension, MInvoice invoice) {
@@ -294,6 +322,22 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		apendiceItem.setCampo("11");
 		apendiceItem.setEtiqueta("777");
 		apendiceItem.setValor("uu");
+	}
+	
+
+	private void validateValues(ComprobanteCreditoFiscal comprobanteCreditoFiscal, StringBuffer error) {
+		String result = "";
+		result = comprobanteCreditoFiscal.getResumen().validateValues();
+		if (!result.equals(VALIDATION_RESULT_OK))
+			error.append(result);
+		result = comprobanteCreditoFiscal.getIdentificacion().validateValues();
+		if (!result.equals(VALIDATION_RESULT_OK))
+			error.append(result);
+		for (CuerpoDocumentoItem cuerpoDocumentoItem :comprobanteCreditoFiscal.getCuerpoDocumento()) {
+			result = cuerpoDocumentoItem.validateValues();
+			if (!result.equals(VALIDATION_RESULT_OK))
+				error.append(result);			
+		}
 	}
 
 }

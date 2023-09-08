@@ -21,39 +21,36 @@ package org.adempiere.core.domains.models;
 import java.sql.ResultSet;
 import java.util.Properties;
 import org.compiere.model.*;
-import org.compiere.util.KeyNamePair;
 
-/** Generated Model for C_Region
+/** Generated Model for E_Activity
  *  @author Adempiere (generated) 
  *  @version Release 3.9.4 - $Id$ */
-public class X_C_Region extends PO implements I_C_Region, I_Persistent 
+public class X_E_Activity extends PO implements I_E_Activity, I_Persistent 
 {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20230907L;
+	private static final long serialVersionUID = 20230903L;
 
     /** Standard Constructor */
-    public X_C_Region (Properties ctx, int C_Region_ID, String trxName)
+    public X_E_Activity (Properties ctx, int E_Activity_ID, String trxName)
     {
-      super (ctx, C_Region_ID, trxName);
-      /** if (C_Region_ID == 0)
+      super (ctx, E_Activity_ID, trxName);
+      /** if (E_Activity_ID == 0)
         {
-			setC_Country_ID (0);
-			setC_Region_ID (0);
-			setName (null);
+			setE_Activity_ID (0);
         } */
     }
 
     /** Load Constructor */
-    public X_C_Region (Properties ctx, ResultSet rs, String trxName)
+    public X_E_Activity (Properties ctx, ResultSet rs, String trxName)
     {
       super (ctx, rs, trxName);
     }
 
     /** AccessLevel
-      * @return 6 - System - Client 
+      * @return 7 - System - Client - Org 
       */
     protected int get_AccessLevel()
     {
@@ -69,101 +66,29 @@ public class X_C_Region extends PO implements I_C_Region, I_Persistent
 
     public String toString()
     {
-      StringBuffer sb = new StringBuffer ("X_C_Region[")
+      StringBuffer sb = new StringBuffer ("X_E_Activity[")
         .append(get_ID()).append("]");
       return sb.toString();
     }
 
-	public org.adempiere.core.domains.models.I_C_Country getC_Country() throws RuntimeException
-    {
-		return (org.adempiere.core.domains.models.I_C_Country)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_Country.Table_Name)
-			.getPO(getC_Country_ID(), get_TrxName());	}
-
-	/** Set Country.
-		@param C_Country_ID 
-		Country 
-	  */
-	public void setC_Country_ID (int C_Country_ID)
+	/** Set CAT-019 Código de Actividad Económica.
+		@param E_Activity_ID CAT-019 Código de Actividad Económica	  */
+	public void setE_Activity_ID (int E_Activity_ID)
 	{
-		if (C_Country_ID < 1) 
-			set_ValueNoCheck (COLUMNNAME_C_Country_ID, null);
+		if (E_Activity_ID < 1) 
+			set_ValueNoCheck (COLUMNNAME_E_Activity_ID, null);
 		else 
-			set_ValueNoCheck (COLUMNNAME_C_Country_ID, Integer.valueOf(C_Country_ID));
+			set_ValueNoCheck (COLUMNNAME_E_Activity_ID, Integer.valueOf(E_Activity_ID));
 	}
 
-	/** Get Country.
-		@return Country 
-	  */
-	public int getC_Country_ID () 
+	/** Get CAT-019 Código de Actividad Económica.
+		@return CAT-019 Código de Actividad Económica	  */
+	public int getE_Activity_ID () 
 	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_C_Country_ID);
+		Integer ii = (Integer)get_Value(COLUMNNAME_E_Activity_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
-	}
-
-	/** Set Region.
-		@param C_Region_ID 
-		Identifies a geographical Region
-	  */
-	public void setC_Region_ID (int C_Region_ID)
-	{
-		if (C_Region_ID < 1) 
-			set_ValueNoCheck (COLUMNNAME_C_Region_ID, null);
-		else 
-			set_ValueNoCheck (COLUMNNAME_C_Region_ID, Integer.valueOf(C_Region_ID));
-	}
-
-	/** Get Region.
-		@return Identifies a geographical Region
-	  */
-	public int getC_Region_ID () 
-	{
-		Integer ii = (Integer)get_Value(COLUMNNAME_C_Region_ID);
-		if (ii == null)
-			 return 0;
-		return ii.intValue();
-	}
-
-	/** Set Description.
-		@param Description 
-		Optional short description of the record
-	  */
-	public void setDescription (String Description)
-	{
-		set_Value (COLUMNNAME_Description, Description);
-	}
-
-	/** Get Description.
-		@return Optional short description of the record
-	  */
-	public String getDescription () 
-	{
-		return (String)get_Value(COLUMNNAME_Description);
-	}
-
-	/** Set Default.
-		@param IsDefault 
-		Default value
-	  */
-	public void setIsDefault (boolean IsDefault)
-	{
-		set_Value (COLUMNNAME_IsDefault, Boolean.valueOf(IsDefault));
-	}
-
-	/** Get Default.
-		@return Default value
-	  */
-	public boolean isDefault () 
-	{
-		Object oo = get_Value(COLUMNNAME_IsDefault);
-		if (oo != null) 
-		{
-			 if (oo instanceof Boolean) 
-				 return ((Boolean)oo).booleanValue(); 
-			return "Y".equals(oo);
-		}
-		return false;
 	}
 
 	/** Set Name.
@@ -182,14 +107,6 @@ public class X_C_Region extends PO implements I_C_Region, I_Persistent
 	{
 		return (String)get_Value(COLUMNNAME_Name);
 	}
-
-    /** Get Record ID/ColumnName
-        @return ID/ColumnName pair
-      */
-    public KeyNamePair getKeyNamePair() 
-    {
-        return new KeyNamePair(get_ID(), getName());
-    }
 
 	/** Set Immutable Universally Unique Identifier.
 		@param UUID 

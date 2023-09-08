@@ -19,7 +19,7 @@ package org.adempiere.core.domains.models;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import org.compiere.model.MTable;
+import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
 
 /** Generated Interface for C_City
@@ -133,6 +133,19 @@ public interface I_C_City
 	  */
 	public String getCoordinates();
 
+    /** Column name CountryName */
+    public static final String COLUMNNAME_CountryName = "CountryName";
+
+	/** Set Country.
+	  * Country Name
+	  */
+	public void setCountryName (String CountryName);
+
+	/** Get Country.
+	  * Country Name
+	  */
+	public String getCountryName();
+
     /** Column name Created */
     public static final String COLUMNNAME_Created = "Created";
 
@@ -148,6 +161,15 @@ public interface I_C_City
 	  * User who created this records
 	  */
 	public int getCreatedBy();
+
+    /** Column name IATACode */
+    public static final String COLUMNNAME_IATACode = "IATACode";
+
+	/** Set IATACode	  */
+	public void setIATACode (String IATACode);
+
+	/** Get IATACode	  */
+	public String getIATACode();
 
     /** Column name IsActive */
     public static final String COLUMNNAME_IsActive = "IsActive";
@@ -187,6 +209,15 @@ public interface I_C_City
 	  * Alphanumeric identifier of the entity
 	  */
 	public String getName();
+
+    /** Column name NameWDiacritics */
+    public static final String COLUMNNAME_NameWDiacritics = "NameWDiacritics";
+
+	/** Set NameWDiacritics	  */
+	public void setNameWDiacritics (String NameWDiacritics);
+
+	/** Get NameWDiacritics	  */
+	public String getNameWDiacritics();
 
     /** Column name Postal */
     public static final String COLUMNNAME_Postal = "Postal";
@@ -229,4 +260,17 @@ public interface I_C_City
 	  * Immutable Universally Unique Identifier
 	  */
 	public String getUUID();
+
+    /** Column name Value */
+    public static final String COLUMNNAME_Value = "Value";
+
+	/** Set Search Key.
+	  * Search key for the record in the format required - must be unique
+	  */
+	public void setValue (String Value);
+
+	/** Get Search Key.
+	  * Search key for the record in the format required - must be unique
+	  */
+	public String getValue();
 }

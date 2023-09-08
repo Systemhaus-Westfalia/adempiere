@@ -95,7 +95,7 @@ public class CuerpoDocumentoItem {
 				return false;
 			if (getCodTributo()==null)
 				return false;
-			if ( (getTributos()==null) || (getTributos().isEmpty())  || (getTributos().get(0)!="20") )
+			if ( (getTributos()==null) || (getTributos().isEmpty())  || (getTributos().get(0) !="20"))
 				return false;
 		} else {
 			if (getCodTributo()!=null)

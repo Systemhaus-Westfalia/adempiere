@@ -20,10 +20,7 @@ package org.adempiere.core.domains.models;
 
 import java.sql.ResultSet;
 import java.util.Properties;
-import org.compiere.model.I_Persistent;
-import org.compiere.model.MTable;
-import org.compiere.model.PO;
-import org.compiere.model.POInfo;
+import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
 
 /** Generated Model for C_City
@@ -35,7 +32,7 @@ public class X_C_City extends PO implements I_C_City, I_Persistent
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20230102L;
+	private static final long serialVersionUID = 20230907L;
 
     /** Standard Constructor */
     public X_C_City (Properties ctx, int C_City_ID, String trxName)
@@ -189,6 +186,36 @@ public class X_C_City extends PO implements I_C_City, I_Persistent
 		return (String)get_Value(COLUMNNAME_Coordinates);
 	}
 
+	/** Set Country.
+		@param CountryName 
+		Country Name
+	  */
+	public void setCountryName (String CountryName)
+	{
+		throw new IllegalArgumentException ("CountryName is virtual column");	}
+
+	/** Get Country.
+		@return Country Name
+	  */
+	public String getCountryName () 
+	{
+		return (String)get_Value(COLUMNNAME_CountryName);
+	}
+
+	/** Set IATACode.
+		@param IATACode IATACode	  */
+	public void setIATACode (String IATACode)
+	{
+		set_Value (COLUMNNAME_IATACode, IATACode);
+	}
+
+	/** Get IATACode.
+		@return IATACode	  */
+	public String getIATACode () 
+	{
+		return (String)get_Value(COLUMNNAME_IATACode);
+	}
+
 	/** Set Locode.
 		@param Locode 
 		Location code - UN/LOCODE 
@@ -231,6 +258,20 @@ public class X_C_City extends PO implements I_C_City, I_Persistent
         return new KeyNamePair(get_ID(), getName());
     }
 
+	/** Set NameWDiacritics.
+		@param NameWDiacritics NameWDiacritics	  */
+	public void setNameWDiacritics (String NameWDiacritics)
+	{
+		set_Value (COLUMNNAME_NameWDiacritics, NameWDiacritics);
+	}
+
+	/** Get NameWDiacritics.
+		@return NameWDiacritics	  */
+	public String getNameWDiacritics () 
+	{
+		return (String)get_Value(COLUMNNAME_NameWDiacritics);
+	}
+
 	/** Set ZIP.
 		@param Postal 
 		Postal code
@@ -263,5 +304,22 @@ public class X_C_City extends PO implements I_C_City, I_Persistent
 	public String getUUID () 
 	{
 		return (String)get_Value(COLUMNNAME_UUID);
+	}
+
+	/** Set Search Key.
+		@param Value 
+		Search key for the record in the format required - must be unique
+	  */
+	public void setValue (String Value)
+	{
+		set_Value (COLUMNNAME_Value, Value);
+	}
+
+	/** Get Search Key.
+		@return Search key for the record in the format required - must be unique
+	  */
+	public String getValue () 
+	{
+		return (String)get_Value(COLUMNNAME_Value);
 	}
 }

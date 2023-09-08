@@ -257,6 +257,36 @@ public class X_C_PaymentTerm extends PO implements I_C_PaymentTerm, I_Persistent
 	{
 		set_Value (COLUMNNAME_FixMonthCutoff, Integer.valueOf(FixMonthCutoff));
 	}
+	
+	
+	public org.adempiere.core.domains.models.I_E_TimeSpan getE_TimeSpan() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_E_TimeSpan)MTable.get(getCtx(), 
+				I_E_TimeSpan.Table_Name).getPO(getE_TimeSpan_ID(), get_TrxName());	}
+
+
+	
+	/** Set CAT-018 Plazo.
+		@param E_TimeSpan_ID CAT-018 Plazo	  */
+	public void setE_TimeSpan_ID (int E_TimeSpan_ID)
+	{
+		if (E_TimeSpan_ID < 1) 
+			set_Value (COLUMNNAME_E_TimeSpan_ID, null);
+		else 
+			set_Value (COLUMNNAME_E_TimeSpan_ID, Integer.valueOf(E_TimeSpan_ID));
+	}
+
+	/** Get CAT-018 Plazo.
+		@return CAT-018 Plazo	  */
+	public int getE_TimeSpan_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_E_TimeSpan_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+
 
 	/** Get Fix month cutoff.
 		@return Last day to include for next due date

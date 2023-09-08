@@ -284,6 +284,17 @@ public interface I_C_DocType
 	  * Additional information for a Document
 	  */
 	public String getDocumentNote();
+	
+
+
+    /** Column name E_DocType_ID */
+    public static final String COLUMNNAME_E_DocType_ID = "E_DocType_ID";
+
+	/** Set CAT-002 Tipo de Documento 	  */
+	public void setE_DocType_ID (int E_DocType_ID);
+
+	/** Get CAT-002 Tipo de Documento 	  */
+	public int getE_DocType_ID();
 
     /** Column name GL_Category_ID */
     public static final String COLUMNNAME_GL_Category_ID = "GL_Category_ID";

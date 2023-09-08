@@ -13,6 +13,12 @@ import org.shw.einvoice.es.util.pojo.PagosItem;
  * 
  */
 public class Resumen {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_PLAZO_IS_NULL         = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'plazo' de pagos no debe ser ='null'";
+	static final String VALIDATION_PERIODO_IS_NULL       = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'periodo' de pagos no debe ser ='null'";
+	static final String VALIDATION_TOTALGRAVADA_IVAPERC1 = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'ivaPerci1' no debe ser mayor que cero";
+	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
+	static final String VALIDATION_TOTALGRAVADA_CONDOP   = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'condicionOperacion' no debe ser diferente a 1";
 	
 	BigDecimal totalNoSuj;
 	BigDecimal totalExenta;
@@ -49,31 +55,33 @@ public Resumen() {
 /**
  * Validate the Schema conditions
  */
-public boolean validateValues() {
+public String validateValues() {
 	if(getCondicionOperacion()==2) {
 		if ( (getPagos()==null) ||  (getPagos().size()==0) ||  (getPagos().get(0).getPlazo()==null) )
-			return false;
+			return VALIDATION_PLAZO_IS_NULL;
 	} else {
 		if ( (getPagos()==null) ||  (getPagos().size()==0) ||  (getPagos().get(0).getPeriodo()==null) )
-			return false;
+			return VALIDATION_PERIODO_IS_NULL;
 	}	
 
 	if(getTotalGravada()==BigDecimal.ZERO) {
 		if ( getIvaPerci1().compareTo(BigDecimal.ZERO) == 1 )
-			return false;
+			return VALIDATION_TOTALGRAVADA_IVAPERC1;
 	} 
 
 	if(getTotalGravada()==BigDecimal.ZERO) {
 		if ( getIvaRete1().compareTo(BigDecimal.ZERO) == 1 )
-			return false;
+			return VALIDATION_TOTALGRAVADA_IVARETE1;
 	} 
 
 	if(getTotalPagar()==BigDecimal.ZERO) {
 		if ( getCondicionOperacion() != 1 )
-			return false;
+			return VALIDATION_TOTALGRAVADA_CONDOP;
 	}
 	
-	return true;}
+	return VALIDATION_RESULT_OK;
+	}
+
 	/**
 	 * @return the totalNoSuj
 	 */

@@ -3,6 +3,9 @@ package org.shw.einvoice.es.feccfcreditofiscalv3;
 import java.util.regex.Pattern;
 
 public class DocumentoRelacionadoItem {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Credito Fiscal, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";
+	
 	String tipoDocumento;
 	int tipoGeneracion;
 	String numeroDocumento;
@@ -32,15 +35,15 @@ public class DocumentoRelacionadoItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		if(getTipoGeneracion()==2) {
 			boolean patternOK = (getNumeroDocumento()!=null) && Pattern.matches(PATTERN, getNumeroDocumento());  
 			
 			if(!patternOK)
-				return false;
+				return VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED;
 		}
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

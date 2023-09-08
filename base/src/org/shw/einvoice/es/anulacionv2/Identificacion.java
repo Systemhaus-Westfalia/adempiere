@@ -19,13 +19,6 @@ public class Identificacion {
 	public Identificacion() {
 		this.version = VERSION;
 	}
-	
-	/**
-	 * Validate the Schema conditions
-	 */
-	public boolean validateValues() {
-		return true;
-	}
 
 
 	/**

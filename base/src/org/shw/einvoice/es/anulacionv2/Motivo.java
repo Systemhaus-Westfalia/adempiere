@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
  * Just for class Anulacion
  */
 public class Motivo {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_MOTIVOANULACION_IS_NULL = "Documento: Anulacion, clase: Motivo. Validacion falló: valor de 'motivoAnulacion' no debe ser ='null'";
 
 	int tipoAnulacion;
 	String motivoAnulacion=null;  // null permitted
@@ -29,14 +31,14 @@ public class Motivo {
 /**
  * Validate the Schema conditions
  */
-public boolean validateValues() {
+public String validateValues() {
 	
 	if(getTipoAnulacion()==3) {
 		if ( getMotivoAnulacion()== null)
-			return false;
+			return VALIDATION_MOTIVOANULACION_IS_NULL;
 	} 
 	
-	return true;
+	return VALIDATION_RESULT_OK;
 }
 	
 	

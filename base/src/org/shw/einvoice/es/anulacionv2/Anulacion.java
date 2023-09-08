@@ -8,6 +8,9 @@ package org.shw.einvoice.es.anulacionv2;
  * 
  */
 public class Anulacion {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_CODIGOGENERACIONR_IS_NOT_NULL = "Documento: Anulacion, clase: Anulacion. Validacion falló: valor de 'codigoGeneracionR' debe ser ='null'";
+	static final String VALIDATION_CODIGOGENERACIONR_IS_NULL = "Documento: Anulacion, clase: Anulacion. Validacion falló: valor de 'codigoGeneracionR' no deber ser ='null'";
 
 	Identificacion identificacion;
 	Emisor emisor;
@@ -29,17 +32,17 @@ public class Anulacion {
 /**
  * Validate the Schema conditions
  */
-public boolean validateValues() {
+public String validateValues() {
 	
 	if(getMotivo().getTipoAnulacion()==2) {
 		if ( getDocumento().getCodigoGeneracionR()!= null)
-			return false;
+			return VALIDATION_CODIGOGENERACIONR_IS_NOT_NULL;
 	} else {
 		if ( getDocumento().getCodigoGeneracionR()== null)
-			return false;
+			return VALIDATION_CODIGOGENERACIONR_IS_NULL;
 	}
 	
-	return true;
+	return VALIDATION_RESULT_OK;
 }
 	
 	/**

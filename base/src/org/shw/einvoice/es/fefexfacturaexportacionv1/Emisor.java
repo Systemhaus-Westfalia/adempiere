@@ -5,6 +5,9 @@ import java.util.regex.Pattern;
 import org.shw.einvoice.es.util.pojo.Direccion;
 
 public class Emisor {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_RECINTOFISCAL_NOT_NULL = "Documento: Factura de Exportacion, clase: Emisor. Validacion falló: valor de 'recintoFiscal' de pagos debe ser ='null'";
+	static final String VALIDATION_REGIMEN_NOT_NULL       = "Documento: Factura de Exportacion, clase: Emisor. Validacion falló: valor de 'regimen' de pagos debe ser ='null'";
 
 	String nit;
 	String nrc;
@@ -34,17 +37,17 @@ public class Emisor {
 /**
  * Validate the Schema conditions
  */
-public boolean validateValues() {
+public String validateValues() {
 	
 	if(getTipoItemExpor()== 2) {
 		if ( getRecintoFiscal()!= null)
-			return false;
+			return VALIDATION_RECINTOFISCAL_NOT_NULL;
 		if ( getRegimen()!= null)
-			return false;
+			return VALIDATION_REGIMEN_NOT_NULL;
 	}
 	// In schema there are more validations, but they are redundant.
 	
-	return true;
+	return VALIDATION_RESULT_OK;
 }
 
 	/**

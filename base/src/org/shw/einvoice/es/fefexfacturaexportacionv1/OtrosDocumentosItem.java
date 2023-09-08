@@ -11,6 +11,18 @@ import java.util.Objects;
  * 
  */
 public class OtrosDocumentosItem {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_MODOTRANSP_IS_NULL       = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'modoTransp' no debe ser ='null'";
+	static final String VALIDATION_NUMCONDUCTOR_IS_NULL     = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'numCoductor' no debe ser ='null'";
+	static final String VALIDATION_NOMBRECONDUCTOR_IS_NULL  = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'nombreConductor' no debe ser ='null'";
+	static final String VALIDATION_PLACATRANS_IS_NULL       = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'placaTrans' no debe ser ='null'";
+	static final String VALIDATION_NUMCONDUCTOR_NOT_NULL    = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'numCoductor' debe ser ='null'";
+	static final String VALIDATION_NOMBRECONDUCTOR_NOT_NULL = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'nombreConductor' debe ser ='null'";
+	static final String VALIDATION_PLACATRANS_NOT_NULL      = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'placaTrans' debe ser ='null'";
+	static final String VALIDATION_MODOTRANSP_NOT_NULL      = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'modoTransp' no debe ser ='null'";
+	static final String VALIDATION_DESCDOCUMENTO_IS_NULL     = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'descDocumento' no debe ser ='null'";
+	static final String VALIDATION_DETALLEDOCUMENTO_IS_NULL     = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'detalleDocumento' no debe ser ='null'";
+	
 
 	int codDocAsociado;
 	String descDocumento=null;  // null allowed
@@ -29,35 +41,35 @@ public class OtrosDocumentosItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if(getCodDocAsociado()==4){
 			if (Objects.isNull(getModoTransp()))
-				return false;
+				return VALIDATION_MODOTRANSP_IS_NULL;
 			if (getNumConductor()==null)
-				return false;
+				return VALIDATION_NUMCONDUCTOR_IS_NULL;
 			if (getNombreConductor()==null)
-				return false;
+				return VALIDATION_NOMBRECONDUCTOR_IS_NULL;
 			if (getPlacaTrans()==null)
-				return false;
+				return VALIDATION_PLACATRANS_IS_NULL;
 		} else  {
 			if (getNumConductor()!=null)
-				return false;
+				return VALIDATION_NUMCONDUCTOR_NOT_NULL;
 			if (getNombreConductor()!=null)
-				return false;
+				return VALIDATION_NOMBRECONDUCTOR_NOT_NULL;
 			if (getPlacaTrans()!=null)
-				return false;
+				return VALIDATION_PLACATRANS_NOT_NULL;
 			if (!(Objects.isNull(getModoTransp())) )
-				return false;
+				return VALIDATION_MODOTRANSP_NOT_NULL;
 		}
 		
 		if(getCodDocAsociado()==1 || getCodDocAsociado()==2 ){
 			if (getDescDocumento()==null)
-				return false;
+				return VALIDATION_DESCDOCUMENTO_IS_NULL;
 			if (getDetalleDocumento()==null)
-				return false;
+				return VALIDATION_DETALLEDOCUMENTO_IS_NULL;
 		} 
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

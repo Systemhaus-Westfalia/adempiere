@@ -13,6 +13,8 @@ import org.shw.einvoice.es.util.pojo.Direccion;
  * 
  */
 public class Receptor {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_NUMDOCUMENTO_PATTERN_FAILED = "Documento: Factura de Exportacion, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 
 	String nombre;
 	String tipoDocumento;
@@ -34,11 +36,10 @@ public class Receptor {
 	}
 	
 
-	
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		String pattern;
 		boolean patternOK;
 
@@ -47,7 +48,7 @@ public class Receptor {
 			pattern = "^([0-9]{14}|[0-9]{9})$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
-				return false;
+				return VALIDATION_NUMDOCUMENTO_PATTERN_FAILED;
 		} 
 
 		// In schema: "pattern" : "^[0-9]{8}-[0-9]{1}$"
@@ -55,10 +56,9 @@ public class Receptor {
 			pattern = "^[0-9]{8}-[0-9]{1}$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
-				return false;
-		}
-		
-		return true;
+				return VALIDATION_NUMDOCUMENTO_PATTERN_FAILED;
+		}		
+		return VALIDATION_RESULT_OK;
 	}
 	
 	/**

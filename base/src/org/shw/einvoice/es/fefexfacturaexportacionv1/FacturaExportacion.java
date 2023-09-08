@@ -17,6 +17,13 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 public class FacturaExportacion {
 	static final int OTROSDOCUMENTOS_MAXIMUM_ITEMS = 20;
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
+
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_CORREO_IS_NULL            = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'receptor.correo' no debe ser ='null'";
+	static final String VALIDATION_OTROSDOCUMENTOS_MAXITEMS  = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'otrosDocumentos' debe contemner entre 1 y " + 
+																OTROSDOCUMENTOS_MAXIMUM_ITEMS + " elementos";
+	static final String VALIDATION_CUERPODOCUMENTO_MAXITEMS  = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'cuerpoDocumento' debe contemner entre 1 y " + 
+																CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
 	Identificacion identificacion;
 	Emisor emisor;
@@ -44,22 +51,22 @@ public class FacturaExportacion {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		
 		if(getResumen().getMontoTotalOperacion().compareTo(BigDecimal.valueOf(10000-1))==1) {
 			if ( getReceptor().getCorreo()== null)
-				return false;
+				return VALIDATION_CORREO_IS_NULL;
 		} 
 		
 		if( (getOtrosDocumentos()!=null) && ( (getOtrosDocumentos().size()==0) || (getOtrosDocumentos().size()>OTROSDOCUMENTOS_MAXIMUM_ITEMS) ) ) {
-			return false;
+			return VALIDATION_OTROSDOCUMENTOS_MAXITEMS;
 		}
 		
-		if( (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
-			return false;
+		if( (getCuerpoDocumento()==null) || (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
+			return VALIDATION_CUERPODOCUMENTO_MAXITEMS;
 		}
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 	
 	

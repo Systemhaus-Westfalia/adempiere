@@ -39,14 +39,6 @@ public Resumen() {
 	this.pagos = new ArrayList<PagosItem>();
 }
 
-/**
- * Validate the Schema conditions: as of Version #1, there are no conditions.
- */
-public boolean validateValues() {
-	
-	return true;
-}
-
 	/**
 	 * @return the totalGravada
 	 */

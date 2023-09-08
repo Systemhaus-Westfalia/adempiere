@@ -11,6 +11,9 @@ import java.util.List;
  * 
  */
 public class CuerpoDocumentoItem {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_PRECIOUNI_IS_NULL = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'precioUni' no debe ser ='null'";
+	static final String VALIDATION_TRIBUTOS          = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='C3'";
 	
 	int numItem;
 	BigDecimal cantidad;
@@ -63,13 +66,15 @@ public class CuerpoDocumentoItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if(getNoGravado()==BigDecimal.ZERO) {
-			if ( (getPrecioUni()== null)  || getTributos().size()!=1  || (getTributos().get(0) !="C3") )
-				return false;
+			if (getPrecioUni()== null)
+				return VALIDATION_PRECIOUNI_IS_NULL;
+			if ( (getTributos().size()!=1) || (getTributos().get(0) !="C3"))
+				return VALIDATION_TRIBUTOS;
 		} 
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

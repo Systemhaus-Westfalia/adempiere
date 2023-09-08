@@ -15,6 +15,8 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class FacturaExportacion {
+	static final int OTROSDOCUMENTOS_MAXIMUM_ITEMS = 20;
+	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 	
 	Identificacion identificacion;
 	Emisor emisor;
@@ -48,6 +50,14 @@ public class FacturaExportacion {
 			if ( getReceptor().getCorreo()== null)
 				return false;
 		} 
+		
+		if( (getOtrosDocumentos()!=null) && ( (getOtrosDocumentos().size()==0) || (getOtrosDocumentos().size()>OTROSDOCUMENTOS_MAXIMUM_ITEMS) ) ) {
+			return false;
+		}
+		
+		if( (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
+			return false;
+		}
 		
 		return true;
 	}

@@ -40,7 +40,7 @@ public class ComprobanteCreditoFiscal {
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
-		this.apendice             = new ArrayList<ApendiceItem>();
+		//this.apendice             = new ArrayList<ApendiceItem>();
 	}
 	
 

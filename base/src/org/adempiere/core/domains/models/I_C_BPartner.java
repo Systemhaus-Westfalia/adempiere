@@ -19,6 +19,7 @@ package org.adempiere.core.domains.models;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import org.adempiere.core.domains.models.*;
 import org.compiere.model.MTable;
 import org.compiere.util.KeyNamePair;
 
@@ -169,7 +170,20 @@ public interface I_C_BPartner
 	  */
 	public int getBPartner_Parent_ID();
 
-	public org.adempiere.core.domains.models.I_C_BPartner getBPartner_Parent() throws RuntimeException;
+    /** Column name C_Activity_ID */
+    public static final String COLUMNNAME_C_Activity_ID = "C_Activity_ID";
+
+	/** Set Activity.
+	  * Business Activity
+	  */
+	public void setC_Activity_ID (int C_Activity_ID);
+
+	/** Get Activity.
+	  * Business Activity
+	  */
+	public int getC_Activity_ID();
+
+	public org.adempiere.core.domains.models.I_C_Activity getC_Activity() throws RuntimeException;
 
     /** Column name C_BP_AccountType_ID */
     public static final String COLUMNNAME_C_BP_AccountType_ID = "C_BP_AccountType_ID";
@@ -186,6 +200,7 @@ public interface I_C_BPartner
 
 	public org.adempiere.core.domains.models.I_C_BP_AccountType getC_BP_AccountType() throws RuntimeException;
 
+    
     /** Column name C_BP_Group_ID */
     public static final String COLUMNNAME_C_BP_Group_ID = "C_BP_Group_ID";
 
@@ -258,6 +273,32 @@ public interface I_C_BPartner
 	  * Identifies a Business Partner
 	  */
 	public int getC_BPartner_ID();
+
+    /** Column name C_DocType_ID */
+    public static final String COLUMNNAME_C_DocType_ID = "C_DocType_ID";
+
+	/** Set Document Type.
+	  * Document type or rules
+	  */
+	public void setC_DocType_ID (int C_DocType_ID);
+
+	/** Get Document Type.
+	  * Document type or rules
+	  */
+	public int getC_DocType_ID();
+
+	public org.adempiere.core.domains.models.I_C_DocType getC_DocType() throws RuntimeException;
+
+    /** Column name C_DoctypePO_ID */
+    public static final String COLUMNNAME_C_DoctypePO_ID = "C_DoctypePO_ID";
+
+	/** Set C_DoctypePO_ID	  */
+	public void setC_DoctypePO_ID (int C_DoctypePO_ID);
+
+	/** Get C_DoctypePO_ID	  */
+	public int getC_DoctypePO_ID();
+
+	public org.adempiere.core.domains.models.I_C_DocType getC_DoctypePO() throws RuntimeException;
 
     /** Column name C_Dunning_ID */
     public static final String COLUMNNAME_C_Dunning_ID = "C_Dunning_ID";
@@ -429,6 +470,72 @@ public interface I_C_BPartner
 	  */
 	public String getDUNS();
 
+    /** Column name E_Activity_ID */
+    public static final String COLUMNNAME_E_Activity_ID = "E_Activity_ID";
+
+	/** Set CAT-019 Código de Actividad Económica	  */
+	public void setE_Activity_ID (int E_Activity_ID);
+
+	/** Get CAT-019 Código de Actividad Económica	  */
+	public int getE_Activity_ID();
+
+    /** Column name E_BPType_ID */
+    public static final String COLUMNNAME_E_BPType_ID = "E_BPType_ID";
+
+	/** Set CAT-029 Tipo de persona	  */
+	public void setE_BPType_ID (int E_BPType_ID);
+
+	/** Get CAT-029 Tipo de persona	  */
+	public int getE_BPType_ID();
+
+    /** Column name E_Recipient_Identification_ID */
+    public static final String COLUMNNAME_E_Recipient_Identification_ID = "E_Recipient_Identification_ID";
+
+	/** Set CAT-022 Tipo de documento de identificación del Receptor	  */
+	public void setE_Recipient_Identification_ID (int E_Recipient_Identification_ID);
+
+	/** Get CAT-022 Tipo de documento de identificación del Receptor	  */
+	public int getE_Recipient_Identification_ID();
+
+    /** Column name EMail */
+    public static final String COLUMNNAME_EMail = "EMail";
+
+	/** Set EMail Address.
+	  * Electronic Mail Address
+	  */
+	public void setEMail (String EMail);
+
+	/** Get EMail Address.
+	  * Electronic Mail Address
+	  */
+	public String getEMail();
+
+    /** Column name EMail2 */
+    public static final String COLUMNNAME_EMail2 = "EMail2";
+
+	/** Set EMail Address 2.
+	  * Electronic Mail Address
+	  */
+	public void setEMail2 (String EMail2);
+
+	/** Get EMail Address 2.
+	  * Electronic Mail Address
+	  */
+	public String getEMail2();
+
+    /** Column name EMail3 */
+    public static final String COLUMNNAME_EMail3 = "EMail3";
+
+	/** Set EMail Address 3.
+	  * Electronic Mail Address
+	  */
+	public void setEMail3 (String EMail3);
+
+	/** Get EMail Address 3.
+	  * Electronic Mail Address
+	  */
+	public String getEMail3();
+
     /** Column name FathersName */
     public static final String COLUMNNAME_FathersName = "FathersName";
 
@@ -441,6 +548,37 @@ public interface I_C_BPartner
 	  * Father's Name
 	  */
 	public String getFathersName();
+
+    /** Column name Fax */
+    public static final String COLUMNNAME_Fax = "Fax";
+
+	/** Set Fax.
+	  * Facsimile number
+	  */
+	public void setFax (String Fax);
+
+	/** Get Fax.
+	  * Facsimile number
+	  */
+	public String getFax();
+
+    /** Column name FirstName1 */
+    public static final String COLUMNNAME_FirstName1 = "FirstName1";
+
+	/** Set First Name 1	  */
+	public void setFirstName1 (String FirstName1);
+
+	/** Get First Name 1	  */
+	public String getFirstName1();
+
+    /** Column name FirstName2 */
+    public static final String COLUMNNAME_FirstName2 = "FirstName2";
+
+	/** Set First Name 2	  */
+	public void setFirstName2 (String FirstName2);
+
+	/** Get First Name 2	  */
+	public String getFirstName2();
 
     /** Column name FirstSale */
     public static final String COLUMNNAME_FirstSale = "FirstSale";
@@ -531,6 +669,15 @@ public interface I_C_BPartner
 	  */
 	public boolean isActive();
 
+    /** Column name isCA */
+    public static final String COLUMNNAME_isCA = "isCA";
+
+	/** Set isCA	  */
+	public void setisCA (boolean isCA);
+
+	/** Get isCA	  */
+	public boolean isCA();
+
     /** Column name IsCustomer */
     public static final String COLUMNNAME_IsCustomer = "IsCustomer";
 
@@ -543,6 +690,15 @@ public interface I_C_BPartner
 	  * Indicates if this Business Partner is a Customer
 	  */
 	public boolean isCustomer();
+
+    /** Column name IsDetailedNames */
+    public static final String COLUMNNAME_IsDetailedNames = "IsDetailedNames";
+
+	/** Set Detailed Names	  */
+	public void setIsDetailedNames (boolean IsDetailedNames);
+
+	/** Get Detailed Names	  */
+	public boolean isDetailedNames();
 
     /** Column name IsDiscountPrinted */
     public static final String COLUMNNAME_IsDiscountPrinted = "IsDiscountPrinted";
@@ -570,6 +726,51 @@ public interface I_C_BPartner
 	  */
 	public boolean isEmployee();
 
+    /** Column name isEXT */
+    public static final String COLUMNNAME_isEXT = "isEXT";
+
+	/** Set isEXT	  */
+	public void setisEXT (boolean isEXT);
+
+	/** Get isEXT	  */
+	public boolean isEXT();
+
+    /** Column name isGranContribuyente */
+    public static final String COLUMNNAME_isGranContribuyente = "isGranContribuyente";
+
+	/** Set isGranContribuyente	  */
+	public void setisGranContribuyente (boolean isGranContribuyente);
+
+	/** Get isGranContribuyente	  */
+	public boolean isGranContribuyente();
+
+    /** Column name IsInvoicedProForma */
+    public static final String COLUMNNAME_IsInvoicedProForma = "IsInvoicedProForma";
+
+	/** Set IsInvoicedProForma	  */
+	public void setIsInvoicedProForma (boolean IsInvoicedProForma);
+
+	/** Get IsInvoicedProForma	  */
+	public boolean isInvoicedProForma();
+
+    /** Column name isLGAgent */
+    public static final String COLUMNNAME_isLGAgent = "isLGAgent";
+
+	/** Set isLGAgent	  */
+	public void setisLGAgent (boolean isLGAgent);
+
+	/** Get isLGAgent	  */
+	public boolean isLGAgent();
+
+    /** Column name isLocal */
+    public static final String COLUMNNAME_isLocal = "isLocal";
+
+	/** Set isLocal	  */
+	public void setisLocal (boolean isLocal);
+
+	/** Get isLocal	  */
+	public boolean isLocal();
+
     /** Column name IsManufacturer */
     public static final String COLUMNNAME_IsManufacturer = "IsManufacturer";
 
@@ -582,6 +783,24 @@ public interface I_C_BPartner
 	  * Indicate role of this Business partner as Manufacturer
 	  */
 	public boolean isManufacturer();
+
+    /** Column name IsNaturalPerson */
+    public static final String COLUMNNAME_IsNaturalPerson = "IsNaturalPerson";
+
+	/** Set IsNaturalPerson	  */
+	public void setIsNaturalPerson (boolean IsNaturalPerson);
+
+	/** Get IsNaturalPerson	  */
+	public boolean isNaturalPerson();
+
+    /** Column name isNotaDebito */
+    public static final String COLUMNNAME_isNotaDebito = "isNotaDebito";
+
+	/** Set isNotaDebito	  */
+	public void setisNotaDebito (boolean isNotaDebito);
+
+	/** Get isNotaDebito	  */
+	public boolean isNotaDebito();
 
     /** Column name IsOneTime */
     public static final String COLUMNNAME_IsOneTime = "IsOneTime";
@@ -631,6 +850,15 @@ public interface I_C_BPartner
 	  */
 	public boolean isSalesRep();
 
+    /** Column name isSplitInvoice */
+    public static final String COLUMNNAME_isSplitInvoice = "isSplitInvoice";
+
+	/** Set isSplitInvoice	  */
+	public void setisSplitInvoice (boolean isSplitInvoice);
+
+	/** Get isSplitInvoice	  */
+	public boolean isSplitInvoice();
+
     /** Column name IsSummary */
     public static final String COLUMNNAME_IsSummary = "IsSummary";
 
@@ -657,6 +885,15 @@ public interface I_C_BPartner
 	  */
 	public boolean isTaxExempt();
 
+    /** Column name IsUseTaxIdDigit */
+    public static final String COLUMNNAME_IsUseTaxIdDigit = "IsUseTaxIdDigit";
+
+	/** Set Use Tax Id Digit	  */
+	public void setIsUseTaxIdDigit (boolean IsUseTaxIdDigit);
+
+	/** Get Use Tax Id Digit	  */
+	public boolean isUseTaxIdDigit();
+
     /** Column name IsVendor */
     public static final String COLUMNNAME_IsVendor = "IsVendor";
 
@@ -669,6 +906,24 @@ public interface I_C_BPartner
 	  * Indicates if this Business Partner is a Vendor
 	  */
 	public boolean isVendor();
+
+    /** Column name LastName1 */
+    public static final String COLUMNNAME_LastName1 = "LastName1";
+
+	/** Set Last Name 1	  */
+	public void setLastName1 (String LastName1);
+
+	/** Get Last Name 1	  */
+	public String getLastName1();
+
+    /** Column name LastName2 */
+    public static final String COLUMNNAME_LastName2 = "LastName2";
+
+	/** Set Last Name 2	  */
+	public void setLastName2 (String LastName2);
+
+	/** Get Last Name 2	  */
+	public String getLastName2();
 
     /** Column name Logo_ID */
     public static final String COLUMNNAME_Logo_ID = "Logo_ID";
@@ -804,6 +1059,45 @@ public interface I_C_BPartner
 	  * Purchase payment option
 	  */
 	public String getPaymentRulePO();
+
+    /** Column name PersonalID */
+    public static final String COLUMNNAME_PersonalID = "PersonalID";
+
+	/** Set Personal ID.
+	  * Personal Identification
+	  */
+	public void setPersonalID (String PersonalID);
+
+	/** Get Personal ID.
+	  * Personal Identification
+	  */
+	public String getPersonalID();
+
+    /** Column name Phone */
+    public static final String COLUMNNAME_Phone = "Phone";
+
+	/** Set Phone.
+	  * Identifies a telephone number
+	  */
+	public void setPhone (String Phone);
+
+	/** Get Phone.
+	  * Identifies a telephone number
+	  */
+	public String getPhone();
+
+    /** Column name Phone2 */
+    public static final String COLUMNNAME_Phone2 = "Phone2";
+
+	/** Set 2nd Phone.
+	  * Identifies an alternate telephone number.
+	  */
+	public void setPhone2 (String Phone2);
+
+	/** Get 2nd Phone.
+	  * Identifies an alternate telephone number.
+	  */
+	public String getPhone2();
 
     /** Column name PlaceOfBirth_ID */
     public static final String COLUMNNAME_PlaceOfBirth_ID = "PlaceOfBirth_ID";
@@ -1036,6 +1330,28 @@ public interface I_C_BPartner
 	  */
 	public String getSOCreditStatus();
 
+    /** Column name SuperVisor_Custom */
+    public static final String COLUMNNAME_SuperVisor_Custom = "SuperVisor_Custom";
+
+	/** Set SuperVisor_Custom	  */
+	public void setSuperVisor_Custom (int SuperVisor_Custom);
+
+	/** Get SuperVisor_Custom	  */
+	public int getSuperVisor_Custom();
+
+	public org.adempiere.core.domains.models.I_AD_User getSuperVisor_Cus() throws RuntimeException;
+
+    /** Column name SuperVisor_Shipment */
+    public static final String COLUMNNAME_SuperVisor_Shipment = "SuperVisor_Shipment";
+
+	/** Set SuperVisor_Shipment	  */
+	public void setSuperVisor_Shipment (int SuperVisor_Shipment);
+
+	/** Get SuperVisor_Shipment	  */
+	public int getSuperVisor_Shipment();
+
+	public org.adempiere.core.domains.models.I_AD_User getSuperVisor_Shipm() throws RuntimeException;
+
     /** Column name TaxID */
     public static final String COLUMNNAME_TaxID = "TaxID";
 
@@ -1048,6 +1364,15 @@ public interface I_C_BPartner
 	  * Tax Identification
 	  */
 	public String getTaxID();
+
+    /** Column name TaxIdDigit */
+    public static final String COLUMNNAME_TaxIdDigit = "TaxIdDigit";
+
+	/** Set Tax ID Digit	  */
+	public void setTaxIdDigit (String TaxIdDigit);
+
+	/** Get Tax ID Digit	  */
+	public String getTaxIdDigit();
 
     /** Column name TotalOpenBalance */
     public static final String COLUMNNAME_TotalOpenBalance = "TotalOpenBalance";
@@ -1100,6 +1425,21 @@ public interface I_C_BPartner
 	  */
 	public String getURL();
 
+    /** Column name User1_ID */
+    public static final String COLUMNNAME_User1_ID = "User1_ID";
+
+	/** Set User List 1.
+	  * User defined list element #1
+	  */
+	public void setUser1_ID (int User1_ID);
+
+	/** Get User List 1.
+	  * User defined list element #1
+	  */
+	public int getUser1_ID();
+
+	public org.adempiere.core.domains.models.I_C_ElementValue getUser1() throws RuntimeException;
+
     /** Column name UUID */
     public static final String COLUMNNAME_UUID = "UUID";
 
@@ -1125,6 +1465,15 @@ public interface I_C_BPartner
 	  * Search key for the record in the format required - must be unique
 	  */
 	public String getValue();
+
+    /** Column name Value_SAP */
+    public static final String COLUMNNAME_Value_SAP = "Value_SAP";
+
+	/** Set Value_SAP	  */
+	public void setValue_SAP (String Value_SAP);
+
+	/** Get Value_SAP	  */
+	public String getValue_SAP();
 
     /** Column name VendorOpenInvoices */
     public static final String COLUMNNAME_VendorOpenInvoices = "VendorOpenInvoices";

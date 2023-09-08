@@ -157,9 +157,90 @@ public interface I_AD_Client
 	  * Directory for documents from the application server
 	  */
 	public String getDocumentDir();
+	
+	 /** Column name EMail */
+    public static final String COLUMNNAME_EMail = "EMail";
+
+	/** Set EMail Address.
+	  * Electronic Mail Address
+	  */
+	public void setEMail (String EMail);
+
+	/** Get EMail Address.
+	  * Electronic Mail Address
+	  */
+	public String getEMail();
+
 
     /** Column name EMailTest */
     public static final String COLUMNNAME_EMailTest = "EMailTest";
+    
+
+    /** Column name E_BPType_ID */
+    public static final String COLUMNNAME_E_BPType_ID = "E_BPType_ID";
+
+	/** Set CAT-029 Tipo de persona	  */
+	public void setE_BPType_ID (int E_BPType_ID);
+
+	/** Get CAT-029 Tipo de persona	  */
+	public int getE_BPType_ID();
+
+    /** Column name E_FiscalResidence_ID */
+    public static final String COLUMNNAME_E_FiscalResidence_ID = "E_FiscalResidence_ID";
+
+	/** Set CAT-032 Domicilio Fiscal	  */
+	public void setE_FiscalResidence_ID (int E_FiscalResidence_ID);
+
+	/** Get CAT-032 Domicilio Fiscal	  */
+	public int getE_FiscalResidence_ID();
+
+    /** Column name E_InvoiceGenerationType_ID */
+    public static final String COLUMNNAME_E_InvoiceGenerationType_ID = "E_InvoiceGenerationType_ID";
+
+	/** Set CAT-007 Tipo de Generación del Documento	  */
+	public void setE_InvoiceGenerationType_ID (int E_InvoiceGenerationType_ID);
+
+	/** Get CAT-007 Tipo de Generación del Documento	  */
+	public int getE_InvoiceGenerationType_ID();
+
+    /** Column name E_InvoicingMode_ID */
+    public static final String COLUMNNAME_E_InvoicingMode_ID = "E_InvoicingMode_ID";
+
+	/** Set CAT-003 Modelo de Facturación	  */
+	public void setE_InvoicingMode_ID (int E_InvoicingMode_ID);
+
+	/** Get CAT-003 Modelo de Facturación	  */
+	public int getE_InvoicingMode_ID();
+	
+	/** Column name E_Activity_ID */
+    public static final String COLUMNNAME_E_Activity_ID = "E_Activity_ID";
+
+	/** Set CAT-019 Código de Actividad Económica	  */
+	public void setE_Activity_ID (int E_Activity_ID);
+
+	/** Get CAT-019 Código de Actividad Económica	  */
+	public int getE_Activity_ID();
+
+
+    /** Column name E_TransmissionType_ID */
+    public static final String COLUMNNAME_E_TransmissionType_ID = "E_TransmissionType_ID";
+
+	/** Set CAT-004 Tipo de Transmisión	  */
+	public void setE_TransmissionType_ID (int E_TransmissionType_ID);
+
+	/** Get CAT-004 Tipo de Transmisión	  */
+	public int getE_TransmissionType_ID();
+	
+	 /** Column name E_PlantType_ID */
+    public static final String COLUMNNAME_E_PlantType_ID = "E_PlantType_ID";
+
+	/** Set CAT-009 Tipo de establecimiento	  */
+	public void setE_PlantType_ID (int E_PlantType_ID);
+
+	/** Get CAT-009 Tipo de establecimiento	  */
+	public int getE_PlantType_ID();
+
+
 
 	/** Set EMail Test.
 	  * Test EMail

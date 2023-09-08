@@ -183,6 +183,17 @@ public interface I_C_PaymentTerm
 	  * Additional information for a Document
 	  */
 	public String getDocumentNote();
+	 /** Column name E_TimeSpan_ID */
+    public static final String COLUMNNAME_E_TimeSpan_ID = "E_TimeSpan_ID";
+
+	/** Set CAT-018 Plazo	  */
+	public void setE_TimeSpan_ID (int E_TimeSpan_ID);
+
+	/** Get CAT-018 Plazo	  */
+	public int getE_TimeSpan_ID();
+
+	public org.adempiere.core.domains.models.I_E_TimeSpan getE_TimeSpan() throws RuntimeException;
+
 
     /** Column name FixMonthCutoff */
     public static final String COLUMNNAME_FixMonthCutoff = "FixMonthCutoff";

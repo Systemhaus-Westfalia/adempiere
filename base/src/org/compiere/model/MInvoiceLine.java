@@ -478,42 +478,38 @@ public class MInvoiceLine extends X_C_InvoiceLine implements DocumentReversalLin
 
 		//	juddm: Tax Exempt & Tax Included in Price List & not Document Level - Adjust Line Amount
 		//  http://sourceforge.net/tracker/index.php?func=detail&aid=1733602&group_id=176962&atid=879332
-		if (isTaxIncluded() && !documentLevel)	{
-			BigDecimal taxStdAmt = Env.ZERO, taxThisAmt = Env.ZERO;
-			
-			MTax invoiceTax = getTax();
-			MTax stdTax = null;
-			
-			if (getProduct() == null)
-			{
-				if (getCharge() != null)	// Charge 
-				{
-					stdTax = new MTax (getCtx(), 
-							((MTaxCategory) getCharge().getC_TaxCategory()).getDefaultTax().getC_Tax_ID(),
-							get_TrxName());
-				}
-					
-			}
-			else	// Product
-				stdTax = new MTax (getCtx(), 
-							((MTaxCategory) getProduct().getC_TaxCategory()).getDefaultTax().getC_Tax_ID(), 
-							get_TrxName());
-
-			if (stdTax != null)
-			{
-				
-				log.fine("stdTax rate is " + stdTax.getRate());
-				log.fine("invoiceTax rate is " + invoiceTax.getRate());
-				
-				taxThisAmt = taxThisAmt.add(invoiceTax.calculateTax(lineNetAmount, isTaxIncluded(), getPrecision()));
-				taxStdAmt = taxStdAmt.add(stdTax.calculateTax(lineNetAmount, isTaxIncluded(), getPrecision()));
-				
-				lineNetAmount = lineNetAmount.subtract(taxStdAmt).add(taxThisAmt);
-				
-				log.fine("Price List includes Tax and Tax Changed on Invoice Line: New Tax Amt: " 
-						+ taxThisAmt + " Standard Tax Amt: " + taxStdAmt + " Line Net Amt: " + lineNetAmount);	
-			}
-		}
+		if (isTaxIncluded() && !documentLevel) {
+			/*
+			 * BigDecimal taxStdAmt = Env.ZERO, taxThisAmt = Env.ZERO;
+			 * 
+			 * MTax invoiceTax = getTax(); MTax stdTax = null;
+			 * 
+			 * if (getProduct() == null) { if (getCharge() != null) // Charge { stdTax = new
+			 * MTax (getCtx(), ((MTaxCategory)
+			 * getCharge().getC_TaxCategory()).getDefaultTax().getC_Tax_ID(),
+			 * get_TrxName()); }
+			 * 
+			 * } else // Product stdTax = new MTax (getCtx(), ((MTaxCategory)
+			 * getProduct().getC_TaxCategory()).getDefaultTax().getC_Tax_ID(),
+			 * get_TrxName());
+			 * 
+			 * if (stdTax != null) {
+			 * 
+			 * log.fine("stdTax rate is " + stdTax.getRate());
+			 * log.fine("invoiceTax rate is " + invoiceTax.getRate());
+			 * 
+			 * taxThisAmt = taxThisAmt.add(invoiceTax.calculateTax(lineNetAmount,
+			 * isTaxIncluded(), getPrecision())); taxStdAmt =
+			 * taxStdAmt.add(stdTax.calculateTax(lineNetAmount, isTaxIncluded(),
+			 * getPrecision()));
+			 * 
+			 * lineNetAmount = lineNetAmount.subtract(taxStdAmt).add(taxThisAmt);
+			 * 
+			 * log.
+			 * fine("Price List includes Tax and Tax Changed on Invoice Line: New Tax Amt: "
+			 * + taxThisAmt + " Standard Tax Amt: " + taxStdAmt + " Line Net Amt: " +
+			 * lineNetAmount); }
+			 */}
 		
 		if (lineNetAmount.scale() > getPrecision())
 			lineNetAmount = lineNetAmount.setScale(getPrecision(), RoundingMode.HALF_UP);

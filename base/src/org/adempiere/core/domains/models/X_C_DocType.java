@@ -566,6 +566,27 @@ public class X_C_DocType extends PO implements I_C_DocType, I_Persistent
 	{
 		return (String)get_Value(COLUMNNAME_DocumentNote);
 	}
+	
+
+	/** Set CAT-002 Tipo de Documento .
+		@param E_DocType_ID CAT-002 Tipo de Documento 	  */
+	public void setE_DocType_ID (int E_DocType_ID)
+	{
+		if (E_DocType_ID < 1) 
+			set_Value (COLUMNNAME_E_DocType_ID, null);
+		else 
+			set_Value (COLUMNNAME_E_DocType_ID, Integer.valueOf(E_DocType_ID));
+	}
+
+	/** Get CAT-002 Tipo de Documento .
+		@return CAT-002 Tipo de Documento 	  */
+	public int getE_DocType_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_E_DocType_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
 
 	public org.adempiere.core.domains.models.I_GL_Category getGL_Category() throws RuntimeException
     {

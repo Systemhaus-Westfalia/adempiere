@@ -51,9 +51,9 @@ public class Identificacion {
 		        return false;
 		}
 		
-		if(getTipoContingencia()==5) {
+		if(getTipoContingencia() != null && getTipoContingencia()==5) {
 			// In schema: "motivoContin" : {"type" : "string"}
-			if(getMotivoContin()==null)
+			if( getMotivoContin()==null)
 		        return false;
 		}
 		

@@ -22,24 +22,24 @@ import java.sql.Timestamp;
 import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
 
-/** Generated Interface for C_Region
+/** Generated Interface for E_Enviroment
  *  @author Adempiere (generated) 
  *  @version Release 3.9.4
  */
-public interface I_C_Region 
+public interface I_E_Enviroment 
 {
 
-    /** TableName=C_Region */
-    public static final String Table_Name = "C_Region";
+    /** TableName=E_Enviroment */
+    public static final String Table_Name = "E_Enviroment";
 
-    /** AD_Table_ID=164 */
+    /** AD_Table_ID=4000000 */
     public static final int Table_ID = MTable.getTable_ID(Table_Name);
 
     KeyNamePair Model = new KeyNamePair(Table_ID, Table_Name);
 
-    /** AccessLevel = 6 - System - Client 
+    /** AccessLevel = 7 - System - Client - Org 
      */
-    BigDecimal accessLevel = BigDecimal.valueOf(6);
+    BigDecimal accessLevel = BigDecimal.valueOf(7);
 
     /** Load Meta Data */
 
@@ -64,34 +64,6 @@ public interface I_C_Region
 	  */
 	public int getAD_Org_ID();
 
-    /** Column name C_Country_ID */
-    public static final String COLUMNNAME_C_Country_ID = "C_Country_ID";
-
-	/** Set Country.
-	  * Country 
-	  */
-	public void setC_Country_ID (int C_Country_ID);
-
-	/** Get Country.
-	  * Country 
-	  */
-	public int getC_Country_ID();
-
-	public org.adempiere.core.domains.models.I_C_Country getC_Country() throws RuntimeException;
-
-    /** Column name C_Region_ID */
-    public static final String COLUMNNAME_C_Region_ID = "C_Region_ID";
-
-	/** Set Region.
-	  * Identifies a geographical Region
-	  */
-	public void setC_Region_ID (int C_Region_ID);
-
-	/** Get Region.
-	  * Identifies a geographical Region
-	  */
-	public int getC_Region_ID();
-
     /** Column name Created */
     public static final String COLUMNNAME_Created = "Created";
 
@@ -108,18 +80,14 @@ public interface I_C_Region
 	  */
 	public int getCreatedBy();
 
-    /** Column name Description */
-    public static final String COLUMNNAME_Description = "Description";
+    /** Column name E_Enviroment_ID */
+    public static final String COLUMNNAME_E_Enviroment_ID = "E_Enviroment_ID";
 
-	/** Set Description.
-	  * Optional short description of the record
-	  */
-	public void setDescription (String Description);
+	/** Set CAT-001 Ambiente de destino	  */
+	public void setE_Enviroment_ID (int E_Enviroment_ID);
 
-	/** Get Description.
-	  * Optional short description of the record
-	  */
-	public String getDescription();
+	/** Get CAT-001 Ambiente de destino	  */
+	public int getE_Enviroment_ID();
 
     /** Column name IsActive */
     public static final String COLUMNNAME_IsActive = "IsActive";
@@ -133,19 +101,6 @@ public interface I_C_Region
 	  * The record is active in the system
 	  */
 	public boolean isActive();
-
-    /** Column name IsDefault */
-    public static final String COLUMNNAME_IsDefault = "IsDefault";
-
-	/** Set Default.
-	  * Default value
-	  */
-	public void setIsDefault (boolean IsDefault);
-
-	/** Get Default.
-	  * Default value
-	  */
-	public boolean isDefault();
 
     /** Column name Name */
     public static final String COLUMNNAME_Name = "Name";

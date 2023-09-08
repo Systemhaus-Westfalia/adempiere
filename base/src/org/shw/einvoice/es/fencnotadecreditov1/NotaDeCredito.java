@@ -21,6 +21,7 @@ public class NotaDeCredito {
 	List<DocumentoRelacionadoItem> documentoRelacionado;
 	Receptor receptor;
 	VentaTercero ventaTercero = null;
+	List<CuerpoDocumentoItem> cuerpoDocumento;
 
 	/**
 	 * No parameters
@@ -30,6 +31,7 @@ public class NotaDeCredito {
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.receptor             = new Receptor();
 		//this.ventaTercero         = new VentaTercero();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 	}
 
 	/**

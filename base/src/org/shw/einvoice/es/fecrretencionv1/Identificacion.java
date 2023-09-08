@@ -34,13 +34,6 @@ public class Identificacion {
 		this.motivoContingencia = null;
 		this.tipoMoneda         = TIPOMONEDA;
 	}
-	
-	/**
-	 * Validate the Schema conditions: no conditions in version #1
-	 */
-	public boolean validateValues() {	
-		return true;
-	}
 
 
 	/**

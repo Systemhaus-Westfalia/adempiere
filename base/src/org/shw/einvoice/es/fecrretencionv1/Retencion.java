@@ -15,6 +15,9 @@ import org.shw.einvoice.es.util.pojo.ApendiceItem;
 public class Retencion {
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 500;
 	
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Retencion, clase: Retencion. Validacion falló: valor de 'cuerpoDocumento' debe  de 1 a 500 elementos";
+	
 	Identificacion identificacion;
 	Emisor emisor;
 	Receptor receptor;
@@ -39,12 +42,12 @@ public class Retencion {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		if( (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
-			return false;
+			return VALIDATION_CUERPODOCUMENTO_MAX_ITEMS;
 		}
 		
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

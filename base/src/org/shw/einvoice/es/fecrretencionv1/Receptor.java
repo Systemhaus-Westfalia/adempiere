@@ -13,6 +13,9 @@ import org.shw.einvoice.es.util.pojo.Direccion;
  * 
  */
 public class Receptor {
+	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Retencion, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
+	static final String VALIDATION_NRC_PATTERN_FAILED              = "Documento: Retencion, clase: Receptor. Validacion falló: valor de 'nrc' no corresponde a patrón";
 
 	String tipoDocumento=null; // null possible
 	String numDocumento=null; // null possible
@@ -65,7 +68,7 @@ public class Receptor {
 	/**
 	 * Validate the Schema conditions
 	 */
-	public boolean validateValues() {
+	public String validateValues() {
 		String pattern;
 		boolean patternOK;
 
@@ -74,7 +77,7 @@ public class Receptor {
 			pattern = "^([0-9]{14}|[0-9]{9})$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
-				return false;
+				return VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED;
 		}
 
 		// In schema: "pattern" : "^[0-9]{9}$"
@@ -82,7 +85,7 @@ public class Receptor {
 			pattern = "^[0-9]{9}$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
-				return false;
+				return VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED;
 		} 
 
 		// In schema: "pattern" : "^[0-9]{1,8}$"
@@ -90,10 +93,10 @@ public class Receptor {
 			pattern = "^[0-9]{1,8}$";
 			patternOK = (getNrc()!=null) && Pattern.matches(pattern, getNrc());
 			if(!patternOK)
-				return false;
+				return VALIDATION_NRC_PATTERN_FAILED;
 		}
 
-		return true;
+		return VALIDATION_RESULT_OK;
 	}
 	
 	/**

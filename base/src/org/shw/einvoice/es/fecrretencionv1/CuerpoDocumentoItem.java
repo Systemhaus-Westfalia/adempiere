@@ -9,6 +9,7 @@ import java.math.BigDecimal;
  * 
  */
 public class CuerpoDocumentoItem {
+	static final String VALIDATION_RESULT_OK = "OK";
 	
 	int numItem;
 	String tipoDte;
@@ -38,8 +39,8 @@ public class CuerpoDocumentoItem {
 	 * if(getTipoDoc()==2)  -> codGeneracion PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$"
 	 * But there is no codGeneracion in this class.
 	 */
-	public boolean validateValues() {	
-		return true;
+	public String validateValues() {	
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

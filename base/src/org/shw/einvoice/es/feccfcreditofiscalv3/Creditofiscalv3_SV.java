@@ -7,6 +7,7 @@ import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
+import org.shw.einvoice.es.util.pojo.Receptor;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public class Creditofiscalv3_SV {

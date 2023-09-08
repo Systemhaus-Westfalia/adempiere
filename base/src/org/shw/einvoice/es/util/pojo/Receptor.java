@@ -1,11 +1,9 @@
 /**
  * 
  */
-package org.shw.einvoice.es.feccfcreditofiscalv3;
+package org.shw.einvoice.es.util.pojo;
 
 import java.util.regex.Pattern;
-
-import org.shw.einvoice.es.util.pojo.Direccion;
 
 /**
  * 

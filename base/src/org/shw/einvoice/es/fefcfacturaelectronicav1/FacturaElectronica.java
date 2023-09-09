@@ -26,11 +26,11 @@ public class FacturaElectronica {
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'cuerpoDocumento' debe  contener máximo " + CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
 	Identificacion identificacion;
-	List<DocumentoRelacionadoItem> documentoRelacionado;
+	List<DocumentoRelacionadoItem> documentoRelacionado = null;
 	Emisor emisor;
 	Receptor receptor;
-	List<OtrosDocumentosItem> otrosDocumentos;
-	VentaTercero ventaTercero;
+	List<OtrosDocumentosItem> otrosDocumentos = null;
+	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
@@ -41,15 +41,15 @@ public class FacturaElectronica {
 	 */
 	public FacturaElectronica() {
 		this.identificacion       = new Identificacion();
-		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
+		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
-		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
-		this.ventaTercero         = new VentaTercero();
+		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
+		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
-		this.apendice             = new ArrayList<ApendiceItem>();
+		//this.apendice             = new ArrayList<ApendiceItem>();
 	}
 
 	/**

@@ -118,7 +118,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     		//String codTributo = "20";
     		ArrayList<String> tributosItems = new ArrayList<String>();
     		//TributosItem tributosItem = new TributosItem("20", "", invoiceLine.getTaxAmt());
-    		tributosItems.add("20");
+    		//tributosItems.add("20");
     		
     		int uniMedida = 1;
     		String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
@@ -137,7 +137,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     		BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
     		CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
     				null, uniMedida, 
-    				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, tributosItems, psv, noGravado); 
+    				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, null, psv, noGravado); 
     		cuerpoDocumentoItem.validateValues();
     		facturaElectronica.getCuerpoDocumento().add(cuerpoDocumentoItem);
     	}  

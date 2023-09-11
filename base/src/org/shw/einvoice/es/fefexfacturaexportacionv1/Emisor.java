@@ -335,7 +335,7 @@ public String validateValues() {
 
 
 	/**
-	 * @return the codPuntoVentaMH
+	 * @return the codPuntoVentaMH 
 	 */
 	public String getCodPuntoVentaMH() {
 		return codPuntoVentaMH;

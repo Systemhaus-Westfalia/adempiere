@@ -842,7 +842,7 @@ public class X_C_BPartner extends PO implements I_C_BPartner, I_Persistent
 	/** Set CAT-029 Tipo de persona.
 		@param E_BPType_ID CAT-029 Tipo de persona	  */
 	
-	public org.adempiere.core.domains.models.I_E_BPType getI_E_BPType() throws RuntimeException
+	public org.adempiere.core.domains.models.I_E_BPType getE_BPType() throws RuntimeException
     {
 		return (org.adempiere.core.domains.models.I_E_BPType)MTable.get(getCtx(), org.adempiere.core.domains.models.I_E_BPType.Table_Name)
 			.getPO(getE_BPType_ID (), get_TrxName());	}

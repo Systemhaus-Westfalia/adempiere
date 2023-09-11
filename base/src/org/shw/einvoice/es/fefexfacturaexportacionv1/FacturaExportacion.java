@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.fefcfacturaelectronicav1.Resumen;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
@@ -28,8 +27,8 @@ public class FacturaExportacion {
 	Identificacion identificacion;
 	Emisor emisor;
 	Receptor receptor;
-	List<OtrosDocumentosItem> otrosDocumentos;
-	VentaTercero ventaTercero;
+	List<OtrosDocumentosItem> otrosDocumentos = null;
+	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	List<ApendiceItem> apendice=null;  // null allowed
@@ -41,11 +40,11 @@ public class FacturaExportacion {
 		this.identificacion       = new Identificacion();
 		this.emisor				  = new Emisor();
 		this.receptor             = new Receptor();
-		this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
-		this.ventaTercero         = new VentaTercero();
+		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
+		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
-		this.apendice             = new ArrayList<ApendiceItem>();
+		//this.apendice             = new ArrayList<ApendiceItem>();
 	}
 
 	/**

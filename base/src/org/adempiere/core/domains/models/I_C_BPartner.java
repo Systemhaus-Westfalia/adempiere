@@ -477,16 +477,22 @@ public interface I_C_BPartner
 	public void setE_Activity_ID (int E_Activity_ID);
 
 	/** Get CAT-019 Código de Actividad Económica	  */
+	
+	
 	public int getE_Activity_ID();
 
     /** Column name E_BPType_ID */
     public static final String COLUMNNAME_E_BPType_ID = "E_BPType_ID";
+    
+    public org.adempiere.core.domains.models.I_E_BPType getE_BPType() throws RuntimeException;
 
 	/** Set CAT-029 Tipo de persona	  */
 	public void setE_BPType_ID (int E_BPType_ID);
 
 	/** Get CAT-029 Tipo de persona	  */
 	public int getE_BPType_ID();
+	
+	
 
     /** Column name E_Recipient_Identification_ID */
     public static final String COLUMNNAME_E_Recipient_Identification_ID = "E_Recipient_Identification_ID";

@@ -22,7 +22,7 @@ public class Identificacion {
 	int tipoModelo;
 	int tipoOperacion;
 	Integer tipoContingencia=null;  // null possible
-	String motivoContingencia=null; // null possible
+	String motivoContigencia=null; // null possible
 	String fecEmi;
 	String horEmi;
 	String tipoMoneda = TIPOMONEDA;
@@ -45,16 +45,16 @@ public class Identificacion {
 				return VALIDATION_TIPOMODELO_FAILED_1;
 			if (getTipoContingencia() != null) 
 				return VALIDATION_TIPOCONTINGENCIA_NOT_NULL;
-			if (getMotivoContingencia() != null) 
+			if (getMotivoContigencia() != null) 
 				return VALIDATION_MOTIVOCONTINGENCIA_NOT_NULL;
 		} else  {
 			if (getTipoModelo() != 2) 
 				return VALIDATION_TIPOMODELO_FAILED_2;
 		}
 		
-		if(getTipoContingencia() !=null &&    getTipoContingencia()==5) {
+		if(getTipoContingencia() !=null && getTipoContingencia()==5) {
 			// In schema: "motivoContingencia" : {"type" : "string"}
-			if(getMotivoContingencia()==null)
+			if(getMotivoContigencia()==null)
 		        return VALIDATION_MOTIVOCONTINGENCIA_IS_NULL;
 		}
 		
@@ -186,8 +186,8 @@ public class Identificacion {
 	/**
 	 * @return the motivoContingencia
 	 */
-	public String getMotivoContingencia() {
-		return motivoContingencia;
+	public String getMotivoContigencia() {
+		return motivoContigencia;
 	}
 
 
@@ -196,13 +196,13 @@ public class Identificacion {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 500; null permitted
 	 */
-	public void setMotivoContingencia(String motivoContingencia) {
+	public void setMotivoContigencia(String motivoContingencia) {
 		final int MINLENGTH = 1;		
 		final int MAXLENGTH = 500;
 		int length = motivoContingencia==null?0:motivoContingencia.length();
 		
 		if( (length>=MINLENGTH && length<=MAXLENGTH ) || (motivoContingencia==null) )
-			this.motivoContingencia = motivoContingencia;
+			this.motivoContigencia = motivoContingencia;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'motivoContingencia' in FacturaExportacion.Identificacion.setMotivoContingencia()");
 	}

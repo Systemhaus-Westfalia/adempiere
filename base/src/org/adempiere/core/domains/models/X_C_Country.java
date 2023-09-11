@@ -37,11 +37,11 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	 */
 	private static final long serialVersionUID = 20230102L;
 
-    /** Standard Constructor */
-    public X_C_Country (Properties ctx, int C_Country_ID, String trxName)
-    {
-      super (ctx, C_Country_ID, trxName);
-      /** if (C_Country_ID == 0)
+	/** Standard Constructor */
+	public X_C_Country (Properties ctx, int C_Country_ID, String trxName)
+	{
+		super (ctx, C_Country_ID, trxName);
+		/** if (C_Country_ID == 0)
         {
 			setC_Country_ID (0);
 			setCountryCode (null);
@@ -53,42 +53,42 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 			setIsAddressLinesReverse (false);
 			setName (null);
         } */
-    }
+	}
 
-    /** Load Constructor */
-    public X_C_Country (Properties ctx, ResultSet rs, String trxName)
-    {
-      super (ctx, rs, trxName);
-    }
+	/** Load Constructor */
+	public X_C_Country (Properties ctx, ResultSet rs, String trxName)
+	{
+		super (ctx, rs, trxName);
+	}
 
-    /** AccessLevel
-      * @return 6 - System - Client 
-      */
-    protected int get_AccessLevel()
-    {
-      return accessLevel.intValue();
-    }
+	/** AccessLevel
+	 * @return 6 - System - Client 
+	 */
+	protected int get_AccessLevel()
+	{
+		return accessLevel.intValue();
+	}
 
-    /** Load Meta Data */
-    protected POInfo initPO (Properties ctx)
-    {
-      POInfo poi = POInfo.getPOInfo (ctx, Table_ID, get_TrxName());
-      return poi;
-    }
+	/** Load Meta Data */
+	protected POInfo initPO (Properties ctx)
+	{
+		POInfo poi = POInfo.getPOInfo (ctx, Table_ID, get_TrxName());
+		return poi;
+	}
 
-    public String toString()
-    {
-      StringBuffer sb = new StringBuffer ("X_C_Country[")
-        .append(get_ID()).append("]");
-      return sb.toString();
-    }
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer ("X_C_Country[")
+				.append(get_ID()).append("]");
+		return sb.toString();
+	}
 
 	/** AD_Language AD_Reference_ID=106 */
 	public static final int AD_LANGUAGE_AD_Reference_ID=106;
 	/** Set Language.
 		@param AD_Language 
 		Language for this entity
-	  */
+	 */
 	public void setAD_Language (String AD_Language)
 	{
 
@@ -97,7 +97,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Language.
 		@return Language for this entity
-	  */
+	 */
 	public String getAD_Language () 
 	{
 		return (String)get_Value(COLUMNNAME_AD_Language);
@@ -106,7 +106,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Allow Cities out of List.
 		@param AllowCitiesOutOfList 
 		A flag to allow cities, currently not in the list, to be entered
-	  */
+	 */
 	public void setAllowCitiesOutOfList (boolean AllowCitiesOutOfList)
 	{
 		set_Value (COLUMNNAME_AllowCitiesOutOfList, Boolean.valueOf(AllowCitiesOutOfList));
@@ -114,14 +114,14 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Allow Cities out of List.
 		@return A flag to allow cities, currently not in the list, to be entered
-	  */
+	 */
 	public boolean isAllowCitiesOutOfList () 
 	{
 		Object oo = get_Value(COLUMNNAME_AllowCitiesOutOfList);
 		if (oo != null) 
 		{
-			 if (oo instanceof Boolean) 
-				 return ((Boolean)oo).booleanValue(); 
+			if (oo instanceof Boolean) 
+				return ((Boolean)oo).booleanValue(); 
 			return "Y".equals(oo);
 		}
 		return false;
@@ -130,7 +130,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Country.
 		@param C_Country_ID 
 		Country 
-	  */
+	 */
 	public void setC_Country_ID (int C_Country_ID)
 	{
 		if (C_Country_ID < 1) 
@@ -141,24 +141,24 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Country.
 		@return Country 
-	  */
+	 */
 	public int getC_Country_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_C_Country_ID);
 		if (ii == null)
-			 return 0;
+			return 0;
 		return ii.intValue();
 	}
 
 	public org.adempiere.core.domains.models.I_C_Currency getC_Currency() throws RuntimeException
-    {
+	{
 		return (org.adempiere.core.domains.models.I_C_Currency)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_Currency.Table_Name)
-			.getPO(getC_Currency_ID(), get_TrxName());	}
+				.getPO(getC_Currency_ID(), get_TrxName());	}
 
 	/** Set Currency.
 		@param C_Currency_ID 
 		The Currency for this record
-	  */
+	 */
 	public void setC_Currency_ID (int C_Currency_ID)
 	{
 		if (C_Currency_ID < 1) 
@@ -169,12 +169,12 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Currency.
 		@return The Currency for this record
-	  */
+	 */
 	public int getC_Currency_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_C_Currency_ID);
 		if (ii == null)
-			 return 0;
+			return 0;
 		return ii.intValue();
 	}
 
@@ -195,7 +195,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set ISO Country Code.
 		@param CountryCode 
 		Upper-case two-letter alphanumeric ISO Country code according to ISO 3166-1 - http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
-	  */
+	 */
 	public void setCountryCode (String CountryCode)
 	{
 		set_Value (COLUMNNAME_CountryCode, CountryCode);
@@ -203,7 +203,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get ISO Country Code.
 		@return Upper-case two-letter alphanumeric ISO Country code according to ISO 3166-1 - http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
-	  */
+	 */
 	public String getCountryCode () 
 	{
 		return (String)get_Value(COLUMNNAME_CountryCode);
@@ -212,7 +212,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Description.
 		@param Description 
 		Optional short description of the record
-	  */
+	 */
 	public void setDescription (String Description)
 	{
 		set_Value (COLUMNNAME_Description, Description);
@@ -220,7 +220,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Description.
 		@return Optional short description of the record
-	  */
+	 */
 	public String getDescription () 
 	{
 		return (String)get_Value(COLUMNNAME_Description);
@@ -229,7 +229,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Address Print Format.
 		@param DisplaySequence 
 		Format for printing this Address
-	  */
+	 */
 	public void setDisplaySequence (String DisplaySequence)
 	{
 		set_Value (COLUMNNAME_DisplaySequence, DisplaySequence);
@@ -237,7 +237,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Address Print Format.
 		@return Format for printing this Address
-	  */
+	 */
 	public String getDisplaySequence () 
 	{
 		return (String)get_Value(COLUMNNAME_DisplaySequence);
@@ -246,7 +246,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Local Address Format.
 		@param DisplaySequenceLocal 
 		Format for printing this Address locally
-	  */
+	 */
 	public void setDisplaySequenceLocal (String DisplaySequenceLocal)
 	{
 		set_Value (COLUMNNAME_DisplaySequenceLocal, DisplaySequenceLocal);
@@ -254,7 +254,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Local Address Format.
 		@return Format for printing this Address locally
-	  */
+	 */
 	public String getDisplaySequenceLocal () 
 	{
 		return (String)get_Value(COLUMNNAME_DisplaySequenceLocal);
@@ -263,7 +263,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Bank Account No Format.
 		@param ExpressionBankAccountNo 
 		Format of the Bank Account
-	  */
+	 */
 	public void setExpressionBankAccountNo (String ExpressionBankAccountNo)
 	{
 		set_Value (COLUMNNAME_ExpressionBankAccountNo, ExpressionBankAccountNo);
@@ -271,7 +271,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Bank Account No Format.
 		@return Format of the Bank Account
-	  */
+	 */
 	public String getExpressionBankAccountNo () 
 	{
 		return (String)get_Value(COLUMNNAME_ExpressionBankAccountNo);
@@ -280,7 +280,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Bank Routing No Format.
 		@param ExpressionBankRoutingNo 
 		Format of the Bank Routing Number
-	  */
+	 */
 	public void setExpressionBankRoutingNo (String ExpressionBankRoutingNo)
 	{
 		set_Value (COLUMNNAME_ExpressionBankRoutingNo, ExpressionBankRoutingNo);
@@ -288,7 +288,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Bank Routing No Format.
 		@return Format of the Bank Routing Number
-	  */
+	 */
 	public String getExpressionBankRoutingNo () 
 	{
 		return (String)get_Value(COLUMNNAME_ExpressionBankRoutingNo);
@@ -297,7 +297,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Phone Format.
 		@param ExpressionPhone 
 		Format of the phone; Can contain fixed format elements, Variables: "_lLoOaAcCa09"
-	  */
+	 */
 	public void setExpressionPhone (String ExpressionPhone)
 	{
 		set_Value (COLUMNNAME_ExpressionPhone, ExpressionPhone);
@@ -305,7 +305,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Phone Format.
 		@return Format of the phone; Can contain fixed format elements, Variables: "_lLoOaAcCa09"
-	  */
+	 */
 	public String getExpressionPhone () 
 	{
 		return (String)get_Value(COLUMNNAME_ExpressionPhone);
@@ -314,7 +314,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Postal Code Format.
 		@param ExpressionPostal 
 		Format of the postal code; Can contain fixed format elements, Variables: "_lLoOaAcCa09"
-	  */
+	 */
 	public void setExpressionPostal (String ExpressionPostal)
 	{
 		set_Value (COLUMNNAME_ExpressionPostal, ExpressionPostal);
@@ -322,7 +322,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Postal Code Format.
 		@return Format of the postal code; Can contain fixed format elements, Variables: "_lLoOaAcCa09"
-	  */
+	 */
 	public String getExpressionPostal () 
 	{
 		return (String)get_Value(COLUMNNAME_ExpressionPostal);
@@ -331,7 +331,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Additional Postal Format.
 		@param ExpressionPostal_Add 
 		Format of the value; Can contain fixed format elements, Variables: "_lLoOaAcCa09"
-	  */
+	 */
 	public void setExpressionPostal_Add (String ExpressionPostal_Add)
 	{
 		set_Value (COLUMNNAME_ExpressionPostal_Add, ExpressionPostal_Add);
@@ -339,7 +339,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Additional Postal Format.
 		@return Format of the value; Can contain fixed format elements, Variables: "_lLoOaAcCa09"
-	  */
+	 */
 	public String getExpressionPostal_Add () 
 	{
 		return (String)get_Value(COLUMNNAME_ExpressionPostal_Add);
@@ -348,7 +348,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Additional Postal code.
 		@param HasPostal_Add 
 		Has Additional Postal Code
-	  */
+	 */
 	public void setHasPostal_Add (boolean HasPostal_Add)
 	{
 		set_Value (COLUMNNAME_HasPostal_Add, Boolean.valueOf(HasPostal_Add));
@@ -356,14 +356,14 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Additional Postal code.
 		@return Has Additional Postal Code
-	  */
+	 */
 	public boolean isHasPostal_Add () 
 	{
 		Object oo = get_Value(COLUMNNAME_HasPostal_Add);
 		if (oo != null) 
 		{
-			 if (oo instanceof Boolean) 
-				 return ((Boolean)oo).booleanValue(); 
+			if (oo instanceof Boolean) 
+				return ((Boolean)oo).booleanValue(); 
 			return "Y".equals(oo);
 		}
 		return false;
@@ -372,7 +372,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Country has Region.
 		@param HasRegion 
 		Country contains Regions
-	  */
+	 */
 	public void setHasRegion (boolean HasRegion)
 	{
 		set_Value (COLUMNNAME_HasRegion, Boolean.valueOf(HasRegion));
@@ -380,14 +380,14 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Country has Region.
 		@return Country contains Regions
-	  */
+	 */
 	public boolean isHasRegion () 
 	{
 		Object oo = get_Value(COLUMNNAME_HasRegion);
 		if (oo != null) 
 		{
-			 if (oo instanceof Boolean) 
-				 return ((Boolean)oo).booleanValue(); 
+			if (oo instanceof Boolean) 
+				return ((Boolean)oo).booleanValue(); 
 			return "Y".equals(oo);
 		}
 		return false;
@@ -396,7 +396,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Reverse Local Address Lines.
 		@param IsAddressLinesLocalReverse 
 		Print Local Address in reverse Order
-	  */
+	 */
 	public void setIsAddressLinesLocalReverse (boolean IsAddressLinesLocalReverse)
 	{
 		set_Value (COLUMNNAME_IsAddressLinesLocalReverse, Boolean.valueOf(IsAddressLinesLocalReverse));
@@ -404,14 +404,14 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Reverse Local Address Lines.
 		@return Print Local Address in reverse Order
-	  */
+	 */
 	public boolean isAddressLinesLocalReverse () 
 	{
 		Object oo = get_Value(COLUMNNAME_IsAddressLinesLocalReverse);
 		if (oo != null) 
 		{
-			 if (oo instanceof Boolean) 
-				 return ((Boolean)oo).booleanValue(); 
+			if (oo instanceof Boolean) 
+				return ((Boolean)oo).booleanValue(); 
 			return "Y".equals(oo);
 		}
 		return false;
@@ -420,7 +420,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Reverse Address Lines.
 		@param IsAddressLinesReverse 
 		Print Address in reverse Order
-	  */
+	 */
 	public void setIsAddressLinesReverse (boolean IsAddressLinesReverse)
 	{
 		set_Value (COLUMNNAME_IsAddressLinesReverse, Boolean.valueOf(IsAddressLinesReverse));
@@ -428,14 +428,14 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Reverse Address Lines.
 		@return Print Address in reverse Order
-	  */
+	 */
 	public boolean isAddressLinesReverse () 
 	{
 		Object oo = get_Value(COLUMNNAME_IsAddressLinesReverse);
 		if (oo != null) 
 		{
-			 if (oo instanceof Boolean) 
-				 return ((Boolean)oo).booleanValue(); 
+			if (oo instanceof Boolean) 
+				return ((Boolean)oo).booleanValue(); 
 			return "Y".equals(oo);
 		}
 		return false;
@@ -444,7 +444,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Use Postcode Lookup.
 		@param IsPostcodeLookup 
 		Does this country have a post code web service
-	  */
+	 */
 	public void setIsPostcodeLookup (boolean IsPostcodeLookup)
 	{
 		set_Value (COLUMNNAME_IsPostcodeLookup, Boolean.valueOf(IsPostcodeLookup));
@@ -452,14 +452,14 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Use Postcode Lookup.
 		@return Does this country have a post code web service
-	  */
+	 */
 	public boolean isPostcodeLookup () 
 	{
 		Object oo = get_Value(COLUMNNAME_IsPostcodeLookup);
 		if (oo != null) 
 		{
-			 if (oo instanceof Boolean) 
-				 return ((Boolean)oo).booleanValue(); 
+			if (oo instanceof Boolean) 
+				return ((Boolean)oo).booleanValue(); 
 			return "Y".equals(oo);
 		}
 		return false;
@@ -468,7 +468,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Lookup ClassName.
 		@param LookupClassName 
 		The class name of the postcode lookup plugin
-	  */
+	 */
 	public void setLookupClassName (String LookupClassName)
 	{
 		set_Value (COLUMNNAME_LookupClassName, LookupClassName);
@@ -476,7 +476,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Lookup ClassName.
 		@return The class name of the postcode lookup plugin
-	  */
+	 */
 	public String getLookupClassName () 
 	{
 		return (String)get_Value(COLUMNNAME_LookupClassName);
@@ -485,7 +485,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Lookup Client ID.
 		@param LookupClientID 
 		The ClientID or Login submitted to the Lookup URL
-	  */
+	 */
 	public void setLookupClientID (String LookupClientID)
 	{
 		set_Value (COLUMNNAME_LookupClientID, LookupClientID);
@@ -493,7 +493,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Lookup Client ID.
 		@return The ClientID or Login submitted to the Lookup URL
-	  */
+	 */
 	public String getLookupClientID () 
 	{
 		return (String)get_Value(COLUMNNAME_LookupClientID);
@@ -502,7 +502,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Lookup Password.
 		@param LookupPassword 
 		The password submitted to the Lookup URL
-	  */
+	 */
 	public void setLookupPassword (String LookupPassword)
 	{
 		set_Value (COLUMNNAME_LookupPassword, LookupPassword);
@@ -510,7 +510,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Lookup Password.
 		@return The password submitted to the Lookup URL
-	  */
+	 */
 	public String getLookupPassword () 
 	{
 		return (String)get_Value(COLUMNNAME_LookupPassword);
@@ -519,7 +519,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Lookup URL.
 		@param LookupUrl 
 		The URL of the web service that the plugin connects to in order to retrieve postcode data
-	  */
+	 */
 	public void setLookupUrl (String LookupUrl)
 	{
 		set_Value (COLUMNNAME_LookupUrl, LookupUrl);
@@ -527,7 +527,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Lookup URL.
 		@return The URL of the web service that the plugin connects to in order to retrieve postcode data
-	  */
+	 */
 	public String getLookupUrl () 
 	{
 		return (String)get_Value(COLUMNNAME_LookupUrl);
@@ -536,7 +536,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Media Size.
 		@param MediaSize 
 		Java Media Size
-	  */
+	 */
 	public void setMediaSize (String MediaSize)
 	{
 		set_Value (COLUMNNAME_MediaSize, MediaSize);
@@ -544,7 +544,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Media Size.
 		@return Java Media Size
-	  */
+	 */
 	public String getMediaSize () 
 	{
 		return (String)get_Value(COLUMNNAME_MediaSize);
@@ -553,7 +553,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Name.
 		@param Name 
 		Alphanumeric identifier of the entity
-	  */
+	 */
 	public void setName (String Name)
 	{
 		set_Value (COLUMNNAME_Name, Name);
@@ -561,24 +561,24 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Name.
 		@return Alphanumeric identifier of the entity
-	  */
+	 */
 	public String getName () 
 	{
 		return (String)get_Value(COLUMNNAME_Name);
 	}
 
-    /** Get Record ID/ColumnName
+	/** Get Record ID/ColumnName
         @return ID/ColumnName pair
-      */
-    public KeyNamePair getKeyNamePair() 
-    {
-        return new KeyNamePair(get_ID(), getName());
-    }
+	 */
+	public KeyNamePair getKeyNamePair() 
+	{
+		return new KeyNamePair(get_ID(), getName());
+	}
 
 	/** Set Region.
 		@param RegionName 
 		Name of the Region
-	  */
+	 */
 	public void setRegionName (String RegionName)
 	{
 		set_Value (COLUMNNAME_RegionName, RegionName);
@@ -586,7 +586,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Region.
 		@return Name of the Region
-	  */
+	 */
 	public String getRegionName () 
 	{
 		return (String)get_Value(COLUMNNAME_RegionName);
@@ -595,7 +595,7 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 	/** Set Immutable Universally Unique Identifier.
 		@param UUID 
 		Immutable Universally Unique Identifier
-	  */
+	 */
 	public void setUUID (String UUID)
 	{
 		set_Value (COLUMNNAME_UUID, UUID);
@@ -603,9 +603,29 @@ public class X_C_Country extends PO implements I_C_Country, I_Persistent
 
 	/** Get Immutable Universally Unique Identifier.
 		@return Immutable Universally Unique Identifier
-	  */
+	 */
 	public String getUUID () 
 	{
 		return (String)get_Value(COLUMNNAME_UUID);
+
 	}
+
+	/** Set Search Key.
+	@param Value 
+	Search key for the record in the format required - must be unique
+	 */
+	public void setValue (String Value)
+	{
+		set_Value (COLUMNNAME_Value, Value);
+	}
+
+
+	/** Get Search Key.
+	@return Search key for the record in the format required - must be unique
+	 */
+	public String getValue () 
+	{
+		return (String)get_Value(COLUMNNAME_Value);
+	}
+
 }

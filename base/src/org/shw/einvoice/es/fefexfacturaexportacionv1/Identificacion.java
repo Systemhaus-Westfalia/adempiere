@@ -52,7 +52,7 @@ public class Identificacion {
 				return VALIDATION_TIPOMODELO_FAILED_2;
 		}
 		
-		if(getTipoContingencia() !=null && getTipoContingencia()==5) {
+		if(getTipoContingencia()!=null && getTipoContingencia()==5) {
 			// In schema: "motivoContingencia" : {"type" : "string"}
 			if(getMotivoContigencia()==null)
 		        return VALIDATION_MOTIVOCONTINGENCIA_IS_NULL;

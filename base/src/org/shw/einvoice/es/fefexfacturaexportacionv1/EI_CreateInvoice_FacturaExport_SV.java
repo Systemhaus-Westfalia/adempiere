@@ -34,11 +34,8 @@ import org.compiere.model.MOrgInfo;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.TributosItem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -106,8 +103,6 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
     	//Durch InvoiceZeilen laufen
     	for (MInvoiceLine invoiceLine:invoice.getLines()) {    		
     		int numItem = invoiceLine.getLine();
-    		int tipoItem = 2;
-    		String numeroDocumento = numeroControl;
     		BigDecimal cantidad = invoiceLine.getQtyInvoiced();
     		String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
     		//String codTributo = "20";

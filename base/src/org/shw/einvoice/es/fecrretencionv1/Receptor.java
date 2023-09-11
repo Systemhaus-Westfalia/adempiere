@@ -73,7 +73,7 @@ public class Receptor {
 		boolean patternOK;
 
 		// In schema: "pattern" : "^([0-9]{14}|[0-9]{9})$"
-		if(getTipoDocumento()=="36") {
+		if(getTipoDocumento().equals("36")) {
 			pattern = "^([0-9]{14}|[0-9]{9})$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
@@ -81,7 +81,7 @@ public class Receptor {
 		}
 
 		// In schema: "pattern" : "^[0-9]{9}$"
-		if(getTipoDocumento()=="13") {
+		if(getTipoDocumento().equals("13")) {
 			pattern = "^[0-9]{9}$";
 			patternOK = (getNumDocumento()!=null) && Pattern.matches(pattern, getNumDocumento());
 			if(!patternOK)
@@ -89,7 +89,7 @@ public class Receptor {
 		} 
 
 		// In schema: "pattern" : "^[0-9]{1,8}$"
-		if(getTipoDocumento()=="36") {
+		if(getTipoDocumento().equals("36")) {
 			pattern = "^[0-9]{1,8}$";
 			patternOK = (getNrc()!=null) && Pattern.matches(pattern, getNrc());
 			if(!patternOK)

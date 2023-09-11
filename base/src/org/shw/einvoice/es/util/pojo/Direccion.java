@@ -29,7 +29,7 @@ public class Direccion {
 		boolean patternOK;
 
 		// In schema: "pattern" : "^0[1-9]|1[0-2]$"
-		if(getDepartamento()=="01") {
+		if(getDepartamento().equals("01")) {
 			pattern = "^0[1-9]|1[0-2]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -37,7 +37,7 @@ public class Direccion {
 		}
 
 		// In schema: "pattern" : "^0[1-9]|1[0-3]$"
-		if(getDepartamento()=="02" || getDepartamento()=="10") {
+		if(getDepartamento().equals("02") || getDepartamento().equals("10")) {
 			pattern = "^0[1-9]|1[0-3]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -45,7 +45,7 @@ public class Direccion {
 		} 
 
 		// In schema: "pattern" : "^0[1-9]|1[0-6]$"
-		if(getDepartamento()=="03" || getDepartamento()=="07") {
+		if(getDepartamento().equals("03") || getDepartamento().equals("07")) {
 			pattern = "^0[1-9]|1[0-6]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -53,7 +53,7 @@ public class Direccion {
 		}  
 		
 		// In schema: "pattern" : "^0[1-9]|[12][0-9]|3[0-3]$"
-		if(getDepartamento()=="04") {
+		if(getDepartamento().equals("04")) {
 			pattern = "^0[1-9]|[12][0-9]|3[0-3]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -61,7 +61,7 @@ public class Direccion {
 		} 
 		
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|2[0-2]$"
-		if(getDepartamento()=="05" || getDepartamento()=="08") {
+		if(getDepartamento().equals("05") || getDepartamento().equals("08")) {
 			pattern = "^0[1-9]|1[0-9]|2[0-2]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -69,7 +69,7 @@ public class Direccion {
 		}  
 		
 		// In schema: "pattern" : "^0[1-9]|1[0-9]$"
-		if(getDepartamento()=="06") {
+		if(getDepartamento().equals("06")) {
 			pattern = "^0[1-9]|1[0-9]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -77,7 +77,7 @@ public class Direccion {
 		}  
 
 		// In schema: "pattern" : "^0[1-9]$"
-		if(getDepartamento()=="09") {
+		if(getDepartamento().equals("09")) {
 			pattern = "^0[1-9]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -85,7 +85,7 @@ public class Direccion {
 		}
 
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|2[0-3]$"
-		if(getDepartamento()=="11") {
+		if(getDepartamento().equals("11")) {
 			pattern = "^0[1-9]|1[0-9]|2[0-3]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -93,7 +93,7 @@ public class Direccion {
 		}
 		
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|20$"
-		if(getDepartamento()=="12") {
+		if(getDepartamento().equals("12")) {
 			pattern = "^0[1-9]|1[0-9]|20$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
@@ -101,14 +101,14 @@ public class Direccion {
 		}
 
 		// In schema: "pattern" : "^0[1-9]|1[0-9]|2[0-6]$"
-		if(getDepartamento()=="13") {
+		if(getDepartamento().equals("13")) {
 			pattern = "^0[1-9]|1[0-9]|2[0-6]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)
 				return VALIDATION_MUNICIPIO_PATTERN_FAILED;
 		}
 		// In schema: "pattern" : "^0[1-9]|1[0-8]$"
-		if(getDepartamento()=="14") {
+		if(getDepartamento().equals("14")) {
 			pattern = "^0[1-9]|1[0-8]$";
 			patternOK = (getMunicipio()!=null) && Pattern.matches(pattern, getMunicipio());
 			if(!patternOK)

@@ -1,10 +1,10 @@
-package org.shw.einvoice.es.fencnotadecreditov1;
+package org.shw.einvoice.es.fendnotadedebitov3;
 
 import java.util.regex.Pattern;
 
 public class DocumentoRelacionadoItem {
 	static final String VALIDATION_RESULT_OK = "OK";
-	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Nota de Credito, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";
+	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Nota de Debito, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";
 	
 	String tipoDocumento;
 	int tipoGeneracion;
@@ -62,7 +62,7 @@ public class DocumentoRelacionadoItem {
 		if (tipoDocumento.compareTo("03")==0 || tipoDocumento.compareTo("07")==0)
 			this.tipoDocumento = tipoDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in NotaDeCredito.DocumentoRelacionadoItem.setTipoDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in NotaDeDebito.DocumentoRelacionadoItem.setTipoDocumento()");
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public class DocumentoRelacionadoItem {
 		if (tipoGeneracion==1 || tipoGeneracion==2)
 			this.tipoGeneracion = tipoGeneracion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoGeneracion' in NotaDeCredito.DocumentoRelacionadoItem.setTipoGeneracion()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoGeneracion' in NotaDeDebito.DocumentoRelacionadoItem.setTipoGeneracion()");
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class DocumentoRelacionadoItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numeroDocumento = numeroDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in NotaDeCredito.DocumentoRelacionadoItem.setNumeroDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in NotaDeDebito.DocumentoRelacionadoItem.setNumeroDocumento()");
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class DocumentoRelacionadoItem {
 		if(fechaEmision!=null)
 			this.fechaEmision = fechaEmision;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'fechaEmision' in NotaDeCredito.DocumentoRelacionadoItem.setFechaEmision()");
+	        throw new IllegalArgumentException("Wrong parameter 'fechaEmision' in NotaDeDebito.DocumentoRelacionadoItem.setFechaEmision()");
 	}
 
 

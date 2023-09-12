@@ -354,9 +354,6 @@
 	<classpathentry kind="lib" path="tools/lib/storefront/httpclient-4.5.10.jar"/>
 	<classpathentry kind="lib" path="tools/lib/storefront/httpcore-4.4.12.jar"/>
 	<classpathentry kind="lib" path="tools/lib/storefront/httpcore-nio-4.4.12.jar"/>
-	<classpathentry kind="lib" path="tools/lib/storefront/jackson-dataformat-cbor-2.10.4.jar"/>
-	<classpathentry kind="lib" path="tools/lib/storefront/jackson-dataformat-smile-2.10.4.jar"/>
-	<classpathentry kind="lib" path="tools/lib/storefront/jackson-dataformat-yaml-2.10.4.jar"/>
 	<classpathentry kind="lib" path="tools/lib/storefront/joda-time-2.10.4.jar"/>
 	<classpathentry kind="lib" path="tools/lib/storefront/jopt-simple-5.0.2.jar"/>
 	<classpathentry kind="lib" path="tools/lib/storefront/lang-mustache-client-7.9.1.jar"/>
@@ -410,8 +407,6 @@
 	<classpathentry kind="lib" path="tools/lib/ejb-api-3.0.jar"/>
 	<classpathentry kind="lib" path="tools/lib/javax.servlet-api-4.0.1.jar"/>
 	<classpathentry kind="lib" path="tools/lib/commons-collections4-4.4.jar"/>
-	<classpathentry kind="lib" path="JasperReportsTools/lib/jasperreports-6.17.0.jar"/>
-	<classpathentry kind="lib" path="JasperReportsTools/lib/jasperreports-fonts-6.17.0.jar"/>
 	<classpathentry kind="lib" path="JasperReportsTools/lib/iText-2.1.7.jar"/>
 	<classpathentry kind="lib" path="tools/lib/jakarta.servlet.jsp-api-3.0.0.jar"/>
 	<classpathentry kind="lib" path="tools/lib/jakarta.servlet-api-5.0.0.jar"/>
@@ -423,9 +418,6 @@
 	<classpathentry kind="lib" path="tools/lib/OpenForecast-0.5.0.jar"/>
 	<classpathentry kind="lib" path="tools/lib/legacy/financial-support-legacy-1.0.0.jar"/>
 	<classpathentry kind="lib" path="tools/lib/discord/annotations-23.0.0.jar"/>
-	<classpathentry kind="lib" path="tools/lib/discord/jackson-annotations-2.13.2.jar"/>
-	<classpathentry kind="lib" path="tools/lib/discord/jackson-core-2.13.2.jar"/>
-	<classpathentry kind="lib" path="tools/lib/discord/jackson-databind-2.13.2.2.jar"/>
 	<classpathentry kind="lib" path="tools/lib/discord/JDA-5.0.0-alpha.11.jar"/>
 	<classpathentry kind="lib" path="tools/lib/discord/jsr305-3.0.2.jar"/>
 	<classpathentry kind="lib" path="tools/lib/discord/kotlin-stdlib-1.4.10.jar"/>
@@ -444,5 +436,9 @@
 	<classpathentry kind="lib" path="tools/lib/openid/nimbus-jose-jwt-9.22.jar"/>
 	<classpathentry kind="lib" path="tools/lib/openid/oauth2-oidc-sdk-9.35.jar"/>
 	<classpathentry kind="lib" path="lib/WithHoldings.jar"/>
+	<classpathentry kind="lib" path="tools/lib/jackson-core-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="tools/lib/jackson-mapper-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="JasperReportsTools/lib/jasperreports-6.20.6.jar"/>
+	<classpathentry kind="lib" path="JasperReportsTools/lib/jasperreports-fonts-6.20.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

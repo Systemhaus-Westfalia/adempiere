@@ -18,32 +18,17 @@
 
 package org.shw.einvoice.es.util.pojo;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
-import org.adempiere.core.domains.models.I_DD_Order;
 import org.adempiere.exceptions.AdempiereException;
-import org.compiere.acct.DocTax;
 import org.compiere.model.MDocType;
 import org.compiere.model.MInvoice;
-import org.compiere.model.MMovement;
-import org.compiere.process.DocAction;
 import org.compiere.process.ProcessInfo;
-import org.eevolution.distribution.model.MDDOrder;
-import org.eevolution.distribution.process.MovementGenerate;
-import org.eevolution.manufacturing.model.MPPMRP;
 import org.eevolution.services.dsl.ProcessBuilder;
-import org.eevolution.wms.model.MWMInOutBound;
-import org.eevolution.wms.model.MWMInOutBoundLine;
 import org.shw.einvoice.es.feccfcreditofiscalv3.EI_CreateInvoice_CCFF_SV;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.EI_CreateInvoice_Factura_SV;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.EI_CreateInvoice_FacturaExport_SV;
-import org.zkoss.idom.DocType;
 
 /** Generated Process for (SB_ElectronicInvoice)
  *  @author ADempiere (generated) 

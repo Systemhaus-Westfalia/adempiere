@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import org.compiere.model.*;
 import org.compiere.util.KeyNamePair;
-import org.adempiere.core.*;
 
 /** Generated Interface for E_UOM
  *  @author Adempiere (generated) 

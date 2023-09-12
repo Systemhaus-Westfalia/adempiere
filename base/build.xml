@@ -46,6 +46,12 @@
   	<pathelement path="../tools/lib/aws-java-sdk-core-1.11.795.jar" />
   	<pathelement path="../tools/lib/aws-java-sdk-kms-1.11.795.jar" />
   	<pathelement path="../tools/lib/aws-java-sdk-s3-1.11.795.jar" />
+  	<pathelement path="../tools/lib/commons-lang-2.1.jar" />
+  	<pathelement path="../tools/lib/jackson-core-asl-1.9.13.jar" />
+  	<pathelement path="../tools/lib/jackson-mapper-asl-1.9.13.jar" />
+  	<pathelement path="../tools/lib/discord/jackson-databind-2.13.2.2.jar" />
+  	<pathelement path="../tools/lib/discord/jackson-core-2.13.2.jar" />
+  	<pathelement path="../tools/lib/discord/jackson-annotations-2.13.2.jar" />
   </path>
 		
   <target name="init" description="initialization target">

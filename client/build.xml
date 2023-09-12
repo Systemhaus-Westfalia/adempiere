@@ -35,7 +35,7 @@
     <pathelement path="../tools/lib/j2ee.jar"/>
   	<pathelement path="../tools/lib/swinglabs-0.8.0.jar"/>  	
   	<pathelement path="../tools/lib/lablib-checkboxtree-3.3.jar"/>
-  	<pathelement path="../JasperReportsTools/lib/jasperreports-6.17.0.jar"/>
+  	<pathelement path="../JasperReportsTools/lib/jasperreports-6.20.6.jar"/>
   	<pathelement path="../tools/lib/postgresql.jar"/>
   	<pathelement path="../lib/oracle.jar"/>
   </path>

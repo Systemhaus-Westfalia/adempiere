@@ -27,10 +27,8 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
 import org.apache.commons.lang.StringUtils;

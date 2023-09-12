@@ -20,7 +20,6 @@ package org.shw.einvoice.es.fefcfacturaelectronicav1;
 
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,6 @@ import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

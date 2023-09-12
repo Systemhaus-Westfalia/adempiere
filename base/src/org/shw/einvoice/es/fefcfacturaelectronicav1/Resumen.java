@@ -27,7 +27,6 @@ public class Resumen {
 	BigDecimal totalDescu;
 	List<TributosItem> tributos;
 	BigDecimal subTotal;
-	BigDecimal ivaPerci1;
 	BigDecimal ivaRete1;
 	BigDecimal reteRenta;
 	BigDecimal montoTotalOperacion;
@@ -234,22 +233,6 @@ public String validateValues() {
 	 */
 	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
-	}
-
-
-	/**
-	 * @return the ivaPerci1
-	 */
-	public BigDecimal getIvaPerci1() {
-		return ivaPerci1;
-	}
-
-
-	/**
-	 * @param ivaPerci1 the ivaPerci1 to set
-	 */
-	public void setIvaPerci1(BigDecimal ivaPerci1) {
-		this.ivaPerci1 = ivaPerci1;
 	}
 
 

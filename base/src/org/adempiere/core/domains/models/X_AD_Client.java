@@ -226,6 +226,33 @@ public class X_AD_Client extends PO implements I_AD_Client, I_Persistent
 	{
 		return (String)get_Value(COLUMNNAME_DocumentDir);
 	}
+	
+
+	public org.adempiere.core.domains.models.I_E_Enviroment getE_Enviroment() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_E_Enviroment)MTable.get(getCtx(), org.adempiere.core.domains.models.I_E_Enviroment.Table_Name)
+			.getPO(getE_Enviroment_ID(), get_TrxName());	}
+
+	/** Set CAT-019 Código de E_Enviroment.
+		@param E_Enviroment_ID CAT-001 E_Enviroment	  */
+	public void setE_Enviroment_ID (int E_Enviroment_ID)
+	{
+		if (E_Enviroment_ID < 1) 
+			set_Value (COLUMNNAME_E_Enviroment_ID, null);
+		else 
+			set_Value (COLUMNNAME_E_Activity_ID, Integer.valueOf(E_Enviroment_ID));
+	}
+
+	/** Get CAT-019 Código de Actividad Económica.
+		@return CAT-019 Código de Actividad Económica	  */
+	public int getE_Enviroment_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_E_Enviroment_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 
 
 	public org.adempiere.core.domains.models.I_E_Activity getE_Activity() throws RuntimeException

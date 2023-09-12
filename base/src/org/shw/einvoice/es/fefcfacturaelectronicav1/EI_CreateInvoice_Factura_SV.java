@@ -33,6 +33,7 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
+import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
@@ -59,6 +60,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	MOrgInfo 			orgInfo = null;
 	List<MInvoiceTax> invoiceTaxes = null;
 	BigDecimal zero = new BigDecimal(0.00);
+	StringBuffer error = new StringBuffer();
 		// TODO Auto-generated method stub
 	
 	
@@ -71,7 +73,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	@Override
 	protected String doIt() throws Exception
 	{	
-		StringBuffer error = new StringBuffer();
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
@@ -103,10 +104,32 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		{
 			error.append(e);
 		}
-    	fillemisor(facturaElectronica.getEmisor(), invoice);  	
-    	fillResumen(facturaElectronica.getResumen(), invoice);     	
-    	//fillReceptor(facturaElectronica.getReceptor(), invoice);    	
-    	fillIdentification(facturaElectronica.getIdentificacion(), invoice);
+		try
+		{
+			fillemisor(facturaElectronica.getEmisor(), invoice);   
+		}
+		catch (Exception e)
+		{
+			error.append(e);
+		}
+		
+		try
+		{
+			fillResumen(facturaElectronica.getResumen(), invoice);  
+		}
+		catch (Exception e)
+		{
+			error.append(e);
+		}
+		try
+		{
+			fillIdentification(facturaElectronica.getIdentificacion(), invoice);
+		}
+		catch (Exception e)
+		{
+			error.append(e);
+		}	
+    	
     	    	
     	//Durch InvoiceZeilen laufen
     	for (MInvoiceLine invoiceLine:invoice.getLines()) {    		
@@ -127,17 +150,22 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     		BigDecimal ventaNoSuj = Env.ZERO;
     		BigDecimal ventaExenta = Env.ZERO;
     		BigDecimal ventaGravada = Env.ONEHUNDRED;
+    		BigDecimal ivaItem = Env.ZERO;
     		if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
     			ventaNoSuj = invoiceLine.getLineNetAmt();
-    		if (!invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceLine.getC_Tax().getRate().doubleValue()==0.00)
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
     			ventaExenta = invoiceLine.getLineNetAmt();
-    		if (!invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceLine.getC_Tax().getRate().doubleValue()!=0.00)
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
     			ventaGravada = invoiceLine.getLineNetAmt(); 
+    			MTax tax = (MTax)invoiceLine.getC_Tax();
+    			if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
+    			ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
+    		}
     		BigDecimal psv = invoiceLine.getTaxAmt();
     		BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
     		CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
     				null, uniMedida, 
-    				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, null, psv, noGravado); 
+    				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, null, psv, noGravado,ivaItem); 
     		cuerpoDocumentoItem.validateValues();
     		facturaElectronica.getCuerpoDocumento().add(cuerpoDocumentoItem);
     	}  
@@ -149,12 +177,11 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     	invoiceElectronic.setei_ValidationStatus("01");
     	if (error.length() > 0) {
     		invoiceElectronic.seterrMsgIntern(error.toString());
+    		invoiceElectronic.setei_ValidationStatus("02");
+        	invoiceElectronic.saveEx();
     		return error.toString();
-    	}
-    		
-    	invoiceElectronic.saveEx();
 	
-    	
+    	}
     	ObjectMapper objectMapper = new ObjectMapper();
     	String json = objectMapper.writeValueAsString(facturaElectronica);
 
@@ -206,6 +233,10 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	private void fillReceptor(Receptor receptor, MInvoice invoice) {
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
+		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
+			error.append("SdN: Falta configuracion para Facturacion Electronica");
+			return;
+		}
 		receptor.setTipoDocumento(partner.getE_Recipient_Identification().getValue());
 		if (receptor.getTipoDocumento().equals("NIT"))
 
@@ -262,7 +293,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		pagosItems.add(pagoitem);
 		resumen.setPagos(pagosItems);
 		
-		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().toString());
+		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
 		BigDecimal SaldoFavor = Env.ZERO;
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
@@ -286,7 +317,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		resumen.setDescuGravada(DescuGravada);
 		resumen.setPorcentajeDescuento(PorcentajeDescuento);
 		resumen.setSubTotal(TotalGravada.add(TotalNoSuj).add(TotalExenta));
-		resumen.setIvaPerci1(IvaPerci1);
 		resumen.setIvaRete1(IvaRete1);
 		resumen.setMontoTotalOperacion(invoice.getGrandTotal());
 		resumen.setTotalNoGravado(TotalExenta.add(TotalNoSuj));
@@ -319,17 +349,32 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 
 	private void validateValues(FacturaElectronica facturaElectronica, StringBuffer error) {
 		String result = "";
-		result = facturaElectronica.getResumen().validateValues();
-		if (!result.equals(VALIDATION_RESULT_OK))
-			error.append(result);
-		result = facturaElectronica.getIdentificacion().validateValues();
-		if (!result.equals(VALIDATION_RESULT_OK))
-			error.append(result);
-		for (CuerpoDocumentoItem cuerpoDocumentoItem :facturaElectronica.getCuerpoDocumento()) {
-			result = cuerpoDocumentoItem.validateValues();
+		if (facturaElectronica.getResumen() != null)
+		{
+			result = facturaElectronica.getResumen().validateValues();
 			if (!result.equals(VALIDATION_RESULT_OK))
-				error.append(result);			
+				error.append(result);
 		}
+		if (facturaElectronica.getIdentificacion() != null) {
+			result = facturaElectronica.getIdentificacion().validateValues();
+			if (!result.equals(VALIDATION_RESULT_OK))
+				error.append(result);
+		}
+
+		if (facturaElectronica.getReceptor() != null){
+			result = facturaElectronica.getReceptor().validateValues();
+			if (!result.equals(VALIDATION_RESULT_OK))
+				error.append(result);
+		}
+		if (facturaElectronica.getCuerpoDocumento() != null) {
+			for (CuerpoDocumentoItem cuerpoDocumentoItem :facturaElectronica.getCuerpoDocumento()) {
+				result = cuerpoDocumentoItem.validateValues();
+				if (!result.equals(VALIDATION_RESULT_OK))
+					error.append(result);			
+			}
+		}
+
+
 	}
 
 }

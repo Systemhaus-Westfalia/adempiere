@@ -33,12 +33,17 @@ public abstract class EI_CreateInvoice_CCFF_SVAbstract extends SvrProcess {
 	private static final int ID_FOR_PROCESS = 3000418;
 	/**	Parameter Name for Invoice	*/
 	public static final String C_INVOICE_ID = "C_Invoice_ID";
+	/**	Parameter Name for Save In Historic	*/
+	public static final String ISSAVEINHISTORIC = "IsSaveInHistoric";
 	/**	Parameter Value for Invoice	*/
 	private int invoiceId;
+	/**	Parameter Value for Save In Historic	*/
+	private boolean isSaveInHistoric;
 
 	@Override
 	protected void prepare() {
 		invoiceId = getParameterAsInt(C_INVOICE_ID);
+		isSaveInHistoric = getParameterAsBoolean(ISSAVEINHISTORIC);
 	}
 
 	/**	 Getter Parameter Value for Invoice	*/
@@ -49,6 +54,16 @@ public abstract class EI_CreateInvoice_CCFF_SVAbstract extends SvrProcess {
 	/**	 Setter Parameter Value for Invoice	*/
 	protected void setInvoiceId(int invoiceId) {
 		this.invoiceId = invoiceId;
+	}
+
+	/**	 Getter Parameter Value for Save In Historic	*/
+	protected boolean isSaveInHistoric() {
+		return isSaveInHistoric;
+	}
+
+	/**	 Setter Parameter Value for Save In Historic	*/
+	protected void setIsSaveInHistoric(boolean isSaveInHistoric) {
+		this.isSaveInHistoric = isSaveInHistoric;
 	}
 
 	/**	 Getter Parameter Value for Process ID	*/

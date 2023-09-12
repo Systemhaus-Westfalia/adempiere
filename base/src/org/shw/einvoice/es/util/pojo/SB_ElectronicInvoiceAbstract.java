@@ -16,29 +16,25 @@
  * or https://github.com/adempiere/adempiere/blob/develop/license.html        *
  *****************************************************************************/
 
-package org.shw.einvoice.es.fefexfacturaexportacionv1;
+package org.shw.einvoice.es.util.pojo;
 
 import org.compiere.process.SvrProcess;
 
-/** Generated Process for (EI_CreateInvoice_FacturaExport_SV.java)
+/** Generated Process for (SB_ElectronicInvoice)
  *  @author ADempiere (generated) 
  *  @version Release 3.9.4
  */
-public abstract class EI_CreateInvoice_FacturaExport_SVAbstract extends SvrProcess {
+public abstract class SB_ElectronicInvoiceAbstract extends SvrProcess {
 	/** Process Value 	*/
-	private static final String VALUE_FOR_PROCESS = "EI_CreateInvoice_FacturaExport_SV.java";
+	private static final String VALUE_FOR_PROCESS = "SB_ElectronicInvoice";
 	/** Process Name 	*/
-	private static final String NAME_FOR_PROCESS = "EI_CreateInvoice_FacturaExport_SV.java";
+	private static final String NAME_FOR_PROCESS = "SB_ElectronicInvoice";
 	/** Process Id 	*/
-	private static final int ID_FOR_PROCESS = 3000420;
-	/**	Parameter Name for Invoice	*/
-	public static final String C_INVOICE_ID = "C_Invoice_ID";
+	private static final int ID_FOR_PROCESS = 3000421;
 	/**	Parameter Name for Save In Historic	*/
 	public static final String ISSAVEINHISTORIC = "IsSaveInHistoric";
 	/**	Parameter Name for File_Directory	*/
 	public static final String FILE_DIRECTORY = "File_Directory";
-	/**	Parameter Value for Invoice	*/
-	private int invoiceId;
 	/**	Parameter Value for Save In Historic	*/
 	private boolean isSaveInHistoric;
 	/**	Parameter Value for File_Directory	*/
@@ -46,19 +42,8 @@ public abstract class EI_CreateInvoice_FacturaExport_SVAbstract extends SvrProce
 
 	@Override
 	protected void prepare() {
-		invoiceId = getParameterAsInt(C_INVOICE_ID);
 		isSaveInHistoric = getParameterAsBoolean(ISSAVEINHISTORIC);
 		directory = getParameterAsString(FILE_DIRECTORY);
-	}
-
-	/**	 Getter Parameter Value for Invoice	*/
-	protected int getInvoiceId() {
-		return invoiceId;
-	}
-
-	/**	 Setter Parameter Value for Invoice	*/
-	protected void setInvoiceId(int invoiceId) {
-		this.invoiceId = invoiceId;
 	}
 
 	/**	 Getter Parameter Value for Save In Historic	*/

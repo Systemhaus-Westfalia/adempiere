@@ -220,6 +220,18 @@ public interface I_AD_Client
 
 	/** Get CAT-019 Código de Actividad Económica	  */
 	public int getE_Activity_ID();
+	
+	/** Column name E_Activity_ID */
+    public static final String COLUMNNAME_E_Enviroment_ID = "E_Enviroment_ID";
+
+	/** Set CAT-019 Código de Actividad Económica	  */
+	public void setE_Enviroment_ID (int E_Enviroment_ID);
+
+	/** Get CAT-019 Código de Actividad Económica	  */
+	public int getE_Enviroment_ID();
+	
+	public org.adempiere.core.domains.models.I_E_Enviroment getE_Enviroment() throws RuntimeException;
+
 
 
     /** Column name E_TransmissionType_ID */

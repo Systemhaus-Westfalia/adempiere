@@ -45,6 +45,8 @@ public class CuerpoDocumentoItem {
 		
 	}
 
+
+
 	/**
 	 * @param numItem
 	 * @param tipoItem
@@ -66,8 +68,8 @@ public class CuerpoDocumentoItem {
 	 */
 	public CuerpoDocumentoItem(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
 			String codTributo, int uniMedida, String descripcion, BigDecimal precioUni, BigDecimal montoDescu,
-			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, ArrayList<String> tributos, BigDecimal psv,
-			BigDecimal noGravado) {
+			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, ArrayList<String> tributos,
+			BigDecimal psv, BigDecimal noGravado, BigDecimal ivaItem) {
 		this.numItem = numItem;
 		this.tipoItem = tipoItem;
 		this.numeroDocumento = numeroDocumento;
@@ -84,7 +86,10 @@ public class CuerpoDocumentoItem {
 		this.tributos = tributos;
 		this.psv = psv;
 		this.noGravado = noGravado;
+		this.ivaItem = ivaItem;
 	}
+
+
 
 	/**
 	 * Validate the Schema conditions

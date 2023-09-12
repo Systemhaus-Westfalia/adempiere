@@ -14,11 +14,11 @@ import org.shw.einvoice.es.util.pojo.TributosItem;
  */
 public class Resumen {
 	static final String VALIDATION_RESULT_OK = "OK";
-	static final String VALIDATION_PLAZO_IS_NULL         = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'plazo' de pagos no debe ser ='null'";
-	static final String VALIDATION_PERIODO_IS_NULL       = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'periodo' de pagos no debe ser ='null'";
-	static final String VALIDATION_TOTALGRAVADA_IVAPERC1 = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'ivaPerci1' no debe ser mayor que cero";
-	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
-	static final String VALIDATION_TOTALGRAVADA_CONDOP   = "Documento: Credito Fiscal, clase: Resumen. Validacion falló: valor de 'condicionOperacion' no debe ser diferente a 1";
+	static final String VALIDATION_PLAZO_IS_NULL         = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'plazo' de pagos no debe ser ='null'";
+	static final String VALIDATION_PERIODO_IS_NULL       = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'periodo' de pagos no debe ser ='null'";
+	static final String VALIDATION_TOTALGRAVADA_IVAPERC1 = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'ivaPerci1' no debe ser mayor que cero";
+	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
+	static final String VALIDATION_TOTALGRAVADA_CONDOP   = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'condicionOperacion' no debe ser diferente a 1";
 	
 	BigDecimal totalNoSuj;
 	BigDecimal totalExenta;
@@ -288,7 +288,7 @@ public String validateValues() {
 		if( length<=MAXLENGTH)
 			this.totalLetras = totalLetras;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in CreditoFiscal.Resumen.setTotalLetras()");
+	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in NotaDeCredito.Resumen.setTotalLetras()");
 	}
 
 
@@ -309,7 +309,7 @@ public String validateValues() {
 		if (condicionOperacion==1 || condicionOperacion==2 || condicionOperacion==2)
 			this.condicionOperacion = condicionOperacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in CreditoFiscal.Resumen.setCondicionOperacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in NotaDeCredito.Resumen.setCondicionOperacion()");
 	}
 
 	/**

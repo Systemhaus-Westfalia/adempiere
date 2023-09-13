@@ -80,6 +80,8 @@ dependencies {
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.3'
     // https://mvnrepository.com/artifact/org.beanshell/bsh
     implementation group: 'org.beanshell', name: 'bsh', version: '2.0b5'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	implementation 'org.apache.commons:commons-lang3:3.13.0'
     //  Local
     api project(path: ':tools')
     //api 'io.github.adempiere:tools:'

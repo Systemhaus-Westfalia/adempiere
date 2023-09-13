@@ -46,7 +46,7 @@
   	<pathelement path="../tools/lib/aws-java-sdk-core-1.11.795.jar" />
   	<pathelement path="../tools/lib/aws-java-sdk-kms-1.11.795.jar" />
   	<pathelement path="../tools/lib/aws-java-sdk-s3-1.11.795.jar" />
-  	<pathelement path="../tools/lib/commons-lang-2.1.jar" />
+  	<pathelement path="../tools/lib/commons-lang3-3.13.0.jar" />
   	<pathelement path="../tools/lib/jackson-core-asl-1.9.13.jar" />
   	<pathelement path="../tools/lib/jackson-mapper-asl-1.9.13.jar" />
   	<pathelement path="../tools/lib/discord/jackson-databind-2.13.2.2.jar" />
@@ -161,12 +161,13 @@
     <pathelement path=".${jar.path}/mysql-connector-java-5.1.13-bin.jar" />
     <pathelement path="${jar.path}/mariadb-java-client.jar"/>
     <pathelement path="./base.jar" />    
-    <pathelement path="../tools/lib/commons-lang-2.1.jar"/>
     <pathelement location="${test.build.dir}"/>
     <pathelement location="${test.results.dir}"/>
     <pathelement path="${project.class.path}"/> 
     <fileset dir="../tools/lib/junit" includes="**/*.jar"/>
     <fileset dir="../tools/lib/testing" includes="**/*.jar"/>
+  	<pathelement path="../tools/lib/commons-lang3-3.13.0.jar" />
+
   </path>
     
   <target name="check.tests">

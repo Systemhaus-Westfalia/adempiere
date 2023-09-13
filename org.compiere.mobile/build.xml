@@ -29,6 +29,7 @@
 		<pathelement location="${Adempiere.dir}/../base/build"/>
 		<pathelement location="${Adempiere.dir}/../client/build"/>
 		<pathelement location="${Adempiere.dir}/../JasperReports/build"/>
+	  	<pathelement path="${Adempiere.dir}/../tools/lib/commons-lang3-3.13.0.jar"/>
 	    <fileset dir="${Adempiere.dir}">
 	    	<include name="*.jar"/>
 	    </fileset>

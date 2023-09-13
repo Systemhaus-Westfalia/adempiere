@@ -20,9 +20,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.adempiere.legacy.apache.ecs.*;
 import org.adempiere.legacy.apache.ecs.xhtml.*;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.compiere.model.*;
 import org.compiere.util.*;
 
@@ -145,10 +145,10 @@ public class WebField
 		if (m_displayType == DisplayType.Button)
 			return new label();
 		//
-		label myLabel = new label(m_columnName + "F", null, StringEscapeUtils.escapeHtml(m_name));
+		label myLabel = new label(m_columnName + "F", null, StringEscapeUtils.escapeHtml3(m_name));
 		myLabel.setID(m_columnName + "L");
 		if (m_description != null)
-			myLabel.setTitle(StringEscapeUtils.escapeHtml(m_description));
+			myLabel.setTitle(StringEscapeUtils.escapeHtml3(m_description));
 		if ( edit && m_readOnly )
 			myLabel.setClass("readonly");
 		else if ( edit && m_mandatory )
@@ -293,7 +293,7 @@ public class WebField
 	private Element getStringField (String data)
 	{
 		if ( m_readOnly )
-			return getDiv(StringEscapeUtils.escapeHtml(data));
+			return getDiv(StringEscapeUtils.escapeHtml3(data));
 		
 		input string = null;
 		
@@ -304,15 +304,15 @@ public class WebField
 			
 		
 		if(isEncrypted)
-			string = new input(input.TYPE_PASSWORD, m_columnName, StringEscapeUtils.escapeHtml(data));
+			string = new input(input.TYPE_PASSWORD, m_columnName, StringEscapeUtils.escapeHtml3(data));
 		else if ( m_columnName.toLowerCase().contains("email") )
-			string = new input("email", m_columnName, StringEscapeUtils.escapeHtml(data));
+			string = new input("email", m_columnName, StringEscapeUtils.escapeHtml3(data));
 		else if ( m_columnName.toLowerCase().contains("phone") && data != null)
-			string = new input("phone", m_columnName, StringEscapeUtils.escapeHtml(data));
+			string = new input("phone", m_columnName, StringEscapeUtils.escapeHtml3(data));
 		else if ( m_displayType == DisplayType.URL )
-			string = new input("url", m_columnName, StringEscapeUtils.escapeHtml(data));
+			string = new input("url", m_columnName, StringEscapeUtils.escapeHtml3(data));
 		else
-			string = new input(input.TYPE_TEXT, m_columnName, StringEscapeUtils.escapeHtml(data));
+			string = new input(input.TYPE_TEXT, m_columnName, StringEscapeUtils.escapeHtml3(data));
 		
 		
 		string.setID(m_columnName + "F");
@@ -346,10 +346,10 @@ public class WebField
 	{
 
 		if ( m_readOnly )
-			return getDiv(StringEscapeUtils.escapeHtml(data));
+			return getDiv(StringEscapeUtils.escapeHtml3(data));
 		
 		textarea text = new textarea (m_columnName, rows, m_displayLength)
-			.addElement(StringEscapeUtils.escapeHtml(data));
+			.addElement(StringEscapeUtils.escapeHtml3(data));
 		text.setID(m_columnName + "F");
 		text.setDisabled(m_readOnly);
 		if (m_error)
@@ -380,7 +380,7 @@ public class WebField
 		
 
 		if ( m_readOnly )
-			return getDiv(StringEscapeUtils.escapeHtml(formattedData));
+			return getDiv(StringEscapeUtils.escapeHtml3(formattedData));
 
 		input string = new input(input.TYPE_TEXT, m_columnName, formattedData);
 		string.setID(m_columnName + "F");
@@ -408,7 +408,7 @@ public class WebField
 	private Element getAssignmentField (Object data)
 	{
 		
-		input string = new input(input.TYPE_TEXT, m_columnName, StringEscapeUtils.escapeHtml(""));
+		input string = new input(input.TYPE_TEXT, m_columnName, StringEscapeUtils.escapeHtml3(""));
 		if (m_fieldLength > 0)
 			string.setMaxlength(m_fieldLength);
 		//
@@ -458,7 +458,7 @@ public class WebField
 		
 
 		if ( m_readOnly )
-			return getDiv(StringEscapeUtils.escapeHtml(formattedData));
+			return getDiv(StringEscapeUtils.escapeHtml3(formattedData));
 			
 		
 		input string = new input("number", m_columnName, formattedData);
@@ -512,7 +512,7 @@ public class WebField
 	private Element getPopupField (String dataDisplay, String dataValue)
 	{
 		if ( m_readOnly )
-			return getDiv(StringEscapeUtils.escapeHtml(dataDisplay));
+			return getDiv(StringEscapeUtils.escapeHtml3(dataDisplay));
 		
 		if ( Util.isEmpty(dataDisplay))
 			dataDisplay = "Select...";
@@ -524,12 +524,12 @@ public class WebField
 		a display = null;
 		m_dataDisplay = null;
 		//  The display field       Name=columnName, ID=FcolumnName		
-			// display = new input(input.TYPE_TEXT, m_columnName + "D",StringEscapeUtils.escapeHtml(dataDisplay));
+			// display = new input(input.TYPE_TEXT, m_columnName + "D",StringEscapeUtils.escapeHtml3(dataDisplay));
 		
 		if (m_displayType == DisplayType.Location )
-			display = new a("WLocation?ColumnName=" + m_columnName, m_columnName + "D", StringEscapeUtils.escapeHtml(dataDisplay));
+			display = new a("WLocation?ColumnName=" + m_columnName, m_columnName + "D", StringEscapeUtils.escapeHtml3(dataDisplay));
 		else 
-			display = new a("WLookup?ColumnName=" + m_columnName+"&AD_Process_ID="+m_processID, m_columnName + "D", StringEscapeUtils.escapeHtml(dataDisplay));
+			display = new a("WLookup?ColumnName=" + m_columnName+"&AD_Process_ID="+m_processID, m_columnName + "D", StringEscapeUtils.escapeHtml3(dataDisplay));
 			
 			
 			m_dataDisplay = dataDisplay;
@@ -636,7 +636,7 @@ public class WebField
 		
 
 		if ( m_readOnly )
-			return getDiv(StringEscapeUtils.escapeHtml(formattedData));
+			return getDiv(StringEscapeUtils.escapeHtml3(formattedData));
 		
 		display = new input(input.TYPE_TEXT, m_columnName, formattedData);
 		display.setID(m_columnName + "F");
@@ -695,7 +695,7 @@ public class WebField
 			dataDisplay = lookup.getDisplay(dataValue);
 		
 		if ( m_readOnly )
-			return getDiv(StringEscapeUtils.escapeHtml(dataDisplay));
+			return getDiv(StringEscapeUtils.escapeHtml3(dataDisplay));
 				
 		option[] ops = getOptions(lookup, dataValue);
 		select sel = new select(m_columnName, ops);		
@@ -781,7 +781,7 @@ public class WebField
 			{
 				MLocator loc = (MLocator)list[i];
 				key = String.valueOf(loc.getM_Locator_ID());
-				String name = StringEscapeUtils.escapeHtml(loc.getValue());
+				String name = StringEscapeUtils.escapeHtml3(loc.getValue());
 				if (dataValue.equals(key)){
 					options[i] = new option(key).addElement(name).setSelected(true);
 					m_dataDisplay = name;}
@@ -792,7 +792,7 @@ public class WebField
 			{
 				KeyNamePair p = (KeyNamePair)list[i];
 				key = String.valueOf(p.getKey());
-				String name = StringEscapeUtils.escapeHtml(p.getName());
+				String name = StringEscapeUtils.escapeHtml3(p.getName());
 				if (dataValue.equals(key)){
 					options[i] = new option(key).addElement(name).setSelected(true);
 					m_dataDisplay =name;}
@@ -808,7 +808,7 @@ public class WebField
 				String name = p.getName();
 				if (name == null || name.length() == 0)
 					name = "???";
-				name = StringEscapeUtils.escapeHtml(name);
+				name = StringEscapeUtils.escapeHtml3(name);
 				if (dataValue.equals(key)){
 					options[i] = new option(key).addElement(name).setSelected(true);
 					m_dataDisplay =name;}
@@ -831,7 +831,7 @@ public class WebField
 	{
 		/*
 		//Modified by Rob Klein 4/29/07
-		a button = new a("#", StringEscapeUtils.escapeHtml(m_name));
+		a button = new a("#", StringEscapeUtils.escapeHtml3(m_name));
 		button.setClass("whiteButton");		
 		return button;*/
 		return null;
@@ -856,7 +856,7 @@ public class WebField
 			//	Add by Rob Klein 6/6/2007
 			buttonValuePref = new a("#", (new img(MobileEnv.getImageDirectory("vPreference10.gif")).setBorder(0))+"  Preference");
 			buttonValuePref.setID(m_columnName + "PV");			
-			buttonValuePref.setOnClick("startValuePref(" + m_displayType + ", '"+StringEscapeUtils.escapeHtml(m_dataDisplay.toString())+ "', '"
+			buttonValuePref.setOnClick("startValuePref(" + m_displayType + ", '"+StringEscapeUtils.escapeHtml3(m_dataDisplay.toString())+ "', '"
 					+ m_Field.getValue()+ "', '"+m_Field.getHeader()+ "', '"+m_Field.getColumnName()+ "', "
 					+ Env.getAD_User_ID(m_wsc.ctx)+ ", " + Env.getAD_Org_ID(m_wsc.ctx) + ", "+Env.getAD_Client_ID(m_wsc.ctx)
 					+ ", "+m_Field.getAD_Window_ID()+");return false;");

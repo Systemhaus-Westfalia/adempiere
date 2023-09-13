@@ -73,7 +73,7 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import org.adempiere.test.CommonUnitTestSetup;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.compiere.db.CConnection;
 import org.compiere.model.MClient;
 import org.compiere.model.MColumn;

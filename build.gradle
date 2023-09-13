@@ -19,7 +19,7 @@ allprojects {
 dependencies {
     //api 'io.github.adempiere:base:3.9.4-develop-1.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	implementation 'org.apache.commons:commons-lang3:3.2'
+	implementation 'org.apache.commons:commons-lang3:3.13.0'
     
 }
 

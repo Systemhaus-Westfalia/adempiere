@@ -31,7 +31,7 @@
   	  <include name="*.jar"/>
   	</fileset>
     <pathelement path="../tools/lib/c3p0-0.9.1.2.jar"/>
-    <pathelement path="../serverApps/src/web/WEB-INF/lib/commons-lang-2.1.jar"/>
+    <pathelement path="../serverApps/src/web/WEB-INF/lib/commons-lang3-3.13.0.jar"/>
   </path>
 
 

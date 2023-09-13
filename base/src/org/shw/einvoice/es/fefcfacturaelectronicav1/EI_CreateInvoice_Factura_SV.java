@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
 import org.compiere.model.MClient;

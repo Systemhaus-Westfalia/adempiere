@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
 import org.compiere.model.MClient;
@@ -92,6 +92,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
 		//final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";	
 		String duns = orgInfo.getDUNS().replace("-", "");
+		//String test = String.format("%8s", duns).replace(' ', '0');
 		numeroControl = "DTE-03-" + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		Integer clientID = (Integer)client.getAD_Client_ID();

@@ -197,7 +197,6 @@
 	<classpathentry kind="lib" path="serverApps/src/web/WEB-INF/lib/commons-beanutils-core.jar"/>
 	<classpathentry kind="lib" path="serverApps/src/web/WEB-INF/lib/commons-digester-1.7.jar"/>
 	<classpathentry kind="lib" path="serverApps/src/web/WEB-INF/lib/commons-fileupload.jar"/>
-	<classpathentry kind="lib" path="serverApps/src/web/WEB-INF/lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="serverApps/src/web/WEB-INF/lib/commons-validator-1.2.0.jar"/>
 	<classpathentry kind="lib" path="JasperReportsTools/lib/iReport.jar">
 		<attributes>
@@ -440,5 +439,6 @@
 	<classpathentry kind="lib" path="tools/lib/jackson-mapper-asl-1.9.13.jar"/>
 	<classpathentry kind="lib" path="JasperReportsTools/lib/jasperreports-6.20.6.jar"/>
 	<classpathentry kind="lib" path="JasperReportsTools/lib/jasperreports-fonts-6.20.6.jar"/>
+	<classpathentry kind="lib" path="tools/lib/commons-lang3-3.13.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -205,7 +205,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			
     		writeToFile(json, invoice);
     	}
-    	System.out.println(json);
+    	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
+
     	
     	
 		return "";
@@ -397,11 +398,11 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	{
 		try
 		{
-			Path path = Paths.get(MSysConfig.getValue("EI_PATH") + invoice.getDateAcct().toString().substring(0, 10) + "/");
+			Path path = Paths.get(MSysConfig.getValue("EI_PATH") + "/" + invoice.getDateAcct().toString().substring(0, 10) + "/");
 			Files.createDirectories(path);
 			//java.nio.file.Files;
 			Files.createDirectories(path);
-			String filename = path +"/" + invoice.getDocumentNo() + ".json"; 
+			String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
 			File out = new File (filename);
 			Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
 			fw.write(json);
@@ -410,6 +411,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			float size = out.length();
 			size /= 1024;
 			log.info(out.getAbsolutePath() + " - " + size + " kB");
+	    	System.out.println("Printed To: " + filename);
 		}
 		catch (Exception ex)
 		{

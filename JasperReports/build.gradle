@@ -19,7 +19,7 @@ allprojects {
 dependencies {
 	api project(path: ':base')
     // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports
-    api 'net.sf.jasperreports:jasperreports:6.1.17'
+    api 'net.sf.jasperreports:jasperreports:6.17.0'
     // https://mvnrepository.com/artifact/com.lowagie/itext
     api 'com.lowagie:itext:2.1.7'
     api 'net.sourceforge.barbecue:barbecue:1.5-beta1'

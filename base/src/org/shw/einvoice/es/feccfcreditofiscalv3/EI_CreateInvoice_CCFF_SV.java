@@ -69,6 +69,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	List<MInvoiceTax> invoiceTaxes = null;
 	BigDecimal zero = new BigDecimal(0.00);
 	StringBuffer error = new StringBuffer();
+	String absDirectory = "";
 		// TODO Auto-generated method stub
 	
 	
@@ -81,6 +82,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	@Override
 	protected String doIt() throws Exception
 	{	
+		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
@@ -198,16 +200,15 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
     	invoiceElectronic.saveEx();
     	log.config(json);
     	if (isSaveInHistoric()) {
-    		//String directory = "C:\\Users\\SHW_User\\Documents\\Json\\"
-    		//		+ invoice.getDocumentNo() + ".json";
-
-			
-			
+    		Path rootpath = Paths.get(absDirectory);
+    		if (!Files.exists(rootpath)) {
+    			invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
+    		}
     		writeToFile(json, invoice);
     	}
-    	System.out.println(json);
-    	
-    	
+		
+    	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
+    	System.out.println(json);	    	
 		return "";
 	}
 
@@ -397,11 +398,14 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	{
 		try
 		{
-			Path path = Paths.get(MSysConfig.getValue("EI_PATH") + invoice.getDateAcct().toString().substring(0, 10) + "/");
+			absDirectory = (absDirectory.endsWith("/")
+					|| absDirectory.endsWith("\\"))
+					? absDirectory:absDirectory + "/";
+			Path path = Paths.get(absDirectory + invoice.getDateAcct().toString().substring(0, 10) + "/");
 			Files.createDirectories(path);
 			//java.nio.file.Files;
 			Files.createDirectories(path);
-			String filename = path +"/" + invoice.getDocumentNo() + ".json"; 
+			String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
 			File out = new File (filename);
 			Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
 			fw.write(json);
@@ -410,6 +414,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			float size = out.length();
 			size /= 1024;
 			log.info(out.getAbsolutePath() + " - " + size + " kB");
+			System.out.println("Printed To: " + filename);
+									
 		}
 		catch (Exception ex)
 		{

@@ -18,7 +18,14 @@
 
 package org.shw.einvoice.es.fefexfacturaexportacionv1;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +38,7 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
+import org.compiere.model.MSysConfig;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
@@ -80,7 +88,6 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
-		
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
 				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
 			error.append("el documento no es Factura");
@@ -102,8 +109,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		catch (Exception e)
 		{
 			error.append(e);
-		}
-		
+		}		
 		try
 		{
 			fillResumen(facturaExportacion.getResumen(), invoice);	 
@@ -111,8 +117,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		catch (Exception e)
 		{
 			error.append(e);
-		}
-		
+		}		
 		try
 		{
 			fillIdentification(facturaExportacion.getIdentificacion(), invoice);
@@ -121,67 +126,71 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		{
 			error.append(e);
 		}
-    	
-    	
-    	//fillReceptor(facturaExportacion.getReceptor(), invoice);    	
-    	
-    	try {
-    	//Durch InvoiceZeilen laufen
-    	for (MInvoiceLine invoiceLine:invoice.getLines()) {    		
-    		int numItem = invoiceLine.getLine();
-    		BigDecimal cantidad = invoiceLine.getQtyInvoiced();
-    		String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
-    		//String codTributo = "20";
-    		ArrayList<String> tributosItems = new ArrayList<String>();
-    		tributosItems.add("C3");
-    		
-    		
-    		int uniMedida = 1;
-    		String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
-    		BigDecimal precioUni = invoiceLine.getPriceActual();
-    		BigDecimal montoDescu = Env.ZERO;
-    		BigDecimal ventaNoSuj = Env.ZERO;
-    		BigDecimal ventaExenta = Env.ZERO;
-    		BigDecimal ventaGravada = Env.ONEHUNDRED;
-    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
-    			ventaNoSuj = invoiceLine.getLineNetAmt();
-    		if (!invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
-    			ventaExenta = invoiceLine.getLineNetAmt();
-    		if (!invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
-    			ventaGravada = invoiceLine.getLineNetAmt(); 
-    		BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
-    		CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem,  cantidad, codigo, uniMedida, 	descripcion, 
-    				precioUni, montoDescu,  ventaGravada, tributosItems, noGravado); 
-    		cuerpoDocumentoItem.validateValues();
-    		facturaExportacion.getCuerpoDocumento().add(cuerpoDocumentoItem);
-    	}  		
-    	}
-    	catch (Exception e){
-    		error.append(e);
-    	}
+		//fillReceptor(facturaExportacion.getReceptor(), invoice);    	
 
-    	validateValues(facturaExportacion, error);
-    	
-    	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
-    	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
-    	invoiceElectronic.setei_ValidationStatus("01");
-    	if (error.length() > 0) {
-    		invoiceElectronic.seterrMsgIntern(error.toString());
-    		invoiceElectronic.setei_ValidationStatus("02");
-        	invoiceElectronic.saveEx();
-    		return error.toString();
-    	}    		
-    	
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String json = objectMapper.writeValueAsString(facturaExportacion);
+		try {
+			//Durch InvoiceZeilen laufen
+			for (MInvoiceLine invoiceLine:invoice.getLines()) {    		
+				int numItem = invoiceLine.getLine();
+				BigDecimal cantidad = invoiceLine.getQtyInvoiced();
+				String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
+				//String codTributo = "20";
+				ArrayList<String> tributosItems = new ArrayList<String>();
+				tributosItems.add("C3");
 
-    	//String newjson = "{\"nit\":\"FFFQQQ\",\"nrc\":null,\"nombre\":null,\"codActividad\":\"OK\",\"descActividad\":null,\"nombreComercial\":null,\"tipoEstablecimiento\":null,\"direccion\":null,\"telefono\":null,\"correo\":null,\"codEstableMH\":null,\"codEstable\":null,\"codPuntoVentaMH\":null,\"codPuntoVenta\":null}";
-    	//Emisor newEmisor= objectMapper.readValue(newjson, Emisor.class);
-    	//String newNIT = newEmisor.getNit();
-    	invoiceElectronic.setjson(json);
-    	invoiceElectronic.saveEx();
-    	log.config(json);
-    	System.out.println(json);
+
+				int uniMedida = 1;
+				String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
+				BigDecimal precioUni = invoiceLine.getPriceActual();
+				BigDecimal montoDescu = Env.ZERO;
+				BigDecimal ventaNoSuj = Env.ZERO;
+				BigDecimal ventaExenta = Env.ZERO;
+				BigDecimal ventaGravada = Env.ONEHUNDRED;
+				if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
+					ventaNoSuj = invoiceLine.getLineNetAmt();
+				if (!invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
+					ventaExenta = invoiceLine.getLineNetAmt();
+				if (!invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
+					ventaGravada = invoiceLine.getLineNetAmt(); 
+				BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
+				CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem,  cantidad, codigo, uniMedida, 	descripcion, 
+						precioUni, montoDescu,  ventaGravada, tributosItems, noGravado); 
+				cuerpoDocumentoItem.validateValues();
+				facturaExportacion.getCuerpoDocumento().add(cuerpoDocumentoItem);
+			}  		
+		}
+		catch (Exception e){
+			error.append(e);
+		}
+
+		validateValues(facturaExportacion, error);
+
+		X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
+		invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
+		invoiceElectronic.setei_ValidationStatus("01");if (error.length() > 0) {
+			invoiceElectronic.seterrMsgIntern(error.toString());
+			invoiceElectronic.setei_ValidationStatus("02");
+			invoiceElectronic.saveEx();
+			return error.toString();
+		}    
+
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		String json = objectMapper.writeValueAsString(facturaExportacion);
+
+		invoiceElectronic.setjson(json);
+		invoiceElectronic.saveEx();
+		log.config(json);
+		if (isSaveInHistoric()) {
+			//String directory = "C:\\Users\\SHW_User\\Documents\\Json\\"
+			//		+ invoice.getDocumentNo() + ".json";
+
+
+
+			writeToFile(json, invoice);
+		}
+		System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
+
 		return "";
 	}
 
@@ -334,4 +343,30 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 			}
 		}
 	}
+	
+	private void writeToFile (String json, MInvoice invoice)
+	{
+		try
+		{
+			Path path = Paths.get(MSysConfig.getValue("EI_PATH") + "/" + invoice.getDateAcct().toString().substring(0, 10) + "/");
+			Files.createDirectories(path);
+			//java.nio.file.Files;
+			Files.createDirectories(path);
+			String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
+			File out = new File (filename);
+			Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
+			fw.write(json);
+			fw.flush ();
+			fw.close ();
+			float size = out.length();
+			size /= 1024;
+			log.info(out.getAbsolutePath() + " - " + size + " kB");
+	    	System.out.println("Printed To: " + filename);
+		}
+		catch (Exception ex)
+		{
+			throw new RuntimeException(ex);
+		}
+	}
+
 }

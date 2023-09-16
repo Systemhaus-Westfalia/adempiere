@@ -66,12 +66,12 @@ public String validateValues() {
 	}	
 
 	if(getTotalGravada()==BigDecimal.ZERO) {
-		if ( getIvaPerci1().compareTo(BigDecimal.ZERO) == 1 )
+		if ( (getIvaPerci1()==null) || (getIvaPerci1().compareTo(BigDecimal.ZERO) == 1) )
 			return VALIDATION_TOTALGRAVADA_IVAPERC1;
 	} 
 
 	if(getTotalGravada()==BigDecimal.ZERO) {
-		if ( getIvaRete1().compareTo(BigDecimal.ZERO) == 1 )
+		if ( (getIvaPerci1()==null) ||  (getIvaRete1().compareTo(BigDecimal.ZERO) == 1) )
 			return VALIDATION_TOTALGRAVADA_IVARETE1;
 	} 
 

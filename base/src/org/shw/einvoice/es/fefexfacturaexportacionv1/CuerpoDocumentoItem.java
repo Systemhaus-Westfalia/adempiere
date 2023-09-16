@@ -70,7 +70,7 @@ public class CuerpoDocumentoItem {
 		if(getNoGravado()==BigDecimal.ZERO) {
 			if (getPrecioUni()== null)
 				return VALIDATION_PRECIOUNI_IS_NULL;
-			if ( (getTributos().size()!=1) || (getTributos().get(0) !="C3"))
+			if ( (getTributos()==null) || (getTributos().size()!=1) || (getTributos().get(0) !="C3"))
 				return VALIDATION_TRIBUTOS;
 		} 
 		

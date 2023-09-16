@@ -84,6 +84,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	{	
 		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
+		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
@@ -103,6 +104,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
 				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
 			error.append("el documento no es Credito Fiscal");
+			System.out.println("el documento no es Credito Fiscal");
 			return error.toString();
 		}
 		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();
@@ -143,7 +145,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
     	    	
     	//Durch InvoiceZeilen laufen
 		try {
-    	for (MInvoiceLine invoiceLine:invoice.getLines()) {    		
+    	for (MInvoiceLine invoiceLine:invoice.getLines()) {    
+			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );		
     		int numItem = invoiceLine.getLine();
     		int tipoItem = 2;
     		String numeroDocumento = numeroControl;
@@ -174,6 +177,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
     				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, tributosItems, psv, noGravado); 
     		cuerpoDocumentoItem.validateValues();
     		comprobanteCreditoFiscal.getCuerpoDocumento().add(cuerpoDocumentoItem);
+			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
     	}  
 	}
 		catch (Exception e)
@@ -256,8 +260,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		receptor.setNit(partner.getTaxID().replace("-", ""));
 		receptor.setNrc(StringUtils.leftPad(partner.getDUNS().trim().replace("-", ""), 8,"0"));
 		receptor.setNombre(partner.getName());
-		receptor.setCodActividad(partner.getI_E_Activity().getValue());
-		receptor.setDescActividad(partner.getI_E_Activity().getName());
+		receptor.setCodActividad(partner.getE_Activity().getValue());
+		receptor.setDescActividad(partner.getE_Activity().getName());
 		String departamento = "";
 		String municipio = "";
 		String complemento = "";

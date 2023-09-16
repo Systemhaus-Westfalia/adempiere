@@ -472,6 +472,9 @@ public interface I_C_BPartner
 
     /** Column name E_Activity_ID */
     public static final String COLUMNNAME_E_Activity_ID = "E_Activity_ID";
+    
+    public org.adempiere.core.domains.models.I_E_Activity getE_Activity() throws RuntimeException;
+
 
 	/** Set CAT-019 Código de Actividad Económica	  */
 	public void setE_Activity_ID (int E_Activity_ID);

@@ -825,7 +825,7 @@ public class X_C_BPartner extends PO implements I_C_BPartner, I_Persistent
 	
 
 
-	public org.adempiere.core.domains.models.I_E_Activity getI_E_Activity() throws RuntimeException
+	public org.adempiere.core.domains.models.I_E_Activity getE_Activity() throws RuntimeException
     {
 		return (org.adempiere.core.domains.models.I_E_Activity)MTable.get(getCtx(), org.adempiere.core.domains.models.I_E_Activity.Table_Name)
 			.getPO(getE_Activity_ID(), get_TrxName());	}

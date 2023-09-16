@@ -64,6 +64,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 	List<MInvoiceTax> invoiceTaxes = null;
 	BigDecimal zero = new BigDecimal(0.00);
 	StringBuffer error = new StringBuffer();
+	String absDirectory = "";
 	@Override
 	protected void prepare()
 	{
@@ -73,7 +74,10 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 	@Override
 	protected String doIt() throws Exception
 	{
+
+		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
+    	System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
@@ -90,7 +94,9 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
 				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
-			error.append("el documento no es Factura");
+			error.append("el documento no es Factura de Exportacion");
+
+	    	System.out.println("el documento no es Factura de Exportacion");
 			return error.toString();
 		}
 		FacturaExportacion facturaExportacion = new FacturaExportacion();
@@ -130,7 +136,9 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 
 		try {
 			//Durch InvoiceZeilen laufen
-			for (MInvoiceLine invoiceLine:invoice.getLines()) {    		
+			for (MInvoiceLine invoiceLine:invoice.getLines()) {
+
+		    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
 				int numItem = invoiceLine.getLine();
 				BigDecimal cantidad = invoiceLine.getQtyInvoiced();
 				String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
@@ -157,40 +165,44 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 						precioUni, montoDescu,  ventaGravada, tributosItems, noGravado); 
 				cuerpoDocumentoItem.validateValues();
 				facturaExportacion.getCuerpoDocumento().add(cuerpoDocumentoItem);
+
+		    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
 			}  		
 		}
 		catch (Exception e){
 			error.append(e);
 		}
 
+    	System.out.println("Start validateValues");
 		validateValues(facturaExportacion, error);
+    	System.out.println("Start Save W_Invoiceelectronic");
+    	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
+    	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
+    	invoiceElectronic.setei_ValidationStatus("01");
+    	if (error.length() > 0) {
+    		invoiceElectronic.seterrMsgIntern(error.toString());
+    		invoiceElectronic.setei_ValidationStatus("02");
+        	invoiceElectronic.saveEx();
+    		return error.toString();
+    	}    
+	
+    	
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	String json = objectMapper.writeValueAsString(facturaExportacion);
 
-		X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
-		invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
-		invoiceElectronic.setei_ValidationStatus("01");if (error.length() > 0) {
-			invoiceElectronic.seterrMsgIntern(error.toString());
-			invoiceElectronic.setei_ValidationStatus("02");
-			invoiceElectronic.saveEx();
-			return error.toString();
-		}    
-
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		String json = objectMapper.writeValueAsString(facturaExportacion);
-
-		invoiceElectronic.setjson(json);
-		invoiceElectronic.saveEx();
-		log.config(json);
-		if (isSaveInHistoric()) {
-			//String directory = "C:\\Users\\SHW_User\\Documents\\Json\\"
-			//		+ invoice.getDocumentNo() + ".json";
-
-
-
-			writeToFile(json, invoice);
-		}
-		System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-
+       	invoiceElectronic.setjson(json);
+    	invoiceElectronic.saveEx();
+    	log.config(json);
+    	if (isSaveInHistoric()) {
+    		Path rootpath = Paths.get(absDirectory);
+    		if (!Files.exists(rootpath)) {
+    			invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
+    		}
+    		writeToFile(json, invoice);
+    	}
+		
+    	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
+    	System.out.println(json);	    	
 		return "";
 	}
 
@@ -198,6 +210,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 
 	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
 
+    	System.out.println("Start fillIdentification");
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);
 		identificacion.setTipoModelo(1);
@@ -209,10 +222,13 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		identificacion.setHorEmi("00:00:00");
 		identificacion.setTipoMoneda("USD");
 		identificacion.setAmbiente("00");
+    	System.out.println("fillIdentification Finished");
 
 	}
 
 	private void fillemisor(Emisor emisor, MInvoice invoice) {
+
+    	System.out.println("fillemisor");
 		emisor.setNit(orgInfo.getTaxID().replace("-", ""));
 		emisor.setNrc(StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
 		emisor.setNombre(client.getName()); 
@@ -229,10 +245,12 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		emisor.setCorreo(client.getEMail());
 		emisor.setTipoItemExpor(2);
 		emisor.setCodPuntoVentaMH(null);
+    	System.out.println("fillemisor Finished");
 	}
 
 	private void fillReceptor(Receptor receptor, MInvoice invoice) {
 
+    	System.out.println("Start fillemisor");
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 				String codPais = "";
 		String nombrePais = "";
@@ -260,7 +278,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		else
 			receptor.setNumDocumento(partner.getDUNS());
 		receptor.setNombreComercial(partner.getName());
-		receptor.setDescActividad(partner.getDescription());
+		receptor.setDescActividad(partner.getE_Activity().getName());
 		receptor.setTipoPersona(Integer.valueOf(partner.getE_BPType().getValue()));
 		for (MBPartnerLocation partnerLocation : MBPartnerLocation.getForBPartner(getCtx(), partner.getC_BPartner_ID(), get_TrxName())){
 			if (partnerLocation.isBillTo()) {
@@ -279,13 +297,15 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		receptor.setComplemento(complemento);
 		receptor.setCorreo(partner.getEMail());
 		receptor.setTelefono(partner.getPhone());
+    	System.out.println("fillemisor Finished");
 	}
 
 
 
 	private void fillResumen(Resumen resumen, MInvoice invoice) {
 		
-		
+
+    	System.out.println("Start fillResumenr");
 		BigDecimal totalGravada = null;
 	    String totalLetras = Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
 	    
@@ -312,6 +332,8 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		resumen.setTotalGravada(invoice.getGrandTotal());
 		resumen.setTotalPagar(invoice.getGrandTotal());
 		resumen.setTotalLetras(totalLetras);
+
+    	System.out.println("fillResumenr Finished");
 	}
 			
 
@@ -319,22 +341,27 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 
 	private void validateValues(FacturaExportacion facturaExportacion, StringBuffer error) {
 		String result = "";
+
+    	System.out.println("Start Identificacion().validateValues");
 		if (facturaExportacion.getIdentificacion() != null) {
 			result = facturaExportacion.getIdentificacion().validateValues();		
 			if (!result.equals(VALIDATION_RESULT_OK))
 				error.append(result);
 		}
+    	System.out.println("Start Receptor().validateValues");
 		if (facturaExportacion.getReceptor() != null) {
 			result = facturaExportacion.getReceptor().validateValues();
 			if (!result.equals(VALIDATION_RESULT_OK))
 				error.append(result);			
 		}
 
+    	System.out.println("Start Emisor().validateValues");
 		if (facturaExportacion.getEmisor() != null) {
 			result = facturaExportacion.getEmisor().validateValues();
 			if (!result.equals(VALIDATION_RESULT_OK))
 				error.append(result);			
 		}
+    	System.out.println("Start CuerpoDocumento().validateValues");
 		if (facturaExportacion.getCuerpoDocumento() != null) {
 			for (CuerpoDocumentoItem cuerpoDocumentoItem :facturaExportacion.getCuerpoDocumento()) {
 				result = cuerpoDocumentoItem.validateValues();
@@ -342,13 +369,18 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 					error.append(result);			
 			}
 		}
+
+    	System.out.println("ValidateValues Finished");
 	}
 	
 	private void writeToFile (String json, MInvoice invoice)
 	{
 		try
 		{
-			Path path = Paths.get(MSysConfig.getValue("EI_PATH") + "/" + invoice.getDateAcct().toString().substring(0, 10) + "/");
+			absDirectory = (absDirectory.endsWith("/")
+					|| absDirectory.endsWith("\\"))
+					? absDirectory:absDirectory + "/";
+			Path path = Paths.get(absDirectory + invoice.getDateAcct().toString().substring(0, 10) + "/");
 			Files.createDirectories(path);
 			//java.nio.file.Files;
 			Files.createDirectories(path);
@@ -361,7 +393,8 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 			float size = out.length();
 			size /= 1024;
 			log.info(out.getAbsolutePath() + " - " + size + " kB");
-	    	System.out.println("Printed To: " + filename);
+			System.out.println("Printed To: " + filename);
+									
 		}
 		catch (Exception ex)
 		{

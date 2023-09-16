@@ -14,6 +14,7 @@ import org.shw.einvoice.es.util.pojo.TributosItem;
  */
 public class Resumen {
 	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_TOTALGRAVADA_IS_NULL  = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'totlaGravada' no debe ser = null";
 	static final String VALIDATION_PLAZO_IS_NULL         = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'plazo' de pagos no debe ser ='null'";
 	static final String VALIDATION_PERIODO_IS_NULL       = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'periodo' de pagos no debe ser ='null'";
 	static final String VALIDATION_TOTALGRAVADA_IVAPERC1 = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'ivaPerci1' no debe ser mayor que cero";
@@ -49,13 +50,17 @@ public Resumen() {
  * Validate the Schema conditions
  */
 public String validateValues() {
-	if(getTotalGravada()==BigDecimal.ZERO) {
-		if ( getIvaPerci1().compareTo(BigDecimal.ZERO) == 1 )
+	if(getTotalGravada()==null) {
+		return VALIDATION_TOTALGRAVADA_IS_NULL;
+	}
+
+	if(getTotalGravada().compareTo(BigDecimal.ZERO)==0) {
+		if ( (getIvaPerci1()==null) || (getIvaPerci1().compareTo(BigDecimal.ZERO) == 1) )
 			return VALIDATION_TOTALGRAVADA_IVAPERC1;
 	} 
 
-	if(getTotalGravada()==BigDecimal.ZERO) {
-		if ( getIvaRete1().compareTo(BigDecimal.ZERO) == 1 )
+	if(getTotalGravada().compareTo(BigDecimal.ZERO)==0) {
+		if (  (getIvaRete1()==null) || (getIvaRete1().compareTo(BigDecimal.ZERO) == 1) )
 			return VALIDATION_TOTALGRAVADA_IVARETE1;
 	} 
 	return VALIDATION_RESULT_OK;

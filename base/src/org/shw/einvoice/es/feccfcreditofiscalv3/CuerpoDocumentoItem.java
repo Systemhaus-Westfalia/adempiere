@@ -90,7 +90,7 @@ public class CuerpoDocumentoItem {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
-		if(getVentaGravada()==BigDecimal.ZERO) {
+		if( (getVentaGravada()!=null) && (getVentaGravada().compareTo(BigDecimal.ZERO)==0) ) {
 			if (getTributos()!=null)
 				return VALIDATION_TRIBUTOS_NOT_NULL;
 		} else {

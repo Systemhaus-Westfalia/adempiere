@@ -65,17 +65,17 @@ public String validateValues() {
 			return VALIDATION_PERIODO_IS_NULL;
 	}	
 
-	if(getTotalGravada()==BigDecimal.ZERO) {
+	if( (getTotalGravada()!=null) && (getTotalGravada().compareTo(BigDecimal.ZERO)==0) ) {
 		if ( (getIvaPerci1()==null) || (getIvaPerci1().compareTo(BigDecimal.ZERO) == 1) )
 			return VALIDATION_TOTALGRAVADA_IVAPERC1;
 	} 
 
-	if(getTotalGravada()==BigDecimal.ZERO) {
+	if( (getTotalGravada()!=null) && (getTotalGravada().compareTo(BigDecimal.ZERO)==0) ) {
 		if ( (getIvaPerci1()==null) ||  (getIvaRete1().compareTo(BigDecimal.ZERO) == 1) )
 			return VALIDATION_TOTALGRAVADA_IVARETE1;
 	} 
 
-	if(getTotalPagar()==BigDecimal.ZERO) {
+	if( (getTotalPagar()!=null) && (getTotalPagar().compareTo(BigDecimal.ZERO)==0) ) {
 		if ( getCondicionOperacion() != 1 )
 			return VALIDATION_TOTALGRAVADA_CONDOP;
 	}

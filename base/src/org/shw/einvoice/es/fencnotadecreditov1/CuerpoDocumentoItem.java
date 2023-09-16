@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class CuerpoDocumentoItem {
 	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_VENTAGRAVADA_IS_NULL     = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'ventaGravada' no debe ser = null";
 	static final String VALIDATION_TRIBUTOS_NOT_NULL        = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='null'";
 	static final String VALIDATION_TRIBUTOS_EMPTY           = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no debe ser vacío";
 	static final String VALIDATION_UDM_NOT_99               = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'uniMedida' debe ser =99";
@@ -85,7 +86,11 @@ public class CuerpoDocumentoItem {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
-		if(getVentaGravada()==BigDecimal.ZERO) {
+		if(getVentaGravada()==null) {
+			return VALIDATION_VENTAGRAVADA_IS_NULL;
+		}
+
+		if(getVentaGravada().compareTo(BigDecimal.ZERO)==0) {
 			if (getTributos()!=null)
 				return VALIDATION_TRIBUTOS_NOT_NULL;
 		} else {

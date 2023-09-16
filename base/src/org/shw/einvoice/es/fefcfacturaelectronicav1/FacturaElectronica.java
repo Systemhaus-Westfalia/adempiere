@@ -20,6 +20,7 @@ public class FacturaElectronica {
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 
 	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_RESUMEN_OR_MONTO_IS_NULL   = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'getResumen() y getMontoTotalOperacion()' no debe ser ='null'";
 	static final String VALIDATION_TIPODOCUMENTO_IS_NULL      = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'tipoDocumento' no debe ser ='null'";
 	static final String VALIDATION_NUMDOCUMENTO_IS_NULL       = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'numDocumento' no debe ser ='null'";
 	static final String VALIDATION_NOMBRE_IS_NULL             = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'NOMBRE' no debe ser ='null'";
@@ -63,6 +64,10 @@ public class FacturaElectronica {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
+		if( (getResumen()==null) || (getResumen().getMontoTotalOperacion()==null) ) {
+			return VALIDATION_RESUMEN_OR_MONTO_IS_NULL;
+		}
+		
 		if(getResumen().getMontoTotalOperacion().compareTo(BigDecimal.valueOf(MINIMUM_TOTOTAL_OF_OPERATION))==1) {
 			if ( getReceptor().getTipoDocumento()== null)
 				return VALIDATION_TIPODOCUMENTO_IS_NULL;

@@ -18,6 +18,7 @@ public class FacturaExportacion {
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 
 	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_RESUMEN_OR_MONTO_IS_NULL  = "Documento: Factura, clase: FacturaExportacion. Validacion falló: valor de 'getResumen() y getMontoTotalOperacion()' no debe ser ='null'";
 	static final String VALIDATION_CORREO_IS_NULL            = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'receptor.correo' no debe ser ='null'";
 	static final String VALIDATION_OTROSDOCUMENTOS_MAXITEMS  = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'otrosDocumentos' debe contemner entre 1 y " + 
 																OTROSDOCUMENTOS_MAXIMUM_ITEMS + " elementos";
@@ -51,6 +52,10 @@ public class FacturaExportacion {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
+
+		if( (getResumen()==null) || (getResumen().getMontoTotalOperacion()==null) ) {
+			return VALIDATION_RESUMEN_OR_MONTO_IS_NULL;
+		}
 		
 		if(getResumen().getMontoTotalOperacion().compareTo(BigDecimal.valueOf(10000-1))==1) {
 			if ( getReceptor().getCorreo()== null)

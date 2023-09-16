@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class CuerpoDocumentoItem {
 	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_NOGRAVADO_IS_NULL = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'noGravado' no debe ser ='null'";
 	static final String VALIDATION_PRECIOUNI_IS_NULL = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'precioUni' no debe ser ='null'";
 	static final String VALIDATION_TRIBUTOS          = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='C3'";
 	
@@ -67,7 +68,11 @@ public class CuerpoDocumentoItem {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
-		if(getNoGravado()==BigDecimal.ZERO) {
+		if(getNoGravado()==null) {
+			return VALIDATION_NOGRAVADO_IS_NULL;
+		}
+
+		if(getNoGravado().compareTo(BigDecimal.ZERO)==0) {
 			if (getPrecioUni()== null)
 				return VALIDATION_PRECIOUNI_IS_NULL;
 			if ( (getTributos()==null) || (getTributos().size()!=1) || (getTributos().get(0) !="C3"))

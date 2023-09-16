@@ -43,7 +43,7 @@ public class Retencion {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
-		if( (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
+		if( (getCuerpoDocumento()==null) ||  (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
 			return VALIDATION_CUERPODOCUMENTO_MAX_ITEMS;
 		}
 		

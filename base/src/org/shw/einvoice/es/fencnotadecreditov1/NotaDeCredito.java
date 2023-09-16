@@ -47,7 +47,67 @@ public class NotaDeCredito {
 	public Identificacion getIdentificacion() {
 		return identificacion;
 	}
+
+	public void setIdentificacion(Identificacion identificacion) {
+		this.identificacion = identificacion;
+	}
 	
+	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
+		return documentoRelacionado;
+	}
+
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+		this.documentoRelacionado = documentoRelacionado;
+	}
+
+	public Receptor getReceptor() {
+		return receptor;
+	}
+
+	public void setReceptor(Receptor receptor) {
+		this.receptor = receptor;
+	}
+
+	public VentaTercero getVentaTercero() {
+		return ventaTercero;
+	}
+
+	public void setVentaTercero(VentaTercero ventaTercero) {
+		this.ventaTercero = ventaTercero;
+	}
+
+	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
+		return cuerpoDocumento;
+	}
+
+	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+		this.cuerpoDocumento = cuerpoDocumento;
+	}
+
+	public Resumen getResumen() {
+		return resumen;
+	}
+
+	public void setResumen(Resumen resumen) {
+		this.resumen = resumen;
+	}
+
+	public Extension getExtension() {
+		return extension;
+	}
+
+	public void setExtension(Extension extension) {
+		this.extension = extension;
+	}
+
+	public List<ApendiceItem> getApendice() {
+		return apendice;
+	}
+
+	public void setApendice(List<ApendiceItem> apendice) {
+		this.apendice = apendice;
+	}
+
 	/**
 	 * @param args
 	 */

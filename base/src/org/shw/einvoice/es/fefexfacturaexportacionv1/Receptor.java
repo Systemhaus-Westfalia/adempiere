@@ -14,6 +14,7 @@ import org.shw.einvoice.es.util.pojo.Direccion;
  */
 public class Receptor {
 	static final String VALIDATION_RESULT_OK = "OK";
+	static final String VALIDATION_CODPAIS_IS_NULL             = "Documento: Factura de Exportacion, clase: Receptor. Validacion falló: valor de 'codPais' no debe ser = null";
 	static final String VALIDATION_NUMDOCUMENTO_PATTERN_FAILED = "Documento: Factura de Exportacion, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 
 	String nombre;
@@ -57,6 +58,13 @@ public class Receptor {
 			if (!patternOK)
 				return VALIDATION_NUMDOCUMENTO_PATTERN_FAILED;
 		}
+		
+
+		// codPais must have a value
+		if (getCodPais()== null) {
+			return VALIDATION_CODPAIS_IS_NULL;
+		}
+		
 		return VALIDATION_RESULT_OK;
 	}
 

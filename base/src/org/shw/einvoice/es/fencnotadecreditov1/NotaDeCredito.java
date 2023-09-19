@@ -20,7 +20,7 @@ public class NotaDeCredito {
 	
 	IdentificacionNotaDeCredito identificacion;
 	List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionado;
-	Emisor emisor;
+	EmisorNotaDeCredito emisor;
 	Receptor receptor;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
@@ -35,7 +35,7 @@ public class NotaDeCredito {
 	public NotaDeCredito() {
 		this.identificacion       = new IdentificacionNotaDeCredito();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemNotaDeCredito>();
-		this.emisor               = new Emisor();
+		this.emisor               = new EmisorNotaDeCredito();
 		this.receptor             = new Receptor();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
@@ -62,11 +62,11 @@ public class NotaDeCredito {
 		this.documentoRelacionado = documentoRelacionado;
 	}
 
-	public Emisor getEmisor() {
+	public EmisorNotaDeCredito getEmisor() {
 		return emisor;
 	}
 
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorNotaDeCredito emisor) {
 		this.emisor = emisor;
 	}
 

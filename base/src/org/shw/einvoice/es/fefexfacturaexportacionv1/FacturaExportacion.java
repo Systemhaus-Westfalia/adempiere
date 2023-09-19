@@ -26,7 +26,7 @@ public class FacturaExportacion {
 																CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
 	IdentificacionFacturaExportacion identificacion;
-	Emisor emisor;
+	EmisorFacturaExportacion emisor;
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
@@ -39,7 +39,7 @@ public class FacturaExportacion {
 	 */
 	public FacturaExportacion() {
 		this.identificacion       = new IdentificacionFacturaExportacion();
-		this.emisor				  = new Emisor();
+		this.emisor				  = new EmisorFacturaExportacion();
 		this.receptor             = new Receptor();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
@@ -92,14 +92,14 @@ public class FacturaExportacion {
 	/**
 	 * @return the emisor
 	 */
-	public Emisor getEmisor() {
+	public EmisorFacturaExportacion getEmisor() {
 		return emisor;
 	}
 
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorFacturaExportacion emisor) {
 		this.emisor = emisor;
 	}
 

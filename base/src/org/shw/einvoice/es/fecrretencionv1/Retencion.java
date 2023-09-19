@@ -19,7 +19,7 @@ public class Retencion {
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Retencion, clase: Retencion. Validacion falló: valor de 'cuerpoDocumento' debe  contener de 1 a 500 elementos";
 	
 	IdentificacionRetencion identificacion;
-	Emisor emisor;
+	EmisorRetencion emisor;
 	Receptor receptor;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
@@ -31,7 +31,7 @@ public class Retencion {
 	 */
 	public Retencion() {
 		this.identificacion       = new IdentificacionRetencion();
-		this.emisor               = new Emisor();
+		this.emisor               = new EmisorRetencion();
 		this.receptor             = new Receptor();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
@@ -68,14 +68,14 @@ public class Retencion {
 	/**
 	 * @return the emisor
 	 */
-	public Emisor getEmisor() {
+	public EmisorRetencion getEmisor() {
 		return emisor;
 	}
 
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorRetencion emisor) {
 		this.emisor = emisor;
 	}
 

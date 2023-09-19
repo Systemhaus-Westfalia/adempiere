@@ -13,7 +13,7 @@ public class Anulacion {
 	static final String VALIDATION_CODIGOGENERACIONR_IS_NULL = "Documento: Anulacion, clase: Anulacion. Validacion falló: valor de 'codigoGeneracionR' no deber ser ='null'";
 
 	IdentificacionAnulacion identificacion;
-	Emisor emisor;
+	EmisorAnulacion emisor;
 	Documento documento;
 	Motivo motivo;
 
@@ -22,7 +22,7 @@ public class Anulacion {
 	 */
 	public Anulacion() {
 		this.identificacion = new IdentificacionAnulacion();
-		this.emisor         = new Emisor();
+		this.emisor         = new EmisorAnulacion();
 		this.documento      = new Documento();
 		this.motivo         = new Motivo();
 	}
@@ -64,7 +64,7 @@ public String validateValues() {
 	/**
 	 * @return the emisor
 	 */
-	public Emisor getEmisor() {
+	public EmisorAnulacion getEmisor() {
 		return emisor;
 	}
 
@@ -72,7 +72,7 @@ public String validateValues() {
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorAnulacion emisor) {
 		this.emisor = emisor;
 	}
 

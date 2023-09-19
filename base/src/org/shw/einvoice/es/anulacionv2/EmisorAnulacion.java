@@ -1,19 +1,16 @@
-package org.shw.einvoice.es.fefcfacturaelectronicav1;
+package org.shw.einvoice.es.anulacionv2;
 
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.Direccion;
-
-public class Emisor {
+/**
+ * Just for class Anulacion
+ */
+public class EmisorAnulacion {
 
 	String nit;
-	String nrc;
 	String nombre;
-	String codActividad;
-	String descActividad;
-	String nombreComercial=null;  // null possible
 	String tipoEstablecimiento;
-    Direccion direccion;
+	String nomEstablecimiento=null; // null permitted
     String telefono;
     String correo;
     String codEstableMH;
@@ -25,7 +22,7 @@ public class Emisor {
 	/**
 	 * 
 	 */
-	public Emisor() {
+	public EmisorAnulacion() {
 	}
 
 
@@ -49,31 +46,7 @@ public class Emisor {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in (POJO).Emisor.setNit()");
-	}
-
-
-	/**
-	 * @return the nrc
-	 */
-	public String getNrc() {
-		return nrc;
-	}
-
-
-	/**
-	 * @param nrc the nrc to set<br>
-	 * The parameter is validated.<br>
-	 * "pattern" : "^[0-9]{1,8}$"
-	 */
-	public void setNrc(String nrc) {
-		final String PATTERN = "^[0-9]{1,8}$";
-		boolean patternOK = (nrc!=null) && Pattern.matches(PATTERN, nrc);  
-		
-		if(patternOK)
-			this.nrc = nrc;
-		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in (POJO).Emisor.setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in Anulacion.Emisor.setNit()");
 	}
 
 
@@ -88,92 +61,19 @@ public class Emisor {
 	/**
 	 * @param nombre the nombre to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 3, "maxLength" : 200
+	 * "minLength" : 3, "maxLength" : 250
 	 */
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 3;
-		final int MAXLENGTH = 200;
+		final int MAXLENGTH = 250;
 		int length = nombre==null?0:nombre.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in (POJO).Emisor.setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in Anulacion.Emisor.setNombre()");
 	}
 
-
-	/**
-	 * @return the codActividad
-	 */
-	public String getCodActividad() {
-		return codActividad;
-	}
-
-
-	/**
-	 * @param codActividad the codActividad to set<br>
-	 * The parameter is validated.<br>
-	 * "pattern" : "^[0-9]{2,6}$"
-	 */
-	public void setCodActividad(String codActividad) {
-		final String PATTERN = "^[0-9]{2,6}$";
-		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
-		
-		if(patternOK)
-			this.codActividad = codActividad;
-		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in (POJO).Emisor.setCodActividad()");
-	}
-
-
-	/**
-	 * @return the descActividad
-	 */
-	public String getDescActividad() {
-		return descActividad;
-	}
-
-
-	/**
-	 * @param descActividad the descActividad to set<br>
-	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 150
-	 */
-	public void setDescActividad(String descActividad) {
-		final int MINLENGTH = 1;
-		final int MAXLENGTH = 150;
-		int length = descActividad==null?0:descActividad.length();
-		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
-			this.descActividad = descActividad;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in (POJO).Emisor.setDescActividad()");
-	}
-
-
-	/**
-	 * @return the nombreComercial
-	 */
-	public String getNombreComercial() {
-		return nombreComercial;
-	}
-
-
-	/**
-	 * @param nombreComercial the nombreComercial to set<br>
-	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 150; null also possible
-	 */
-	public void setNombreComercial(String nombreComercial) {
-		final int MINLENGTH = 1;
-		final int MAXLENGTH = 150;
-		int length = nombreComercial==null?0:nombreComercial.length();
-		
-		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
-			this.nombreComercial = nombreComercial;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in (POJO).Emisor.setNombreComercial()");
-	}
 
 
 	/**
@@ -193,23 +93,32 @@ public class Emisor {
 		if (tipoEstablecimiento.compareTo("01")==0 || tipoEstablecimiento.compareTo("02")==0 || tipoEstablecimiento.compareTo("04")==0 || tipoEstablecimiento.compareTo("07")==0 || tipoEstablecimiento.compareTo("20")==0)
 			this.tipoEstablecimiento = tipoEstablecimiento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in (POJO).Emisor.setTipoEstablecimiento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in Anulacion.Emisor.setTipoEstablecimiento()");
 	}
 
 
 	/**
-	 * @return the direccion
+	 * @return the nomEstablecimiento
 	 */
-	public Direccion getDireccion() {
-		return direccion;
+	public String getNomEstablecimiento() {
+		return nomEstablecimiento;
 	}
 
 
 	/**
-	 * @param direccion the direccion to set
+	 * @param nomEstablecimiento the nomEstablecimiento to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 3, "maxLength" : 150; null also possible
 	 */
-	public void setDireccion(Direccion direccion) {
-		this.direccion = direccion;
+	public void setNomEstablecimiento(String nomEstablecimiento) {
+		final int MINLENGTH = 3;
+		final int MAXLENGTH = 150;
+		int length = nomEstablecimiento==null?0:nomEstablecimiento.length();
+		
+		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (nomEstablecimiento==null) )
+			this.nomEstablecimiento = nomEstablecimiento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'nomEstablecimiento' in Anulacion.Emisor.setNomEstablecimiento()");
 	}
 
 
@@ -224,17 +133,21 @@ public class Emisor {
 	/**
 	 * @param telefono the telefono to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 8, "maxLength" : 30
+	 * "minLength" : 8, "maxLength" : 26<br>
+	 * "pattern" : "^[0-9+;]{8,26}$"
 	 */
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
-		final int MAXLENGTH = 30;
+		final int MAXLENGTH = 26;
 		int length = telefono==null?0:telefono.length();
+
+		final String PATTERN = "^[0-9+;]{8,26}$";
+		boolean patternOK = (telefono!=null) && Pattern.matches(PATTERN, telefono);  
 		
-		if(length>=MINLENGTH && length<=MAXLENGTH)
+		if(length>=MINLENGTH && length<=MAXLENGTH && patternOK)
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in (POJO).Emisor.setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in Anulacion.Emisor.setTelefono()");
 	}
 
 
@@ -259,7 +172,7 @@ public class Emisor {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in (POJO).Emisor.setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in Anulacion.Emisor.setCorreo()");
 	}
 
 
@@ -284,7 +197,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstableMH==null) )
 			this.codEstableMH = codEstableMH;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codEstableMH' in (POJO).Emisor.setCodEstableMH()");
+	        throw new IllegalArgumentException("Wrong parameter 'codEstableMH' in Anulacion.Emisor.setCodEstableMH()");
 	}
 
 
@@ -309,7 +222,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codEstable==null) )
 			this.codEstable = codEstable;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codEstable' in (POJO).Emisor.setCodEstable()");
+	        throw new IllegalArgumentException("Wrong parameter 'codEstable' in Anulacion.Emisor.setCodEstable()");
 	}
 
 
@@ -334,7 +247,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVentaMH==null) )
 			this.codPuntoVentaMH = codPuntoVentaMH;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVentaMH' in (POJO).Emisor.setCodPuntoVentaMH()");
+	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVentaMH' in Anulacion.Emisor.setCodPuntoVentaMH()");
 	}
 
 
@@ -359,7 +272,7 @@ public class Emisor {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codPuntoVenta==null) )
 			this.codPuntoVenta = codPuntoVenta;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVenta' in (POJO).Emisor.setCodPuntoVenta()");
+	        throw new IllegalArgumentException("Wrong parameter 'codPuntoVenta' in Anulacion.Emisor.setCodPuntoVenta()");
 	}
 
 

@@ -20,7 +20,7 @@ public class NotaDeDebito {
 	
 	IdentificacionNotaDeDebito identificacion;
 	List<DocumentoRelacionadoItemNotaDeDebito> documentoRelacionado;
-	Emisor emisor;
+	EmisorNotaDeDebito emisor;
 	Receptor receptor;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
@@ -35,7 +35,7 @@ public class NotaDeDebito {
 	public NotaDeDebito() {
 		this.identificacion       = new IdentificacionNotaDeDebito();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemNotaDeDebito>();
-		this.emisor               = new Emisor();
+		this.emisor               = new EmisorNotaDeDebito();
 		this.receptor             = new Receptor();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
@@ -59,11 +59,11 @@ public class NotaDeDebito {
 		this.documentoRelacionado = documentoRelacionado;
 	}
 
-	public Emisor getEmisor() {
+	public EmisorNotaDeDebito getEmisor() {
 		return emisor;
 	}
 
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorNotaDeDebito emisor) {
 		this.emisor = emisor;
 	}
 

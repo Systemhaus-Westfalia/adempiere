@@ -231,7 +231,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 
 	}
 	
-	private void fillemisor(Emisor emisor, MInvoice invoice) {
+	private void fillemisor(EmisorCreditoFiscal emisor, MInvoice invoice) {
 		emisor.setNit(orgInfo.getTaxID().replace("-", ""));
 		emisor.setNrc(StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
 		emisor.setNombre(client.getName()); 

@@ -11,7 +11,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public class Creditofiscalv3_SV {
 
-	 private Emisor 					emisor;
+	 private EmisorCreditoFiscal 					emisor;
 	 private String 					estado;
 	 private Resumen 					resumen;
 	 private String 					version;
@@ -120,10 +120,10 @@ public class Creditofiscalv3_SV {
 	public void setDocumentoRelacionadoItems(List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItems) {
 		this.documentoRelacionadoItems = documentoRelacionadoItems;
 	}
-	public Emisor getEmisor() {
+	public EmisorCreditoFiscal getEmisor() {
 		return emisor;
 	}
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorCreditoFiscal emisor) {
 		this.emisor = emisor;
 	}
 	public Receptor getReceptor() {

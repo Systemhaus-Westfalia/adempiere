@@ -226,7 +226,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 
 	}
 
-	private void fillemisor(Emisor emisor, MInvoice invoice) {
+	private void fillemisor(EmisorFacturaExportacion emisor, MInvoice invoice) {
 
     	System.out.println("fillemisor");
 		emisor.setNit(orgInfo.getTaxID().replace("-", ""));

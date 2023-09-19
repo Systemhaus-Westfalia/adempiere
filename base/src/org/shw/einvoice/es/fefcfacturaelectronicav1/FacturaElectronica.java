@@ -27,7 +27,7 @@ public class FacturaElectronica {
 	
 	IdentificacionFactura identificacion;
 	List<DocumentoRelacionadoItemFactura> documentoRelacionado = null;
-	Emisor emisor;
+	EmisorFactura emisor;
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
@@ -42,7 +42,7 @@ public class FacturaElectronica {
 	public FacturaElectronica() {
 		this.identificacion       = new IdentificacionFactura();
 		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
-		this.emisor               = new Emisor();
+		this.emisor               = new EmisorFactura();
 		this.receptor             = new Receptor();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
@@ -111,7 +111,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the emisor
 	 */
-	public Emisor getEmisor() {
+	public EmisorFactura getEmisor() {
 		return emisor;
 	}
 
@@ -119,7 +119,7 @@ public class FacturaElectronica {
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorFactura emisor) {
 		this.emisor = emisor;
 	}
 

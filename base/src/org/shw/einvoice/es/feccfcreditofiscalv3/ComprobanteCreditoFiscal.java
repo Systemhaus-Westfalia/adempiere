@@ -18,7 +18,7 @@ public class ComprobanteCreditoFiscal {
 	
 	IdentificacionCreditoFiscal identificacion;
 	List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionado = null;
-	Emisor emisor;
+	EmisorCreditoFiscal emisor;
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
@@ -33,7 +33,7 @@ public class ComprobanteCreditoFiscal {
 	public ComprobanteCreditoFiscal() {
 		this.identificacion       = new IdentificacionCreditoFiscal();
 		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();		
-		this.emisor               = new Emisor();
+		this.emisor               = new EmisorCreditoFiscal();
 		this.receptor             = new Receptor();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
@@ -87,7 +87,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the emisor
 	 */
-	public Emisor getEmisor() {
+	public EmisorCreditoFiscal getEmisor() {
 		return emisor;
 	}
 
@@ -95,7 +95,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorCreditoFiscal emisor) {
 		this.emisor = emisor;
 	}
 

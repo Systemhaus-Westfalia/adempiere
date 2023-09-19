@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.Direccion;
 
-public class Emisor {
+public class EmisorFacturaExportacion {
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_RECINTOFISCAL_NOT_NULL = "Documento: Factura de Exportacion, clase: Emisor. Validacion falló: valor de 'recintoFiscal' de pagos debe ser ='null'";
 	static final String VALIDATION_REGIMEN_NOT_NULL       = "Documento: Factura de Exportacion, clase: Emisor. Validacion falló: valor de 'regimen' de pagos debe ser ='null'";
@@ -31,7 +31,7 @@ public class Emisor {
 	/**
 	 * 
 	 */
-	public Emisor() {
+	public EmisorFacturaExportacion() {
 	}
 
 /**

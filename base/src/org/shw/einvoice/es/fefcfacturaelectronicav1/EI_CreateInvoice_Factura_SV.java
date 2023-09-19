@@ -230,7 +230,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 
 	}
 	
-	private void fillemisor(Emisor emisor, MInvoice invoice) {
+	private void fillemisor(EmisorFactura emisor, MInvoice invoice) {
 		System.out.println("Start fillEmisor");
 		emisor.setNit(orgInfo.getTaxID().replace("-", ""));
 		emisor.setNrc(StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));

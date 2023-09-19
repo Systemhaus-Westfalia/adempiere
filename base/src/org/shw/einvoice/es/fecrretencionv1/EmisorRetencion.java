@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.Direccion;
 
-public class Emisor {
+public class EmisorRetencion {
 
 	String nit;
 	String nrc;
@@ -24,7 +24,7 @@ public class Emisor {
 	/**
 	 * 
 	 */
-	public Emisor() {
+	public EmisorRetencion() {
 	}
 
 

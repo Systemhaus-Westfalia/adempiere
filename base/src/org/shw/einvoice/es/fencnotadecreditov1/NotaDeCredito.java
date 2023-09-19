@@ -18,7 +18,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  */
 public class NotaDeCredito {
 	
-	Identificacion identificacion;
+	IdentificacionNotaDeCredito identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado;
 	Receptor receptor;
 	VentaTercero ventaTercero = null;
@@ -32,7 +32,7 @@ public class NotaDeCredito {
 	 * No parameters
 	 */
 	public NotaDeCredito() {
-		this.identificacion       = new Identificacion();
+		this.identificacion       = new IdentificacionNotaDeCredito();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.receptor             = new Receptor();
 		//this.ventaTercero         = new VentaTercero();
@@ -44,11 +44,11 @@ public class NotaDeCredito {
 	/**
 	 * @return the identificacion
 	 */
-	public Identificacion getIdentificacion() {
+	public IdentificacionNotaDeCredito getIdentificacion() {
 		return identificacion;
 	}
 
-	public void setIdentificacion(Identificacion identificacion) {
+	public void setIdentificacion(IdentificacionNotaDeCredito identificacion) {
 		this.identificacion = identificacion;
 	}
 	

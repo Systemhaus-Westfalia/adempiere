@@ -102,7 +102,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
 		
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
-				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
+				!invoice.getC_DocType().getE_DocType().getValue().equals(IdentificacionCreditoFiscal.TIPO_DE_DOCUMENTO)) {
 			error.append("el documento no es Credito Fiscal");
 			System.out.println("el documento no es Credito Fiscal");
 			return error.toString();
@@ -216,7 +216,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		return "";
 	}
 
-	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
+	private void fillIdentification(IdentificacionCreditoFiscal identificacion, MInvoice invoice) {
 		
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);

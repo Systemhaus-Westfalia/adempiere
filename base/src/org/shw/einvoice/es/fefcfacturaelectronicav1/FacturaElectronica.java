@@ -26,7 +26,7 @@ public class FacturaElectronica {
 	static final String VALIDATION_NOMBRE_IS_NULL             = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'NOMBRE' no debe ser ='null'";
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'cuerpoDocumento' debe  contener máximo " + CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
-	Identificacion identificacion;
+	IdentificacionFactura identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado = null;
 	Emisor emisor;
 	Receptor receptor;
@@ -41,7 +41,7 @@ public class FacturaElectronica {
 	 * No parameters
 	 */
 	public FacturaElectronica() {
-		this.identificacion       = new Identificacion();
+		this.identificacion       = new IdentificacionFactura();
 		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
@@ -56,7 +56,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the identificacion
 	 */
-	public Identificacion getIdentificacion() {
+	public IdentificacionFactura getIdentificacion() {
 		return identificacion;
 	}
 
@@ -88,7 +88,7 @@ public class FacturaElectronica {
 	/**
 	 * @param identificacion the identificacion to set
 	 */
-	public void setIdentificacion(Identificacion identificacion) {
+	public void setIdentificacion(IdentificacionFactura identificacion) {
 		this.identificacion = identificacion;
 	}
 

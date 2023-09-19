@@ -93,7 +93,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
-				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
+				!invoice.getC_DocType().getE_DocType().getValue().equals(IdentificacionFacturaExportacion.TIPO_DE_DOCUMENTO)) {
 			error.append("el documento no es Factura de Exportacion");
 
 	    	System.out.println("el documento no es Factura de Exportacion");
@@ -208,7 +208,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 
 
 
-	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
+	private void fillIdentification(IdentificacionFacturaExportacion identificacion, MInvoice invoice) {
 
     	System.out.println("Start fillIdentification");
 		identificacion.setNumeroControl(numeroControl);

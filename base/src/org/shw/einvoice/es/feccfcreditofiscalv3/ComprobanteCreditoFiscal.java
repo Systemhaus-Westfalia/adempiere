@@ -17,7 +17,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  */
 public class ComprobanteCreditoFiscal {
 	
-	Identificacion identificacion;
+	IdentificacionCreditoFiscal identificacion;
 	List<DocumentoRelacionadoItem> documentoRelacionado = null;
 	Emisor emisor;
 	Receptor receptor;
@@ -32,7 +32,7 @@ public class ComprobanteCreditoFiscal {
 	 * No parameters
 	 */
 	public ComprobanteCreditoFiscal() {
-		this.identificacion       = new Identificacion();
+		this.identificacion       = new IdentificacionCreditoFiscal();
 		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();		
 		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
@@ -57,7 +57,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the identificacion
 	 */
-	public Identificacion getIdentificacion() {
+	public IdentificacionCreditoFiscal getIdentificacion() {
 		return identificacion;
 	}
 
@@ -65,7 +65,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param identificacion the identificacion to set
 	 */
-	public void setIdentificacion(Identificacion identificacion) {
+	public void setIdentificacion(IdentificacionCreditoFiscal identificacion) {
 		this.identificacion = identificacion;
 	}
 

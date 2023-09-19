@@ -25,7 +25,7 @@ public class FacturaExportacion {
 	static final String VALIDATION_CUERPODOCUMENTO_MAXITEMS  = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'cuerpoDocumento' debe contemner entre 1 y " + 
 																CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
-	Identificacion identificacion;
+	IdentificacionFacturaExportacion identificacion;
 	Emisor emisor;
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
@@ -38,7 +38,7 @@ public class FacturaExportacion {
 	 * No parameters
 	 */
 	public FacturaExportacion() {
-		this.identificacion       = new Identificacion();
+		this.identificacion       = new IdentificacionFacturaExportacion();
 		this.emisor				  = new Emisor();
 		this.receptor             = new Receptor();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
@@ -77,7 +77,7 @@ public class FacturaExportacion {
 	/**
 	 * @return the identificacion
 	 */
-	public Identificacion getIdentificacion() {
+	public IdentificacionFacturaExportacion getIdentificacion() {
 		return identificacion;
 	}
 
@@ -85,7 +85,7 @@ public class FacturaExportacion {
 	/**
 	 * @param identificacion the identificacion to set
 	 */
-	public void setIdentificacion(Identificacion identificacion) {
+	public void setIdentificacion(IdentificacionFacturaExportacion identificacion) {
 		this.identificacion = identificacion;
 	}
 

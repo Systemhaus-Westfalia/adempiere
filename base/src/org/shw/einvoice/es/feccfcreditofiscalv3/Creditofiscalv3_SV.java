@@ -27,7 +27,7 @@ public class Creditofiscalv3_SV {
 	 private List<Object>				obsercaciones;
 	 private String 					selloRecibido;
 	 private String 					descripcionMsg;
-	 private Identificacion 			identificacion;
+	 private IdentificacionCreditoFiscal 			identificacion;
 	 private List<CuerpoDocumentoItem> 	cuerpoDocumentoItems;
 	 private String 					fhProcesamiento;
 	 private List<OtrosDocumentosItem> 	otrosDocumentosItems;
@@ -109,10 +109,10 @@ public class Creditofiscalv3_SV {
 	public void setCodigoGeneracion(String codigoGeneracion) {
 		this.codigoGeneracion = codigoGeneracion;
 	}
-	public Identificacion getIdentificacion() {
+	public IdentificacionCreditoFiscal getIdentificacion() {
 		return identificacion;
 	}
-	public void setIdentificacion(Identificacion identificacion) {
+	public void setIdentificacion(IdentificacionCreditoFiscal identificacion) {
 		this.identificacion = identificacion;
 	}
 	public List<DocumentoRelacionadoItem> getDocumentoRelacionadoItems() {

@@ -33,7 +33,7 @@ public class Creditofiscalv3_SV {
 	 private List<OtrosDocumentosItem> 	otrosDocumentosItems;
 	 
 	 private String 						codigoGeneracion;
-	 private List<DocumentoRelacionadoItem> documentoRelacionadoItems;
+	 private List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItems;
 	 
 	public String getEstado() {
 		return estado;
@@ -115,10 +115,10 @@ public class Creditofiscalv3_SV {
 	public void setIdentificacion(IdentificacionCreditoFiscal identificacion) {
 		this.identificacion = identificacion;
 	}
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionadoItems() {
+	public List<DocumentoRelacionadoItemCreditoFiscal> getDocumentoRelacionadoItems() {
 		return documentoRelacionadoItems;
 	}
-	public void setDocumentoRelacionadoItems(List<DocumentoRelacionadoItem> documentoRelacionadoItems) {
+	public void setDocumentoRelacionadoItems(List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItems) {
 		this.documentoRelacionadoItems = documentoRelacionadoItems;
 	}
 	public Emisor getEmisor() {

@@ -19,7 +19,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 public class NotaDeDebito {
 	
 	IdentificacionNotaDeDebito identificacion;
-	List<DocumentoRelacionadoItem> documentoRelacionado;
+	List<DocumentoRelacionadoItemNotaDeDebito> documentoRelacionado;
 	Receptor receptor;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
@@ -33,7 +33,7 @@ public class NotaDeDebito {
 	 */
 	public NotaDeDebito() {
 		this.identificacion       = new IdentificacionNotaDeDebito();
-		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
+		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemNotaDeDebito>();
 		this.receptor             = new Receptor();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
@@ -49,11 +49,11 @@ public class NotaDeDebito {
 		this.identificacion = identificacion;
 	}
 
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
+	public List<DocumentoRelacionadoItemNotaDeDebito> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
 
-	public void setDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemNotaDeDebito> documentoRelacionado) {
 		this.documentoRelacionado = documentoRelacionado;
 	}
 

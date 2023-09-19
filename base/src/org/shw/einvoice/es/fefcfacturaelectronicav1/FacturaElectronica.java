@@ -27,7 +27,7 @@ public class FacturaElectronica {
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'cuerpoDocumento' debe  contener máximo " + CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
 	IdentificacionFactura identificacion;
-	List<DocumentoRelacionadoItem> documentoRelacionado = null;
+	List<DocumentoRelacionadoItemFactura> documentoRelacionado = null;
 	Emisor emisor;
 	Receptor receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
@@ -96,7 +96,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the documentoRelacionado
 	 */
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
+	public List<DocumentoRelacionadoItemFactura> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
 
@@ -104,7 +104,7 @@ public class FacturaElectronica {
 	/**
 	 * @param documentoRelacionado the documentoRelacionado to set
 	 */
-	public void setDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemFactura> documentoRelacionado) {
 		this.documentoRelacionado = documentoRelacionado;
 	}
 

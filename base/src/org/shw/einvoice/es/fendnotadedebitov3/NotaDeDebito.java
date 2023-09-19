@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.fencnotadecreditov1.Emisor;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Receptor;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
@@ -20,6 +21,7 @@ public class NotaDeDebito {
 	
 	IdentificacionNotaDeDebito identificacion;
 	List<DocumentoRelacionadoItemNotaDeDebito> documentoRelacionado;
+	Emisor emisor;
 	Receptor receptor;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
@@ -34,6 +36,7 @@ public class NotaDeDebito {
 	public NotaDeDebito() {
 		this.identificacion       = new IdentificacionNotaDeDebito();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemNotaDeDebito>();
+		this.emisor               = new Emisor();
 		this.receptor             = new Receptor();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
@@ -55,6 +58,14 @@ public class NotaDeDebito {
 
 	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemNotaDeDebito> documentoRelacionado) {
 		this.documentoRelacionado = documentoRelacionado;
+	}
+
+	public Emisor getEmisor() {
+		return emisor;
+	}
+
+	public void setEmisor(Emisor emisor) {
+		this.emisor = emisor;
 	}
 
 	public Receptor getReceptor() {

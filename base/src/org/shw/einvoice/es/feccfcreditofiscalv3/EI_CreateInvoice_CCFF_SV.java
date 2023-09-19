@@ -45,7 +45,6 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.PagosItem;

@@ -1,6 +1,8 @@
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.util.regex.Pattern;
+
+import org.shw.einvoice.es.util.pojo.Direccion;
 
 public class Emisor {
 

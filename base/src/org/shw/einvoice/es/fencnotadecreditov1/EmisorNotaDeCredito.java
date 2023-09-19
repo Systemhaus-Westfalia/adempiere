@@ -3,8 +3,9 @@ package org.shw.einvoice.es.fencnotadecreditov1;
 import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.Direccion;
+import org.shw.einvoice.es.util.pojo.Emisor;
 
-public class EmisorNotaDeCredito {
+public class EmisorNotaDeCredito implements Emisor {
 
 	String nit;
 	String nrc;
@@ -26,8 +27,18 @@ public class EmisorNotaDeCredito {
 
 
 	/**
+	 * Validate the Schema conditions
+	 */
+	@Override
+	public String validateValues() {
+		return VALIDATION_RESULT_OK;
+	}
+
+
+	/**
 	 * @return the nit
 	 */
+	@Override
 	public String getNit() {
 		return nit;
 	}
@@ -38,6 +49,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^([0-9]{14}|[0-9]{9})$"
 	 */
+	@Override
 	public void setNit(String nit) {
 		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
 		boolean patternOK = (nit!=null) && Pattern.matches(PATTERN, nit);  
@@ -52,6 +64,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the nrc
 	 */
+	@Override
 	public String getNrc() {
 		return nrc;
 	}
@@ -62,6 +75,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{1,8}$"
 	 */
+	@Override
 	public void setNrc(String nrc) {
 		final String PATTERN = "^[0-9]{1,8}$";
 		boolean patternOK = (nrc!=null) && Pattern.matches(PATTERN, nrc);  
@@ -76,6 +90,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the nombre
 	 */
+	@Override
 	public String getNombre() {
 		return nombre;
 	}
@@ -86,6 +101,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 3, "maxLength" : 200
 	 */
+	@Override
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 200;
@@ -101,6 +117,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the codActividad
 	 */
+	@Override
 	public String getCodActividad() {
 		return codActividad;
 	}
@@ -111,6 +128,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{2,6}$"
 	 */
+	@Override
 	public void setCodActividad(String codActividad) {
 		final String PATTERN = "^[0-9]{2,6}$";
 		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
@@ -125,6 +143,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the descActividad
 	 */
+	@Override
 	public String getDescActividad() {
 		return descActividad;
 	}
@@ -135,6 +154,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 150
 	 */
+	@Override
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
@@ -150,6 +170,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the nombreComercial
 	 */
+	@Override
 	public String getNombreComercial() {
 		return nombreComercial;
 	}
@@ -175,6 +196,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the tipoEstablecimiento
 	 */
+	@Override
 	public String getTipoEstablecimiento() {
 		return tipoEstablecimiento;
 	}
@@ -185,6 +207,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "enum" : ["01", "02", "04", "07", "20"]
 	 */
+	@Override
 	public void setTipoEstablecimiento(String tipoEstablecimiento) {
 		if (tipoEstablecimiento.compareTo("01")==0 || tipoEstablecimiento.compareTo("02")==0 || tipoEstablecimiento.compareTo("04")==0 || tipoEstablecimiento.compareTo("07")==0 || tipoEstablecimiento.compareTo("20")==0)
 			this.tipoEstablecimiento = tipoEstablecimiento;
@@ -196,6 +219,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the direccion
 	 */
+	@Override
 	public Direccion getDireccion() {
 		return direccion;
 	}
@@ -204,6 +228,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @param direccion the direccion to set
 	 */
+	@Override
 	public void setDireccion(Direccion direccion) {
 		this.direccion = direccion;
 	}
@@ -212,6 +237,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the telefono
 	 */
+	@Override
 	public String getTelefono() {
 		return telefono;
 	}
@@ -222,6 +248,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 8, "maxLength" : 30
 	 */
+	@Override
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 30;
@@ -237,6 +264,7 @@ public class EmisorNotaDeCredito {
 	/**
 	 * @return the correo
 	 */
+	@Override
 	public String getCorreo() {
 		return correo;
 	}
@@ -247,6 +275,7 @@ public class EmisorNotaDeCredito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 3, "maxLength" : 100
 	 */
+	@Override
 	public void setCorreo(String correo) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 100;
@@ -259,11 +288,210 @@ public class EmisorNotaDeCredito {
 	}
 
 
+
+
+    
+	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
+	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodEstableMH() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getCodEstableMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodEstableMH(String codEstableMH) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setCodEstableMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodEstable() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getCodEstable() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodEstable(String codEstable) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setCodEstable() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodPuntoVentaMH() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getCodPuntoVentaMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodPuntoVentaMH(String codPuntoVentaMH) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setCodPuntoVentaMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodPuntoVenta() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getCodPuntoVenta() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodPuntoVenta(String codPuntoVenta) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setCodPuntoVenta() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getNomEstablecimiento() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getNomEstablecimiento() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setNomEstablecimiento(String nomEstablecimiento) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setNomEstablecimiento() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodigoMH() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getCodigoMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodigoMH(String codigoMH) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setCodigoMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodigo() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getCodigo() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodigo(String codigo) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setCodigo() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getPuntoVentaMH() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getPuntoVentaMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setPuntoVentaMH(String puntoVentaMH) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setPuntoVentaMH() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getPuntoVenta() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getPuntoVenta() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setPuntoVenta(String puntoVenta) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setPuntoVenta() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public int getTipoItemExpor() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getTipoItemExpor() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setTipoItemExpor(int tipoItemExpor) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setTipoItemExpor() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getRecintoFiscal() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getRecintoFiscal() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setRecintoFiscal(String recintoFiscal) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setRecintoFiscal() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getRegimen() {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.getRegimen() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setRegimen(String regimen) {
+		throw new UnsupportedOperationException("In Document Nota de Credito calling the method Emisor.setRegimen() is not allowed");
+	}
+
     
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
+
 
 }

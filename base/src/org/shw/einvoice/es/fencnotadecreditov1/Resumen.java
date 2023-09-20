@@ -317,6 +317,14 @@ public String validateValues() {
 	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in NotaDeCredito.Resumen.setCondicionOperacion()");
 	}
 
+	public List<TributosItem> getTributos() {
+		return tributos;
+	}
+
+	public void setTributos(List<TributosItem> tributos) {
+		this.tributos = tributos;
+	}
+
 	/**
 	 * @param args
 	 */

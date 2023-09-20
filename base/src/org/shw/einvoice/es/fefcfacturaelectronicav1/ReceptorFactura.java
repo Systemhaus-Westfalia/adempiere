@@ -12,7 +12,7 @@ import org.shw.einvoice.es.util.pojo.Direccion;
 /**
  * 
  */
-public class Receptor {
+public class ReceptorFactura {
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Factura, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 	static final String VALIDATION_NRC_NOT_NULL                    = "Documento: Factura, clase: Receptor. Validacion falló: valor de 'nrc' debe ser ='null'";
@@ -30,7 +30,7 @@ public class Receptor {
 	/**
 	 * No parameters
 	 */
-	public Receptor() {
+	public ReceptorFactura() {
 	}
 	
 

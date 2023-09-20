@@ -48,7 +48,6 @@ import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -248,7 +247,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		emisor.setCorreo(client.getEMail());
 	}
 	
-	private void fillReceptor(Receptor receptor, MInvoice invoice) {
+	private void fillReceptor(ReceptorCreditoFiscal receptor, MInvoice invoice) {
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 

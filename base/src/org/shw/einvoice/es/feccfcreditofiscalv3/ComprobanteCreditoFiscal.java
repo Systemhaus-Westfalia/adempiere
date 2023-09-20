@@ -8,7 +8,6 @@ import java.util.List;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 /**
@@ -19,7 +18,7 @@ public class ComprobanteCreditoFiscal {
 	IdentificacionCreditoFiscal identificacion;
 	List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionado = null;
 	EmisorCreditoFiscal emisor;
-	Receptor receptor;
+	ReceptorCreditoFiscal receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
@@ -34,7 +33,7 @@ public class ComprobanteCreditoFiscal {
 		this.identificacion       = new IdentificacionCreditoFiscal();
 		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();		
 		this.emisor               = new EmisorCreditoFiscal();
-		this.receptor             = new Receptor();
+		this.receptor             = new ReceptorCreditoFiscal();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
@@ -103,7 +102,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the receptor
 	 */
-	public Receptor getReceptor() {
+	public ReceptorCreditoFiscal getReceptor() {
 		return receptor;
 	}
 
@@ -111,7 +110,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(Receptor receptor) {
+	public void setReceptor(ReceptorCreditoFiscal receptor) {
 		this.receptor = receptor;
 	}
 

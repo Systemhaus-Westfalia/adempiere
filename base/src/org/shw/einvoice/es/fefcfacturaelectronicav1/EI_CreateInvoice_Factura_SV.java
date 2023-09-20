@@ -249,7 +249,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		System.out.println("fillEmisor Finished");
 	}
 	
-	private void fillReceptor(Receptor receptor, MInvoice invoice) {
+	private void fillReceptor(ReceptorFactura receptor, MInvoice invoice) {
 
 		System.out.println("Start fillemisor");
 

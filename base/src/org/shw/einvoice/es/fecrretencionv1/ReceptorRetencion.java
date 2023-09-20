@@ -12,7 +12,7 @@ import org.shw.einvoice.es.util.pojo.Direccion;
 /**
  * 
  */
-public class Receptor {
+public class ReceptorRetencion {
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Retencion, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 	static final String VALIDATION_NRC_PATTERN_FAILED              = "Documento: Retencion, clase: Receptor. Validacion falló: valor de 'nrc' no corresponde a patrón";
@@ -31,7 +31,7 @@ public class Receptor {
 	/**
 	 * No parameters
 	 */
-	public Receptor() {
+	public ReceptorRetencion() {
 	}
 	
 
@@ -48,7 +48,7 @@ public class Receptor {
 	 * @param telefono
 	 * @param correo
 	 */
-	public Receptor(String tipoDocumento, String numDocumento, String nrc, String nombre, String codActividad,
+	public ReceptorRetencion(String tipoDocumento, String numDocumento, String nrc, String nombre, String codActividad,
 			String descActividad, String nombreComercial, Direccion direccion, String telefono, String correo) {
 		super();
 		this.tipoDocumento = tipoDocumento;

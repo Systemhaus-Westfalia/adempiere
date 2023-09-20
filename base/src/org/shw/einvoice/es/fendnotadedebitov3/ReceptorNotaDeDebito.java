@@ -1,14 +1,16 @@
 /**
  * 
  */
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.fendnotadedebitov3;
 
 import java.util.regex.Pattern;
+
+import org.shw.einvoice.es.util.pojo.Direccion;
 
 /**
  * 
  */
-public class Receptor {
+public class ReceptorNotaDeDebito {
 
 	String nit;
 	String nrc;
@@ -23,7 +25,7 @@ public class Receptor {
 	/**
 	 * No parameters
 	 */
-	public Receptor() {
+	public ReceptorNotaDeDebito() {
 	}
 	
 	

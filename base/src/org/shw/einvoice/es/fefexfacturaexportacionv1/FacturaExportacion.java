@@ -27,7 +27,7 @@ public class FacturaExportacion {
 	
 	IdentificacionFacturaExportacion identificacion;
 	EmisorFacturaExportacion emisor;
-	Receptor receptor;
+	ReceptorFacturaExportacion receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
@@ -40,7 +40,7 @@ public class FacturaExportacion {
 	public FacturaExportacion() {
 		this.identificacion       = new IdentificacionFacturaExportacion();
 		this.emisor				  = new EmisorFacturaExportacion();
-		this.receptor             = new Receptor();
+		this.receptor             = new ReceptorFacturaExportacion();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
@@ -106,14 +106,14 @@ public class FacturaExportacion {
 	/**
 	 * @return the receptor
 	 */
-	public Receptor getReceptor() {
+	public ReceptorFacturaExportacion getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(Receptor receptor) {
+	public void setReceptor(ReceptorFacturaExportacion receptor) {
 		this.receptor = receptor;
 	}
 

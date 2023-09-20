@@ -6,7 +6,6 @@ import org.shw.einvoice.es.fefexfacturaexportacionv1.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public class Creditofiscalv3_SV {
@@ -17,7 +16,7 @@ public class Creditofiscalv3_SV {
 	 private String 					version;
 	 private String 					ambiente;
 	 private List<ApendiceItem> 		apendiceItems;
-	 private Receptor 					receptor;
+	 private ReceptorCreditoFiscal 					receptor;
 	 private String						codiMsg;
 	 private Extension 					extension;
 	 private Integer 					versionApp;
@@ -126,10 +125,10 @@ public class Creditofiscalv3_SV {
 	public void setEmisor(EmisorCreditoFiscal emisor) {
 		this.emisor = emisor;
 	}
-	public Receptor getReceptor() {
+	public ReceptorCreditoFiscal getReceptor() {
 		return receptor;
 	}
-	public void setReceptor(Receptor receptor) {
+	public void setReceptor(ReceptorCreditoFiscal receptor) {
 		this.receptor = receptor;
 	}
 	public List<OtrosDocumentosItem> getOtrosDocumentosItems() {

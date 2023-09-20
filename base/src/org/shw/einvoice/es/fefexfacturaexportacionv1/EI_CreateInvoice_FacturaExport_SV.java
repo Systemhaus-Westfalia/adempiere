@@ -248,7 +248,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
     	System.out.println("fillemisor Finished");
 	}
 
-	private void fillReceptor(Receptor receptor, MInvoice invoice) {
+	private void fillReceptor(ReceptorFacturaExportacion receptor, MInvoice invoice) {
 
     	System.out.println("Start fillemisor");
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();

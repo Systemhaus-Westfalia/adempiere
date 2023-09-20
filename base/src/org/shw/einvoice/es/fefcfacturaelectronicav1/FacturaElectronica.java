@@ -28,7 +28,7 @@ public class FacturaElectronica {
 	IdentificacionFactura identificacion;
 	List<DocumentoRelacionadoItemFactura> documentoRelacionado = null;
 	EmisorFactura emisor;
-	Receptor receptor;
+	ReceptorFactura receptor;
 	List<OtrosDocumentosItem> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
@@ -43,7 +43,7 @@ public class FacturaElectronica {
 		this.identificacion       = new IdentificacionFactura();
 		//this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItem>();
 		this.emisor               = new EmisorFactura();
-		this.receptor             = new Receptor();
+		this.receptor             = new ReceptorFactura();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
@@ -127,14 +127,14 @@ public class FacturaElectronica {
 	/**
 	 * @return the receptor
 	 */
-	public Receptor getReceptor() {
+	public ReceptorFactura getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(Receptor receptor) {
+	public void setReceptor(ReceptorFactura receptor) {
 		this.receptor = receptor;
 	}
 

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 
@@ -21,7 +20,7 @@ public class NotaDeCredito {
 	IdentificacionNotaDeCredito identificacion;
 	List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionado;
 	EmisorNotaDeCredito emisor;
-	Receptor receptor;
+	ReceptorNotaDeCredito receptor;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
@@ -36,7 +35,7 @@ public class NotaDeCredito {
 		this.identificacion       = new IdentificacionNotaDeCredito();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemNotaDeCredito>();
 		this.emisor               = new EmisorNotaDeCredito();
-		this.receptor             = new Receptor();
+		this.receptor             = new ReceptorNotaDeCredito();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
@@ -70,11 +69,11 @@ public class NotaDeCredito {
 		this.emisor = emisor;
 	}
 
-	public Receptor getReceptor() {
+	public ReceptorNotaDeCredito getReceptor() {
 		return receptor;
 	}
 
-	public void setReceptor(Receptor receptor) {
+	public void setReceptor(ReceptorNotaDeCredito receptor) {
 		this.receptor = receptor;
 	}
 

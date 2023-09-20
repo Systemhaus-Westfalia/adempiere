@@ -20,7 +20,7 @@ public class Retencion {
 	
 	IdentificacionRetencion identificacion;
 	EmisorRetencion emisor;
-	Receptor receptor;
+	ReceptorRetencion receptor;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
@@ -32,7 +32,7 @@ public class Retencion {
 	public Retencion() {
 		this.identificacion       = new IdentificacionRetencion();
 		this.emisor               = new EmisorRetencion();
-		this.receptor             = new Receptor();
+		this.receptor             = new ReceptorRetencion();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
@@ -82,14 +82,14 @@ public class Retencion {
 	/**
 	 * @return the receptor
 	 */
-	public Receptor getReceptor() {
+	public ReceptorRetencion getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(Receptor receptor) {
+	public void setReceptor(ReceptorRetencion receptor) {
 		this.receptor = receptor;
 	}
 

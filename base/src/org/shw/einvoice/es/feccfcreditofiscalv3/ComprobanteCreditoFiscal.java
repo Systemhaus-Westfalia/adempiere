@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 /**
@@ -19,7 +18,7 @@ public class ComprobanteCreditoFiscal {
 	List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionado = null;
 	EmisorCreditoFiscal emisor;
 	ReceptorCreditoFiscal receptor;
-	List<OtrosDocumentosItem> otrosDocumentos = null;
+	List<OtrosDocumentosItemCreditoFiscal> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
@@ -118,7 +117,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the otrosDocumentos
 	 */
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
+	public List<OtrosDocumentosItemCreditoFiscal> getOtrosDocumentos() {
 		return otrosDocumentos;
 	}
 
@@ -126,7 +125,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param otrosDocumentos the otrosDocumentos to set
 	 */
-	public void setOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void setOtrosDocumentos(List<OtrosDocumentosItemCreditoFiscal> otrosDocumentos) {
 		this.otrosDocumentos = otrosDocumentos;
 	}
 

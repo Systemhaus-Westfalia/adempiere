@@ -28,7 +28,7 @@ public class FacturaExportacion {
 	IdentificacionFacturaExportacion identificacion;
 	EmisorFacturaExportacion emisor;
 	ReceptorFacturaExportacion receptor;
-	List<OtrosDocumentosItem> otrosDocumentos = null;
+	List<OtrosDocumentosItemFacturaExportacon> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
@@ -120,14 +120,14 @@ public class FacturaExportacion {
 	/**
 	 * @return the otrosDocumentos
 	 */
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
+	public List<OtrosDocumentosItemFacturaExportacon> getOtrosDocumentos() {
 		return otrosDocumentos;
 	}
 
 	/**
 	 * @param otrosDocumentos the otrosDocumentos to set
 	 */
-	public void setOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void setOtrosDocumentos(List<OtrosDocumentosItemFacturaExportacon> otrosDocumentos) {
 		this.otrosDocumentos = otrosDocumentos;
 	}
 

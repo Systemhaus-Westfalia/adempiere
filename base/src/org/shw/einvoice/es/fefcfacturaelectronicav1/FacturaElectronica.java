@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 /**
@@ -29,7 +28,7 @@ public class FacturaElectronica {
 	List<DocumentoRelacionadoItemFactura> documentoRelacionado = null;
 	EmisorFactura emisor;
 	ReceptorFactura receptor;
-	List<OtrosDocumentosItem> otrosDocumentos = null;
+	List<OtrosDocumentosItemFactura> otrosDocumentos = null;
 	VentaTercero ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
@@ -141,7 +140,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the otrosDocumentos
 	 */
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
+	public List<OtrosDocumentosItemFactura> getOtrosDocumentos() {
 		return otrosDocumentos;
 	}
 
@@ -149,7 +148,7 @@ public class FacturaElectronica {
 	/**
 	 * @param otrosDocumentos the otrosDocumentos to set
 	 */
-	public void setOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void setOtrosDocumentos(List<OtrosDocumentosItemFactura> otrosDocumentos) {
 		this.otrosDocumentos = otrosDocumentos;
 	}
 

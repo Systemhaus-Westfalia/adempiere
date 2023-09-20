@@ -5,13 +5,15 @@ package org.shw.einvoice.es.fefexfacturaexportacionv1;
 
 import java.util.Objects;
 
+import org.shw.einvoice.es.util.pojo.Medico;
+import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
+
 ;
 
 /**
  * 
  */
-public class OtrosDocumentosItem {
-	static final String VALIDATION_RESULT_OK = "OK";
+public class OtrosDocumentosItemFacturaExportacon implements OtrosDocumentosItem{
 	static final String VALIDATION_MODOTRANSP_IS_NULL       = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'modoTransp' no debe ser ='null'";
 	static final String VALIDATION_NUMCONDUCTOR_IS_NULL     = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'numCoductor' no debe ser ='null'";
 	static final String VALIDATION_NOMBRECONDUCTOR_IS_NULL  = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'nombreConductor' no debe ser ='null'";
@@ -35,12 +37,13 @@ public class OtrosDocumentosItem {
 	/**
 	 * No Parameters
 	 */
-	public OtrosDocumentosItem() {
+	public OtrosDocumentosItemFacturaExportacon() {
 	}
 
 	/**
 	 * Validate the Schema conditions
 	 */
+	@Override
 	public String validateValues() {
 		if(getCodDocAsociado()==4){
 			if (Objects.isNull(getModoTransp()))
@@ -75,6 +78,7 @@ public class OtrosDocumentosItem {
 	/**
 	 * @return the codDocAsociado
 	 */
+	@Override
 	public int getCodDocAsociado() {
 		return codDocAsociado;
 	}
@@ -85,6 +89,7 @@ public class OtrosDocumentosItem {
 	 * The parameter is validated.<br>
 	 * "minimum" : 1, "maximum" : 4
 	 */
+	@Override
 	public void setCodDocAsociado(int codDocAsociado) {
 		final int MINIMUM = 1;
 		final int MAXIMUM = 4;
@@ -99,6 +104,7 @@ public class OtrosDocumentosItem {
 	/**
 	 * @return the descDocumento
 	 */
+	@Override
 	public String getDescDocumento() {
 		return descDocumento;
 	}
@@ -108,6 +114,7 @@ public class OtrosDocumentosItem {
 	 * The parameter is validated; null also possible.<br>
 	 * "maxLength" : 100
 	 */
+	@Override
 	public void setDescDocumento(String descDocumento) {
 		final int MAXLENGTH = 100;
 		int length = descDocumento==null?0:descDocumento.length();
@@ -121,6 +128,7 @@ public class OtrosDocumentosItem {
 	/**
 	 * @return the detalleDocumento
 	 */
+	@Override
 	public String getDetalleDocumento() {
 		return detalleDocumento;
 	}
@@ -130,6 +138,7 @@ public class OtrosDocumentosItem {
 	 * The parameter is validated; null also possible.<br>.<br>
 	 * "maxLength" : 300
 	 */
+	@Override
 	public void setDetalleDocumento(String detalleDocumento) {
 		final int MAXLENGTH = 300;
 		int length = detalleDocumento==null?0:detalleDocumento.length();
@@ -144,6 +153,7 @@ public class OtrosDocumentosItem {
 	/**
 	 * @return the placaTrans
 	 */
+	@Override
 	public String getPlacaTrans() {
 		return placaTrans;
 	}
@@ -153,6 +163,7 @@ public class OtrosDocumentosItem {
 	 * The parameter is validated; null also possible.<br>
 	 * "minLength" : 5, "maxLength" : 70
 	 */
+	@Override
 	public void setPlacaTrans(String placaTrans) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 70;
@@ -167,6 +178,7 @@ public class OtrosDocumentosItem {
 	/**
 	 * @return the modoTransp
 	 */
+	@Override
 	public Integer getModoTransp() {
 		return modoTransp;
 	}
@@ -177,6 +189,7 @@ public class OtrosDocumentosItem {
 	 * "enum" : [1,2,3,4,5,6,7], null
 	 * "minimum" : 1, "maximum" : 4. This contradicts the Enum. The enum is taken.
 	 */
+	@Override
 	public void setModoTransp(Integer modoTransp) {
 		if ( (modoTransp==null) || (modoTransp>=1 && modoTransp<=7) )
 			this.modoTransp = modoTransp;
@@ -187,6 +200,7 @@ public class OtrosDocumentosItem {
 	/**
 	 * @return the numConductor
 	 */
+	@Override
 	public String getNumConductor() {
 		return numConductor;
 	}
@@ -196,6 +210,7 @@ public class OtrosDocumentosItem {
 	 * The parameter is validated; null also possible.<br>
 	 * "minLength" : 5, "maxLength" : 100
 	 */
+	@Override
 	public void setNumConductor(String numConductor) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 100;
@@ -210,6 +225,7 @@ public class OtrosDocumentosItem {
 	/**
 	 * @return the nombreConductor
 	 */
+	@Override
 	public String getNombreConductor() {
 		return nombreConductor;
 	}
@@ -219,6 +235,7 @@ public class OtrosDocumentosItem {
 	 * The parameter is validated; null also possible.<br>
 	 * "minLength" : 5, "maxLength" : 200
 	 */
+	@Override
 	public void setNombreConductor(String nombreConductor) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 200;
@@ -228,6 +245,29 @@ public class OtrosDocumentosItem {
 			this.nombreConductor = nombreConductor;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'nombreConductor' in FacturaExportacion.OtrosDocumentosItem.setNombreConductor()");
+	}
+
+
+    
+	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
+	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
+
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public Medico getMedico() {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.getMedico() is not allowed");
+	}
+
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setMedico(Medico medico) {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.setMedico() is not allowed");
 	}
 
 	/**

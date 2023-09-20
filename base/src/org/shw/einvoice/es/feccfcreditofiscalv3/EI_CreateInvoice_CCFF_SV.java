@@ -46,7 +46,6 @@ import org.compiere.util.Msg;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
@@ -277,7 +276,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		receptor.setCorreo(partner.get_ValueAsString("EMail"));		
 	}
 	
-	private void fillOtrosDocumentosItem(OtrosDocumentosItem otrosDocumentosItem, MInvoice invoice) {
+	private void fillOtrosDocumentosItem(OtrosDocumentosItemCreditoFiscal otrosDocumentosItem, MInvoice invoice) {
 		otrosDocumentosItem.setCodDocAsociado(1);
 	}
 	

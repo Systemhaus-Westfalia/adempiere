@@ -12,7 +12,7 @@ import org.shw.einvoice.es.util.pojo.PagosItem;
 /**
  * 
  */
-public class Resumen {
+public class ResumenFactura {
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_TOTALGRAVADA_IS_NULL = "Documento: Factura, clase: Resumen. Validacion falló: valor de 'totlaGravada' no debe ser = null";
 	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Factura, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
@@ -45,7 +45,7 @@ public class Resumen {
 	/**
 	 * No parameters
 	 */
-public Resumen() {
+public ResumenFactura() {
 	this.pagos = new ArrayList<PagosItem>();
 }
 

@@ -12,7 +12,7 @@ public class Creditofiscalv3_SV {
 
 	 private EmisorCreditoFiscal 					emisor;
 	 private String 					estado;
-	 private Resumen 					resumen;
+	 private ResumenCreditoFiscal 					resumen;
 	 private String 					version;
 	 private String 					ambiente;
 	 private List<ApendiceItem> 		apendiceItems;
@@ -149,10 +149,10 @@ public class Creditofiscalv3_SV {
 	public void setCuerpoDocumentoItems(List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoItems) {
 		this.cuerpoDocumentoItems = cuerpoDocumentoItems;
 	}
-	public Resumen getResumen() {
+	public ResumenCreditoFiscal getResumen() {
 		return resumen;
 	}
-	public void setResumen(Resumen resumen) {
+	public void setResumen(ResumenCreditoFiscal resumen) {
 		this.resumen = resumen;
 	}
 	public Extension getExtension() {

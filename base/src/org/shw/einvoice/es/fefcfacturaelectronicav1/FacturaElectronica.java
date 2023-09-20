@@ -30,7 +30,7 @@ public class FacturaElectronica {
 	List<OtrosDocumentosItemFactura> otrosDocumentos = null;
 	VentaTerceroFactura ventaTercero = null;
 	List<CuerpoDocumentoItemFactura> cuerpoDocumento;
-	Resumen resumen;
+	ResumenFactura resumen;
 	Extension extension;
 	List<ApendiceItem> apendice=null;  // null allowed
 
@@ -45,7 +45,7 @@ public class FacturaElectronica {
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemFactura>();
-		this.resumen              = new Resumen();
+		this.resumen              = new ResumenFactura();
 		this.extension            = new Extension();
 		//this.apendice             = new ArrayList<ApendiceItem>();
 	}
@@ -187,7 +187,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the resumen
 	 */
-	public Resumen getResumen() {
+	public ResumenFactura getResumen() {
 		return resumen;
 	}
 
@@ -195,7 +195,7 @@ public class FacturaElectronica {
 	/**
 	 * @param resumen the resumen to set
 	 */
-	public void setResumen(Resumen resumen) {
+	public void setResumen(ResumenFactura resumen) {
 		this.resumen = resumen;
 	}
 

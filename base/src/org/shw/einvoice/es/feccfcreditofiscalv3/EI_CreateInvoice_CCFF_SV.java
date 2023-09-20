@@ -286,7 +286,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		
 	}
 	
-	private void fillResumen(Resumen resumen, MInvoice invoice) {
+	private void fillResumen(ResumenCreditoFiscal resumen, MInvoice invoice) {
 
 		//List<TributosItem> tributos;
 		//List<PagosItem> pagos ;  // there must be at least one item

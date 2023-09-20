@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fendnotadedebitov3;
+package org.shw.einvoice.es.fencnotadecreditov1;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,14 +12,14 @@ import org.shw.einvoice.es.util.pojo.TributosItem;
 /**
  * 
  */
-public class Resumen {
+public class ResumenNotaDeCredito {
 	static final String VALIDATION_RESULT_OK = "OK";
-	static final String VALIDATION_TOTALGRAVADA_IS_NULL  = "Documento: Nota de Debito, clase: Resumen. Validacion falló: valor de 'totlaGravada' no debe ser = null";
-	static final String VALIDATION_PLAZO_IS_NULL         = "Documento: Nota de Debito, clase: Resumen. Validacion falló: valor de 'plazo' de pagos no debe ser ='null'";
-	static final String VALIDATION_PERIODO_IS_NULL       = "Documento: Nota de Debito, clase: Resumen. Validacion falló: valor de 'periodo' de pagos no debe ser ='null'";
-	static final String VALIDATION_TOTALGRAVADA_IVAPERC1 = "Documento: Nota de Debito, clase: Resumen. Validacion falló: valor de 'ivaPerci1' no debe ser mayor que cero";
-	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Nota de Debito, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
-	static final String VALIDATION_TOTALGRAVADA_CONDOP   = "Documento: Nota de Debito, clase: Resumen. Validacion falló: valor de 'condicionOperacion' no debe ser diferente a 1";
+	static final String VALIDATION_TOTALGRAVADA_IS_NULL  = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'totlaGravada' no debe ser = null";
+	static final String VALIDATION_PLAZO_IS_NULL         = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'plazo' de pagos no debe ser ='null'";
+	static final String VALIDATION_PERIODO_IS_NULL       = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'periodo' de pagos no debe ser ='null'";
+	static final String VALIDATION_TOTALGRAVADA_IVAPERC1 = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'ivaPerci1' no debe ser mayor que cero";
+	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
+	static final String VALIDATION_TOTALGRAVADA_CONDOP   = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'condicionOperacion' no debe ser diferente a 1";
 	
 	BigDecimal totalNoSuj;
 	BigDecimal totalExenta;
@@ -37,14 +37,13 @@ public class Resumen {
 	BigDecimal montoTotalOperacion;
     String totalLetras;
     int condicionOperacion;
-    String numPagoElectronico;
    
    
 
 	/**
 	 * No parameters
 	 */
-public Resumen() {
+public ResumenNotaDeCredito() {
 }
 
 /**
@@ -61,7 +60,7 @@ public String validateValues() {
 	} 
 
 	if(getTotalGravada().compareTo(BigDecimal.ZERO)==0) {
-		if ( (getIvaRete1()==null) || (getIvaRete1().compareTo(BigDecimal.ZERO) == 1) )
+		if (  (getIvaRete1()==null) || (getIvaRete1().compareTo(BigDecimal.ZERO) == 1) )
 			return VALIDATION_TOTALGRAVADA_IVARETE1;
 	} 
 	return VALIDATION_RESULT_OK;
@@ -294,7 +293,7 @@ public String validateValues() {
 		if( length<=MAXLENGTH)
 			this.totalLetras = totalLetras;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in NotaDeDebito.Resumen.setTotalLetras()");
+	        throw new IllegalArgumentException("Wrong parameter 'totalLetras' in NotaDeCredito.Resumen.setTotalLetras()");
 	}
 
 
@@ -315,43 +314,15 @@ public String validateValues() {
 		if (condicionOperacion==1 || condicionOperacion==2 || condicionOperacion==2)
 			this.condicionOperacion = condicionOperacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in NotaDeDebito.Resumen.setCondicionOperacion()");
+	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in NotaDeCredito.Resumen.setCondicionOperacion()");
 	}
 
-	/**
-	 * @return the tributos
-	 */
 	public List<TributosItem> getTributos() {
 		return tributos;
 	}
 
-	/**
-	 * @param tributos the tributos to set
-	 */
 	public void setTributos(List<TributosItem> tributos) {
 		this.tributos = tributos;
-	}
-
-	/**
-	 * @return the numPagoElectronico
-	 */
-	public String getNumPagoElectronico() {
-		return numPagoElectronico;
-	}
-
-	/**
-	 * @param numPagoElectronico the numPagoElectronico to set<br>
-	 * The parameter is validated.<br>
-	 * "maxLength" : 100; null also possible
-	 */
-	public void setNumPagoElectronico(String numPagoElectronico) {
-		final int MAXLENGTH = 100;
-		int length = numPagoElectronico==null?0:numPagoElectronico.length();
-		
-		if( (length<=MAXLENGTH) || (numPagoElectronico==null) )
-			this.numPagoElectronico = numPagoElectronico;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in NotaDeDebito.Resumen.setNumPagoElectronico()");
 	}
 
 	/**

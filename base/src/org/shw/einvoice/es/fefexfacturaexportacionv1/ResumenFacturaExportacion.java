@@ -12,7 +12,7 @@ import org.shw.einvoice.es.util.pojo.PagosItem;
 /**
  * 
  */
-public class Resumen {
+public class ResumenFacturaExportacion {
 
 	BigDecimal totalGravada;
 	BigDecimal descuento;
@@ -35,7 +35,7 @@ public class Resumen {
 	/**
 	 * No parameters
 	 */
-public Resumen() {
+public ResumenFacturaExportacion() {
 	this.pagos = new ArrayList<PagosItem>();
 }
 

@@ -22,7 +22,7 @@ public class Retencion {
 	EmisorRetencion emisor;
 	ReceptorRetencion receptor;
 	List<CuerpoDocumentoItemRetencion> cuerpoDocumento;
-	Resumen resumen;
+	ResumenRetencion resumen;
 	Extension extension;
 	List<ApendiceItem> apendice=null;  // null allowed
 
@@ -34,7 +34,7 @@ public class Retencion {
 		this.emisor               = new EmisorRetencion();
 		this.receptor             = new ReceptorRetencion();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemRetencion>();
-		this.resumen              = new Resumen();
+		this.resumen              = new ResumenRetencion();
 		this.extension            = new Extension();
 		this.apendice             = new ArrayList<ApendiceItem>();
 	}
@@ -110,14 +110,14 @@ public class Retencion {
 	/**
 	 * @return the resumen
 	 */
-	public Resumen getResumen() {
+	public ResumenRetencion getResumen() {
 		return resumen;
 	}
 
 	/**
 	 * @param resumen the resumen to set
 	 */
-	public void setResumen(Resumen resumen) {
+	public void setResumen(ResumenRetencion resumen) {
 		this.resumen = resumen;
 	}
 

@@ -12,7 +12,7 @@ import org.shw.einvoice.es.util.pojo.PagosItem;
 /**
  * 
  */
-public class Resumen {
+public class ResumenRetencion {
 
 	BigDecimal totalSujetoRetencion;
 	BigDecimal totalIVAretenido;
@@ -21,7 +21,7 @@ public class Resumen {
 	/**
 	 * No parameters
 	 */
-	public Resumen() {
+	public ResumenRetencion() {
 	}
 
 	/**

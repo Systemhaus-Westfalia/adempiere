@@ -286,7 +286,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	
 	
 	
-	private void fillResumen(Resumen resumen, MInvoice invoice) {
+	private void fillResumen(ResumenFactura resumen, MInvoice invoice) {
 		System.out.println("Start fillResumenr");
 
 

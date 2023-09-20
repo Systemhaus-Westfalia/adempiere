@@ -26,7 +26,7 @@ public class Creditofiscalv3_SV {
 	 private String 					selloRecibido;
 	 private String 					descripcionMsg;
 	 private IdentificacionCreditoFiscal 			identificacion;
-	 private List<CuerpoDocumentoItem> 	cuerpoDocumentoItems;
+	 private List<CuerpoDocumentoItemAnulacion> 	cuerpoDocumentoItems;
 	 private String 					fhProcesamiento;
 	 private List<OtrosDocumentosItemFacturaExportacon> 	otrosDocumentosItems;
 	 
@@ -143,10 +143,10 @@ public class Creditofiscalv3_SV {
 	public void setVentaTercero(VentaTercero ventaTercero) {
 		this.ventaTercero = ventaTercero;
 	}
-	public List<CuerpoDocumentoItem> getCuerpoDocumentoItems() {
+	public List<CuerpoDocumentoItemAnulacion> getCuerpoDocumentoItems() {
 		return cuerpoDocumentoItems;
 	}
-	public void setCuerpoDocumentoItems(List<CuerpoDocumentoItem> cuerpoDocumentoItems) {
+	public void setCuerpoDocumentoItems(List<CuerpoDocumentoItemAnulacion> cuerpoDocumentoItems) {
 		this.cuerpoDocumentoItems = cuerpoDocumentoItems;
 	}
 	public Resumen getResumen() {

@@ -161,7 +161,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 				if (!invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
 					ventaGravada = invoiceLine.getLineNetAmt(); 
 				BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
-				CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem,  cantidad, codigo, uniMedida, 	descripcion, 
+				CuerpoDocumentoItemFacturaExportacion cuerpoDocumentoItem = new CuerpoDocumentoItemFacturaExportacion(numItem,  cantidad, codigo, uniMedida, 	descripcion, 
 						precioUni, montoDescu,  ventaGravada, tributosItems, noGravado); 
 				cuerpoDocumentoItem.validateValues();
 				facturaExportacion.getCuerpoDocumento().add(cuerpoDocumentoItem);
@@ -363,7 +363,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		}
     	System.out.println("Start CuerpoDocumento().validateValues");
 		if (facturaExportacion.getCuerpoDocumento() != null) {
-			for (CuerpoDocumentoItem cuerpoDocumentoItem :facturaExportacion.getCuerpoDocumento()) {
+			for (CuerpoDocumentoItemFacturaExportacion cuerpoDocumentoItem :facturaExportacion.getCuerpoDocumento()) {
 				result = cuerpoDocumentoItem.validateValues();
 				if (!result.equals(VALIDATION_RESULT_OK))
 					error.append(result);			

@@ -171,7 +171,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			}
 			BigDecimal psv = invoiceLine.getTaxAmt();
 			BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
-			CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
+			CuerpoDocumentoItemFactura cuerpoDocumentoItem = new CuerpoDocumentoItemFactura(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
 					null, uniMedida, 
 					descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, null, psv, noGravado,ivaItem); 
 			cuerpoDocumentoItem.validateValues();
@@ -403,7 +403,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 
 		System.out.println("Start Cuerpo Documento validateValues");
 		if (facturaElectronica.getCuerpoDocumento() != null) {
-			for (CuerpoDocumentoItem cuerpoDocumentoItem :facturaElectronica.getCuerpoDocumento()) {
+			for (CuerpoDocumentoItemFactura cuerpoDocumentoItem :facturaElectronica.getCuerpoDocumento()) {
 				result = cuerpoDocumentoItem.validateValues();
 				if (!result.equals(VALIDATION_RESULT_OK))
 					error.append(result);			

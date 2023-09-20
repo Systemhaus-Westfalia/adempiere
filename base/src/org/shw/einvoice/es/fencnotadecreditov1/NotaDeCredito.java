@@ -21,7 +21,7 @@ public class NotaDeCredito {
 	EmisorNotaDeCredito emisor;
 	ReceptorNotaDeCredito receptor;
 	VentaTerceroNotaDeCredito ventaTercero = null;
-	List<CuerpoDocumentoItem> cuerpoDocumento;
+	List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
 	List<ApendiceItem> apendice=null;  // null allowed
@@ -36,7 +36,7 @@ public class NotaDeCredito {
 		this.emisor               = new EmisorNotaDeCredito();
 		this.receptor             = new ReceptorNotaDeCredito();
 		//this.ventaTercero         = new VentaTercero();
-		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemNotaDeCredito>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
 	}
@@ -84,11 +84,11 @@ public class NotaDeCredito {
 		this.ventaTercero = ventaTercero;
 	}
 
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItemNotaDeCredito> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 

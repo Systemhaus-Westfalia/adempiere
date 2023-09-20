@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fendnotadedebitov3;
+package org.shw.einvoice.es.fencnotadecreditov1;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,16 +10,16 @@ import java.util.List;
 /**
  * 
  */
-public class CuerpoDocumentoItem {
+public class CuerpoDocumentoItemNotaDeCredito {
 	static final String VALIDATION_RESULT_OK = "OK";
-	static final String VALIDATION_VENTAGRAVADA_IS_NULL     = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'ventaGravada' no debe ser ='null'";
-	static final String VALIDATION_TRIBUTOS_NOT_NULL        = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='null'";
-	static final String VALIDATION_TRIBUTOS_EMPTY           = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no debe ser vacío";
-	static final String VALIDATION_UDM_NOT_99               = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'uniMedida' debe ser =99";
-	static final String VALIDATION_TRIBUTOS_IS_NULL         = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no debe ser ='null'";
-	static final String VALIDATION_TRIBUTOS_NOT_20          = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='20'";
-	static final String VALIDATION_CODTRIBUTO_NOT_NULL      = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'codTributo' debe ser ='null'";
-	static final String VALIDATION_TRIBUTOS_PATTERN_FAILED  = "Documento: Nota de Debito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no corresponde a patrón";
+	static final String VALIDATION_VENTAGRAVADA_IS_NULL     = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'ventaGravada' no debe ser = null";
+	static final String VALIDATION_TRIBUTOS_NOT_NULL        = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='null'";
+	static final String VALIDATION_TRIBUTOS_EMPTY           = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no debe ser vacío";
+	static final String VALIDATION_UDM_NOT_99               = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'uniMedida' debe ser =99";
+	static final String VALIDATION_TRIBUTOS_IS_NULL         = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no debe ser ='null'";
+	static final String VALIDATION_TRIBUTOS_NOT_20          = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='20'";
+	static final String VALIDATION_CODTRIBUTO_NOT_NULL      = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'codTributo' debe ser ='null'";
+	static final String VALIDATION_TRIBUTOS_PATTERN_FAILED  = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no corresponde a patrón";
 	
 	int numItem;
 	int tipoItem;
@@ -40,7 +40,7 @@ public class CuerpoDocumentoItem {
     /**
 	 * Constructor without parameters. 
 	 */
-	public CuerpoDocumentoItem() {
+	public CuerpoDocumentoItemNotaDeCredito() {
 		
 	}
 
@@ -63,7 +63,7 @@ public class CuerpoDocumentoItem {
 	 * @param noGravado
 	 * @param ivaItem
 	 */
-	public CuerpoDocumentoItem(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
+	public CuerpoDocumentoItemNotaDeCredito(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
 			String codTributo, int uniMedida, String descripcion, BigDecimal precioUni, BigDecimal montoDescu,
 			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, ArrayList<String> tributos) {
 		this.numItem = numItem;
@@ -137,7 +137,7 @@ public class CuerpoDocumentoItem {
 		if(numItem>=MINIMUM && numItem<=MAXIMUM)
 			this.numItem = numItem;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numItem' in Nota de Debito.CuerpoDocumentoItem.setNumItem()");
+	        throw new IllegalArgumentException("Wrong parameter 'numItem' in NotaDeCredito.CuerpoDocumentoItem.setNumItem()");
 	}
 
 
@@ -157,7 +157,7 @@ public class CuerpoDocumentoItem {
 		if (tipoItem==1 || tipoItem==2 || tipoItem==3 || tipoItem==4)
 			this.tipoItem = tipoItem;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoItem' in Nota de Debito.CuerpoDocumentoItem.setTipoItem()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoItem' in NotaDeCredito.CuerpoDocumentoItem.setTipoItem()");
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class CuerpoDocumentoItem {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numeroDocumento = numeroDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in Nota de Debito.CuerpoDocumentoItem.setNumeroDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numeroDocumento' in NotaDeCredito.CuerpoDocumentoItem.setNumeroDocumento()");
 	}
 
 
@@ -219,7 +219,7 @@ public class CuerpoDocumentoItem {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (codigo==null) )
 			this.codigo = codigo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codigo' in Nota de Debito.CuerpoDocumentoItem.setCodigo()");
+	        throw new IllegalArgumentException("Wrong parameter 'codigo' in NotaDeCredito.CuerpoDocumentoItem.setCodigo()");
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class CuerpoDocumentoItem {
 				codTributo.compareTo("D5")==0 || codTributo.compareTo("25")==0 || codTributo.compareTo("A6")==0)
 			this.codTributo = codTributo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'codTributo' in Nota de Debito.CuerpoDocumentoItem.setCodTributo()");
+	        throw new IllegalArgumentException("Wrong parameter 'codTributo' in NotaDeCredito.CuerpoDocumentoItem.setCodTributo()");
 	}
 
 
@@ -262,7 +262,7 @@ public class CuerpoDocumentoItem {
 		if(uniMedida>=MINIMUM && uniMedida<=MAXIMUM)
 			this.uniMedida = uniMedida;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'uniMedida' in Nota de Debito.CuerpoDocumentoItem.setUniMedida()");
+	        throw new IllegalArgumentException("Wrong parameter 'uniMedida' in NotaDeCredito.CuerpoDocumentoItem.setUniMedida()");
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class CuerpoDocumentoItem {
 		if( (length<=MAXLENGTH) || (descripcion==null) )
 			this.descripcion = descripcion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in Nota de Debito.CuerpoDocumentoItem.setDescripcion()");
+	        throw new IllegalArgumentException("Wrong parameter 'descripcion' in NotaDeCredito.CuerpoDocumentoItem.setDescripcion()");
 	}
 	
 	/**
@@ -382,7 +382,7 @@ public class CuerpoDocumentoItem {
 		if( (tributos==null) || (tributos.size()>=MINLENGTH) )
 			this.tributos = tributos;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'tributos' in Nota de Debito.CuerpoDocumentoItem.setTributos()");
+	        throw new IllegalArgumentException("Wrong expression 'tributos' in NotaDeCredito.CuerpoDocumentoItem.setTributos()");
 	}
 
 	/**

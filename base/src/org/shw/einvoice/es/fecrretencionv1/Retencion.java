@@ -21,7 +21,7 @@ public class Retencion {
 	IdentificacionRetencion identificacion;
 	EmisorRetencion emisor;
 	ReceptorRetencion receptor;
-	List<CuerpoDocumentoItem> cuerpoDocumento;
+	List<CuerpoDocumentoItemRetencion> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
 	List<ApendiceItem> apendice=null;  // null allowed
@@ -33,7 +33,7 @@ public class Retencion {
 		this.identificacion       = new IdentificacionRetencion();
 		this.emisor               = new EmisorRetencion();
 		this.receptor             = new ReceptorRetencion();
-		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemRetencion>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
 		this.apendice             = new ArrayList<ApendiceItem>();
@@ -96,14 +96,14 @@ public class Retencion {
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItemRetencion> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
 	/**
 	 * @param cuerpoDocumento the cuerpoDocumento to set
 	 */
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemRetencion> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 

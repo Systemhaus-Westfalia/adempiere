@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 
  */
-public class CuerpoDocumentoItem {
+public class CuerpoDocumentoItemFacturaExportacion {
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_NOGRAVADO_IS_NULL = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'noGravado' no debe ser ='null'";
 	static final String VALIDATION_PRECIOUNI_IS_NULL = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'precioUni' no debe ser ='null'";
@@ -31,7 +31,7 @@ public class CuerpoDocumentoItem {
     /**
 	 * Constructor without parameters. 
 	 */
-	public CuerpoDocumentoItem() {
+	public CuerpoDocumentoItemFacturaExportacion() {
 		
 	}	
 
@@ -47,7 +47,7 @@ public class CuerpoDocumentoItem {
 	 * @param tributos
 	 * @param noGravado
 	 */
-	public CuerpoDocumentoItem(int numItem, BigDecimal cantidad, String codigo, int uniMedida, String descripcion,
+	public CuerpoDocumentoItemFacturaExportacion(int numItem, BigDecimal cantidad, String codigo, int uniMedida, String descripcion,
 			BigDecimal precioUni, BigDecimal montoDescu, BigDecimal ventaGravada, ArrayList<String> tributos,
 			BigDecimal noGravado) {
 		this.numItem = numItem;

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 /**
  * 
  */
-public class CuerpoDocumentoItem {
+public class CuerpoDocumentoItemRetencion {
 	static final String VALIDATION_RESULT_OK = "OK";
 	
 	int numItem;
@@ -25,7 +25,7 @@ public class CuerpoDocumentoItem {
     /**
 	 * Constructor without parameters. 
 	 */
-	public CuerpoDocumentoItem() {
+	public CuerpoDocumentoItemRetencion() {
 		
 	}
 

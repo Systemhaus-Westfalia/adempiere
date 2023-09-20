@@ -29,7 +29,7 @@ public class FacturaElectronica {
 	ReceptorFactura receptor;
 	List<OtrosDocumentosItemFactura> otrosDocumentos = null;
 	VentaTerceroFactura ventaTercero = null;
-	List<CuerpoDocumentoItem> cuerpoDocumento;
+	List<CuerpoDocumentoItemFactura> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
 	List<ApendiceItem> apendice=null;  // null allowed
@@ -44,7 +44,7 @@ public class FacturaElectronica {
 		this.receptor             = new ReceptorFactura();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
-		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemFactura>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
 		//this.apendice             = new ArrayList<ApendiceItem>();
@@ -171,7 +171,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItemFactura> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
@@ -179,7 +179,7 @@ public class FacturaElectronica {
 	/**
 	 * @param cuerpoDocumento the cuerpoDocumento to set
 	 */
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemFactura> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 

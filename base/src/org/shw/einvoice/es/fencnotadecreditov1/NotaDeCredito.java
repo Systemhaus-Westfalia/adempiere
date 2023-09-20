@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 
 
@@ -21,7 +20,7 @@ public class NotaDeCredito {
 	List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionado;
 	EmisorNotaDeCredito emisor;
 	ReceptorNotaDeCredito receptor;
-	VentaTercero ventaTercero = null;
+	VentaTerceroNotaDeCredito ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
@@ -77,11 +76,11 @@ public class NotaDeCredito {
 		this.receptor = receptor;
 	}
 
-	public VentaTercero getVentaTercero() {
+	public VentaTerceroNotaDeCredito getVentaTercero() {
 		return ventaTercero;
 	}
 
-	public void setVentaTercero(VentaTercero ventaTercero) {
+	public void setVentaTercero(VentaTerceroNotaDeCredito ventaTercero) {
 		this.ventaTercero = ventaTercero;
 	}
 

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * 
  */
-public class VentaTercero {
+public abstract class VentaTercero {
 
 	String nit;
 	String nombre;

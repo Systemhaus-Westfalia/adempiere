@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 
 /**
@@ -29,7 +28,7 @@ public class FacturaExportacion {
 	EmisorFacturaExportacion emisor;
 	ReceptorFacturaExportacion receptor;
 	List<OtrosDocumentosItemFacturaExportacon> otrosDocumentos = null;
-	VentaTercero ventaTercero = null;
+	VentaTerceroFacturaExportacion ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	List<ApendiceItem> apendice=null;  // null allowed
@@ -134,14 +133,14 @@ public class FacturaExportacion {
 	/**
 	 * @return the ventaTercero
 	 */
-	public VentaTercero getVentaTercero() {
+	public VentaTerceroFacturaExportacion getVentaTercero() {
 		return ventaTercero;
 	}
 
 	/**
 	 * @param ventaTercero the ventaTercero to set
 	 */
-	public void setVentaTercero(VentaTercero ventaTercero) {
+	public void setVentaTercero(VentaTerceroFacturaExportacion ventaTercero) {
 		this.ventaTercero = ventaTercero;
 	}
 

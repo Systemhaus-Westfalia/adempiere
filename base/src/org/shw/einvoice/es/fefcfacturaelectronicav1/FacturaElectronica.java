@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 /**
  * 
@@ -29,7 +28,7 @@ public class FacturaElectronica {
 	EmisorFactura emisor;
 	ReceptorFactura receptor;
 	List<OtrosDocumentosItemFactura> otrosDocumentos = null;
-	VentaTercero ventaTercero = null;
+	VentaTerceroFactura ventaTercero = null;
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
@@ -156,7 +155,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the ventaTercero
 	 */
-	public VentaTercero getVentaTercero() {
+	public VentaTerceroFactura getVentaTercero() {
 		return ventaTercero;
 	}
 
@@ -164,7 +163,7 @@ public class FacturaElectronica {
 	/**
 	 * @param ventaTercero the ventaTercero to set
 	 */
-	public void setVentaTercero(VentaTercero ventaTercero) {
+	public void setVentaTercero(VentaTerceroFactura ventaTercero) {
 		this.ventaTercero = ventaTercero;
 	}
 

@@ -169,7 +169,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
     			ventaGravada = invoiceLine.getLineNetAmt(); 
     		BigDecimal psv = Env.ZERO;
     		BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
-    		CuerpoDocumentoItemAnulacion cuerpoDocumentoItem = new CuerpoDocumentoItemAnulacion(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
+    		CuerpoDocumentoItemCreditoFiscal cuerpoDocumentoItem = new CuerpoDocumentoItemCreditoFiscal(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
     				null, uniMedida, 
     				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, tributosItems, psv, noGravado); 
     		cuerpoDocumentoItem.validateValues();
@@ -385,7 +385,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		}
 
 		if (comprobanteCreditoFiscal.getCuerpoDocumento() != null) {
-			for (CuerpoDocumentoItemAnulacion cuerpoDocumentoItem :comprobanteCreditoFiscal.getCuerpoDocumento()) {
+			for (CuerpoDocumentoItemCreditoFiscal cuerpoDocumentoItem :comprobanteCreditoFiscal.getCuerpoDocumento()) {
 				result = cuerpoDocumentoItem.validateValues();
 				if (!result.equals(VALIDATION_RESULT_OK))
 					error.append(result);			

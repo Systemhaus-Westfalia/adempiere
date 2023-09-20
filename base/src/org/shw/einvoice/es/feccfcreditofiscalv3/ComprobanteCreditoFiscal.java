@@ -19,7 +19,7 @@ public class ComprobanteCreditoFiscal {
 	ReceptorCreditoFiscal receptor;
 	List<OtrosDocumentosItemCreditoFiscal> otrosDocumentos = null;
 	VentaTerceroCreditoFiscal ventaTercero = null;
-	List<CuerpoDocumentoItemAnulacion> cuerpoDocumento;
+	List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
 	List<ApendiceItem> apendice=null;  // null allowed
@@ -34,7 +34,7 @@ public class ComprobanteCreditoFiscal {
 		this.receptor             = new ReceptorCreditoFiscal();
 		//this.otrosDocumentos      = new ArrayList<OtrosDocumentosItem>();
 		//this.ventaTercero         = new VentaTercero();
-		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemAnulacion>();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemCreditoFiscal>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
 		//this.apendice             = new ArrayList<ApendiceItem>();
@@ -147,7 +147,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	public List<CuerpoDocumentoItemAnulacion> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItemCreditoFiscal> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
@@ -155,7 +155,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param cuerpoDocumento the cuerpoDocumento to set
 	 */
-	public void setCuerpoDocumento(List<CuerpoDocumentoItemAnulacion> cuerpoDocumento) {
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 

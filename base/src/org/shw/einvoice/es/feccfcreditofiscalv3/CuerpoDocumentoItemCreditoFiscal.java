@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 
  */
-public class CuerpoDocumentoItemAnulacion {
+public class CuerpoDocumentoItemCreditoFiscal {
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_VENTAGRAVADA_IS_NULL     = "Documento: Credito Fiscal, clase: CuerpoDocumentoItem. Validacion falló: valor de 'ventaGravada' no debe ser ='null'";
 	static final String VALIDATION_TRIBUTOS_NOT_NULL        = "Documento: Credito Fiscal, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='null'";
@@ -42,7 +42,7 @@ public class CuerpoDocumentoItemAnulacion {
     /**
 	 * Constructor without parameters. 
 	 */
-	public CuerpoDocumentoItemAnulacion() {
+	public CuerpoDocumentoItemCreditoFiscal() {
 		
 	}
 
@@ -65,7 +65,7 @@ public class CuerpoDocumentoItemAnulacion {
 	 * @param noGravado
 	 * @param ivaItem
 	 */
-	public CuerpoDocumentoItemAnulacion(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
+	public CuerpoDocumentoItemCreditoFiscal(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
 			String codTributo, int uniMedida, String descripcion, BigDecimal precioUni, BigDecimal montoDescu,
 			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, ArrayList<String> tributos, BigDecimal psv,
 			BigDecimal noGravado) {

@@ -7,11 +7,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
+
 /**
  * 
  */
-public class CuerpoDocumentoItemFacturaExportacion {
-	static final String VALIDATION_RESULT_OK = "OK";
+public class CuerpoDocumentoItemFacturaExportacion implements CuerpoDocumentoItem {
 	static final String VALIDATION_NOGRAVADO_IS_NULL = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'noGravado' no debe ser ='null'";
 	static final String VALIDATION_PRECIOUNI_IS_NULL = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'precioUni' no debe ser ='null'";
 	static final String VALIDATION_TRIBUTOS          = "Documento: Factura de Exportacion, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='C3'";
@@ -67,6 +68,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * Validate the Schema conditions
 	 */
+	@Override
 	public String validateValues() {
 		if(getNoGravado()==null) {
 			return VALIDATION_NOGRAVADO_IS_NULL;
@@ -85,6 +87,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the numItem
 	 */
+	@Override
 	public int getNumItem() {
 		return numItem;
 	}
@@ -94,6 +97,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * The parameter is validated.<br>
 	 * "minimum" : 1, "maximum" : 2000
 	 */
+	@Override
 	public void setNumItem(int numItem) {
 		final int MINIMUM = 1;
 		final int MAXIMUM = 2000;
@@ -108,6 +112,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the cantidad
 	 */
+	@Override
 	public BigDecimal getCantidad() {
 		return cantidad;
 	}
@@ -116,6 +121,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * @param cantidad the cantidad to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
+	@Override
 	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
@@ -123,6 +129,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the codigo
 	 */
+	@Override
 	public String getCodigo() {
 		return codigo;
 	}
@@ -132,6 +139,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 200; null also possible
 	 */
+	@Override
 	public void setCodigo(String codigo) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 200;
@@ -146,6 +154,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the uniMedida
 	 */
+	@Override
 	public int getUniMedida() {
 		return uniMedida;
 	}
@@ -155,6 +164,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * The parameter is validated.<br>
 	 * "minimum" : 1, "maximum" : 99
 	 */
+	@Override
 	public void setUniMedida(int uniMedida) {
 		final int MINIMUM = 1;
 		final int MAXIMUM = 99;
@@ -168,6 +178,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the descripcion
 	 */
+	@Override
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -177,6 +188,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 1000
 	 */
+	@Override
 	public void setDescripcion(String descripcion) {
 		final int MAXLENGTH = 1000;
 		int length = descripcion==null?0:descripcion.length();
@@ -190,6 +202,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the precioUni
 	 */
+	@Override
 	public BigDecimal getPrecioUni() {
 		return precioUni;
 	}
@@ -198,6 +211,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * @param precioUni the precioUni to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
+	@Override
 	public void setPrecioUni(BigDecimal precioUni) {
 		this.precioUni = precioUni;
 	}
@@ -205,6 +219,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the montoDescu
 	 */
+	@Override
 	public BigDecimal getMontoDescu() {
 		return montoDescu;
 	}
@@ -213,6 +228,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * @param montoDescu the montoDescu to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
+	@Override
 	public void setMontoDescu(BigDecimal montoDescu) {
 		this.montoDescu = montoDescu;
 	}
@@ -220,6 +236,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the ventaGravada
 	 */
+	@Override
 	public BigDecimal getVentaGravada() {
 		return ventaGravada;
 	}
@@ -228,6 +245,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * @param ventaGravada the ventaGravada to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
+	@Override
 	public void setVentaGravada(BigDecimal ventaGravada) {
 		this.ventaGravada = ventaGravada;
 	}
@@ -236,6 +254,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the noGravado
 	 */
+	@Override
 	public BigDecimal getNoGravado() {
 		return noGravado;
 	}
@@ -244,6 +263,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * @param noGravado the noGravado to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
+	@Override
 	public void setNoGravado(BigDecimal noGravado) {
 		this.noGravado = noGravado;
 	}
@@ -251,6 +271,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	/**
 	 * @return the tributos
 	 */
+	@Override
 	public ArrayList<String> getTributos() {
 		return tributos;
 	}
@@ -260,6 +281,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * Very complex logic: either null or a two-character string
 	 * "type" : ["array", "null"], "items" : {"type" : "string", "maxLength" : 2, "minLength" : 2}, "minItems": 1
 	 */
+	@Override
 	public void setTributos(ArrayList<String> tributos) {
 		final int MINLENGTH = 1;
 		
@@ -272,6 +294,208 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	
 
 
+
+    
+	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
+	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public int getTipoItem() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getTipoItem() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setTipoItem(int tipoItem) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setTipoItem() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodTributo() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getCodTributo() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodTributo(String codTributo) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setCodTributo() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public BigDecimal getVentaNoSuj() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getVentaNoSuj() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setVentaNoSuj(BigDecimal ventaNoSuj) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setVentaNoSuj() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public BigDecimal getVentaExenta() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getVentaExenta() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setVentaExenta(BigDecimal ventaExenta) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setVentaExenta() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getNumeroDocumento() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getNumeroDocumento() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setNumeroDocumento(String numeroDocumento) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setNumeroDocumento() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public BigDecimal getPsv() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getPsv() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setPsv(BigDecimal psv) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setPsv() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getNumDocumento() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getNumDocumento() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setNumDocumento(String numDocumento) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setNumDocumento() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getFechaEmision() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getFechaEmision() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setFechaEmision(String fechaEmision) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setFechaEmision() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public BigDecimal getMontoSujetoGrav() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getMontoSujetoGrav() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setMontoSujetoGrav(BigDecimal montoSujetoGrav) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setMontoSujetoGrav() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodigoRetencionMH() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getCodigoRetencionMH() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodigoRetencionMH(String codigoRetencionMH) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setCodigoRetencionMH() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public BigDecimal getIvaRetenido() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getIvaRetenido() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setIvaRetenido(BigDecimal ivaRetenido) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setIvaRetenido() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getTipoDte() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getTipoDte() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setTipoDte(String tipoDte) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setTipoDte() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public int getTipoDoc() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getTipoDoc() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setTipoDoc(int tipoDoc) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setTipoDoc() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public BigDecimal getIvaItem() {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.getIvaItem() is not allowed");
+	}
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setIvaItem(BigDecimal ivaItem) {
+		throw new UnsupportedOperationException("In Document FacturaExportacion calling the method CuerpoDocumentoItem.setIvaItem() is not allowed");
+	}
+
 	/**
 	 * @param args
 	 */
@@ -279,5 +503,4 @@ public class CuerpoDocumentoItemFacturaExportacion {
 		// TODO Auto-generated method stub
 
 	}
-
 }

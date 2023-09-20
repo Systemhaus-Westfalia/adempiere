@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.Direccion;
+import org.shw.einvoice.es.util.pojo.Receptor;
 
 /**
  * 
  */
-public class ReceptorFacturaExportacion {
-	static final String VALIDATION_RESULT_OK = "OK";
+public class ReceptorFacturaExportacion implements Receptor {
 	static final String VALIDATION_CODPAIS_IS_NULL             = "Documento: Factura de Exportacion, clase: Receptor. Validacion falló: valor de 'codPais' no debe ser = null";
 	static final String VALIDATION_NUMDOCUMENTO_PATTERN_FAILED = "Documento: Factura de Exportacion, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 
@@ -39,6 +39,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * Validate the Schema conditions
 	 */
+	@Override
 	public String validateValues() {
 		String pattern;
 		boolean patternOK;
@@ -71,6 +72,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the tipoDocumento
 	 */
+	@Override
 	public String getTipoDocumento() {
 		return tipoDocumento;
 	}
@@ -80,6 +82,7 @@ public class ReceptorFacturaExportacion {
 	 *                      The parameter is validated.<br>
 	 *                      "enum" : [null,"36","13","02","03","37"]
 	 */
+	@Override
 	public void setTipoDocumento(String tipoDocumento) {
 		String[] validTipoDocumento = { "36", "13", "02", "03", "37" };
 
@@ -93,6 +96,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the numDocumento
 	 */
+	@Override
 	public String getNumDocumento() {
 		return numDocumento;
 	}
@@ -102,6 +106,7 @@ public class ReceptorFacturaExportacion {
 	 *                     The parameter is validated.<br>
 	 *                     "minLength" : 3, "maxLength" : 20
 	 */
+	@Override
 	public void setNumDocumento(String numDocumento) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
@@ -117,6 +122,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the nombreComercial
 	 */
+	@Override
 	public String getNombreComercial() {
 		return nombreComercial;
 	}
@@ -126,6 +132,7 @@ public class ReceptorFacturaExportacion {
 	 *                        The parameter is validated.<br>
 	 *                        "minLength" : 1, "maxLength" : 150
 	 */
+	@Override
 	public void setNombreComercial(String nombreComercial) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
@@ -141,6 +148,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the codPais
 	 */
+	@Override
 	public String getCodPais() {
 		return codPais;
 	}
@@ -150,6 +158,7 @@ public class ReceptorFacturaExportacion {
 	 *                The parameter is validated.<br>
 	 *                "enum" : ["9320","9539","9565","9905",....]
 	 */
+	@Override
 	public void setCodPais(String codPais) {
 		String[] validPais = { "9320", "9539", "9565", "9905", "9999", "9303", "9306", "9309", "9310", "9315", "9317",
 				"9318", "9319", "9324", "9327", "9330", "9333", "9336", "9339", "9342", "9345", "9348", "9349", "9350",
@@ -183,6 +192,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the nombrePais
 	 */
+	@Override
 	public String getNombrePais() {
 		return nombrePais;
 	}
@@ -192,6 +202,7 @@ public class ReceptorFacturaExportacion {
 	 *                   The parameter is validated.<br>
 	 *                   "minLength" : 3, "maxLength" : 50
 	 */
+	@Override
 	public void setNombrePais(String nombrePais) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 50;
@@ -207,6 +218,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the complemento
 	 */
+	@Override
 	public String getComplemento() {
 		return complemento;
 	}
@@ -216,6 +228,7 @@ public class ReceptorFacturaExportacion {
 	 *                    The parameter is validated.<br>
 	 *                    "minLength" : 5, "maxLength" : 300
 	 */
+	@Override
 	public void setComplemento(String complemento) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 300;
@@ -231,6 +244,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the tipoPersona
 	 */
+	@Override
 	public int getTipoPersona() {
 		return tipoPersona;
 	}
@@ -240,6 +254,7 @@ public class ReceptorFacturaExportacion {
 	 *                    The parameter is validated.<br>
 	 *                    "enum" : [1,2]
 	 */
+	@Override
 	public void setTipoPersona(int tipoPersona) {
 		if (tipoPersona == 1 || tipoPersona == 2)
 			this.tipoPersona = tipoPersona;
@@ -251,6 +266,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the nombre
 	 */
+	@Override
 	public String getNombre() {
 		return nombre;
 	}
@@ -260,6 +276,7 @@ public class ReceptorFacturaExportacion {
 	 *               The parameter is validated.<br>
 	 *               "minLength" : 1, "maxLength" : 250
 	 */
+	@Override
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 250;
@@ -274,6 +291,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the descActividad
 	 */
+	@Override
 	public String getDescActividad() {
 		return descActividad;
 	}
@@ -283,6 +301,7 @@ public class ReceptorFacturaExportacion {
 	 *                      The parameter is validated.<br>
 	 *                      "minLength" : 5, "maxLength" : 150
 	 */
+	@Override
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 150;
@@ -310,6 +329,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the telefono
 	 */
+	@Override
 	public String getTelefono() {
 		return telefono;
 	}
@@ -320,6 +340,7 @@ public class ReceptorFacturaExportacion {
 	 * @param telefono the telefono to set<br> The parameter is validated.<br>
 	 * "minLength" : 8, "maxLength" : 50; null also possible
 	 */
+	@Override
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 50;
@@ -335,6 +356,7 @@ public class ReceptorFacturaExportacion {
 	/**
 	 * @return the correo
 	 */
+	@Override
 	public String getCorreo() {
 		return correo;
 	}
@@ -344,6 +366,7 @@ public class ReceptorFacturaExportacion {
 	 *               The parameter is validated.<br>
 	 *               "minLength" : 3, "maxLength" : 100; null also possible
 	 */
+	@Override
 	public void setCorreo(String correo) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 100;
@@ -353,6 +376,75 @@ public class ReceptorFacturaExportacion {
 			this.correo = correo;
 		else
 			throw new IllegalArgumentException("Wrong parameter 'correo' in FacturaExportacion.Receptor.setCorreo()");
+	}
+
+
+    
+	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
+	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public Direccion getDireccion() {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.getDireccion() is not allowed");
+	}
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setDireccion(Direccion direccion) {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.setDireccion() is not allowed");
+	}
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getNit() {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.getNit() is not allowed");
+	}
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setNit(String nit) {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.setNit() is not allowed");
+	}
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getNrc() {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.getNrc() is not allowed");
+	}
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setNrc(String nrc) {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.setNrc() is not allowed");
+	}
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodActividad() {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.getCodActividad() is not allowed");
+	}
+	
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodActividad(String codActividad) {
+		throw new UnsupportedOperationException("In Document Factura de Exportacion calling the method Receptor.setCodActividad() is not allowed");
 	}
 
 	/**

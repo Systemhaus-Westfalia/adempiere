@@ -6,11 +6,12 @@ package org.shw.einvoice.es.fendnotadedebitov3;
 import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.Direccion;
+import org.shw.einvoice.es.util.pojo.Receptor;
 
 /**
  * 
  */
-public class ReceptorNotaDeDebito {
+public class ReceptorNotaDeDebito implements Receptor {
 
 	String nit;
 	String nrc;
@@ -27,11 +28,21 @@ public class ReceptorNotaDeDebito {
 	 */
 	public ReceptorNotaDeDebito() {
 	}
+
+
+	/**
+	 * Validate the Schema conditions
+	 */
+	@Override
+	public String validateValues() {
+		return VALIDATION_RESULT_OK;
+	}
 	
 	
     /**
 	 * @return the nit
 	 */
+	@Override
     public String getNit() {
 		return nit;
 	}
@@ -41,6 +52,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^([0-9]{14}|[0-9]{9})$"
 	 */
+	@Override
 	public void setNit(String nit) {
 		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
 		boolean patternOK = (nit!=null) && Pattern.matches(PATTERN, nit);  
@@ -48,12 +60,13 @@ public class ReceptorNotaDeDebito {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in CreditoFiscal.Receptor.setNit()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in NotaDeDebito.Receptor.setNit()");
 	}
 	
 	/**
 	 * @return the nrc
 	 */
+	@Override
 	public String getNrc() {
 		return nrc;
 	}
@@ -63,6 +76,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{1,8}$"
 	 */
+	@Override
 	public void setNrc(String nrc) {
 		final String PATTERN = "^[0-9]{1,8}$";
 		boolean patternOK = (nrc!=null) && Pattern.matches(PATTERN, nrc);  
@@ -70,12 +84,13 @@ public class ReceptorNotaDeDebito {
 		if(patternOK)
 			this.nrc = nrc;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in CreditoFiscal.Receptor.setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in NotaDeDebito.Receptor.setNrc()");
 	}
     
 	/**
 	 * @return the nombre
 	 */
+	@Override
 	public String getNombre() {
 		return nombre;
 	}
@@ -85,6 +100,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 250
 	 */
+	@Override
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 250;
@@ -93,12 +109,13 @@ public class ReceptorNotaDeDebito {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in CreditoFiscal.Receptor.setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in NotaDeDebito.Receptor.setNombre()");
 	}
 
 	/**
 	 * @return the codActividad
 	 */
+	@Override
 	public String getCodActividad() {
 		return codActividad;
 	}
@@ -108,6 +125,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{2,6}$"
 	 */
+	@Override
 	public void setCodActividad(String codActividad) {
 		final String PATTERN = "^[0-9]{2,6}$";
 		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
@@ -115,12 +133,13 @@ public class ReceptorNotaDeDebito {
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in CreditoFiscal.Receptor.setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in NotaDeDebito.Receptor.setCodActividad()");
 	}
 
 	/**
 	 * @return the descActividad
 	 */
+	@Override
 	public String getDescActividad() {
 		return descActividad;
 	}
@@ -130,6 +149,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 150
 	 */
+	@Override
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
@@ -138,12 +158,13 @@ public class ReceptorNotaDeDebito {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in CreditoFiscal.Receptor.setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in NotaDeDebito.Receptor.setDescActividad()");
 	}
 
 	/**
 	 * @return the nombreComercial
 	 */
+	@Override
 	public String getNombreComercial() {
 		return nombreComercial;
 	}
@@ -153,6 +174,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 150; null also possible
 	 */
+	@Override
 	public void setNombreComercial(String nombreComercial) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
@@ -161,12 +183,13 @@ public class ReceptorNotaDeDebito {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in CreditoFiscal.Receptor.setNombreComercial()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in NotaDeDebito.Receptor.setNombreComercial()");
 	}
 
 	/**
 	 * @return the direccion
 	 */
+	@Override
 	public Direccion getDireccion() {
 		return direccion;
 	}
@@ -174,6 +197,7 @@ public class ReceptorNotaDeDebito {
 	/**
 	 * @param direccion the direccion to set
 	 */
+	@Override
 	public void setDireccion(Direccion direccion) {
 		this.direccion = direccion;
 	}
@@ -181,6 +205,7 @@ public class ReceptorNotaDeDebito {
 	/**
 	 * @return the telefono
 	 */
+	@Override
 	public String getTelefono() {
 		return telefono;
 	}
@@ -190,6 +215,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 8, "maxLength" : 30
 	 */
+	@Override
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 30;
@@ -198,12 +224,13 @@ public class ReceptorNotaDeDebito {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in CreditoFiscal.Receptor.setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in NotaDeDebito.Receptor.setTelefono()");
 	}
 
 	/**
 	 * @return the correo
 	 */
+	@Override
 	public String getCorreo() {
 		return correo;
 	}
@@ -213,6 +240,7 @@ public class ReceptorNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 100
 	 */
+	@Override
 	public void setCorreo(String correo) {
 		final int MAXLENGTH = 100;
 		int length = correo==null?0:correo.length();
@@ -220,9 +248,111 @@ public class ReceptorNotaDeDebito {
 		if(length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in CreditoFiscal.Receptor.setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in NotaDeDebito.Receptor.setCorreo()");
 	}
 
+
+
+    
+	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
+	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getNombrePais() {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.getNombrePais() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setNombrePais(String nombrePais) {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.setNombrePais() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getCodPais() {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.getCodPais() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setCodPais(String codPais) {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.setCodPais() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getComplemento() {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.getComplemento() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setComplemento(String complemento) {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.setComplemento() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public int getTipoPersona() {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.getTipoPersona() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setTipoPersona(int tipoPersona) {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.setTipoPersona() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getTipoDocumento() {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.getTipoDocumento() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setTipoDocumento(String tipoDocumento) {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.setTipoDocumento() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getNumDocumento() {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.getNumDocumento() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setNumDocumento(String numDocumento) {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Receptor.setNumDocumento() is not allowed");
+	}
+	
 	/**
 	 * @param args
 	 */

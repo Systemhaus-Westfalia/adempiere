@@ -14,8 +14,8 @@ public class Anulacion {
 
 	IdentificacionAnulacion identificacion;
 	EmisorAnulacion emisor;
-	Documento documento;
-	Motivo motivo;
+	DocumentoAnulacion documento;
+	MotivoAnulacion motivo;
 
 	/**
 	 * No parameters
@@ -23,8 +23,8 @@ public class Anulacion {
 	public Anulacion() {
 		this.identificacion = new IdentificacionAnulacion();
 		this.emisor         = new EmisorAnulacion();
-		this.documento      = new Documento();
-		this.motivo         = new Motivo();
+		this.documento      = new DocumentoAnulacion();
+		this.motivo         = new MotivoAnulacion();
 	}
 
 
@@ -81,7 +81,7 @@ public String validateValues() {
 	/**
 	 * @return the documento
 	 */
-	public Documento getDocumento() {
+	public DocumentoAnulacion getDocumento() {
 		return documento;
 	}
 
@@ -89,7 +89,8 @@ public String validateValues() {
 	/**
 	 * @param documento the documento to set
 	 */
-	public void setDocumento(Documento documento) {
+	public void setDocumento(DocumentoAnulacion
+			documento) {
 		this.documento = documento;
 	}
 
@@ -97,7 +98,7 @@ public String validateValues() {
 	/**
 	 * @return the motivo
 	 */
-	public Motivo getMotivo() {
+	public MotivoAnulacion getMotivo() {
 		return motivo;
 	}
 
@@ -105,7 +106,7 @@ public String validateValues() {
 	/**
 	 * @param motivo the motivo to set
 	 */
-	public void setMotivo(Motivo motivo) {
+	public void setMotivo(MotivoAnulacion motivo) {
 		this.motivo = motivo;
 	}
 

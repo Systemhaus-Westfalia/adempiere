@@ -1,4 +1,4 @@
-package org.shw.einvoice.es.anulacionv2;
+package org.shw.einvoice.es.util.pojo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Just for class Anulacion
  */
-public class Documento {
+public abstract class Documento {
 
 	String tipoDte;
 	String codigoGeneracion;

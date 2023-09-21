@@ -1,4 +1,4 @@
-package org.shw.einvoice.es.anulacionv2;
+package org.shw.einvoice.es.util.pojo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Just for class Anulacion
  */
-public class Motivo {
+public abstract class Motivo {
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_MOTIVOANULACION_IS_NULL = "Documento: Anulacion, clase: Motivo. Validacion falló: valor de 'motivoAnulacion' no debe ser ='null'";
 

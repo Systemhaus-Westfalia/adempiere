@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * 
  */
-public class TributosItem {
+public class TributosItemFactura {
 	
 	String codigo;
 	String descripcion;
@@ -21,7 +21,7 @@ public class TributosItem {
 	 * @param descripcion
 	 * @param valor
 	 */
-	public TributosItem(String codigo, String descripcion, BigDecimal valor) {
+	public TributosItemFactura(String codigo, String descripcion, BigDecimal valor) {
 		this.codigo = codigo;
 		this.descripcion = descripcion;
 		this.valor = valor;

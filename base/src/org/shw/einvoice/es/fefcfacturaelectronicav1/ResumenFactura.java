@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.Resumen;
-import org.shw.einvoice.es.util.pojo.TributosItem;
 
 /**
  * 
@@ -27,7 +26,7 @@ public class ResumenFactura implements Resumen{
 	BigDecimal descuGravada;
 	BigDecimal porcentajeDescuento;
 	BigDecimal totalDescu;
-	List<TributosItem> tributos;
+	List<TributosItemFactura> tributos;
 	BigDecimal subTotal;
 	BigDecimal ivaRete1;
 	BigDecimal reteRenta;
@@ -225,14 +224,6 @@ public String validateValues() {
 	@Override
 	public void setTotalDescu(BigDecimal totalDescu) {
 		this.totalDescu = totalDescu;
-	}
-
-	public List<TributosItem> getTributos() {
-		return tributos;
-	}
-
-	public void setTributos(List<TributosItem> tributos) {
-		this.tributos = tributos;
 	}
 
 	/**
@@ -468,6 +459,20 @@ public String validateValues() {
 	        throw new IllegalArgumentException("Wrong parameter 'numPagoElectronico' in FacturaExportacion.Resumen.setNumPagoElectronico()");
 	}
 
+	/**
+	 * @return the tributos
+	 */
+	public List<TributosItemFactura> getTributosFactura() {
+		return tributos;
+	}
+
+	/**
+	 * @param tributos the tributos to set
+	 */
+	public void setTributosFactura(List<TributosItemFactura> tributos) {
+		this.tributos = tributos;
+	}
+
     
 	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
 	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
@@ -611,6 +616,22 @@ public String validateValues() {
 	@Override
 	public void setObservaciones(String observaciones) {
 		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setObservaciones() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public List< org.shw.einvoice.es.util.pojo.TributosItem> getTributos() {
+		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getTributos() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setTributos(List< org.shw.einvoice.es.util.pojo.TributosItem> tributos) {
+		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setTributos() is not allowed");
 	}
 
 	/**

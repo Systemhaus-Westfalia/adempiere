@@ -3,18 +3,20 @@
  */
 package org.shw.einvoice.es.feccfcreditofiscalv3;
 
+import org.shw.einvoice.es.util.pojo.Extension;
+
 /**
  * 
  */
-public class ExtensionCreditoFiscal {
-	
+public class ExtensionCreditoFiscal implements Extension {
+
 	String nombEntrega=null;  // null allowed
 	String docuEntrega=null;  // null allowed
 	String nombRecibe=null;  // null allowed
 	String docuRecibe=null;  // null allowed
 	String observaciones=null;  // null allowed
 	String placaVehiculo=null;  // null allowed
-	
+
 	/**
 	 * No parameters
 	 */
@@ -25,6 +27,7 @@ public class ExtensionCreditoFiscal {
 	/**
 	 * @return the nombEntrega
 	 */
+	@Override
 	public String getNombEntrega() {
 		return nombEntrega;
 	}
@@ -34,20 +37,22 @@ public class ExtensionCreditoFiscal {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 100; null also possible
 	 */
+	@Override
 	public void setNombEntrega(String nombEntrega) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 100;
 		int length = nombEntrega==null?0:nombEntrega.length();
-		
+
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombEntrega==null) )
 			this.nombEntrega = nombEntrega;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombEntrega' in (POJO).Extension.setNombEntrega()");
+			throw new IllegalArgumentException("Wrong parameter 'nombEntrega' in (POJO).Extension.setNombEntrega()");
 	}
 
 	/**
 	 * @return the docuEntrega
 	 */
+	@Override
 	public String getDocuEntrega() {
 		return docuEntrega;
 	}
@@ -57,20 +62,22 @@ public class ExtensionCreditoFiscal {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 25; null also possible
 	 */
+	@Override
 	public void setDocuEntrega(String docuEntrega) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
 		int length = docuEntrega==null?0:docuEntrega.length();
-		
+
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuEntrega==null) )
 			this.docuEntrega = docuEntrega;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'docuEntrega' in (POJO).Extension.setDocuEntrega()");
+			throw new IllegalArgumentException("Wrong parameter 'docuEntrega' in (POJO).Extension.setDocuEntrega()");
 	}
 
 	/**
 	 * @return the nombRecibe
 	 */
+	@Override
 	public String getNombRecibe() {
 		return nombRecibe;
 	}
@@ -80,20 +87,22 @@ public class ExtensionCreditoFiscal {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 100; null also possible
 	 */
+	@Override
 	public void setNombRecibe(String nombRecibe) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 100;
 		int length = nombRecibe==null?0:nombRecibe.length();
-		
+
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombRecibe==null) )
 			this.nombRecibe = nombRecibe;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombRecibe' in (POJO).Extension.setNombRecibe()");
+			throw new IllegalArgumentException("Wrong parameter 'nombRecibe' in (POJO).Extension.setNombRecibe()");
 	}
 
 	/**
 	 * @return the docuRecibe
 	 */
+	@Override
 	public String getDocuRecibe() {
 		return docuRecibe;
 	}
@@ -103,20 +112,22 @@ public class ExtensionCreditoFiscal {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 25; null also possible
 	 */
+	@Override
 	public void setDocuRecibe(String docuRecibe) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
 		int length = docuRecibe==null?0:docuRecibe.length();
-		
+
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuRecibe==null) )
 			this.docuRecibe = docuRecibe;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'docuRecibe' in (POJO).Extension.setDocuRecibe()");
+			throw new IllegalArgumentException("Wrong parameter 'docuRecibe' in (POJO).Extension.setDocuRecibe()");
 	}
 
 	/**
 	 * @return the observaciones
 	 */
+	@Override
 	public String getObservaciones() {
 		return observaciones;
 	}
@@ -126,19 +137,21 @@ public class ExtensionCreditoFiscal {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 3000; null also possible
 	 */
+	@Override
 	public void setObservaciones(String observaciones) {
 		final int MAXLENGTH = 3000;
 		int length = observaciones==null?0:observaciones.length();
-		
+
 		if( (length<=MAXLENGTH) || (observaciones==null) )
 			this.observaciones = observaciones;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in (POJO).Extension.setObservaciones()");
+			throw new IllegalArgumentException("Wrong parameter 'observaciones' in (POJO).Extension.setObservaciones()");
 	}
 
 	/**
 	 * @return the placaVehiculo
 	 */
+	@Override
 	public String getPlacaVehiculo() {
 		return placaVehiculo;
 	}
@@ -148,15 +161,16 @@ public class ExtensionCreditoFiscal {
 	 * The parameter is validated.<br>
 	 * "minLength" : 2, "maxLength" : 10; null also possible
 	 */
+	@Override
 	public void setPlacaVehiculo(String placaVehiculo) {
 		final int MINLENGTH = 2;
 		final int MAXLENGTH = 10;
 		int length = placaVehiculo==null?0:placaVehiculo.length();
-		
+
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (placaVehiculo==null) )
 			this.placaVehiculo = placaVehiculo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'placaVehiculo' in (POJO).Extension.setPlacaVehiculo()");
+			throw new IllegalArgumentException("Wrong parameter 'placaVehiculo' in (POJO).Extension.setPlacaVehiculo()");
 	}
 
 

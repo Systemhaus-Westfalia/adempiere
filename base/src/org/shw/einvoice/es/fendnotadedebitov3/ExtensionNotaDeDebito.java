@@ -3,10 +3,12 @@
  */
 package org.shw.einvoice.es.fendnotadedebitov3;
 
+import org.shw.einvoice.es.util.pojo.Extension;
+
 /**
  * 
  */
-public class ExtensionNotaDeDebito {
+public class ExtensionNotaDeDebito implements Extension {
 	
 	String nombEntrega=null;  // null allowed
 	String docuEntrega=null;  // null allowed
@@ -24,6 +26,7 @@ public class ExtensionNotaDeDebito {
 	/**
 	 * @return the nombEntrega
 	 */
+	@Override
 	public String getNombEntrega() {
 		return nombEntrega;
 	}
@@ -33,6 +36,7 @@ public class ExtensionNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 100; null also possible
 	 */
+	@Override
 	public void setNombEntrega(String nombEntrega) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 100;
@@ -47,6 +51,7 @@ public class ExtensionNotaDeDebito {
 	/**
 	 * @return the docuEntrega
 	 */
+	@Override
 	public String getDocuEntrega() {
 		return docuEntrega;
 	}
@@ -56,6 +61,7 @@ public class ExtensionNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 25; null also possible
 	 */
+	@Override
 	public void setDocuEntrega(String docuEntrega) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
@@ -70,6 +76,7 @@ public class ExtensionNotaDeDebito {
 	/**
 	 * @return the nombRecibe
 	 */
+	@Override
 	public String getNombRecibe() {
 		return nombRecibe;
 	}
@@ -79,6 +86,7 @@ public class ExtensionNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 100; null also possible
 	 */
+	@Override
 	public void setNombRecibe(String nombRecibe) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 100;
@@ -93,6 +101,7 @@ public class ExtensionNotaDeDebito {
 	/**
 	 * @return the docuRecibe
 	 */
+	@Override
 	public String getDocuRecibe() {
 		return docuRecibe;
 	}
@@ -102,6 +111,7 @@ public class ExtensionNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 25; null also possible
 	 */
+	@Override
 	public void setDocuRecibe(String docuRecibe) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
@@ -116,6 +126,7 @@ public class ExtensionNotaDeDebito {
 	/**
 	 * @return the observaciones
 	 */
+	@Override
 	public String getObservaciones() {
 		return observaciones;
 	}
@@ -125,6 +136,7 @@ public class ExtensionNotaDeDebito {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 3000; null also possible
 	 */
+	@Override
 	public void setObservaciones(String observaciones) {
 		final int MAXLENGTH = 3000;
 		int length = observaciones==null?0:observaciones.length();
@@ -134,6 +146,29 @@ public class ExtensionNotaDeDebito {
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in NotaDeDebito.Extension.setObservaciones()");
 	}
+
+    
+	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
+	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
+
+
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public String getPlacaVehiculo() {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Extension.getPlacaVehiculo() is not allowed");
+	}
+
+	/**
+	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
+	 */
+	@Override
+	public void setPlacaVehiculo(String placaVehiculo) {
+		throw new UnsupportedOperationException("In Document Nota de Debito calling the method Extension.setPlacaVehiculo() is not allowed");
+	}
+
 
 
 	/**

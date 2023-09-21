@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
 
 /**
  * 
@@ -31,7 +30,7 @@ public class FacturaElectronica {
 	List<CuerpoDocumentoItemFactura> cuerpoDocumento;
 	ResumenFactura resumen;
 	ExtensionFactura extension;
-	List<ApendiceItem> apendice=null;  // null allowed
+	List<ApendiceItemFactura> apendice=null;  // null allowed
 
 	/**
 	 * No parameters
@@ -219,7 +218,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the apendice
 	 */
-	public List<ApendiceItem> getApendice() {
+	public List<ApendiceItemFactura> getApendice() {
 		return apendice;
 	}
 
@@ -227,7 +226,7 @@ public class FacturaElectronica {
 	/**
 	 * @param apendice the apendice to set
 	 */
-	public void setApendice(List<ApendiceItem> apendice) {
+	public void setApendice(List<ApendiceItemFactura> apendice) {
 		this.apendice = apendice;
 	}
 

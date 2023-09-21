@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-
 
 /**
  * 
@@ -24,7 +22,7 @@ public class Retencion {
 	List<CuerpoDocumentoItemRetencion> cuerpoDocumento;
 	ResumenRetencion resumen;
 	ExtensionRetencion extension;
-	List<ApendiceItem> apendice=null;  // null allowed
+	List<ApendiceItemRetencion> apendice=null;  // null allowed
 
 	/**
 	 * No parameters
@@ -36,7 +34,7 @@ public class Retencion {
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemRetencion>();
 		this.resumen              = new ResumenRetencion();
 		this.extension            = new ExtensionRetencion();
-		this.apendice             = new ArrayList<ApendiceItem>();
+		this.apendice             = new ArrayList<ApendiceItemRetencion>();
 	}
 	
 	/**
@@ -138,14 +136,14 @@ public class Retencion {
 	/**
 	 * @return the apendice
 	 */
-	public List<ApendiceItem> getApendice() {
+	public List<ApendiceItemRetencion> getApendice() {
 		return apendice;
 	}
 
 	/**
 	 * @param apendice the apendice to set
 	 */
-	public void setApendice(List<ApendiceItem> apendice) {
+	public void setApendice(List<ApendiceItemRetencion> apendice) {
 		this.apendice = apendice;
 	}
 

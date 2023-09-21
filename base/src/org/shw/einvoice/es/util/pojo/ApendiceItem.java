@@ -6,7 +6,7 @@ package org.shw.einvoice.es.util.pojo;
 /**
  * 
  */
-public class ApendiceItem {
+public abstract class ApendiceItem {
 	
 	String campo;
 	String etiqueta;

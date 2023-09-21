@@ -5,7 +5,6 @@ package org.shw.einvoice.es.feccfcreditofiscalv3;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
 
 /**
  * 
@@ -21,7 +20,7 @@ public class ComprobanteCreditoFiscal {
 	List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento;
 	ResumenCreditoFiscal resumen;
 	ExtensionCreditoFiscal extension;
-	List<ApendiceItem> apendice=null;  // null allowed
+	List<ApendiceItemCreditoFiscal> apendice=null;  // null allowed
 
 	/**
 	 * No parameters
@@ -194,7 +193,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the apendice
 	 */
-	public List<ApendiceItem> getApendice() {
+	public List<ApendiceItemCreditoFiscal> getApendice() {
 		return apendice;
 	}
 
@@ -202,7 +201,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param apendice the apendice to set
 	 */
-	public void setApendice(List<ApendiceItem> apendice) {
+	public void setApendice(List<ApendiceItemCreditoFiscal> apendice) {
 		this.apendice = apendice;
 	}
 

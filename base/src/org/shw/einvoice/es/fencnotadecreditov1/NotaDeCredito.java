@@ -6,10 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-
-
-
 
 /**
  * 
@@ -24,7 +20,7 @@ public class NotaDeCredito {
 	List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumento;
 	ResumenNotaDeCredito resumen;
 	ExtensionNotaDeCredito extension;
-	List<ApendiceItem> apendice=null;  // null allowed
+	List<ApendiceItemNotaDeCredito> apendice=null;  // null allowed
 	//this.apendice             = new ArrayList<ApendiceItem>();
 
 	/**
@@ -108,11 +104,11 @@ public class NotaDeCredito {
 		this.extension = extension;
 	}
 
-	public List<ApendiceItem> getApendice() {
+	public List<ApendiceItemNotaDeCredito> getApendice() {
 		return apendice;
 	}
 
-	public void setApendice(List<ApendiceItem> apendice) {
+	public void setApendice(List<ApendiceItemNotaDeCredito> apendice) {
 		this.apendice = apendice;
 	}
 

@@ -13,7 +13,7 @@ import org.shw.einvoice.es.util.pojo.Resumen;
 /**
  * 
  */
-public class ResumenFactura implements Resumen{
+public class ResumenFactura implements Resumen {
 	static final String VALIDATION_TOTALGRAVADA_IS_NULL = "Documento: Factura, clase: Resumen. Validacion falló: valor de 'totlaGravada' no debe ser = null";
 	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Factura, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
 	
@@ -26,7 +26,7 @@ public class ResumenFactura implements Resumen{
 	BigDecimal descuGravada;
 	BigDecimal porcentajeDescuento;
 	BigDecimal totalDescu;
-	List<TributosItemFactura> tributos;
+	List<TributosItemFactura> tributos;  // Special getter()+setter(), different from interface Resumen
 	BigDecimal subTotal;
 	BigDecimal ivaRete1;
 	BigDecimal reteRenta;
@@ -461,6 +461,7 @@ public String validateValues() {
 
 	/**
 	 * @return the tributos
+	 * // Special getter, different from interface Resumen
 	 */
 	public List<TributosItemFactura> getTributosFactura() {
 		return tributos;
@@ -468,6 +469,7 @@ public String validateValues() {
 
 	/**
 	 * @param tributos the tributos to set
+	 * Special setter(), different from interface Resumen
 	 */
 	public void setTributosFactura(List<TributosItemFactura> tributos) {
 		this.tributos = tributos;

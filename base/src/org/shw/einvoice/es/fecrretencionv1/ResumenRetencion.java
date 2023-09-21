@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.Resumen;
-import org.shw.einvoice.es.util.pojo.TributosItem;
+import org.shw.einvoice.es.util.pojo.TributosItem;  // This is only needed because interface Resumen.
 
 /**
  * 

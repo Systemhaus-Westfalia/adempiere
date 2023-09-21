@@ -46,7 +46,6 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -357,7 +356,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 
 	}
 	
-	private void fillExtension(Extension extension, MInvoice invoice) {
+	private void fillExtension(ExtensionFactura extension, MInvoice invoice) {
 		extension.setDocuEntrega("555");
 		extension.setDocuRecibe("555");
 		extension.setNombEntrega("55");

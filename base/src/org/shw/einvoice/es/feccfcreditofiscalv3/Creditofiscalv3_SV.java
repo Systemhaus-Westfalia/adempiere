@@ -4,21 +4,20 @@ import java.util.List;
 
 import org.shw.einvoice.es.fefexfacturaexportacionv1.OtrosDocumentosItemFacturaExportacon;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public class Creditofiscalv3_SV {
 
-	 private EmisorCreditoFiscal 					emisor;
+	 private EmisorCreditoFiscal 		emisor;
 	 private String 					estado;
-	 private ResumenCreditoFiscal 					resumen;
+	 private ResumenCreditoFiscal 		resumen;
 	 private String 					version;
 	 private String 					ambiente;
 	 private List<ApendiceItem> 		apendiceItems;
-	 private ReceptorCreditoFiscal 					receptor;
+	 private ReceptorCreditoFiscal  	receptor;
 	 private String						codiMsg;
-	 private Extension 					extension;
+	 private ExtensionCreditoFiscal		extension;
 	 private Integer 					versionApp;
 	 private String						clasificaMsg;
 	 private VentaTercero 				ventaTercero;
@@ -155,10 +154,10 @@ public class Creditofiscalv3_SV {
 	public void setResumen(ResumenCreditoFiscal resumen) {
 		this.resumen = resumen;
 	}
-	public Extension getExtension() {
+	public ExtensionCreditoFiscal getExtension() {
 		return extension;
 	}
-	public void setExtension(Extension extension) {
+	public void setExtension(ExtensionCreditoFiscal extension) {
 		this.extension = extension;
 	}
 	public List<ApendiceItem> getApendiceItems() {

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.Extension;
 
 /**
  * 
@@ -31,7 +30,7 @@ public class FacturaElectronica {
 	VentaTerceroFactura ventaTercero = null;
 	List<CuerpoDocumentoItemFactura> cuerpoDocumento;
 	ResumenFactura resumen;
-	Extension extension;
+	ExtensionFactura extension;
 	List<ApendiceItem> apendice=null;  // null allowed
 
 	/**
@@ -46,7 +45,7 @@ public class FacturaElectronica {
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemFactura>();
 		this.resumen              = new ResumenFactura();
-		this.extension            = new Extension();
+		this.extension            = new ExtensionFactura();
 		//this.apendice             = new ArrayList<ApendiceItem>();
 	}
 
@@ -203,7 +202,7 @@ public class FacturaElectronica {
 	/**
 	 * @return the extension
 	 */
-	public Extension getExtension() {
+	public ExtensionFactura getExtension() {
 		return extension;
 	}
 
@@ -211,7 +210,7 @@ public class FacturaElectronica {
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(Extension extension) {
+	public void setExtension(ExtensionFactura extension) {
 		this.extension = extension;
 	}
 

@@ -1,23 +1,24 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fencnotadecreditov1;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 /**
  * 
  */
-public class Extension {
+public class ExtensionCreditoFiscal {
 	
 	String nombEntrega=null;  // null allowed
 	String docuEntrega=null;  // null allowed
 	String nombRecibe=null;  // null allowed
 	String docuRecibe=null;  // null allowed
 	String observaciones=null;  // null allowed
+	String placaVehiculo=null;  // null allowed
 	
 	/**
 	 * No parameters
 	 */
-	public Extension() {
+	public ExtensionCreditoFiscal() {
 
 	}
 
@@ -41,7 +42,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombEntrega==null) )
 			this.nombEntrega = nombEntrega;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombEntrega' in NotaDeCredito.Extension.setNombEntrega()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombEntrega' in (POJO).Extension.setNombEntrega()");
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuEntrega==null) )
 			this.docuEntrega = docuEntrega;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'docuEntrega' in NotaDeCredito.Extension.setDocuEntrega()");
+	        throw new IllegalArgumentException("Wrong parameter 'docuEntrega' in (POJO).Extension.setDocuEntrega()");
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombRecibe==null) )
 			this.nombRecibe = nombRecibe;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombRecibe' in NotaDeCredito.Extension.setNombRecibe()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombRecibe' in (POJO).Extension.setNombRecibe()");
 	}
 
 	/**
@@ -110,7 +111,7 @@ public class Extension {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (docuRecibe==null) )
 			this.docuRecibe = docuRecibe;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'docuRecibe' in NotaDeCredito.Extension.setDocuRecibe()");
+	        throw new IllegalArgumentException("Wrong parameter 'docuRecibe' in (POJO).Extension.setDocuRecibe()");
 	}
 
 	/**
@@ -132,7 +133,30 @@ public class Extension {
 		if( (length<=MAXLENGTH) || (observaciones==null) )
 			this.observaciones = observaciones;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in NotaDeCredito.Extension.setObservaciones()");
+	        throw new IllegalArgumentException("Wrong parameter 'observaciones' in (POJO).Extension.setObservaciones()");
+	}
+
+	/**
+	 * @return the placaVehiculo
+	 */
+	public String getPlacaVehiculo() {
+		return placaVehiculo;
+	}
+
+	/**
+	 * @param placaVehiculo the placaVehiculo to set<br>
+	 * The parameter is validated.<br>
+	 * "minLength" : 2, "maxLength" : 10; null also possible
+	 */
+	public void setPlacaVehiculo(String placaVehiculo) {
+		final int MINLENGTH = 2;
+		final int MAXLENGTH = 10;
+		int length = placaVehiculo==null?0:placaVehiculo.length();
+		
+		if( (length>=MINLENGTH && length<=MAXLENGTH) || (placaVehiculo==null) )
+			this.placaVehiculo = placaVehiculo;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'placaVehiculo' in (POJO).Extension.setPlacaVehiculo()");
 	}
 
 

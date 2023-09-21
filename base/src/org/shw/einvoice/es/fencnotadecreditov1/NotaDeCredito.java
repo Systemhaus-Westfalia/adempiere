@@ -23,7 +23,7 @@ public class NotaDeCredito {
 	VentaTerceroNotaDeCredito ventaTercero = null;
 	List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumento;
 	ResumenNotaDeCredito resumen;
-	Extension extension;
+	ExtensionNotaDeCredito extension;
 	List<ApendiceItem> apendice=null;  // null allowed
 	//this.apendice             = new ArrayList<ApendiceItem>();
 
@@ -38,7 +38,7 @@ public class NotaDeCredito {
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemNotaDeCredito>();
 		this.resumen              = new ResumenNotaDeCredito();
-		this.extension            = new Extension();
+		this.extension            = new ExtensionNotaDeCredito();
 	}
 
 	/**
@@ -100,11 +100,11 @@ public class NotaDeCredito {
 		this.resumen = resumen;
 	}
 
-	public Extension getExtension() {
+	public ExtensionNotaDeCredito getExtension() {
 		return extension;
 	}
 
-	public void setExtension(Extension extension) {
+	public void setExtension(ExtensionNotaDeCredito extension) {
 		this.extension = extension;
 	}
 

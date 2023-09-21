@@ -6,7 +6,7 @@ package org.shw.einvoice.es.fendnotadedebitov3;
 /**
  * 
  */
-public class Extension {
+public class ExtensionNotaDeDebito {
 	
 	String nombEntrega=null;  // null allowed
 	String docuEntrega=null;  // null allowed
@@ -17,7 +17,7 @@ public class Extension {
 	/**
 	 * No parameters
 	 */
-	public Extension() {
+	public ExtensionNotaDeDebito() {
 
 	}
 

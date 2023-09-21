@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.fefcfacturaelectronicav1;
 
 /**
  * 
  */
-public class Extension {
+public class ExtensionFactura {
 	
 	String nombEntrega=null;  // null allowed
 	String docuEntrega=null;  // null allowed
@@ -18,7 +18,7 @@ public class Extension {
 	/**
 	 * No parameters
 	 */
-	public Extension() {
+	public ExtensionFactura() {
 
 	}
 

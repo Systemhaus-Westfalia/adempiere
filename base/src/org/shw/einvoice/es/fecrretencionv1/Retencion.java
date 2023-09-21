@@ -23,7 +23,7 @@ public class Retencion {
 	ReceptorRetencion receptor;
 	List<CuerpoDocumentoItemRetencion> cuerpoDocumento;
 	ResumenRetencion resumen;
-	Extension extension;
+	ExtensionRetencion extension;
 	List<ApendiceItem> apendice=null;  // null allowed
 
 	/**
@@ -35,7 +35,7 @@ public class Retencion {
 		this.receptor             = new ReceptorRetencion();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemRetencion>();
 		this.resumen              = new ResumenRetencion();
-		this.extension            = new Extension();
+		this.extension            = new ExtensionRetencion();
 		this.apendice             = new ArrayList<ApendiceItem>();
 	}
 	
@@ -124,14 +124,14 @@ public class Retencion {
 	/**
 	 * @return the extension
 	 */
-	public Extension getExtension() {
+	public ExtensionRetencion getExtension() {
 		return extension;
 	}
 
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(Extension extension) {
+	public void setExtension(ExtensionRetencion extension) {
 		this.extension = extension;
 	}
 

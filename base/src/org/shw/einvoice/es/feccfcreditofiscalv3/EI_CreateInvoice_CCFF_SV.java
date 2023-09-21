@@ -45,7 +45,6 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
@@ -353,7 +352,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			
 	}
 	
-	private void fillExtension(Extension extension, MInvoice invoice) {
+	private void fillExtension(ExtensionCreditoFiscal extension, MInvoice invoice) {
 		extension.setDocuEntrega("555");
 		extension.setDocuRecibe("555");
 		extension.setNombEntrega("55");

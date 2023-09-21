@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.Extension;
 
 /**
  * 
@@ -21,7 +20,7 @@ public class ComprobanteCreditoFiscal {
 	VentaTerceroCreditoFiscal ventaTercero = null;
 	List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento;
 	ResumenCreditoFiscal resumen;
-	Extension extension;
+	ExtensionCreditoFiscal extension;
 	List<ApendiceItem> apendice=null;  // null allowed
 
 	/**
@@ -36,7 +35,7 @@ public class ComprobanteCreditoFiscal {
 		//this.ventaTercero         = new VentaTercero();
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemCreditoFiscal>();
 		this.resumen              = new ResumenCreditoFiscal();
-		this.extension            = new Extension();
+		this.extension            = new ExtensionCreditoFiscal();
 		//this.apendice             = new ArrayList<ApendiceItem>();
 	}
 	
@@ -179,7 +178,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @return the extension
 	 */
-	public Extension getExtension() {
+	public ExtensionCreditoFiscal getExtension() {
 		return extension;
 	}
 
@@ -187,7 +186,7 @@ public class ComprobanteCreditoFiscal {
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(Extension extension) {
+	public void setExtension(ExtensionCreditoFiscal extension) {
 		this.extension = extension;
 	}
 

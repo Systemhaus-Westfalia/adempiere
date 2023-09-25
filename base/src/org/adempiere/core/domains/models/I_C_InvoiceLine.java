@@ -629,6 +629,8 @@ public interface I_C_InvoiceLine
 
     /** Column name ReversalLine_ID */
     public static final String COLUMNNAME_ReversalLine_ID = "ReversalLine_ID";
+    
+    public org.adempiere.core.domains.models.I_C_InvoiceLine getRef_InvoiceLine() throws RuntimeException;
 
 	/** Set Reversal Line.
 	  * Use to keep the reversal line ID for reversing costing purpose

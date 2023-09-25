@@ -16,7 +16,7 @@
  * or https://github.com/adempiere/adempiere/blob/develop/license.html        *
  *****************************************************************************/
 
-package org.shw.einvoice.es.fefcfacturaelectronicav1;
+package org.shw.einvoice.es.fencnotadecreditov1;
 
 
 import java.io.File;
@@ -28,27 +28,31 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Optional;
 
 import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
 import org.apache.commons.lang3.StringUtils;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
 import org.compiere.model.MClient;
+import org.compiere.model.MDocType;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
 import org.compiere.model.MSysConfig;
-import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.Emisor;
 import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.PagosItem;
+import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
+import org.shw.einvoice.es.util.pojo.Receptor;
+import org.shw.einvoice.es.util.pojo.TributosItem;
+import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -56,7 +60,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *  @author ADempiere (generated) 
  *  @version Release 3.9.4
  */
-public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbstract
+public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredito_SVAbstract
 {
 	static final String VALIDATION_RESULT_OK = "OK";
 
@@ -68,8 +72,8 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	BigDecimal zero = new BigDecimal(0.00);
 	StringBuffer error = new StringBuffer();
 	String absDirectory = "";
-		// TODO Auto-generated method stub
-	
+	Hashtable<Integer, MInvoice> invoicesList = new Hashtable<>();
+
 	
 	@Override
 	protected void prepare()
@@ -83,7 +87,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
-																											   
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
@@ -94,21 +97,23 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
 		//final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";	
 		String duns = orgInfo.getDUNS().replace("-", "");
-		numeroControl = "DTE-01-" + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
+		//String test = String.format("%8s", duns).replace(' ', '0');
+		numeroControl = "DTE-05-" + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
+		
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
 				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
-			error.append("el documento no es Factura");
-			System.out.println("el documento no es Factura de Exportacion");
+			error.append("el documento no es Credito Fiscal");
+			System.out.println("el documento no es Credito Fiscal");
 			return error.toString();
 		}
-		FacturaElectronica facturaElectronica   = new FacturaElectronica();
-
+		NotaDeCredito comprobanteNotaCredito   = new NotaDeCredito();
+		
 		try
 		{
-			fillReceptor(facturaElectronica.getReceptor(), invoice);  
+			fillReceptor(comprobanteNotaCredito.getReceptor(), invoice);  
 		}
 		catch (Exception e)
 		{
@@ -116,15 +121,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		}
 		try
 		{
-			fillemisor(facturaElectronica.getEmisor(), invoice);   
-		}
-		catch (Exception e)
-		{
-			error.append(e);
-		}		
-		try
-		{
-			fillResumen(facturaElectronica.getResumen(), invoice);  
+			fillemisor(comprobanteNotaCredito.getEmisor(), invoice);  	
 		}
 		catch (Exception e)
 		{
@@ -132,57 +129,81 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		}
 		try
 		{
-			fillIdentification(facturaElectronica.getIdentificacion(), invoice);
+			fillResumen(comprobanteNotaCredito.getResumen(), invoice);  	
 		}
 		catch (Exception e)
 		{
 			error.append(e);
 		}
-		//Durch InvoiceZeilen laufen
-		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
+		try
+		{
+			fillIdentification(comprobanteNotaCredito.getIdentificacion(), invoice);
+		}
+		catch (Exception e)
+		{
+			error.append(e);
+		}
+    	   	
+    	    	
+    	//Durch InvoiceZeilen laufen
+		try {
+    	for (MInvoiceLine invoiceLine:invoice.getLines()) {    
 			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
-
-			int numItem = invoiceLine.getLine();
-			int tipoItem = 2;
-			String numeroDocumento = numeroControl;
-			BigDecimal cantidad = invoiceLine.getQtyInvoiced();
-			String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
-			//String codTributo = "20";
-			ArrayList<String> tributosItems = new ArrayList<String>();
-			//TributosItem tributosItem = new TributosItem("20", "", invoiceLine.getTaxAmt());
-			//tributosItems.add("20");
-
-			int uniMedida = 1;
-			String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
-			BigDecimal precioUni = invoiceLine.getPriceActual();
-			BigDecimal montoDescu = Env.ZERO;
-			BigDecimal ventaNoSuj = Env.ZERO;
-			BigDecimal ventaExenta = Env.ZERO;
-			BigDecimal ventaGravada = Env.ONEHUNDRED;
-			BigDecimal ivaItem = Env.ZERO;
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
-				ventaNoSuj = invoiceLine.getLineNetAmt();
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
-				ventaExenta = invoiceLine.getLineNetAmt();
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
-				ventaGravada = invoiceLine.getLineNetAmt(); 
-				MTax tax = (MTax)invoiceLine.getC_Tax();
-				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
-					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
+			if (invoiceLine.getRef_InvoiceLine_ID()>0) {
+				MInvoice invoiceRelated = (MInvoice)invoiceLine.getRef_InvoiceLine().getC_Invoice();
+				if (!invoicesList.contains(invoice.get_ID()))
+					invoicesList.put(invoiceRelated.get_ID(), invoiceRelated);
 			}
-			BigDecimal psv = invoiceLine.getTaxAmt();
-			BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
-			CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
-					null, uniMedida, 
-					descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, null, psv, noGravado,ivaItem); 
-			cuerpoDocumentoItem.validateValues();
-			facturaElectronica.getCuerpoDocumento().add(cuerpoDocumentoItem);
+			
+    		int numItem = invoiceLine.getLine();
+    		int tipoItem = 2;
+    		String numeroDocumento = numeroControl;
+    		BigDecimal cantidad = invoiceLine.getQtyInvoiced();
+    		String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
+    		//String codTributo = "20";
+    		//TributosItem tributosItem = new TributosItem("20", "", invoiceLine.getTaxAmt());
+    		ArrayList<String> tributosItems = new ArrayList<String>();
+    		tributosItems.add("20");
+    		
+    		int uniMedida = 1;
+    		String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
+    		BigDecimal precioUni = invoiceLine.getPriceActual();
+    		BigDecimal montoDescu = Env.ZERO;
+    		BigDecimal ventaNoSuj = Env.ZERO;
+    		BigDecimal ventaExenta = Env.ZERO;
+    		BigDecimal ventaGravada = Env.ONEHUNDRED;
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
+    			ventaNoSuj = invoiceLine.getLineNetAmt();
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT") )
+    			ventaExenta = invoiceLine.getLineNetAmt();
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
+    			ventaGravada = invoiceLine.getLineNetAmt(); 
+    		BigDecimal psv = Env.ZERO;
+    		BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
+    		CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
+    				null, uniMedida, 
+    				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada,tributosItems); 
+    		cuerpoDocumentoItem.validateValues();
+    		comprobanteNotaCredito.getCuerpoDocumento().add(cuerpoDocumentoItem);
 			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
-
-		}  
-
-		validateValues(facturaElectronica, error);
-
+    	}  
+	}
+		catch (Exception e)
+		{
+			error.append(e);
+		}
+		invoicesList.forEach((key, relatedInvoice) -> {
+			String doctype = relatedInvoice.getC_DocType().getE_DocType().getValue();
+			int tipoGeneracion = 1;
+			String relDocumentno = relatedInvoice.getDocumentNo();
+			String fecha = relatedInvoice.getDateAcct().toString().substring(0, 10);
+		DocumentoRelacionadoItem documentoRelacionadoItem=	
+				new DocumentoRelacionadoItem(doctype, tipoGeneracion, relDocumentno, fecha);
+		comprobanteNotaCredito.getDocumentoRelacionado().add(documentoRelacionadoItem);
+			
+		});
+    	validateValues(comprobanteNotaCredito, error);
+    	
     	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
     	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
     	invoiceElectronic.setei_numeroControl(numeroControl);
@@ -196,7 +217,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	
     	
     	ObjectMapper objectMapper = new ObjectMapper();
-    	String json = objectMapper.writeValueAsString(facturaElectronica);
+    	String json = objectMapper.writeValueAsString(comprobanteNotaCredito);
 
        	invoiceElectronic.setjson(json);
     	invoiceElectronic.saveEx();
@@ -215,8 +236,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	}
 
 	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
-
-		System.out.println("Start fillIdentificacion");
+		
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);
 		identificacion.setTipoModelo(1);
@@ -228,12 +248,10 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		identificacion.setHorEmi("00:00:00");
 		identificacion.setTipoMoneda("USD");
 		identificacion.setAmbiente(client.getE_Enviroment().getValue());
-		System.out.println("fillIdentificacion Finished");
 
 	}
 	
 	private void fillemisor(Emisor emisor, MInvoice invoice) {
-		System.out.println("Start fillEmisor");
 		emisor.setNit(orgInfo.getTaxID().replace("-", ""));
 		emisor.setNrc(StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
 		emisor.setNombre(client.getName()); 
@@ -248,22 +266,18 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		emisor.setDireccion(direccion);
 		emisor.setTelefono(client.get_ValueAsString("phone"));
 		emisor.setCorreo(client.getEMail());
-		System.out.println("fillEmisor Finished");
 	}
 	
 	private void fillReceptor(Receptor receptor, MInvoice invoice) {
 
-		System.out.println("Start fillemisor");
-
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
-		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
+
+		if (partner.getE_Activity_ID()<0 || partner.getE_Recipient_Identification_ID() <= 0) {
 			error.append("SdN: Falta configuracion para Facturacion Electronica");
 			return;
 		}
-		receptor.setTipoDocumento(partner.getE_Recipient_Identification().getValue());
-		if (receptor.getTipoDocumento().equals("36"))
-
-			receptor.setNumDocumento(partner.getTaxID().replace("-", ""));
+		receptor.setNit(partner.getTaxID().replace("-", ""));
+		receptor.setNrc(StringUtils.leftPad(partner.getDUNS().trim().replace("-", ""), 8,"0"));
 		receptor.setNombre(partner.getName());
 		receptor.setCodActividad(partner.getE_Activity().getValue());
 		receptor.setDescActividad(partner.getE_Activity().getName());
@@ -281,20 +295,24 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		Direccion direccion = new Direccion(departamento, municipio, complemento);
 		receptor.setDireccion(direccion);
 		receptor.setTelefono("79309099");
-		receptor.setCorreo(partner.get_ValueAsString("EMail"));	
-		System.out.println("fillemisor Finished");
-
+		receptor.setCorreo(partner.get_ValueAsString("EMail"));		
 	}
 	
+	private void fillOtrosDocumentosItem(OtrosDocumentosItem otrosDocumentosItem, MInvoice invoice) {
+		otrosDocumentosItem.setCodDocAsociado(1);
+	}
 	
+	private void fillVentaTercero(VentaTercero ventaTercero, MInvoice invoice) {
+		ventaTercero.setNit("41615488187047");
+		ventaTercero.setNombre("Mi Presidente");
+		
+	}
 	
 	private void fillResumen(Resumen resumen, MInvoice invoice) {
-		System.out.println("Start fillResumenr");
-
 
 		//List<TributosItem> tributos;
 		//List<PagosItem> pagos ;  // there must be at least one item
-
+		
 		BigDecimal TotalNoSuj = Env.ZERO;
 		BigDecimal TotalExenta = Env.ZERO;
 		BigDecimal TotalGravada = Env.ZERO;
@@ -311,15 +329,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		BigDecimal totalIVA = Env.ZERO;
 
 		int CondicionOperacion =2;
-		List<PagosItem> pagosItems = new ArrayList<PagosItem>();
-		PagosItem pagoitem = new PagosItem("05",
-				zero, 
-				"Transferencia_ Depósito Bancario", 
-				invoice.getC_PaymentTerm().getE_TimeSpan().getValue(),
-				invoice.getC_PaymentTerm().getNetDays());
-		pagosItems.add(pagoitem);
-		resumen.setPagos(pagosItems);
-
+		
 		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
 		BigDecimal SaldoFavor = Env.ZERO;
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
@@ -332,9 +342,9 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 				TotalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();
 			}
-
+				
 		}
-
+		
 		resumen.setTotalNoSuj(TotalNoSuj);
 		resumen.setTotalExenta(TotalExenta);
 		resumen.setTotalGravada(TotalGravada);
@@ -342,21 +352,28 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		resumen.setDescuNoSuj(DescuNoSuj);
 		resumen.setDescuExenta(DescuExenta);
 		resumen.setDescuGravada(DescuGravada);
-		resumen.setPorcentajeDescuento(PorcentajeDescuento);
 		resumen.setSubTotal(TotalGravada.add(TotalNoSuj).add(TotalExenta));
+		resumen.setIvaPerci1(IvaPerci1);
 		resumen.setIvaRete1(IvaRete1);
-		resumen.setMontoTotalOperacion(invoice.getGrandTotal());
-		resumen.setTotalNoGravado(TotalExenta.add(TotalNoSuj));
-		resumen.setTotalPagar(invoice.getGrandTotal());
-		resumen.setTotalLetras(TotalLetras);
-		resumen.setSaldoFavor(invoice.getGrandTotal());
+		resumen.setMontoTotalOperacion(invoice.getGrandTotal());		resumen.setTotalLetras(TotalLetras);
 		resumen.setCondicionOperacion(1);
 		resumen.setTotalDescu(Env.ZERO);
 		resumen.setReteRenta(Env.ZERO);
-		resumen.setTotalIva(totalIVA);
-		System.out.println("fillResumenr Finished");
-
-
+		
+		ArrayList<Integer> taxList = new ArrayList<>();
+		for (MInvoiceLine invoiceLine : invoice.getLines(true)) {
+			if (!taxList.contains(invoiceLine.getC_Tax_ID())) {
+				Optional<MInvoiceTax> maybeInvoiceTax = Optional.ofNullable(MInvoiceTax.get(invoiceLine, invoice.getPrecision(), false, get_TrxName())); //	current Tax
+				if (maybeInvoiceTax.isPresent()) {
+					MInvoiceTax invoiceTax = maybeInvoiceTax.get();
+					if (invoiceTax.getTaxAmt().compareTo(Env.ZERO) != 0) {
+						taxList.add(invoiceLine.getC_Tax_ID());
+						TributosItem tributosItem = new TributosItem("20", "Impuesto al Valor Agregado 13%", invoiceTax.getTaxAmt());
+						resumen.getTributos().add(tributosItem);						
+					}
+				}
+			}
+		}			
 	}
 	
 	private void fillExtension(Extension extension, MInvoice invoice) {
@@ -375,47 +392,42 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		apendiceItem.setValor("uu");
 	}
 	
+	
 
-	private void validateValues(FacturaElectronica facturaElectronica, StringBuffer error) {
-
-		System.out.println("Start validateValues");
-		System.out.println("Start Resumen validateValues");
+	private void validateValues(NotaDeCredito notaDeCredito, StringBuffer error) {
 		String result = "";
-		
-		if (facturaElectronica.getResumen() != null)
+		if (notaDeCredito.getResumen() != null)
 		{
-			result = facturaElectronica.getResumen().validateValues();
+			result = notaDeCredito.getResumen().validateValues();
+			if (!result.equals(VALIDATION_RESULT_OK))
+				error.append(result);
+		}
+		if (notaDeCredito.getIdentificacion() != null) {
+			result = notaDeCredito.getIdentificacion().validateValues();
 			if (!result.equals(VALIDATION_RESULT_OK))
 				error.append(result);
 		}
 
-		System.out.println("Start Identification validateValues");
-		if (facturaElectronica.getIdentificacion() != null) {
-			result = facturaElectronica.getIdentificacion().validateValues();
-			if (!result.equals(VALIDATION_RESULT_OK))
-				error.append(result);
-		}
-
-		System.out.println("Start Receptor validateValues");
-		if (facturaElectronica.getReceptor() != null){
-			result = facturaElectronica.getReceptor().validateValues();
-			if (!result.equals(VALIDATION_RESULT_OK))
-				error.append(result);
-		}
-
-		System.out.println("Start Cuerpo Documento validateValues");
-		if (facturaElectronica.getCuerpoDocumento() != null) {
-			for (CuerpoDocumentoItem cuerpoDocumentoItem :facturaElectronica.getCuerpoDocumento()) {
+		if (notaDeCredito.getCuerpoDocumento() != null) {
+			for (CuerpoDocumentoItem cuerpoDocumentoItem :notaDeCredito.getCuerpoDocumento()) {
 				result = cuerpoDocumentoItem.validateValues();
 				if (!result.equals(VALIDATION_RESULT_OK))
 					error.append(result);			
-			}			
+			}
 		}
-
-		System.out.println("validateValues Finished");
-
-
+		if (notaDeCredito.getDocumentoRelacionado().isEmpty())
+		{
+			error.append("Faltan documentos relacionados");
+		}
+		else {
+			for (DocumentoRelacionadoItem documentoRelacionadoItem:notaDeCredito.getDocumentoRelacionado()) {
+				result = documentoRelacionadoItem.validateValues();
+				if (!result.equals(VALIDATION_RESULT_OK))
+					error.append(result);
+			}
+		}
 	}
+	
 	private void writeToFile (String json, MInvoice invoice)
 	{
 		try
@@ -444,6 +456,11 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			throw new RuntimeException(ex);
 		}
 	}
-  
+	
+	private MInvoice findRelatedInvoice(MInvoice notaCredito) {
+		
+		
+		return null;
+	}
 
 }

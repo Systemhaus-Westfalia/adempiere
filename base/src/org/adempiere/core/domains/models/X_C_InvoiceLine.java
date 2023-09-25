@@ -1063,6 +1063,13 @@ public class X_C_InvoiceLine extends PO implements I_C_InvoiceLine, I_Persistent
 
 	/** Get Referenced Invoice Line.
 		@return Referenced Invoice Line	  */
+	
+	public org.adempiere.core.domains.models.I_C_InvoiceLine getRef_InvoiceLine() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_InvoiceLine)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_InvoiceLine.Table_Name)
+			.getPO(getRef_InvoiceLine_ID (), get_TrxName());	}
+
+	
 	public int getRef_InvoiceLine_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_Ref_InvoiceLine_ID);

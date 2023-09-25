@@ -178,6 +178,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
     	System.out.println("Start Save W_Invoiceelectronic");
     	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
     	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
+    	invoiceElectronic.setei_numeroControl(numeroControl);
     	invoiceElectronic.setei_ValidationStatus("01");
     	if (error.length() > 0) {
     		invoiceElectronic.seterrMsgIntern(error.toString());
@@ -221,7 +222,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		identificacion.setFecEmi(fecha);
 		identificacion.setHorEmi("00:00:00");
 		identificacion.setTipoMoneda("USD");
-		identificacion.setAmbiente("00");
+		identificacion.setAmbiente(client.getE_Enviroment().getValue());
     	System.out.println("fillIdentification Finished");
 
 	}

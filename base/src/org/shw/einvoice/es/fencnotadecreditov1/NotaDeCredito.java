@@ -25,6 +25,8 @@ public class NotaDeCredito {
 	List<CuerpoDocumentoItem> cuerpoDocumento;
 	Resumen resumen;
 	Extension extension;
+	Emisor emisor;
+
 	List<ApendiceItem> apendice=null;  // null allowed
 	//this.apendice             = new ArrayList<ApendiceItem>();
 
@@ -39,6 +41,8 @@ public class NotaDeCredito {
 		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
 		this.resumen              = new Resumen();
 		this.extension            = new Extension();
+		this.emisor				  = new Emisor();
+		
 	}
 
 	/**
@@ -106,6 +110,15 @@ public class NotaDeCredito {
 
 	public void setApendice(List<ApendiceItem> apendice) {
 		this.apendice = apendice;
+	}
+	
+
+	public Emisor getEmisor() {
+		return emisor;
+	}
+
+	public void setEmisor(Emisor emisor) {
+		this.emisor = emisor;
 	}
 
 	/**

@@ -29,7 +29,7 @@ public class Resumen {
 	BigDecimal descuExenta;
 	BigDecimal descuGravada;
 	BigDecimal totalDescu;
-	List<TributosItem> tributos;
+	List<TributosItem> tributos = new ArrayList<TributosItem>();
 	BigDecimal subTotal;
 	BigDecimal ivaPerci1;
 	BigDecimal ivaRete1;
@@ -315,6 +315,16 @@ public String validateValues() {
 			this.condicionOperacion = condicionOperacion;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'condicionOperacion' in NotaDeCredito.Resumen.setCondicionOperacion()");
+	}
+	
+	
+
+	public List<TributosItem> getTributos() {
+		return tributos;
+	}
+
+	public void setTributos(List<TributosItem> tributos) {
+		this.tributos = tributos;
 	}
 
 	/**

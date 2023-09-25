@@ -65,7 +65,7 @@ public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
 
 			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000006)
 				processingFacturaExportacion(invoice);
-		});;
+		});
 		return "";
 	}
 	

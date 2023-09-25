@@ -1,0 +1,81 @@
+package org.shw.einvoice.es.factory;
+
+import java.util.List;
+
+import org.shw.einvoice.es.util.pojo.ApendiceItem;
+import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
+import org.shw.einvoice.es.util.pojo.Documento;
+import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
+import org.shw.einvoice.es.util.pojo.Emisor;
+import org.shw.einvoice.es.util.pojo.Extension;
+import org.shw.einvoice.es.util.pojo.Identificacion;
+import org.shw.einvoice.es.util.pojo.Motivo;
+import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
+import org.shw.einvoice.es.util.pojo.Resumen;
+import org.shw.einvoice.es.util.pojo.VentaTercero;
+
+public abstract class EDocumentStore {
+
+	abstract EDocument createEDocument();
+	
+	EDocument generateEDocument() {
+		EDocument eDocument = createEDocument();
+		
+		Identificacion identification = eDocument.getIdentificacion();
+		if(identification!=null) {
+			eDocument.fillIdentification(identification);
+		}
+		
+		List<DocumentoRelacionadoItem> documentoRelacionado = eDocument.getDocumentoRelacionado();
+		if(documentoRelacionado!=null) {
+			eDocument.fillDocumentoRelacionado(documentoRelacionado);
+		}
+		
+		Emisor emisor = eDocument.getEmisor();
+		if(emisor!=null) {
+			eDocument.fillEmisor(emisor);
+		}
+		
+		List<OtrosDocumentosItem> otrosDocumentos = eDocument.getOtrosDocumentos();
+		if(otrosDocumentos!=null) {
+			eDocument.fillOtrosDocumentos(otrosDocumentos);
+		}
+		
+		VentaTercero ventaTercero = eDocument.getVentaTercero();
+		if(ventaTercero!=null) {
+			eDocument.fillVentaTercero(ventaTercero);
+		}
+		
+		List<CuerpoDocumentoItem> cuerpoDocumento = eDocument.getCuerpoDocumento();
+		if(cuerpoDocumento!=null) {
+			eDocument.fillCuerpoDocumento(cuerpoDocumento);
+		}
+		
+		Resumen resumen = eDocument.getResumen();
+		if(resumen!=null) {
+			eDocument.fillResumen(resumen);
+		}
+		
+		Extension extension = eDocument.getExtension();
+		if(extension!=null) {
+			eDocument.fillExtension(extension);
+		}
+		
+		List<ApendiceItem> apendice = eDocument.getApendice();
+		if(apendice!=null) {
+			eDocument.fillApendice(apendice);
+		}
+		
+		Documento documento = eDocument.getDocumento();
+		if(documento!=null) {
+			eDocument.fillDocumento(documento);
+		}
+		
+		Motivo motivo = eDocument.getMotivo();
+		if(documento!=null) {
+			eDocument.fillMotivo(motivo);
+		}
+		
+		return eDocument;
+	}
+}

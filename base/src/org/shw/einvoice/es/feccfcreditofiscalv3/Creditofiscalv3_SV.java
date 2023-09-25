@@ -2,7 +2,7 @@ package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.util.List;
 
-import org.shw.einvoice.es.fefexfacturaexportacionv1.OtrosDocumentosItemFacturaExportacon;
+import org.shw.einvoice.es.fefexfacturaexportacionv1.OtrosDocumentosItemFacturaExportacion;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
@@ -27,7 +27,7 @@ public class Creditofiscalv3_SV {
 	 private IdentificacionCreditoFiscal 			identificacion;
 	 private List<CuerpoDocumentoItemCreditoFiscal> 	cuerpoDocumentoItems;
 	 private String 					fhProcesamiento;
-	 private List<OtrosDocumentosItemFacturaExportacon> 	otrosDocumentosItems;
+	 private List<OtrosDocumentosItemFacturaExportacion> 	otrosDocumentosItems;
 	 
 	 private String 						codigoGeneracion;
 	 private List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItems;
@@ -130,10 +130,10 @@ public class Creditofiscalv3_SV {
 	public void setReceptor(ReceptorCreditoFiscal receptor) {
 		this.receptor = receptor;
 	}
-	public List<OtrosDocumentosItemFacturaExportacon> getOtrosDocumentosItems() {
+	public List<OtrosDocumentosItemFacturaExportacion> getOtrosDocumentosItems() {
 		return otrosDocumentosItems;
 	}
-	public void setOtrosDocumentosItems(List<OtrosDocumentosItemFacturaExportacon> otrosDocumentosItems) {
+	public void setOtrosDocumentosItems(List<OtrosDocumentosItemFacturaExportacion> otrosDocumentosItems) {
 		this.otrosDocumentosItems = otrosDocumentosItems;
 	}
 	public VentaTercero getVentaTercero() {

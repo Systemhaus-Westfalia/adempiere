@@ -13,7 +13,7 @@ import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 /**
  * 
  */
-public class OtrosDocumentosItemFacturaExportacon implements OtrosDocumentosItem{
+public class OtrosDocumentosItemFacturaExportacion implements OtrosDocumentosItem{
 	static final String VALIDATION_MODOTRANSP_IS_NULL       = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'modoTransp' no debe ser ='null'";
 	static final String VALIDATION_NUMCONDUCTOR_IS_NULL     = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'numCoductor' no debe ser ='null'";
 	static final String VALIDATION_NOMBRECONDUCTOR_IS_NULL  = "Documento: Factura de Exportacion, clase: OtrosDocumentosItem. Validacion falló: valor de 'nombreConductor' no debe ser ='null'";
@@ -37,7 +37,7 @@ public class OtrosDocumentosItemFacturaExportacon implements OtrosDocumentosItem
 	/**
 	 * No Parameters
 	 */
-	public OtrosDocumentosItemFacturaExportacon() {
+	public OtrosDocumentosItemFacturaExportacion() {
 	}
 
 	/**

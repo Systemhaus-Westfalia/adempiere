@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
 
 public class DocumentoRelacionadoItemNotaDeCredito implements DocumentoRelacionadoItem {
-	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Nota de Credito, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";
 	
 	String tipoDocumento;

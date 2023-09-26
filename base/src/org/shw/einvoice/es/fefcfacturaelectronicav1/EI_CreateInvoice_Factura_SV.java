@@ -103,6 +103,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		factoryInput.put("emisor", generateEmisorInputData(invoice));
 		factoryInput.put("resumen", generateResumenInputData(invoice));
 		factoryInput.put("cuerpoDocumento", generateCuerpoDocumentoInputData(invoice));
+		
 		Factura factura = (Factura) facturaStore.generateEDocument(factoryInput);	
 
 		// TODO folgendes muß weg

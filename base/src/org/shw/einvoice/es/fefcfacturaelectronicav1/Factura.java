@@ -1,22 +1,15 @@
 /**
  * 
  */
-package org.shw.einvoice.es.factory;
+package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ApendiceItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.DocumentoRelacionadoItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.EmisorFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ExtensionFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.IdentificacionFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.OtrosDocumentosItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ReceptorFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ResumenFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.VentaTerceroFactura;
+import org.shw.einvoice.es.factory.EDocument;
+import org.shw.einvoice.es.factory.EDocumentFactory;
+import org.shw.einvoice.es.factory.FacturaFactory;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.Documento;
@@ -241,6 +234,7 @@ public class Factura extends EDocument {
 	/**
 	 * @return the receptor
 	 */
+	@Override
 	public Receptor getReceptor() {
 		return receptor;
 	}

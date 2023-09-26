@@ -2,6 +2,7 @@ package org.shw.einvoice.es.factory;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.Documento;
@@ -18,22 +19,22 @@ public abstract class EDocumentStore {
 
 	abstract EDocument createEDocument();
 	
-	EDocument generateEDocument() {
+	public EDocument generateEDocument(JSONObject factoryInput) {
 		EDocument eDocument = createEDocument();
 		
 		Identificacion identification = eDocument.getIdentificacion();
 		if(identification!=null) {
-			eDocument.fillIdentification(identification);
+			eDocument.fillIdentification(factoryInput, identification);
 		}
 		
 		List<DocumentoRelacionadoItem> documentoRelacionado = eDocument.getDocumentoRelacionado();
 		if(documentoRelacionado!=null) {
-			eDocument.fillDocumentoRelacionado(documentoRelacionado);
+			eDocument.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
 		}
 		
 		Emisor emisor = eDocument.getEmisor();
 		if(emisor!=null) {
-			eDocument.fillEmisor(emisor);
+			eDocument.fillEmisor(factoryInput, emisor);
 		}
 		
 		List<OtrosDocumentosItem> otrosDocumentos = eDocument.getOtrosDocumentos();

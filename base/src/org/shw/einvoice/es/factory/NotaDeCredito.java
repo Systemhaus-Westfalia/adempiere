@@ -5,6 +5,7 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.fencnotadecreditov1.ApendiceItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.CuerpoDocumentoItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.DocumentoRelacionadoItemNotaDeCredito;
@@ -94,7 +95,7 @@ public class NotaDeCredito extends EDocument {
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
 	@Override
-	void fillIdentification(Identificacion identificacion) {
+	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		notaDeCreditoFactory.fillIdentification( (IdentificacionNotaDeCredito) identificacion );
 	}
 
@@ -114,7 +115,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {	
+	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {	
 		notaDeCreditoFactory.fillDocumentoRelacionado(documentoRelacionado);
 	}
 
@@ -134,7 +135,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillEmisor(Emisor emisor) {
+	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		notaDeCreditoFactory.fillEmisor( (EmisorNotaDeCredito) emisor);
 	}
 
@@ -154,7 +155,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillReceptor(Receptor receptor) {
+	public void fillReceptor(Receptor receptor) {
 		notaDeCreditoFactory.fillReceptor( (ReceptorNotaDeCredito) receptor);
 	}
 
@@ -174,7 +175,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(VentaTercero ventaTercero) {
 		notaDeCreditoFactory.fillVentaTercero( (VentaTerceroNotaDeCredito) ventaTercero);
 	}
 
@@ -198,7 +199,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
 		notaDeCreditoFactory.fillCuerpoDocumento(cuerpoDocumento);	
 	}
 
@@ -218,7 +219,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillResumen(Resumen resumen) {
+	public void fillResumen(Resumen resumen) {
 		notaDeCreditoFactory.fillResumen( (ResumenNotaDeCredito) resumen);
 	}
 
@@ -238,7 +239,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillExtension(Extension extension) {
+	public void fillExtension(Extension extension) {
 		notaDeCreditoFactory.fillExtension( (ExtensionNotaDeCredito) extension);
 	}
 
@@ -262,7 +263,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(List<ApendiceItem> apendice) {
 		notaDeCreditoFactory.fillApendice(apendice);		
 	}
 
@@ -270,7 +271,7 @@ public class NotaDeCredito extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A OTROSDOCUMENTOSITEM PROPERTY
 	 */
 	@Override
-	List<OtrosDocumentosItem> getOtrosDocumentos() {
+	public List<OtrosDocumentosItem> getOtrosDocumentos() {
 		return null;
 	}
 
@@ -279,7 +280,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillOtrosDocumentos() is not allowed");
 	}
 
@@ -287,7 +288,7 @@ public class NotaDeCredito extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A DOCUMENTO PROPERTY
 	 */
 	@Override
-	Documento getDocumento() {
+	public Documento getDocumento() {
 		return null;
 	}
 
@@ -296,7 +297,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillDocumento(Documento documento) {
+	public void fillDocumento(Documento documento) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillDocumento() is not allowed");
 	}
 
@@ -304,7 +305,7 @@ public class NotaDeCredito extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A MOTIVO PROPERTY
 	 */
 	@Override
-	Motivo getMotivo() {
+	public Motivo getMotivo() {
 		return null;
 	}
 
@@ -314,7 +315,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillMotivo(Motivo motivo) {
+	public void fillMotivo(Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillMotivo() is not allowed");
 	}
 

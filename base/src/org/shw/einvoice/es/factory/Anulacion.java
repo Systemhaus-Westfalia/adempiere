@@ -5,6 +5,7 @@ package org.shw.einvoice.es.factory;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.anulacionv2.DocumentoAnulacion;
 import org.shw.einvoice.es.anulacionv2.EmisorAnulacion;
 import org.shw.einvoice.es.anulacionv2.IdentificacionAnulacion;
@@ -93,8 +94,8 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	void fillIdentification(Identificacion identificacion) {
-		anulacionFactory.fillIdentification( (IdentificacionAnulacion) identificacion );
+	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+		anulacionFactory.fillIdentification((IdentificacionAnulacion) identificacion );
 	}
 
 
@@ -118,7 +119,7 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	void fillEmisor(Emisor emisor) {
+	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		this.emisor = (EmisorAnulacion) emisor;
 	}
 
@@ -143,7 +144,7 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	void fillDocumento(Documento documento) {
+	public void fillDocumento(Documento documento) {
 		this.documento = (DocumentoAnulacion) documento;
 	}
 
@@ -166,7 +167,7 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	void fillMotivo(Motivo motivo) {
+	public void fillMotivo(Motivo motivo) {
 		this.motivo = (MotivoAnulacion) motivo;
 	}
 
@@ -175,7 +176,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A DOCUMENTORELACIONADOITEM PROPERTY
 	 */
 	@Override
-	List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
+	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
 		return null;
 	}
 
@@ -184,7 +185,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void fillDocumentoRelacionado(JSONObject factoryInput,List<DocumentoRelacionadoItem> documentoRelacionado) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillDocumentoRelacionado() is not allowed");
 	}
 
@@ -193,7 +194,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A RECEPTOR PROPERTY
 	 */
 	@Override
-	Receptor getReceptor() {
+	public Receptor getReceptor() {
 		return null;
 	}
 
@@ -202,7 +203,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillReceptor(Receptor receptor) {
+	public void fillReceptor(Receptor receptor) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillReceptor() is not allowed");
 	}
 
@@ -211,7 +212,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE AN OTROSDOCUMENTOSITEM PROPERTY
 	 */
 	@Override
-	List<OtrosDocumentosItem> getOtrosDocumentos() {
+	public List<OtrosDocumentosItem> getOtrosDocumentos() {
 		return null;
 	}
 
@@ -220,7 +221,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillOtrosDocumentos() is not allowed");
 	}
 
@@ -229,7 +230,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A VENTATERCERO PROPERTY
 	 */
 	@Override
-	VentaTercero getVentaTercero() {
+	public VentaTercero getVentaTercero() {
 		return null;
 	}
 
@@ -238,7 +239,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(VentaTercero ventaTercero) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillVentaTercero() is not allowed");
 	}
 
@@ -247,7 +248,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A CUERPODOCUMENTOITEM PROPERTY
 	 */
 	@Override
-	List<CuerpoDocumentoItem> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
 		return null;
 	}
 
@@ -256,7 +257,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillCuerpoDocumento() is not allowed");
 	}
 
@@ -265,7 +266,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE A RESUMEN PROPERTY
 	 */
 	@Override
-	Resumen getResumen() {
+	public Resumen getResumen() {
 		return null;
 	}
 
@@ -274,7 +275,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillResumen(Resumen resumen) {
+	public void fillResumen(Resumen resumen) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillResumen() is not allowed");
 	}
 
@@ -283,7 +284,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE AN EXTENSION PROPERTY
 	 */
 	@Override
-	Extension getExtension() {
+	public Extension getExtension() {
 		return null;
 	}
 
@@ -292,7 +293,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillExtension(Extension extension) {
+	public void fillExtension(Extension extension) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillExtension() is not allowed");
 	}
 
@@ -301,7 +302,7 @@ public class Anulacion extends EDocument {
 	 * THIS CLASS DOESN'T HAVE AN APENDICE PROPERTY
 	 */
 	@Override
-	List<ApendiceItem> getApendice() {
+	public List<ApendiceItem> getApendice() {
 		return null;
 	}
 
@@ -310,7 +311,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(List<ApendiceItem> apendice) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillApendice() is not allowed");
 	}
 

@@ -2,6 +2,7 @@ package org.shw.einvoice.es.factory;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.Documento;
@@ -17,40 +18,40 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public abstract class EDocument {
 
-	abstract Identificacion getIdentificacion();
-	abstract void fillIdentification(Identificacion identificacion);
+	public abstract Identificacion getIdentificacion();
+	public abstract void fillIdentification(JSONObject factoryInput, Identificacion identificacion);
 	
-	abstract List<DocumentoRelacionadoItem> getDocumentoRelacionado();
-	abstract  void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado);
+	public abstract List<DocumentoRelacionadoItem> getDocumentoRelacionado();
+	public abstract  void fillDocumentoRelacionado(JSONObject factoryInput,List<DocumentoRelacionadoItem> documentoRelacionado);
 
-	abstract Emisor getEmisor();
-	abstract void fillEmisor(Emisor emisor);
+	public abstract Emisor getEmisor();
+	public abstract void fillEmisor(JSONObject factoryInput, Emisor emisor);
 
-	abstract Receptor getReceptor();
-	abstract void fillReceptor(Receptor receptor);
+	public abstract Receptor getReceptor();
+	public abstract void fillReceptor(Receptor receptor);
 	
-	abstract List<OtrosDocumentosItem> getOtrosDocumentos();
-	abstract  void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos);
+	public abstract List<OtrosDocumentosItem> getOtrosDocumentos();
+	public abstract  void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos);
 
-	abstract VentaTercero getVentaTercero();
-	abstract void fillVentaTercero(VentaTercero ventaTercero);
+	public abstract VentaTercero getVentaTercero();
+	public abstract void fillVentaTercero(VentaTercero ventaTercero);
 	
-	abstract List<CuerpoDocumentoItem> getCuerpoDocumento();
-	abstract void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento);
+	public abstract List<CuerpoDocumentoItem> getCuerpoDocumento();
+	public abstract void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento);
 	
-	abstract Resumen getResumen();
-	abstract void fillResumen(Resumen resumen);
+	public abstract Resumen getResumen();
+	public abstract void fillResumen(Resumen resumen);
 	
-	abstract Extension getExtension();
-	abstract void fillExtension(Extension extension);
+	public abstract Extension getExtension();
+	public abstract void fillExtension(Extension extension);
 	
-	abstract List<ApendiceItem> getApendice();
-	abstract void fillApendice(List<ApendiceItem> apendice);
+	public abstract List<ApendiceItem> getApendice();
+	public abstract void fillApendice(List<ApendiceItem> apendice);
 	
-	abstract Documento getDocumento();
-	abstract void fillDocumento(Documento documento);
+	public abstract Documento getDocumento();
+	public abstract void fillDocumento(Documento documento);
 	
-	abstract Motivo getMotivo();
-	abstract void fillMotivo(Motivo motivo);
+	public abstract Motivo getMotivo();
+	public abstract void fillMotivo(Motivo motivo);
 	
 }

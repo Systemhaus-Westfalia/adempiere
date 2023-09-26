@@ -75,9 +75,16 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 	protected String doIt() throws Exception
 	{
 
+
 		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
-    	System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
+		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
+		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
+				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
+			error.append("el documento no es Factura de Exportacion");
+			System.out.println("el documento no es Factura de Exportacion");
+			return error.toString();
+		}																											   
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
@@ -86,20 +93,15 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		Integer id = invoice.get_ID();
 		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
-		//final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";	
 		String duns = orgInfo.getDUNS().replace("-", "");
-		numeroControl = "DTE-11-" + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
+		FacturaExportacion facturaExportacion = new FacturaExportacion();
+		numeroControl = "DTE-" + facturaExportacion.getIdentificacion().getTipoDte()
+				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
-		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
-				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
-			error.append("el documento no es Factura de Exportacion");
+		
 
-	    	System.out.println("el documento no es Factura de Exportacion");
-			return error.toString();
-		}
-		FacturaExportacion facturaExportacion = new FacturaExportacion();
 		try
 		{
 			fillReceptor(facturaExportacion.getReceptor(), invoice);  

@@ -85,6 +85,12 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
+		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
+				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
+			error.append("el documento no es Credito Fiscal");
+			System.out.println("el documento no es Credito Fiscal");
+			return error.toString();
+		}																											   
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
@@ -93,21 +99,16 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		Integer id = invoice.get_ID();
 		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
-		//final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";	
 		String duns = orgInfo.getDUNS().replace("-", "");
-		//String test = String.format("%8s", duns).replace(' ', '0');
-		numeroControl = "DTE-03-" + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
+		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();
+		numeroControl = "DTE-" + comprobanteCreditoFiscal.getIdentificacion().getTipoDte()
+				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
 		
-		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
-				!invoice.getC_DocType().getE_DocType().getValue().equals(Identificacion.TIPO_DE_DOCUMENTO)) {
-			error.append("el documento no es Credito Fiscal");
-			System.out.println("el documento no es Credito Fiscal");
-			return error.toString();
-		}
-		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();
+
+		
 
 		try
 		{

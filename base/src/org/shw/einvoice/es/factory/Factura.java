@@ -306,7 +306,7 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		facturaFactory.fillOtrosDocumentos(otrosDocumentos);
 	}
 
@@ -328,7 +328,7 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		facturaFactory.fillVentaTercero( (VentaTerceroFactura) ventaTercero);
 	}
 
@@ -384,7 +384,7 @@ public class Factura extends EDocument {
 
 	
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		facturaFactory.fillCuerpoDocumento(cuerpoDocumento);
 	}
 
@@ -405,7 +405,7 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		facturaFactory.fillResumen( (ResumenFactura) resumen);
 	}
 
@@ -427,7 +427,7 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		facturaFactory.fillExtension( (ExtensionFactura) extension);
 	}
 
@@ -482,7 +482,7 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		facturaFactory.fillApendice(apendice);		
 	}
 
@@ -498,7 +498,7 @@ public class Factura extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(Documento documento) {
+	public void fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Factura calling the method Factura.fillDocumento() is not allowed");
 	}
 
@@ -514,7 +514,7 @@ public class Factura extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(Motivo motivo) {
+	public void fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Factura calling the method Factura.fillMotivo() is not allowed");
 	}
 

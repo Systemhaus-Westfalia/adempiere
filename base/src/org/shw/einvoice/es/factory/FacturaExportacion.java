@@ -202,7 +202,7 @@ public class FacturaExportacion extends EDocument {
 	}
 
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
 		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
 		//      OtrosDocumentosItemFacturaExportacion is a subtype of OtrosDocumentosItem
@@ -250,7 +250,7 @@ public class FacturaExportacion extends EDocument {
 	}
 
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		facturaExportacionFactory.fillVentaTercero( (VentaTerceroFacturaExportacion) ventaTercero);
 	}
 
@@ -276,7 +276,7 @@ public class FacturaExportacion extends EDocument {
 
 	
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// TODO Implement actual code
 		
 		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
@@ -326,7 +326,7 @@ public class FacturaExportacion extends EDocument {
 	}
 
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		facturaExportacionFactory.fillResumen( (ResumenFacturaExportacion) resumen);
 	}
 
@@ -351,7 +351,7 @@ public class FacturaExportacion extends EDocument {
 	}
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// TODO Implement actual code
 		
 		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
@@ -415,7 +415,7 @@ public class FacturaExportacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method Identificacion.fillExtension() is not allowed");
 	}
 
@@ -431,7 +431,7 @@ public class FacturaExportacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(Documento documento) {
+	public void fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacion.fillDocumento() is not allowed");
 	}
 
@@ -447,7 +447,7 @@ public class FacturaExportacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(Motivo motivo) {
+	public void fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacion.fillMotivo() is not allowed");
 	}
 

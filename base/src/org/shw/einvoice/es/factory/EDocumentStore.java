@@ -39,42 +39,42 @@ public abstract class EDocumentStore {
 		
 		List<OtrosDocumentosItem> otrosDocumentos = eDocument.getOtrosDocumentos();
 		if(otrosDocumentos!=null) {
-			eDocument.fillOtrosDocumentos(otrosDocumentos);
+			eDocument.fillOtrosDocumentos(factoryInput, otrosDocumentos);
 		}
 		
 		VentaTercero ventaTercero = eDocument.getVentaTercero();
 		if(ventaTercero!=null) {
-			eDocument.fillVentaTercero(ventaTercero);
+			eDocument.fillVentaTercero(factoryInput, ventaTercero);
 		}
 		
 		List<CuerpoDocumentoItem> cuerpoDocumento = eDocument.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
-			eDocument.fillCuerpoDocumento(cuerpoDocumento);
+			eDocument.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
 		}
 		
 		Resumen resumen = eDocument.getResumen();
 		if(resumen!=null) {
-			eDocument.fillResumen(resumen);
+			eDocument.fillResumen(factoryInput, resumen);
 		}
 		
 		Extension extension = eDocument.getExtension();
 		if(extension!=null) {
-			eDocument.fillExtension(extension);
+			eDocument.fillExtension(factoryInput, extension);
 		}
 		
 		List<ApendiceItem> apendice = eDocument.getApendice();
 		if(apendice!=null) {
-			eDocument.fillApendice(apendice);
+			eDocument.fillApendice(factoryInput, apendice);
 		}
 		
 		Documento documento = eDocument.getDocumento();
 		if(documento!=null) {
-			eDocument.fillDocumento(documento);
+			eDocument.fillDocumento(factoryInput, documento);
 		}
 		
 		Motivo motivo = eDocument.getMotivo();
 		if(documento!=null) {
-			eDocument.fillMotivo(motivo);
+			eDocument.fillMotivo(factoryInput, motivo);
 		}
 		
 		return eDocument;

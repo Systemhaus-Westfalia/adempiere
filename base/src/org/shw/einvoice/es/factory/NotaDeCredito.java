@@ -175,7 +175,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		notaDeCreditoFactory.fillVentaTercero( (VentaTerceroNotaDeCredito) ventaTercero);
 	}
 
@@ -199,7 +199,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		notaDeCreditoFactory.fillCuerpoDocumento(cuerpoDocumento);	
 	}
 
@@ -219,7 +219,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		notaDeCreditoFactory.fillResumen( (ResumenNotaDeCredito) resumen);
 	}
 
@@ -239,7 +239,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		notaDeCreditoFactory.fillExtension( (ExtensionNotaDeCredito) extension);
 	}
 
@@ -263,7 +263,7 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		notaDeCreditoFactory.fillApendice(apendice);		
 	}
 
@@ -280,7 +280,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillOtrosDocumentos() is not allowed");
 	}
 
@@ -297,7 +297,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(Documento documento) {
+	public void fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillDocumento() is not allowed");
 	}
 
@@ -315,7 +315,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(Motivo motivo) {
+	public void fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillMotivo() is not allowed");
 	}
 

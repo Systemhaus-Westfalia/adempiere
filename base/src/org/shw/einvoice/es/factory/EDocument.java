@@ -31,27 +31,27 @@ public abstract class EDocument {
 	public abstract void fillReceptor(Receptor receptor);
 	
 	public abstract List<OtrosDocumentosItem> getOtrosDocumentos();
-	public abstract  void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos);
+	public abstract  void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos);
 
 	public abstract VentaTercero getVentaTercero();
-	public abstract void fillVentaTercero(VentaTercero ventaTercero);
+	public abstract void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero);
 	
 	public abstract List<CuerpoDocumentoItem> getCuerpoDocumento();
-	public abstract void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento);
+	public abstract void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento);
 	
 	public abstract Resumen getResumen();
-	public abstract void fillResumen(Resumen resumen);
+	public abstract void fillResumen(JSONObject factoryInput, Resumen resumen);
 	
 	public abstract Extension getExtension();
-	public abstract void fillExtension(Extension extension);
+	public abstract void fillExtension(JSONObject factoryInput, Extension extension);
 	
 	public abstract List<ApendiceItem> getApendice();
-	public abstract void fillApendice(List<ApendiceItem> apendice);
+	public abstract void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice);
 	
 	public abstract Documento getDocumento();
-	public abstract void fillDocumento(Documento documento);
+	public abstract void fillDocumento(JSONObject factoryInput, Documento documento);
 	
 	public abstract Motivo getMotivo();
-	public abstract void fillMotivo(Motivo motivo);
+	public abstract void fillMotivo(JSONObject factoryInput, Motivo motivo);
 	
 }

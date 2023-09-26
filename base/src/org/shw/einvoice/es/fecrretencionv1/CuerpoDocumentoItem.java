@@ -4,6 +4,7 @@
 package org.shw.einvoice.es.fecrretencionv1;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 /**
  * 
@@ -25,6 +26,19 @@ public class CuerpoDocumentoItem {
     /**
 	 * Constructor without parameters. 
 	 */
+	public CuerpoDocumentoItem(int numItem,	String tipoDte,	int tipoDoc,	String numDocumento,
+			String fechaEmision,BigDecimal montoSujetoGrav,	String codigoRetencionMH,	BigDecimal ivaRetenido,	String descripcion) {
+		this.setCodigoRetencionMH(codigoRetencionMH);
+		this.setDescripcion(descripcion);
+		this.setFechaEmision(fechaEmision);
+		this.setIvaRetenido(ivaRetenido);
+		this.setMontoSujetoGrav(montoSujetoGrav);
+		this.setNumDocumento(numDocumento);
+		this.setNumItem(numItem);
+		this.setTipoDoc(tipoDoc);
+		this.setTipoDte(tipoDte);
+	}
+	
 	public CuerpoDocumentoItem() {
 		
 	}

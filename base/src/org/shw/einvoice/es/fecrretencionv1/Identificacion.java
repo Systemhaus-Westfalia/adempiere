@@ -17,7 +17,7 @@ public class Identificacion {
 	int tipoModelo=TIPOMODELO;
 	int tipoOperacion=TIPOOPERACION;
 	Integer tipoContingencia=null;  // null mandatory
-	String motivoContingencia=null; // null mandatory
+	String motivoContin=null; // null mandatory
 	String fecEmi;
 	String horEmi;
 	String tipoMoneda = TIPOMONEDA;
@@ -31,7 +31,7 @@ public class Identificacion {
 		this.tipoModelo         = TIPOMODELO;
 		this.tipoOperacion      = TIPOOPERACION;
 		this.tipoContingencia   = null;
-		this.motivoContingencia = null;
+		this.motivoContin = null;
 		this.tipoMoneda         = TIPOMONEDA;
 	}
 
@@ -160,8 +160,8 @@ public class Identificacion {
 	/**
 	 * @return the motivoContingencia
 	 */
-	public String getMotivoContingencia() {
-		return motivoContingencia;
+	public String getMotivoContin() {
+		return motivoContin;
 	}
 
 
@@ -170,9 +170,9 @@ public class Identificacion {
 	 * The parameter is validated.<br>
 	 * null mandatory
 	 */
-	public void setMotivoContingencia(String motivoContingencia) {
-		if(motivoContingencia==null)
-			this.motivoContingencia = motivoContingencia;
+	public void setMotivoContingencia(String motivoContin) {
+		if(motivoContin==null)
+			this.motivoContin = motivoContin;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'motivoContingencia' in Retencion.Identificacion.setMotivoContingencia()");
 	}

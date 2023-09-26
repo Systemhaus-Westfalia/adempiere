@@ -38,7 +38,7 @@ public class X_C_Tax extends PO implements I_C_Tax, I_Persistent
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20230102L;
+	private static final long serialVersionUID = 20230926L;
 
     /** Standard Constructor */
     public X_C_Tax (Properties ctx, int C_Tax_ID, String trxName)
@@ -115,11 +115,6 @@ public class X_C_Tax extends PO implements I_C_Tax, I_Persistent
 			 return 0;
 		return ii.intValue();
 	}
-
-	public org.adempiere.core.domains.models.I_C_Country getC_Country() throws RuntimeException
-    {
-		return (org.adempiere.core.domains.models.I_C_Country)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_Country.Table_Name)
-			.getPO(getC_Country_ID(), get_TrxName());	}
 
 	/** Set Country.
 		@param C_Country_ID 
@@ -238,6 +233,57 @@ public class X_C_Tax extends PO implements I_C_Tax, I_Persistent
 	public String getDescription () 
 	{
 		return (String)get_Value(COLUMNNAME_Description);
+	}
+
+	/** Set CAT-015 Tributos.
+		@param E_Duties_ID CAT-015 Tributos	  */
+	public void setE_Duties_ID (int E_Duties_ID)
+	{
+		if (E_Duties_ID < 1) 
+			set_Value (COLUMNNAME_E_Duties_ID, null);
+		else 
+			set_Value (COLUMNNAME_E_Duties_ID, Integer.valueOf(E_Duties_ID));
+	}
+
+	/** Get CAT-015 Tributos.
+		@return CAT-015 Tributos	  */
+	public int getE_Duties_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_E_Duties_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	/** Set CAT-006 Retención IVA MH.
+		@param E_WithholdingType_ID CAT-006 Retención IVA MH	  */
+	public void setE_WithholdingType_ID (int E_WithholdingType_ID)
+	{
+		if (E_WithholdingType_ID < 1) 
+			set_Value (COLUMNNAME_E_WithholdingType_ID, null);
+		else 
+			set_Value (COLUMNNAME_E_WithholdingType_ID, Integer.valueOf(E_WithholdingType_ID));
+	}
+
+	/** Get CAT-006 Retención IVA MH.
+		@return CAT-006 Retención IVA MH	  */
+	
+	public org.adempiere.core.domains.models.I_E_WithholdingType getE_WithholdingType() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_E_WithholdingType)MTable.get(getCtx(), org.adempiere.core.domains.models.I_E_WithholdingType.Table_Name)
+			.getPO(getE_WithholdingType_ID(), get_TrxName());	}
+
+	/** Set Tax Category.
+		@param C_TaxCategory_ID 
+		Tax Category
+	  */
+	
+	public int getE_WithholdingType_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_E_WithholdingType_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
 	}
 
 	/** Set Default.
@@ -457,6 +503,35 @@ public class X_C_Tax extends PO implements I_C_Tax, I_Persistent
 		return false;
 	}
 
+	/** shw_Taxtype AD_Reference_ID=1000019 */
+	public static final int SHW_TAXTYPE_AD_Reference_ID=1000019;
+	/** Exento = TEXT */
+	public static final String SHW_TAXTYPE_Exento = "TEXT";
+	/** No sujeto a IVA = TINO */
+	public static final String SHW_TAXTYPE_NoSujetoAIVA = "TINO";
+	/** IVA = TIVA */
+	public static final String SHW_TAXTYPE_IVA = "TIVA";
+	/** Retencion Venta 1% = TPER */
+	public static final String SHW_TAXTYPE_RetencionVenta1 = "TPER";
+	/** Retenciones = TRET */
+	public static final String SHW_TAXTYPE_Retenciones = "TRET";
+	/** Cuenta Ajena = TAJE */
+	public static final String SHW_TAXTYPE_CuentaAjena = "TAJE";
+	/** Set shw_Taxtype.
+		@param shw_Taxtype shw_Taxtype	  */
+	public void setshw_Taxtype (String shw_Taxtype)
+	{
+
+		set_Value (COLUMNNAME_shw_Taxtype, shw_Taxtype);
+	}
+
+	/** Get shw_Taxtype.
+		@return shw_Taxtype	  */
+	public String getshw_Taxtype () 
+	{
+		return (String)get_Value(COLUMNNAME_shw_Taxtype);
+	}
+
 	/** SOPOType AD_Reference_ID=287 */
 	public static final int SOPOTYPE_AD_Reference_ID=287;
 	/** Both = B */
@@ -499,11 +574,6 @@ public class X_C_Tax extends PO implements I_C_Tax, I_Persistent
 	{
 		return (String)get_Value(COLUMNNAME_TaxIndicator);
 	}
-
-	public org.adempiere.core.domains.models.I_C_Country getTo_Country() throws RuntimeException
-    {
-		return (org.adempiere.core.domains.models.I_C_Country)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_Country.Table_Name)
-			.getPO(getTo_Country_ID(), get_TrxName());	}
 
 	/** Set To.
 		@param To_Country_ID 

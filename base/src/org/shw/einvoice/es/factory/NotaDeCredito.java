@@ -96,7 +96,7 @@ public class NotaDeCredito extends EDocument {
 	 */
 	@Override
 	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		notaDeCreditoFactory.fillIdentification( (IdentificacionNotaDeCredito) identificacion );
+		notaDeCreditoFactory.fillIdentification(factoryInput, (IdentificacionNotaDeCredito) identificacion );
 	}
 
 	@SuppressWarnings("unchecked")
@@ -116,7 +116,7 @@ public class NotaDeCredito extends EDocument {
 
 	@Override
 	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {	
-		notaDeCreditoFactory.fillDocumentoRelacionado(documentoRelacionado);
+		notaDeCreditoFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class NotaDeCredito extends EDocument {
 
 	@Override
 	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		notaDeCreditoFactory.fillEmisor( (EmisorNotaDeCredito) emisor);
+		notaDeCreditoFactory.fillEmisor(factoryInput, (EmisorNotaDeCredito) emisor);
 	}
 
 	/**
@@ -155,8 +155,8 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
-		notaDeCreditoFactory.fillReceptor( (ReceptorNotaDeCredito) receptor);
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+		notaDeCreditoFactory.fillReceptor(factoryInput, (ReceptorNotaDeCredito) receptor);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class NotaDeCredito extends EDocument {
 
 	@Override
 	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		notaDeCreditoFactory.fillVentaTercero( (VentaTerceroNotaDeCredito) ventaTercero);
+		notaDeCreditoFactory.fillVentaTercero(factoryInput, (VentaTerceroNotaDeCredito) ventaTercero);
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class NotaDeCredito extends EDocument {
 
 	@Override
 	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		notaDeCreditoFactory.fillCuerpoDocumento(cuerpoDocumento);	
+		notaDeCreditoFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);	
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class NotaDeCredito extends EDocument {
 
 	@Override
 	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
-		notaDeCreditoFactory.fillResumen( (ResumenNotaDeCredito) resumen);
+		notaDeCreditoFactory.fillResumen(factoryInput, (ResumenNotaDeCredito) resumen);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class NotaDeCredito extends EDocument {
 
 	@Override
 	public void fillExtension(JSONObject factoryInput, Extension extension) {
-		notaDeCreditoFactory.fillExtension( (ExtensionNotaDeCredito) extension);
+		notaDeCreditoFactory.fillExtension(factoryInput, (ExtensionNotaDeCredito) extension);
 	}
 
 	/**
@@ -264,7 +264,7 @@ public class NotaDeCredito extends EDocument {
 
 	@Override
 	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		notaDeCreditoFactory.fillApendice(apendice);		
+		notaDeCreditoFactory.fillApendice(factoryInput, apendice);		
 	}
 
 	/**

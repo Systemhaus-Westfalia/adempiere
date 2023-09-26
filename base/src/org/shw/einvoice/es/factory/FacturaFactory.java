@@ -6,6 +6,7 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.ApendiceItemFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItemFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.DocumentoRelacionadoItemFactura;
@@ -138,13 +139,13 @@ public class FacturaFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(Identificacion identificacion) {
+	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionFactura identificacionFactura = (IdentificacionFactura) identificacion;
 	}
 
 
 	@Override
-	public void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		// Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemFactura)
 		List<DocumentoRelacionadoItemFactura> documentoRelacionadoItemFactura = new ArrayList<DocumentoRelacionadoItemFactura>();
 		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemFactura.add((DocumentoRelacionadoItemFactura) e) );
@@ -153,19 +154,19 @@ public class FacturaFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillEmisor(Emisor emisor) {
+	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorFactura emisorFactura = (EmisorFactura) emisor;
 	}
 
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorFactura receptorFactura = (ReceptorFactura) receptor;
 	}
 
 
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		// Convert (=cast) all (OtrosDocumentosItem) to (OtrosDocumentosItemFactura)
 		List<OtrosDocumentosItemFactura> otrosDocumentosItemFactura = new ArrayList<OtrosDocumentosItemFactura>();
 		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemFactura.add((OtrosDocumentosItemFactura) e) );
@@ -173,13 +174,13 @@ public class FacturaFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroFactura ventaTerceroFactura = (VentaTerceroFactura) ventaTercero;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFactura)
 		List<CuerpoDocumentoItemFactura> cuerpoDocumentoItemFactura = new ArrayList<CuerpoDocumentoItemFactura>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFactura.add((CuerpoDocumentoItemFactura) e) );
@@ -187,19 +188,19 @@ public class FacturaFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenFactura resumenFactura = (ResumenFactura) resumen;
 	}
 
 
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		ExtensionFactura extensionFactura = (ExtensionFactura) extension;
 	}
 
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemFactura)
 		List<ApendiceItemFactura> apendiceItemFactura = new ArrayList<ApendiceItemFactura>();
 		apendice.stream().forEach(e -> apendiceItemFactura.add((ApendiceItemFactura) e) );

@@ -6,6 +6,7 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ApendiceItemCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.DocumentoRelacionadoItemCreditoFiscal;
@@ -140,13 +141,13 @@ public class CreditoFiscalFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(Identificacion identificacion) {
+	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionCreditoFiscal identificacionCreditoFiscal = (IdentificacionCreditoFiscal) identificacion;
 	}
 
 
 	@Override
-	public void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		// Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemCreditoFiscal)
 		List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItemCreditoFiscal= new ArrayList<DocumentoRelacionadoItemCreditoFiscal>();
 		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemCreditoFiscal.add((DocumentoRelacionadoItemCreditoFiscal) e) );
@@ -155,19 +156,19 @@ public class CreditoFiscalFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillEmisor(Emisor emisor) {
+	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorCreditoFiscal emisorCreditoFiscal = (EmisorCreditoFiscal) emisor;
 	}
 
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorCreditoFiscal receptorCreditoFiscal = (ReceptorCreditoFiscal) receptor;
 	}
 
 
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		// Convert (=cast) all (OtrosDocumentosItem) to (OtrosDocumentosItemCreditoFiscal)
 		List<OtrosDocumentosItemCreditoFiscal> otrosDocumentosItemCreditoFiscal= new ArrayList<OtrosDocumentosItemCreditoFiscal>();
 		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemCreditoFiscal.add((OtrosDocumentosItemCreditoFiscal) e) );
@@ -175,13 +176,13 @@ public class CreditoFiscalFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroCreditoFiscal ventaTerceroCreditoFiscal = (VentaTerceroCreditoFiscal) ventaTercero;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemCreditoFiscal)
 		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoItemCreditoFiscal= new ArrayList<CuerpoDocumentoItemCreditoFiscal>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemCreditoFiscal.add((CuerpoDocumentoItemCreditoFiscal) e) );
@@ -189,19 +190,19 @@ public class CreditoFiscalFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenCreditoFiscal resumenCreditoFiscal = (ResumenCreditoFiscal) resumen;
 	}
 
 
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		ExtensionCreditoFiscal extensionCreditoFiscal = (ExtensionCreditoFiscal) extension;
 	}
 
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemCreditoFiscal)
 		List<ApendiceItemCreditoFiscal> apendiceItemCreditoFiscal= new ArrayList<ApendiceItemCreditoFiscal>();
 		apendice.stream().forEach(e -> apendiceItemCreditoFiscal.add((ApendiceItemCreditoFiscal) e) );

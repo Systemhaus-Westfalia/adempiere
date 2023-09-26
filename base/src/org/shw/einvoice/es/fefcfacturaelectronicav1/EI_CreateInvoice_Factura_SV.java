@@ -47,6 +47,7 @@ import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.shw.einvoice.es.factory.Factura;
 import org.shw.einvoice.es.factory.FacturaStore;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;

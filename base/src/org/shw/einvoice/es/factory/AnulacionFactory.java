@@ -6,6 +6,7 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.anulacionv2.DocumentoAnulacion;
 import org.shw.einvoice.es.anulacionv2.EmisorAnulacion;
 import org.shw.einvoice.es.anulacionv2.IdentificacionAnulacion;
@@ -40,13 +41,13 @@ public class AnulacionFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(Identificacion identificacion) {
+	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionAnulacion identificacionAnulacion = (IdentificacionAnulacion) identificacion;
 	}
 
 
 	@Override
-	public void fillEmisor(Emisor emisor) {
+	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorAnulacion emisorAnulacion = (EmisorAnulacion) emisor;
 	}
 
@@ -143,7 +144,7 @@ public class AnulacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.fillDocumentoRelacionado() is not allowed");
 	}
 
@@ -151,7 +152,7 @@ public class AnulacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillReceptor(Receptor receptor) {
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.fillReceptor() is not allowed");
 	}
 
@@ -159,7 +160,7 @@ public class AnulacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.fillOtrosDocumentos() is not allowed");
 	}
 
@@ -167,7 +168,7 @@ public class AnulacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.fillVentaTercero() is not allowed");
 	}
 
@@ -175,7 +176,7 @@ public class AnulacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.fillCuerpoDocumento() is not allowed");
 	}
 
@@ -183,7 +184,7 @@ public class AnulacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.createDocumentoRelacionado() is not allowed");
 	}
 
@@ -191,12 +192,12 @@ public class AnulacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.createDocumentoRelacionado() is not allowed");
 	}
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method AnulacionFactory.createDocumentoRelacionado() is not allowed");
 	}
 	

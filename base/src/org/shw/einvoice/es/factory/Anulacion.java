@@ -95,7 +95,7 @@ public class Anulacion extends EDocument {
 
 	@Override
 	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		anulacionFactory.fillIdentification((IdentificacionAnulacion) identificacion );
+		anulacionFactory.fillIdentification(factoryInput, (IdentificacionAnulacion) identificacion );
 	}
 
 
@@ -203,7 +203,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillReceptor(Receptor receptor) {
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillReceptor() is not allowed");
 	}
 

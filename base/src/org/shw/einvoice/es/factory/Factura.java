@@ -38,7 +38,7 @@ public class Factura extends EDocument {
 	static final int MINIMUM_TOTOTAL_OF_OPERATION = 1095;
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 
-	static final String VALIDATION_RESULT_OK = "OK";
+	public static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_RESUMEN_OR_MONTO_IS_NULL   = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'getResumen() y getMontoTotalOperacion()' no debe ser ='null'";
 	static final String VALIDATION_TIPODOCUMENTO_IS_NULL      = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'tipoDocumento' no debe ser ='null'";
 	static final String VALIDATION_NUMDOCUMENTO_IS_NULL       = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'numDocumento' no debe ser ='null'";
@@ -149,7 +149,7 @@ public class Factura extends EDocument {
 	 */
 	@Override
 	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		facturaFactory.fillIdentification( (IdentificacionFactura) identificacion );
+		facturaFactory.fillIdentification(factoryInput, (IdentificacionFactura) identificacion );
 	}
 
 
@@ -211,7 +211,7 @@ public class Factura extends EDocument {
 	@Override
 	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		
-		facturaFactory.fillDocumentoRelacionado(documentoRelacionado);
+		facturaFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
 		
 	}
 
@@ -234,7 +234,7 @@ public class Factura extends EDocument {
 	
 	@Override
 	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		facturaFactory.fillEmisor( (EmisorFactura) emisor);
+		facturaFactory.fillEmisor(factoryInput, (EmisorFactura) emisor);
 	}
 
 
@@ -253,8 +253,8 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
-		facturaFactory.fillReceptor( (ReceptorFactura) receptor);
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+		facturaFactory.fillReceptor(factoryInput, (ReceptorFactura) receptor);
 	}
 
 	/**
@@ -307,7 +307,7 @@ public class Factura extends EDocument {
 
 	@Override
 	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
-		facturaFactory.fillOtrosDocumentos(otrosDocumentos);
+		facturaFactory.fillOtrosDocumentos(factoryInput, otrosDocumentos);
 	}
 
 
@@ -329,7 +329,7 @@ public class Factura extends EDocument {
 
 	@Override
 	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		facturaFactory.fillVentaTercero( (VentaTerceroFactura) ventaTercero);
+		facturaFactory.fillVentaTercero(factoryInput, (VentaTerceroFactura) ventaTercero);
 	}
 
 
@@ -385,7 +385,7 @@ public class Factura extends EDocument {
 	
 	@Override
 	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		facturaFactory.fillCuerpoDocumento(cuerpoDocumento);
+		facturaFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
 	}
 
 	/**
@@ -406,7 +406,7 @@ public class Factura extends EDocument {
 
 	@Override
 	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
-		facturaFactory.fillResumen( (ResumenFactura) resumen);
+		facturaFactory.fillResumen(factoryInput, (ResumenFactura) resumen);
 	}
 
 
@@ -428,7 +428,7 @@ public class Factura extends EDocument {
 
 	@Override
 	public void fillExtension(JSONObject factoryInput, Extension extension) {
-		facturaFactory.fillExtension( (ExtensionFactura) extension);
+		facturaFactory.fillExtension(factoryInput, (ExtensionFactura) extension);
 	}
 
 
@@ -483,7 +483,7 @@ public class Factura extends EDocument {
 
 	@Override
 	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		facturaFactory.fillApendice(apendice);		
+		facturaFactory.fillApendice(factoryInput, apendice);		
 	}
 
 	/**

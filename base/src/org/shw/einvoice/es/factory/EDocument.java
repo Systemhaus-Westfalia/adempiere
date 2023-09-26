@@ -28,7 +28,7 @@ public abstract class EDocument {
 	public abstract void fillEmisor(JSONObject factoryInput, Emisor emisor);
 
 	public abstract Receptor getReceptor();
-	public abstract void fillReceptor(Receptor receptor);
+	public abstract void fillReceptor(JSONObject factoryInput, Receptor receptor);
 	
 	public abstract List<OtrosDocumentosItem> getOtrosDocumentos();
 	public abstract  void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos);

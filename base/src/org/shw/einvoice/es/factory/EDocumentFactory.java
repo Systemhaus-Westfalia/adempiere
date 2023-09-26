@@ -2,6 +2,7 @@ package org.shw.einvoice.es.factory;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.Documento;
@@ -30,16 +31,16 @@ public interface EDocumentFactory {
 	Documento createDocumento();
 	Motivo createMotivo();	
 
-	void fillIdentification(Identificacion identificacion);
-	void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado);
-	void fillEmisor(Emisor emisor);
-	void fillReceptor(Receptor receptor);
-	void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos);
-	void fillVentaTercero(VentaTercero ventaTercero);
-	void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento);
-	void fillResumen(Resumen resumen);
-	void fillExtension(Extension extension);
-	void fillApendice(List<ApendiceItem> apendice);
+	void fillIdentification(JSONObject factoryInput, Identificacion identificacion);
+	void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado);
+	void fillEmisor(JSONObject factoryInput, Emisor emisor);
+	void fillReceptor(JSONObject factoryInput, Receptor receptor);
+	void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos);
+	void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero);
+	void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento);
+	void fillResumen(JSONObject factoryInput, Resumen resumen);
+	void fillExtension(JSONObject factoryInput, Extension extension);
+	void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice);
 
 	void fillDocumento(Documento documento);
 	void fillMotivo(Motivo motivo);

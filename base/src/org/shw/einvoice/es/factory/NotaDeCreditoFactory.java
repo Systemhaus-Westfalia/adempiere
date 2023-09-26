@@ -6,6 +6,7 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.fencnotadecreditov1.ApendiceItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.CuerpoDocumentoItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.DocumentoRelacionadoItemNotaDeCredito;
@@ -127,13 +128,13 @@ public class NotaDeCreditoFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(Identificacion identificacion) {
+	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionNotaDeCredito identificacionNotaDeCredito = (IdentificacionNotaDeCredito) identificacion;
 	}
 
 
 	@Override
-	public void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		// Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemNotaDeCredito)
 		List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionadoItemNotaDeCredito= new ArrayList<DocumentoRelacionadoItemNotaDeCredito>();
 		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemNotaDeCredito.add((DocumentoRelacionadoItemNotaDeCredito) e) );
@@ -142,13 +143,13 @@ public class NotaDeCreditoFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillEmisor(Emisor emisor) {
+	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorNotaDeCredito emisorNotaDeCredito = (EmisorNotaDeCredito) emisor;
 	}
 
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorNotaDeCredito receptorNotaDeCredito = (ReceptorNotaDeCredito) receptor;
 	}
 
@@ -156,19 +157,19 @@ public class NotaDeCreditoFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCreditoFactory.fillOtrosDocumentos() is not allowed");
 	}
 
 
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroNotaDeCredito ventaTerceroNotaDeCredito = (VentaTerceroNotaDeCredito) ventaTercero;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemNotaDeCredito)
 		List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumentoItemNotaDeCredito= new ArrayList<CuerpoDocumentoItemNotaDeCredito>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemNotaDeCredito.add((CuerpoDocumentoItemNotaDeCredito) e) );
@@ -176,19 +177,19 @@ public class NotaDeCreditoFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenNotaDeCredito resumenNotaDeCredito = (ResumenNotaDeCredito) resumen;
 	}
 
 
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		ExtensionNotaDeCredito extensionNotaDeCredito = (ExtensionNotaDeCredito) extension;
 	}
 
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemNotaDeCredito)
 		List<ApendiceItemNotaDeCredito> apendiceItemNotaDeCredito= new ArrayList<ApendiceItemNotaDeCredito>();
 		apendice.stream().forEach(e -> apendiceItemNotaDeCredito.add((ApendiceItemNotaDeCredito) e) );

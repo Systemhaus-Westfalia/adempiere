@@ -6,6 +6,7 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.ApendiceItemFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.CuerpoDocumentoItemFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.EmisorFacturaExportacion;
@@ -130,7 +131,7 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(Identificacion identificacion) {
+	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionFacturaExportacion identificacionFacturaExportacion = (IdentificacionFacturaExportacion) identificacion;
 	}
 
@@ -139,25 +140,25 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacionFactory.fillDocumentoRelacionado() is not allowed");
 	}
 
 
 	@Override
-	public void fillEmisor(Emisor emisor) {
+	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorFacturaExportacion emisorFacturaExportacion = (EmisorFacturaExportacion) emisor;
 	}
 
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorFacturaExportacion receptorFacturaExportacion = (ReceptorFacturaExportacion) receptor;
 	}
 
 
 	@Override
-	public void fillOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
+	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		// Convert (=cast) all (OtrosDocumentosItem) to (OtrosDocumentosItemFacturaExportacion)
 		List<OtrosDocumentosItemFacturaExportacion> otrosDocumentosItemFacturaExportacion = new ArrayList<OtrosDocumentosItemFacturaExportacion>();
 		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemFacturaExportacion.add((OtrosDocumentosItemFacturaExportacion) e) );
@@ -165,13 +166,13 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillVentaTercero(VentaTercero ventaTercero) {
+	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroFacturaExportacion ventaTerceroFacturaExportacion = (VentaTerceroFacturaExportacion) ventaTercero;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFacturaExportacion)
 		List<CuerpoDocumentoItemFacturaExportacion> cuerpoDocumentoItemFacturaExportacion = new ArrayList<CuerpoDocumentoItemFacturaExportacion>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFacturaExportacion.add((CuerpoDocumentoItemFacturaExportacion) e) );
@@ -179,7 +180,7 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillResumen(Resumen resumen) {
+	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenFacturaExportacion resumenFacturaExportacion = (ResumenFacturaExportacion) resumen;
 	}
 
@@ -188,13 +189,13 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillExtension(Extension extension) {
+	public void fillExtension(JSONObject factoryInput, Extension extension) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacionFactory.fillExtension() is not allowed");
 	}
 
 
 	@Override
-	public void fillApendice(List<ApendiceItem> apendice) {
+	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemFacturaExportacion)
 		List<ApendiceItemFacturaExportacion> apendiceItemFacturaExportacion = new ArrayList<ApendiceItemFacturaExportacion>();
 		apendice.stream().forEach(e -> apendiceItemFacturaExportacion.add((ApendiceItemFacturaExportacion) e) );

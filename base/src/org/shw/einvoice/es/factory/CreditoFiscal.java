@@ -110,7 +110,7 @@ public class CreditoFiscal extends EDocument {
 	 */
 	@Override
 	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		creditoFiscalFactory.fillIdentification( (IdentificacionCreditoFiscal) identificacion );
+		creditoFiscalFactory.fillIdentification(factoryInput, (IdentificacionCreditoFiscal) identificacion );
 	}
 
 
@@ -172,7 +172,7 @@ public class CreditoFiscal extends EDocument {
 	@Override
 	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		
-		creditoFiscalFactory.fillDocumentoRelacionado(documentoRelacionado);
+		creditoFiscalFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
 		
 	}
 
@@ -195,7 +195,7 @@ public class CreditoFiscal extends EDocument {
 	
 	@Override
 	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		creditoFiscalFactory.fillEmisor( (EmisorCreditoFiscal) emisor);
+		creditoFiscalFactory.fillEmisor(factoryInput, (EmisorCreditoFiscal) emisor);
 	}
 
 
@@ -215,8 +215,8 @@ public class CreditoFiscal extends EDocument {
 	}
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
-		creditoFiscalFactory.fillReceptor( (ReceptorCreditoFiscal) receptor);
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+		creditoFiscalFactory.fillReceptor(factoryInput, (ReceptorCreditoFiscal) receptor);
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class CreditoFiscal extends EDocument {
 
 	@Override
 	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {	
-		creditoFiscalFactory.fillOtrosDocumentos(otrosDocumentos);
+		creditoFiscalFactory.fillOtrosDocumentos(factoryInput, otrosDocumentos);
 	}
 
 
@@ -291,7 +291,7 @@ public class CreditoFiscal extends EDocument {
 
 	@Override
 	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		creditoFiscalFactory.fillVentaTercero( (VentaTerceroCreditoFiscal) ventaTercero);
+		creditoFiscalFactory.fillVentaTercero(factoryInput, (VentaTerceroCreditoFiscal) ventaTercero);
 	}
 
 
@@ -350,7 +350,7 @@ public class CreditoFiscal extends EDocument {
 	@Override
 	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 
-		creditoFiscalFactory.fillCuerpoDocumento(cuerpoDocumento);
+		creditoFiscalFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
 		
 	}
 
@@ -372,7 +372,7 @@ public class CreditoFiscal extends EDocument {
 
 	@Override
 	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
-		creditoFiscalFactory.fillResumen( (ResumenCreditoFiscal) resumen);
+		creditoFiscalFactory.fillResumen(factoryInput, (ResumenCreditoFiscal) resumen);
 	}
 
 
@@ -394,7 +394,7 @@ public class CreditoFiscal extends EDocument {
 
 	@Override
 	public void fillExtension(JSONObject factoryInput, Extension extension) {
-		creditoFiscalFactory.fillExtension( (ExtensionCreditoFiscal) extension);
+		creditoFiscalFactory.fillExtension(factoryInput, (ExtensionCreditoFiscal) extension);
 	}
 
 
@@ -450,7 +450,7 @@ public class CreditoFiscal extends EDocument {
 	@Override
 	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {		
 
-		creditoFiscalFactory.fillApendice(apendice);		
+		creditoFiscalFactory.fillApendice(factoryInput, apendice);		
 		
 	}
 

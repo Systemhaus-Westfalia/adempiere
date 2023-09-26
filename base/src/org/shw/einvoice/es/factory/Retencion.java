@@ -104,7 +104,7 @@ public class Retencion extends EDocument {
 	 */
 	@Override
 	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		retencionFactory.fillIdentification( (IdentificacionRetencion) identificacion );
+		retencionFactory.fillIdentification(factoryInput, (IdentificacionRetencion) identificacion );
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class Retencion extends EDocument {
 
 	@Override
 	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		retencionFactory.fillEmisor( (EmisorRetencion) emisor);
+		retencionFactory.fillEmisor(factoryInput, (EmisorRetencion) emisor);
 	}
 
 	/**
@@ -143,8 +143,8 @@ public class Retencion extends EDocument {
 	}
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
-		retencionFactory.fillReceptor( (ReceptorRetencion) receptor);
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+		retencionFactory.fillReceptor(factoryInput, (ReceptorRetencion) receptor);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class Retencion extends EDocument {
 	
 	@Override
 	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		retencionFactory.fillCuerpoDocumento(cuerpoDocumento);
+		retencionFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class Retencion extends EDocument {
 	
 	@Override
 	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
-		retencionFactory.fillResumen( (ResumenRetencion) resumen);
+		retencionFactory.fillResumen(factoryInput, (ResumenRetencion) resumen);
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class Retencion extends EDocument {
 	
 	@Override
 	public void fillExtension(JSONObject factoryInput, Extension extension) {
-		retencionFactory.fillExtension( (ExtensionRetencion) extension);
+		retencionFactory.fillExtension(factoryInput, (ExtensionRetencion) extension);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class Retencion extends EDocument {
 	
 	@Override
 	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		retencionFactory.fillApendice(apendice);		
+		retencionFactory.fillApendice(factoryInput, apendice);		
 	}
 
 	/**

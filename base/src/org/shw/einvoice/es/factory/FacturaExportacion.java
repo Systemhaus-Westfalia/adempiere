@@ -136,7 +136,7 @@ public class FacturaExportacion extends EDocument {
 	 */
 	@Override
 	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		facturaExportacionFactory.fillIdentification( (IdentificacionFacturaExportacion) identificacion );
+		facturaExportacionFactory.fillIdentification(factoryInput, (IdentificacionFacturaExportacion) identificacion );
 	}
 
 
@@ -158,7 +158,7 @@ public class FacturaExportacion extends EDocument {
 	
 	@Override
 	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		facturaExportacionFactory.fillEmisor( (EmisorFacturaExportacion) emisor);
+		facturaExportacionFactory.fillEmisor(factoryInput, (EmisorFacturaExportacion) emisor);
 	}
 
 
@@ -178,8 +178,8 @@ public class FacturaExportacion extends EDocument {
 	}
 
 	@Override
-	public void fillReceptor(Receptor receptor) {
-		facturaExportacionFactory.fillReceptor( (ReceptorFacturaExportacion) receptor);
+	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+		facturaExportacionFactory.fillReceptor(factoryInput, (ReceptorFacturaExportacion) receptor);
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class FacturaExportacion extends EDocument {
 		//		Also possible IV (cast single entry):
 		//  	OtrosDocumentosItemFacturaExportacion xxx = (OtrosDocumentosItemFacturaExportacion) otrosDocumentos.get(1);	
 
-		facturaExportacionFactory.fillOtrosDocumentos(otrosDocumentos);
+		facturaExportacionFactory.fillOtrosDocumentos(factoryInput, otrosDocumentos);
 		
 	}
 
@@ -251,7 +251,7 @@ public class FacturaExportacion extends EDocument {
 
 	@Override
 	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		facturaExportacionFactory.fillVentaTercero( (VentaTerceroFacturaExportacion) ventaTercero);
+		facturaExportacionFactory.fillVentaTercero(factoryInput, (VentaTerceroFacturaExportacion) ventaTercero);
 	}
 
 
@@ -305,7 +305,7 @@ public class FacturaExportacion extends EDocument {
 		//		Also possible IV (cast single entry):
 		//  	OtrosDocumentosItemFacturaExportacion xxx = (OtrosDocumentosItemFacturaExportacion) otrosDocumentos.get(1);	
 
-		facturaExportacionFactory.fillCuerpoDocumento(cuerpoDocumento);
+		facturaExportacionFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
 		
 	}
 
@@ -327,7 +327,7 @@ public class FacturaExportacion extends EDocument {
 
 	@Override
 	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
-		facturaExportacionFactory.fillResumen( (ResumenFacturaExportacion) resumen);
+		facturaExportacionFactory.fillResumen(factoryInput, (ResumenFacturaExportacion) resumen);
 	}
 
 
@@ -379,7 +379,7 @@ public class FacturaExportacion extends EDocument {
 		//		Also possible IV (cast single entry):
 		//  	OtrosDocumentosItemFacturaExportacion xxx = (OtrosDocumentosItemFacturaExportacion) otrosDocumentos.get(1);	
 
-		facturaExportacionFactory.fillApendice(apendice);		
+		facturaExportacionFactory.fillApendice(factoryInput, apendice);		
 		
 	}
 

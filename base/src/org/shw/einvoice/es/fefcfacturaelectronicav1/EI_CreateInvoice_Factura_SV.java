@@ -47,7 +47,6 @@ import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
-import org.shw.einvoice.es.factory.Factura;
 import org.shw.einvoice.es.factory.FacturaStore;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
@@ -65,9 +64,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	MClient				client = null;
 	MOrgInfo 			orgInfo = null;
 	StringBuffer errorMessages = new StringBuffer();
-	String absDirectory = "";
-		// TODO Auto-generated method stub
-	
+	String absDirectory = "";	
 	
 	@Override
 	protected void prepare()
@@ -78,9 +75,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	@Override
 	protected String doIt() throws Exception
 	{	
-		System.out.println("Process EI_CreateInvoice_Factura_SV : Started");
-		FacturaStore facturaStore = new FacturaStore();	
-		JSONObject factoryInput = new JSONObject();  // Will contain data passed to factory
+		System.out.println("Process EI_CreateInvoice_Factura_SV : started");
 		
 		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
@@ -88,9 +83,10 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
 				!invoice.getC_DocType().getE_DocType().getValue().equals(IdentificacionFactura.TIPO_DE_DOCUMENTO)) {
-			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es Factura";
+			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es una Factura. Aquí se interrumpe el proceso";
 			errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
+			System.out.println("Process EI_CreateInvoice_Factura_SV : finished");
 			return errorMessages.toString();
 		}
 		
@@ -99,13 +95,10 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		int orgID = invoice.getAD_Org_ID();		
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
 		
-		factoryInput.put("identificacion", generateIdentificationInputData(invoice));
-		factoryInput.put("receptor", generateReceptorInputData(invoice));
-		factoryInput.put("emisor", generateEmisorInputData(invoice));
-		factoryInput.put("resumen", generateResumenInputData(invoice));
-		factoryInput.put("cuerpoDocumento", generateCuerpoDocumentoInputData(invoice));
-		
-		Factura factura = (Factura) facturaStore.generateEDocument(factoryInput);	
+		FacturaStore facturaStore = new FacturaStore();
+		JSONObject jsonInputToFactory = generateJSONInputData(invoice); // Will contain data passed to factory	
+		Factura factura = (Factura) facturaStore.generateEDocument(jsonInputToFactory);
+		errorMessages.append(facturaStore.getEDocumentErrorMessages());
 
 		// TODO folgendes muß weg
 		try {fillReceptor((ReceptorFactura)             factura.getReceptor(),       invoice);} catch (Exception e) {errorMessages.append(e);}
@@ -184,8 +177,22 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     	}
 		
     	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-    	System.out.println(json);	    	
+    	System.out.println(json);
+		System.out.println("Process EI_CreateInvoice_Factura_SV : Finished");
 		return "";
+	}
+
+	private JSONObject generateJSONInputData(MInvoice invoice) {
+		JSONObject factoryInput = new JSONObject();  // Will contain data passed to factory
+
+		factoryInput.put("identificacion", generateIdentificationInputData(invoice));
+		factoryInput.put("receptor", generateReceptorInputData(invoice));
+		factoryInput.put("emisor", generateEmisorInputData(invoice));
+		factoryInput.put("resumen", generateResumenInputData(invoice));
+		factoryInput.put("cuerpoDocumento", generateCuerpoDocumentoInputData(invoice));
+
+		return factoryInput;
+
 	}
 
 	private String getNumeroControl(MInvoice invoice) {
@@ -240,7 +247,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		jsonObjectIdentificacion.put("fecEmi", invoice.getDateAcct().toString().substring(0, 10));
 		jsonObjectIdentificacion.put("horEmi", "00:00:00");
 		jsonObjectIdentificacion.put("tipoMoneda", "USD");
-		jsonObjectIdentificacion.put("tipoOperacion", "00");
+		jsonObjectIdentificacion.put("ambiente", "00");
 
 		System.out.println("Finish collecting JSON data for Identificacion");
 		return jsonObjectIdentificacion;

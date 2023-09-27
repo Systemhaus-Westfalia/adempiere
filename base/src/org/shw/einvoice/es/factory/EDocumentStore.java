@@ -17,6 +17,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public abstract class EDocumentStore {
 
+	StringBuffer errorMessages = new StringBuffer();
 	abstract EDocument createEDocument();
 	
 	public EDocument generateEDocument(JSONObject factoryInput) {
@@ -24,12 +25,12 @@ public abstract class EDocumentStore {
 		
 		Identificacion identification = eDocument.getIdentificacion();
 		if(identification!=null) {
-			eDocument.fillIdentification(factoryInput, identification);
+			errorMessages.append(eDocument.fillIdentification(factoryInput, identification));
 		}
 		
 		List<DocumentoRelacionadoItem> documentoRelacionado = eDocument.getDocumentoRelacionado();
 		if(documentoRelacionado!=null) {
-			eDocument.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
+			errorMessages.append(eDocument.fillDocumentoRelacionado(factoryInput, documentoRelacionado));
 		}
 		
 		Emisor emisor = eDocument.getEmisor();
@@ -79,4 +80,8 @@ public abstract class EDocumentStore {
 		
 		return eDocument;
 	}
+
+	public StringBuffer getEDocumentErrorMessages() {
+		 return this.errorMessages;
+	 }
 }

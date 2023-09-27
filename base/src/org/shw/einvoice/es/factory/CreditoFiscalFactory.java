@@ -43,6 +43,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class CreditoFiscalFactory implements EDocumentFactory {
+	StringBuffer errorMessages = new StringBuffer();
 	
 	@Override
 	public Identificacion createIdentificacion() {
@@ -141,71 +142,84 @@ public class CreditoFiscalFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionCreditoFiscal identificacionCreditoFiscal = (IdentificacionCreditoFiscal) identificacion;
+		
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		// Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemCreditoFiscal)
 		List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItemCreditoFiscal= new ArrayList<DocumentoRelacionadoItemCreditoFiscal>();
 		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemCreditoFiscal.add((DocumentoRelacionadoItemCreditoFiscal) e) );
+
+		return errorMessages;
 		
 	}
 
 
 	@Override
-	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorCreditoFiscal emisorCreditoFiscal = (EmisorCreditoFiscal) emisor;
+
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorCreditoFiscal receptorCreditoFiscal = (ReceptorCreditoFiscal) receptor;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		// Convert (=cast) all (OtrosDocumentosItem) to (OtrosDocumentosItemCreditoFiscal)
 		List<OtrosDocumentosItemCreditoFiscal> otrosDocumentosItemCreditoFiscal= new ArrayList<OtrosDocumentosItemCreditoFiscal>();
 		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemCreditoFiscal.add((OtrosDocumentosItemCreditoFiscal) e) );
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroCreditoFiscal ventaTerceroCreditoFiscal = (VentaTerceroCreditoFiscal) ventaTercero;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemCreditoFiscal)
 		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoItemCreditoFiscal= new ArrayList<CuerpoDocumentoItemCreditoFiscal>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemCreditoFiscal.add((CuerpoDocumentoItemCreditoFiscal) e) );
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenCreditoFiscal resumenCreditoFiscal = (ResumenCreditoFiscal) resumen;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillExtension(JSONObject factoryInput, Extension extension) {
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
 		ExtensionCreditoFiscal extensionCreditoFiscal = (ExtensionCreditoFiscal) extension;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemCreditoFiscal)
 		List<ApendiceItemCreditoFiscal> apendiceItemCreditoFiscal= new ArrayList<ApendiceItemCreditoFiscal>();
 		apendice.stream().forEach(e -> apendiceItemCreditoFiscal.add((ApendiceItemCreditoFiscal) e) );
+		return errorMessages;
 	}
 
 
@@ -231,7 +245,7 @@ public class CreditoFiscalFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Credito Fiscal calling the method CreditoFiscalFactory.fillDocumento() is not allowed");
 	}
 
@@ -240,7 +254,7 @@ public class CreditoFiscalFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Credito Fiscal calling the method CreditoFiscalFactory.fillMotivo() is not allowed");
 	}
 

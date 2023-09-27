@@ -39,6 +39,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class FacturaFactory implements EDocumentFactory {
+	StringBuffer errorMessages = new StringBuffer();
 	
 	@Override
 	public Identificacion createIdentificacion() {
@@ -139,71 +140,94 @@ public class FacturaFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		IdentificacionFactura identificacionFactura = (IdentificacionFactura) identificacion;
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+		IdentificacionFactura identificacionFactura = (IdentificacionFactura) identificacion;		
+		System.out.println("Start fillIdentificacion"); 
+		errorMessages.setLength(0);
+		try {identificacionFactura.setNumeroControl(factoryInput.getString("numeroControl"));} 		catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setCodigoGeneracion(factoryInput.getString("codigoGeneracion"));} catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setTipoModelo(factoryInput.getInt("tipoModelo"));} 				catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setTipoOperacion(factoryInput.getInt("tipoOperacion"));} 		catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setFecEmi(factoryInput.getString("fecEmi"));} 					catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setHorEmi(factoryInput.getString("horEmi"));} 					catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setTipoMoneda(factoryInput.getString("tipoMoneda"));} 			catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setAmbiente("00");} catch (Exception e) {errorMessages.append(e);}
+		
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		// Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemFactura)
 		List<DocumentoRelacionadoItemFactura> documentoRelacionadoItemFactura = new ArrayList<DocumentoRelacionadoItemFactura>();
 		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemFactura.add((DocumentoRelacionadoItemFactura) e) );
+
+		return errorMessages;
 		
 	}
 
 
 	@Override
-	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorFactura emisorFactura = (EmisorFactura) emisor;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorFactura receptorFactura = (ReceptorFactura) receptor;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		// Convert (=cast) all (OtrosDocumentosItem) to (OtrosDocumentosItemFactura)
 		List<OtrosDocumentosItemFactura> otrosDocumentosItemFactura = new ArrayList<OtrosDocumentosItemFactura>();
 		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemFactura.add((OtrosDocumentosItemFactura) e) );
+		
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroFactura ventaTerceroFactura = (VentaTerceroFactura) ventaTercero;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFactura)
 		List<CuerpoDocumentoItemFactura> cuerpoDocumentoItemFactura = new ArrayList<CuerpoDocumentoItemFactura>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFactura.add((CuerpoDocumentoItemFactura) e) );
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenFactura resumenFactura = (ResumenFactura) resumen;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillExtension(JSONObject factoryInput, Extension extension) {
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
 		ExtensionFactura extensionFactura = (ExtensionFactura) extension;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemFactura)
 		List<ApendiceItemFactura> apendiceItemFactura = new ArrayList<ApendiceItemFactura>();
 		apendice.stream().forEach(e -> apendiceItemFactura.add((ApendiceItemFactura) e) );
+		return errorMessages;
 	}
 
 	/**
@@ -218,7 +242,7 @@ public class FacturaFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Factura calling the method FacturaFactory.fillDocumento() is not allowed");
 	}
 
@@ -234,7 +258,7 @@ public class FacturaFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Factura calling the method FacturaFactory.fillMotivo() is not allowed");
 	}
 

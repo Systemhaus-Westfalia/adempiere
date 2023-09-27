@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.python.antlr.PythonParser.return_stmt_return;
 import org.shw.einvoice.es.fendnotadedebitov3.ApendiceItemNotaDeDebito;
 import org.shw.einvoice.es.fendnotadedebitov3.CuerpoDocumentoItemNotaDeDebito;
 import org.shw.einvoice.es.fendnotadedebitov3.DocumentoRelacionadoItemNotaDeDebito;
@@ -95,8 +96,10 @@ public class NotaDeDebito extends EDocument {
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
 	@Override
-	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		notaDeDebitoFactory.fillIdentification(factoryInput, (IdentificacionNotaDeDebito) identificacion );
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+		errorMessages = notaDeDebitoFactory.fillIdentification(factoryInput, (IdentificacionNotaDeDebito) identificacion );
+		
+		return errorMessages;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -115,8 +118,10 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {	
-		notaDeDebitoFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {	
+		errorMessages = notaDeDebitoFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
+		
+		return errorMessages;
 	}
 
 	/**
@@ -135,8 +140,9 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		notaDeDebitoFactory.fillEmisor(factoryInput, (EmisorNotaDeDebito) emisor);
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
+		errorMessages = notaDeDebitoFactory.fillEmisor(factoryInput, (EmisorNotaDeDebito) emisor);
+		return errorMessages;
 	}
 
 	/**
@@ -155,8 +161,9 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
-		notaDeDebitoFactory.fillReceptor(factoryInput, (ReceptorNotaDeDebito) receptor);
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
+		errorMessages = notaDeDebitoFactory.fillReceptor(factoryInput, (ReceptorNotaDeDebito) receptor);
+		return errorMessages;
 	}
 
 	/**
@@ -175,8 +182,9 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		notaDeDebitoFactory.fillVentaTercero(factoryInput, (VentaTerceroNotaDeDebito) ventaTercero);
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+		errorMessages = notaDeDebitoFactory.fillVentaTercero(factoryInput, (VentaTerceroNotaDeDebito) ventaTercero); 
+		return errorMessages;
 	}
 
 	/**
@@ -199,8 +207,9 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		notaDeDebitoFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);	
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
+		errorMessages = notaDeDebitoFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);	 
+		return errorMessages;
 	}
 
 	/**
@@ -219,8 +228,9 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
-		notaDeDebitoFactory.fillResumen(factoryInput, (ResumenNotaDeDebito) resumen);
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
+		errorMessages = notaDeDebitoFactory.fillResumen(factoryInput, (ResumenNotaDeDebito) resumen); 
+		return errorMessages;
 	}
 
 	/**
@@ -239,8 +249,9 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillExtension(JSONObject factoryInput, Extension extension) {
-		notaDeDebitoFactory.fillExtension(factoryInput, (ExtensionNotaDeDebito) extension);
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
+		errorMessages = notaDeDebitoFactory.fillExtension(factoryInput, (ExtensionNotaDeDebito) extension); 
+		return errorMessages;
 	}
 
 	/**
@@ -263,8 +274,9 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	@Override
-	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		notaDeDebitoFactory.fillApendice(factoryInput, apendice);		
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
+		errorMessages = notaDeDebitoFactory.fillApendice(factoryInput, apendice); 
+		return errorMessages;
 	}
 
 	/**
@@ -280,7 +292,7 @@ public class NotaDeDebito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Nota de Debito calling the method NotaDeDebito.fillOtrosDocumentos() is not allowed");
 	}
 
@@ -297,7 +309,7 @@ public class NotaDeDebito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(JSONObject factoryInput, Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Nota de Debito calling the method NotaDeDebito.fillDocumento() is not allowed");
 	}
 
@@ -315,7 +327,7 @@ public class NotaDeDebito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(JSONObject factoryInput, Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Nota de Debito calling the method NotaDeDebito.fillMotivo() is not allowed");
 	}
 

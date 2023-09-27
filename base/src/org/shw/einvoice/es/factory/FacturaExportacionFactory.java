@@ -37,6 +37,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class FacturaExportacionFactory implements EDocumentFactory {
+	StringBuffer errorMessages = new StringBuffer();
 	
 	@Override
 	public Identificacion createIdentificacion() {
@@ -131,8 +132,10 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionFacturaExportacion identificacionFacturaExportacion = (IdentificacionFacturaExportacion) identificacion;
+		
+		return errorMessages;
 	}
 
 
@@ -140,48 +143,54 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacionFactory.fillDocumentoRelacionado() is not allowed");
 	}
 
 
 	@Override
-	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorFacturaExportacion emisorFacturaExportacion = (EmisorFacturaExportacion) emisor;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorFacturaExportacion receptorFacturaExportacion = (ReceptorFacturaExportacion) receptor;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		// Convert (=cast) all (OtrosDocumentosItem) to (OtrosDocumentosItemFacturaExportacion)
 		List<OtrosDocumentosItemFacturaExportacion> otrosDocumentosItemFacturaExportacion = new ArrayList<OtrosDocumentosItemFacturaExportacion>();
 		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemFacturaExportacion.add((OtrosDocumentosItemFacturaExportacion) e) );
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroFacturaExportacion ventaTerceroFacturaExportacion = (VentaTerceroFacturaExportacion) ventaTercero;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFacturaExportacion)
 		List<CuerpoDocumentoItemFacturaExportacion> cuerpoDocumentoItemFacturaExportacion = new ArrayList<CuerpoDocumentoItemFacturaExportacion>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFacturaExportacion.add((CuerpoDocumentoItemFacturaExportacion) e) );
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenFacturaExportacion resumenFacturaExportacion = (ResumenFacturaExportacion) resumen;
+		return errorMessages;
 	}
 
 
@@ -189,16 +198,17 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillExtension(JSONObject factoryInput, Extension extension) {
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacionFactory.fillExtension() is not allowed");
 	}
 
 
 	@Override
-	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemFacturaExportacion)
 		List<ApendiceItemFacturaExportacion> apendiceItemFacturaExportacion = new ArrayList<ApendiceItemFacturaExportacion>();
 		apendice.stream().forEach(e -> apendiceItemFacturaExportacion.add((ApendiceItemFacturaExportacion) e) );
+		return errorMessages;
 	}
 
 
@@ -224,7 +234,7 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacionFactory.fillDocumento() is not allowed");
 	}
 
@@ -233,7 +243,7 @@ public class FacturaExportacionFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacionFactory.fillMotivo() is not allowed");
 	}
 

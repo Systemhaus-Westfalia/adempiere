@@ -38,6 +38,7 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class NotaDeCreditoFactory implements EDocumentFactory {
+	StringBuffer errorMessages = new StringBuffer();
 	
 	@Override
 	public Identificacion createIdentificacion() {
@@ -128,71 +129,82 @@ public class NotaDeCreditoFactory implements EDocumentFactory {
 
 
 	@Override
-	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
 		IdentificacionNotaDeCredito identificacionNotaDeCredito = (IdentificacionNotaDeCredito) identificacion;
+		
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		// Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemNotaDeCredito)
 		List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionadoItemNotaDeCredito= new ArrayList<DocumentoRelacionadoItemNotaDeCredito>();
 		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemNotaDeCredito.add((DocumentoRelacionadoItemNotaDeCredito) e) );
 		
+
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
 		EmisorNotaDeCredito emisorNotaDeCredito = (EmisorNotaDeCredito) emisor;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		ReceptorNotaDeCredito receptorNotaDeCredito = (ReceptorNotaDeCredito) receptor;
+		return errorMessages;
 	}
 
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCreditoFactory.fillOtrosDocumentos() is not allowed");
 	}
 
 
 	@Override
-	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		VentaTerceroNotaDeCredito ventaTerceroNotaDeCredito = (VentaTerceroNotaDeCredito) ventaTercero;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemNotaDeCredito)
 		List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumentoItemNotaDeCredito= new ArrayList<CuerpoDocumentoItemNotaDeCredito>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemNotaDeCredito.add((CuerpoDocumentoItemNotaDeCredito) e) );
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
 		ResumenNotaDeCredito resumenNotaDeCredito = (ResumenNotaDeCredito) resumen;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillExtension(JSONObject factoryInput, Extension extension) {
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
 		ExtensionNotaDeCredito extensionNotaDeCredito = (ExtensionNotaDeCredito) extension;
+		return errorMessages;
 	}
 
 
 	@Override
-	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemNotaDeCredito)
 		List<ApendiceItemNotaDeCredito> apendiceItemNotaDeCredito= new ArrayList<ApendiceItemNotaDeCredito>();
 		apendice.stream().forEach(e -> apendiceItemNotaDeCredito.add((ApendiceItemNotaDeCredito) e) );
+		return errorMessages;
 	}
 
 
@@ -218,7 +230,7 @@ public class NotaDeCreditoFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCreditoFactory.fillDocumento() is not allowed");
 	}
 
@@ -227,7 +239,7 @@ public class NotaDeCreditoFactory implements EDocumentFactory {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCreditoFactory.fillMotivo() is not allowed");
 	}
 

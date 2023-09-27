@@ -94,8 +94,10 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		anulacionFactory.fillIdentification(factoryInput, (IdentificacionAnulacion) identificacion );
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+		errorMessages = anulacionFactory.fillIdentification(factoryInput, (IdentificacionAnulacion) identificacion );
+		
+		return errorMessages;
 	}
 
 
@@ -119,8 +121,9 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		this.emisor = (EmisorAnulacion) emisor;
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
+		errorMessages = anulacionFactory.fillEmisor(factoryInput, (EmisorAnulacion) emisor );
+		return errorMessages;
 	}
 
 
@@ -144,8 +147,9 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	public void fillDocumento(JSONObject factoryInput, Documento documento) {
-		this.documento = (DocumentoAnulacion) documento;
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
+		errorMessages = anulacionFactory.fillDocumento(factoryInput, (DocumentoAnulacion) documento );
+		return errorMessages;
 	}
 
 
@@ -167,8 +171,9 @@ public class Anulacion extends EDocument {
 
 
 	@Override
-	public void fillMotivo(JSONObject factoryInput, Motivo motivo) {
-		this.motivo = (MotivoAnulacion) motivo;
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
+		errorMessages = anulacionFactory.fillMotivo(factoryInput, (MotivoAnulacion) motivo );
+		return errorMessages;
 	}
 
 
@@ -185,7 +190,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumentoRelacionado(JSONObject factoryInput,List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput,List<DocumentoRelacionadoItem> documentoRelacionado) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillDocumentoRelacionado() is not allowed");
 	}
 
@@ -203,7 +208,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillReceptor() is not allowed");
 	}
 
@@ -221,7 +226,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillOtrosDocumentos() is not allowed");
 	}
 
@@ -239,7 +244,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillVentaTercero() is not allowed");
 	}
 
@@ -257,7 +262,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillCuerpoDocumento() is not allowed");
 	}
 
@@ -275,7 +280,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillResumen() is not allowed");
 	}
 
@@ -293,7 +298,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillExtension(JSONObject factoryInput, Extension extension) {
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillExtension() is not allowed");
 	}
 
@@ -311,7 +316,7 @@ public class Anulacion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
 		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillApendice() is not allowed");
 	}
 

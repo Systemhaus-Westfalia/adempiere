@@ -1,22 +1,15 @@
 /**
  * 
  */
-package org.shw.einvoice.es.factory;
+package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ApendiceItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.DocumentoRelacionadoItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.EmisorFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ExtensionFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.IdentificacionFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.OtrosDocumentosItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ReceptorFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ResumenFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.VentaTerceroFactura;
+import org.shw.einvoice.es.factory.EDocument;
+import org.shw.einvoice.es.factory.EDocumentFactory;
+import org.shw.einvoice.es.factory.FacturaFactory;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.Documento;
@@ -148,8 +141,10 @@ public class Factura extends EDocument {
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
 	@Override
-	public void fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		facturaFactory.fillIdentification(factoryInput, (IdentificacionFactura) identificacion );
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
+		errorMessages = facturaFactory.fillIdentification(factoryInput, (IdentificacionFactura) identificacion );
+		
+		return errorMessages;
 	}
 
 
@@ -209,9 +204,11 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
 		
-		facturaFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
+		errorMessages = facturaFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
+		
+		return errorMessages;
 		
 	}
 
@@ -233,8 +230,10 @@ public class Factura extends EDocument {
 	}
 	
 	@Override
-	public void fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		facturaFactory.fillEmisor(factoryInput, (EmisorFactura) emisor);
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
+		errorMessages = facturaFactory.fillEmisor(factoryInput, (EmisorFactura) emisor);
+		
+		return errorMessages;
 	}
 
 
@@ -253,8 +252,9 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillReceptor(JSONObject factoryInput, Receptor receptor) {
-		facturaFactory.fillReceptor(factoryInput, (ReceptorFactura) receptor);
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
+		errorMessages = facturaFactory.fillReceptor(factoryInput, (ReceptorFactura) receptor);
+		return errorMessages;
 	}
 
 	/**
@@ -306,8 +306,9 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
-		facturaFactory.fillOtrosDocumentos(factoryInput, otrosDocumentos);
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+		errorMessages = facturaFactory.fillOtrosDocumentos(factoryInput, otrosDocumentos);
+		return errorMessages;
 	}
 
 
@@ -328,8 +329,9 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		facturaFactory.fillVentaTercero(factoryInput, (VentaTerceroFactura) ventaTercero);
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+		errorMessages = facturaFactory.fillVentaTercero(factoryInput, (VentaTerceroFactura) ventaTercero);
+		return errorMessages;
 	}
 
 
@@ -384,8 +386,9 @@ public class Factura extends EDocument {
 
 	
 	@Override
-	public void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		facturaFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
+		errorMessages = facturaFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
+		return errorMessages;
 	}
 
 	/**
@@ -405,8 +408,9 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillResumen(JSONObject factoryInput, Resumen resumen) {
-		facturaFactory.fillResumen(factoryInput, (ResumenFactura) resumen);
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
+		errorMessages = facturaFactory.fillResumen(factoryInput, (ResumenFactura) resumen);
+		return errorMessages;
 	}
 
 
@@ -427,8 +431,9 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillExtension(JSONObject factoryInput, Extension extension) {
-		facturaFactory.fillExtension(factoryInput, (ExtensionFactura) extension);
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
+		errorMessages = facturaFactory.fillExtension(factoryInput, (ExtensionFactura) extension);
+		return errorMessages;
 	}
 
 
@@ -482,8 +487,9 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		facturaFactory.fillApendice(factoryInput, apendice);		
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
+		errorMessages = facturaFactory.fillApendice(factoryInput, apendice);	
+		return errorMessages;	
 	}
 
 	/**
@@ -498,7 +504,7 @@ public class Factura extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillDocumento(JSONObject factoryInput, Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
 		throw new UnsupportedOperationException("In Document Factura calling the method Factura.fillDocumento() is not allowed");
 	}
 
@@ -514,7 +520,7 @@ public class Factura extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public void fillMotivo(JSONObject factoryInput, Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
 		throw new UnsupportedOperationException("In Document Factura calling the method Factura.fillMotivo() is not allowed");
 	}
 

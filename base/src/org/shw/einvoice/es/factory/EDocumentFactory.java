@@ -31,17 +31,17 @@ public interface EDocumentFactory {
 	Documento createDocumento();
 	Motivo createMotivo();	
 
-	void fillIdentification(JSONObject factoryInput, Identificacion identificacion);
-	void fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado);
-	void fillEmisor(JSONObject factoryInput, Emisor emisor);
-	void fillReceptor(JSONObject factoryInput, Receptor receptor);
-	void fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos);
-	void fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero);
-	void fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento);
-	void fillResumen(JSONObject factoryInput, Resumen resumen);
-	void fillExtension(JSONObject factoryInput, Extension extension);
-	void fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice);
+	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion);
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado);
+	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor);
+	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor);
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos);
+	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero);
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento);
+	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen);
+	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension);
+	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice);
 
-	void fillDocumento(Documento documento);
-	void fillMotivo(Motivo motivo);
+	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento);
+	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo);
 }

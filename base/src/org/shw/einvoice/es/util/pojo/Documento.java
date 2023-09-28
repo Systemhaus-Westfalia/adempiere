@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
  * Just for class Anulacion
  */
 public abstract class Documento {
+	static final String VALIDATION_RESULT_OK = "OK";
 
 	String tipoDte;
 	String codigoGeneracion;
@@ -35,6 +36,13 @@ public abstract class Documento {
 	 */
 	public String getTipoDte() {
 		return tipoDte;
+	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {
+		return VALIDATION_RESULT_OK;
 	}
 
 

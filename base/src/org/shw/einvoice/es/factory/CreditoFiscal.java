@@ -2,6 +2,7 @@
  * 
  */
 package org.shw.einvoice.es.factory;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,8 +77,13 @@ public class CreditoFiscal extends EDocument {
 		this.extension            = (ExtensionCreditoFiscal) creditoFiscalFactory.createExtension();
 		
 	    tmpList = creditoFiscalFactory.createApendice();
-	    this.apendice             = (List<ApendiceItemCreditoFiscal>) tmpList;;
+	    this.apendice             = (List<ApendiceItemCreditoFiscal>) tmpList;
+	    
 	}
+	
+	/**
+	 * validateValues() from super class
+	 */
 	
 	/**
 	 * No parameters

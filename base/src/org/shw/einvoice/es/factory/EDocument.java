@@ -17,8 +17,9 @@ import org.shw.einvoice.es.util.pojo.Resumen;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public abstract class EDocument {
+	public static final String VALIDATION_RESULT_OK = "OK";
 	public StringBuffer errorMessages = new StringBuffer();
-
+	
 	public abstract Identificacion getIdentificacion();
 	public abstract StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion);
 	
@@ -54,5 +55,12 @@ public abstract class EDocument {
 	
 	public abstract Motivo getMotivo();
 	public abstract StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo);
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {		
+		return VALIDATION_RESULT_OK;
+	}
 	
 }

@@ -19,29 +19,29 @@ public abstract class Motivo {
 	String nombreSolicita;
 	String tipDocSolicita;
 	String numDocSolicita;
-    
+
 	/**
 	 * 
 	 */
 	public Motivo() {
 	}
-    
 
 
-/**
- * Validate the Schema conditions
- */
-public String validateValues() {
-	
-	if(getTipoAnulacion()==3) {
-		if ( getMotivoAnulacion()== null)
-			return VALIDATION_MOTIVOANULACION_IS_NULL;
-	} 
-	
-	return VALIDATION_RESULT_OK;
-}
-	
-	
+
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {
+
+		if(getTipoAnulacion()==3) {
+			if ( getMotivoAnulacion()== null)
+				return VALIDATION_MOTIVOANULACION_IS_NULL;
+		} 
+
+		return VALIDATION_RESULT_OK;
+	}
+
+
 	/**
 	 * @return the tipoAnulacion
 	 */
@@ -61,7 +61,7 @@ public String validateValues() {
 		if (tipoAnulacion==1 || tipoAnulacion==2 || tipoAnulacion==3)
 			this.tipoAnulacion = tipoAnulacion;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoAnulacion' in Anulacion.Motivo.setTipoAnulacion()");
+			throw new IllegalArgumentException("Wrong parameter 'tipoAnulacion' in Anulacion.Motivo.setTipoAnulacion()");
 	}
 
 
@@ -86,11 +86,11 @@ public String validateValues() {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 250;
 		int length = motivoAnulacion==null?0:motivoAnulacion.length();
-		
+
 		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (motivoAnulacion==null) )
 			this.motivoAnulacion = motivoAnulacion;
 		else
-		    throw new IllegalArgumentException("Wrong parameter 'motivoAnulacion' in Anulacion.Motivo.setMotivoAnulacion()");
+			throw new IllegalArgumentException("Wrong parameter 'motivoAnulacion' in Anulacion.Motivo.setMotivoAnulacion()");
 	}
 
 
@@ -115,11 +115,11 @@ public String validateValues() {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 100;
 		int length = nombreResponsable==null?0:nombreResponsable.length();
-		
+
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombreResponsable = nombreResponsable;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreResponsable' in Anulacion.Motivo.setNombreResponsable()");
+			throw new IllegalArgumentException("Wrong parameter 'nombreResponsable' in Anulacion.Motivo.setNombreResponsable()");
 	}
 
 
@@ -174,11 +174,11 @@ public String validateValues() {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
 		int length = numDocResponsable==null?0:numDocResponsable.length();
-		
+
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocResponsable = numDocResponsable;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocResponsable' in Anulacion.Motivo.setNumDocResponsable()");
+			throw new IllegalArgumentException("Wrong parameter 'numDocResponsable' in Anulacion.Motivo.setNumDocResponsable()");
 	}
 
 
@@ -203,11 +203,11 @@ public String validateValues() {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 100;
 		int length = nombreSolicita==null?0:nombreSolicita.length();
-		
+
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombreSolicita = nombreSolicita;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreSolicita' in Anulacion.Motivo.setNombreSolicita()");
+			throw new IllegalArgumentException("Wrong parameter 'nombreSolicita' in Anulacion.Motivo.setNombreSolicita()");
 	}
 
 
@@ -262,11 +262,11 @@ public String validateValues() {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
 		int length = numDocSolicita==null?0:numDocSolicita.length();
-		
+
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.numDocSolicita = numDocSolicita;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocSolicita' in Anulacion.Motivo.setNumDocSolicita()");
+			throw new IllegalArgumentException("Wrong parameter 'numDocSolicita' in Anulacion.Motivo.setNumDocSolicita()");
 	}
 
 

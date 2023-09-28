@@ -23,6 +23,14 @@ public class ExtensionCreditoFiscal implements Extension {
 	public ExtensionCreditoFiscal() {
 
 	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	@Override
+	public String validateValues() {		
+		return VALIDATION_RESULT_OK;
+	}
 
 	/**
 	 * @return the nombEntrega

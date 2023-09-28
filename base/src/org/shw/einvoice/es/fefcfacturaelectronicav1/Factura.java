@@ -31,7 +31,6 @@ public class Factura extends EDocument {
 	static final int MINIMUM_TOTOTAL_OF_OPERATION = 1095;
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 
-	public static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_RESUMEN_OR_MONTO_IS_NULL   = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'getResumen() y getMontoTotalOperacion()' no debe ser ='null'";
 	static final String VALIDATION_TIPODOCUMENTO_IS_NULL      = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'tipoDocumento' no debe ser ='null'";
 	static final String VALIDATION_NUMDOCUMENTO_IS_NULL       = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'numDocumento' no debe ser ='null'";
@@ -99,6 +98,7 @@ public class Factura extends EDocument {
 	/**
 	 * Validate the Schema conditions
 	 */
+	@Override
 	public String validateValues() {
 		if( (getResumen()==null) || (getResumen().getMontoTotalOperacion()==null) ) {
 			return VALIDATION_RESUMEN_OR_MONTO_IS_NULL;

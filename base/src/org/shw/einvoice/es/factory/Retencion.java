@@ -33,8 +33,6 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  */
 public class Retencion extends EDocument {
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 500;
-	
-	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Retencion, clase: Retencion. Validacion falló: valor de 'cuerpoDocumento' debe  contener de 1 a 500 elementos";
 	
 	IdentificacionRetencion identificacion;
@@ -76,6 +74,7 @@ public class Retencion extends EDocument {
 	/**
 	 * Validate the Schema conditions
 	 */
+	@Override
 	public String validateValues() {
 		if( (getCuerpoDocumento()==null) ||  (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
 			return VALIDATION_CUERPODOCUMENTO_MAX_ITEMS;

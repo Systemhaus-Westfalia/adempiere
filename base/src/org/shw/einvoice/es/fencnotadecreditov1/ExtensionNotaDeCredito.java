@@ -22,6 +22,14 @@ public class ExtensionNotaDeCredito implements Extension {
 	public ExtensionNotaDeCredito() {
 
 	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	@Override
+	public String validateValues() {		
+		return VALIDATION_RESULT_OK;
+	}
 
 	/**
 	 * @return the nombEntrega

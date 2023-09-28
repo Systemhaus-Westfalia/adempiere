@@ -22,6 +22,14 @@ public class ExtensionNotaDeDebito implements Extension {
 	public ExtensionNotaDeDebito() {
 
 	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	@Override
+	public String validateValues() {		
+		return VALIDATION_RESULT_OK;
+	}
 
 	/**
 	 * @return the nombEntrega

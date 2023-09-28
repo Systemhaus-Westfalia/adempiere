@@ -23,6 +23,13 @@ public class ExtensionFactura implements Extension {
 	public ExtensionFactura() {
 
 	}
+	/**
+	 * Validate the Schema conditions
+	 */
+	@Override
+	public String validateValues() {		
+		return VALIDATION_RESULT_OK;
+	}
 
 	/**
 	 * @return the nombEntrega

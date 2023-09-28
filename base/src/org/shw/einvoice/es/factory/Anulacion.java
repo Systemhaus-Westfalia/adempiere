@@ -27,7 +27,6 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class Anulacion extends EDocument {
-	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_CODIGOGENERACIONR_IS_NOT_NULL = "Documento: Anulacion, clase: Anulacion. Validacion falló: valor de 'codigoGeneracionR' debe ser ='null'";
 	static final String VALIDATION_CODIGOGENERACIONR_IS_NULL = "Documento: Anulacion, clase: Anulacion. Validacion falló: valor de 'codigoGeneracionR' no deber ser ='null'";
 
@@ -61,6 +60,7 @@ public class Anulacion extends EDocument {
 	/**
 	 * Validate the Schema conditions
 	 */
+	@Override
 	public String validateValues() {
 
 		if(getMotivo().getTipoAnulacion()==2) {

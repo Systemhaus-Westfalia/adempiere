@@ -78,6 +78,10 @@ public class NotaDeDebito extends EDocument {
 		this();
 		this.notaDeDebitoFactory = (NotaDeDebitoFactory) notaDeDebitoFactory;
 	}
+	
+	/**
+	 * validateValues() from super class
+	 */
 
 	/**
 	 * @return the identificacion

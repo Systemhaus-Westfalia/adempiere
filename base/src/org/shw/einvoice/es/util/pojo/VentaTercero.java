@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
  */
 public abstract class VentaTercero {
 
+	public static final String VALIDATION_RESULT_OK = "OK";
 	String nit;
 	String nombre;
 	
@@ -17,6 +18,13 @@ public abstract class VentaTercero {
 	 * No parameters
 	 */
 	public VentaTercero() {
+	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {		
+		return VALIDATION_RESULT_OK;
 	}
 
 	

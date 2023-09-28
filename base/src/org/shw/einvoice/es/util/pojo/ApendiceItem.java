@@ -7,6 +7,7 @@ package org.shw.einvoice.es.util.pojo;
  * 
  */
 public abstract class ApendiceItem {
+	static final String VALIDATION_RESULT_OK = "OK";
 	
 	String campo;
 	String etiqueta;
@@ -17,6 +18,13 @@ public abstract class ApendiceItem {
 	 */
 	public ApendiceItem() {
 
+	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {
+		return VALIDATION_RESULT_OK;
 	}
 
 	/**

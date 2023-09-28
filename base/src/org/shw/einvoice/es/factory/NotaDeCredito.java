@@ -69,6 +69,7 @@ public class NotaDeCredito extends EDocument {
 	    tmpList = (List<ApendiceItem>) notaDeCreditoFactory.createApendice();
 	    this.apendice             = (List<ApendiceItemNotaDeCredito>) tmpList;								  // must be eliminated from JSON
 	}
+	
 	/**
 	 * No parameters
 	 */
@@ -77,6 +78,10 @@ public class NotaDeCredito extends EDocument {
 		this();
 		this.notaDeCreditoFactory = (NotaDeCreditoFactory) notaDeCreditoFactory;
 	}
+	
+	/**
+	 * validateValues() from super class
+	 */
 
 	/**
 	 * @return the identificacion

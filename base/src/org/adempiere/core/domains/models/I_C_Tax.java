@@ -169,6 +169,8 @@ public interface I_C_Tax
 
 	/** Get CAT-015 Tributos	  */
 	public int getE_Duties_ID();
+	
+	public org.adempiere.core.domains.models.I_E_Duties getE_Duties() throws RuntimeException;
 
     /** Column name E_WithholdingType_ID */
     public static final String COLUMNNAME_E_WithholdingType_ID = "E_WithholdingType_ID";

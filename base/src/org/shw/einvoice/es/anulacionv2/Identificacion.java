@@ -93,7 +93,7 @@ public class Identificacion {
 	 * @param fecEmi the fecAnula to set<br>
 	 * null not allowed
 	 */
-	public void setFecEmi(String fecAnula) {
+	public void setfecAnula(String fecAnula) {
 		if(fecAnula!=null)
 		this.fecAnula = fecAnula;
 	else

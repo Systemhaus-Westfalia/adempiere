@@ -234,6 +234,12 @@ public class X_C_Tax extends PO implements I_C_Tax, I_Persistent
 	{
 		return (String)get_Value(COLUMNNAME_Description);
 	}
+	
+	public org.adempiere.core.domains.models.I_E_Duties getE_Duties() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_E_Duties)MTable.get(getCtx(), I_E_Duties.Table_Name)
+			.getPO(getE_Duties_ID(), get_TrxName());	}
+
 
 	/** Set CAT-015 Tributos.
 		@param E_Duties_ID CAT-015 Tributos	  */

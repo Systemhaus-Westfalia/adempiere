@@ -44,6 +44,7 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.PagosItem;
+import org.shw.einvoice.es.util.pojo.TributosItem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -137,39 +138,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		//fillReceptor(facturaExportacion.getReceptor(), invoice);    	
 
 		try {
-			//Durch InvoiceZeilen laufen
-			for (MInvoiceLine invoiceLine:invoice.getLines()) {
-
-		    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
-				int numItem = invoiceLine.getLine();
-				BigDecimal cantidad = invoiceLine.getQtyInvoiced();
-				String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
-				//String codTributo = "20";
-				ArrayList<String> tributosItems = new ArrayList<String>();
-				tributosItems.add("C3");
-
-
-				int uniMedida = 1;
-				String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
-				BigDecimal precioUni = invoiceLine.getPriceActual();
-				BigDecimal montoDescu = Env.ZERO;
-				BigDecimal ventaNoSuj = Env.ZERO;
-				BigDecimal ventaExenta = Env.ZERO;
-				BigDecimal ventaGravada = Env.ONEHUNDRED;
-				if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
-					ventaNoSuj = invoiceLine.getLineNetAmt();
-				if (!invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
-					ventaExenta = invoiceLine.getLineNetAmt();
-				if (!invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
-					ventaGravada = invoiceLine.getLineNetAmt(); 
-				BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
-				CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem,  cantidad, codigo, uniMedida, 	descripcion, 
-						precioUni, montoDescu,  ventaGravada, tributosItems, noGravado); 
-				cuerpoDocumentoItem.validateValues();
-				facturaExportacion.getCuerpoDocumento().add(cuerpoDocumentoItem);
-
-		    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
-			}  		
+			fillCuerpoDocumento(facturaExportacion, invoice);
 		}
 		catch (Exception e){
 			error.append(e);
@@ -335,8 +304,46 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		resumen.setTotalGravada(invoice.getGrandTotal());
 		resumen.setTotalPagar(invoice.getGrandTotal());
 		resumen.setTotalLetras(totalLetras);
+		
 
     	System.out.println("fillResumenr Finished");
+	}
+	
+	private void fillCuerpoDocumento(FacturaExportacion facturaExportacion, MInvoice invoice) {
+		int i = 0;
+		//Durch InvoiceZeilen laufen
+		for (MInvoiceLine invoiceLine:invoice.getLines()) {
+			i++;
+	    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
+			int numItem = invoiceLine.getLine();
+			BigDecimal cantidad = invoiceLine.getQtyInvoiced();
+			String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
+			ArrayList<String> tributosItems = new ArrayList<String>();
+			tributosItems.add("C3");
+
+
+			int uniMedida = 1;
+			String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
+			BigDecimal precioUni = invoiceLine.getPriceActual();
+			BigDecimal montoDescu = Env.ZERO;
+			BigDecimal ventaNoSuj = Env.ZERO;
+			BigDecimal ventaExenta = Env.ZERO;
+			BigDecimal ventaGravada = Env.ONEHUNDRED;
+			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
+				ventaNoSuj = invoiceLine.getLineNetAmt();
+			if (!invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
+				ventaExenta = invoiceLine.getLineNetAmt();
+			if (!invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
+				ventaGravada = invoiceLine.getLineNetAmt(); 
+			BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
+			CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(i,  cantidad, codigo, uniMedida, 	descripcion, 
+					precioUni, montoDescu,  ventaGravada, tributosItems, noGravado); 
+			cuerpoDocumentoItem.validateValues();
+			facturaExportacion.getCuerpoDocumento().add(cuerpoDocumentoItem);
+
+	    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
+		}  		
+		
 	}
 			
 

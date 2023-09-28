@@ -50,6 +50,7 @@ import org.shw.einvoice.es.util.pojo.Extension;
 import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.Receptor;
+import org.shw.einvoice.es.util.pojo.TributosItem;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,12 +104,9 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();
 		numeroControl = "DTE-" + comprobanteCreditoFiscal.getIdentificacion().getTipoDte()
 				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
-	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
+		//final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
-		
-
-		
 
 		try
 		{
@@ -142,79 +140,46 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		{
 			error.append(e);
 		}
-    	   	
-    	    	
-    	//Durch InvoiceZeilen laufen
+
+
+		//Durch InvoiceZeilen laufen
 		try {
-    	for (MInvoiceLine invoiceLine:invoice.getLines()) {    
-			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );		
-    		int numItem = invoiceLine.getLine();
-    		int tipoItem = 2;
-    		String numeroDocumento = numeroControl;
-    		BigDecimal cantidad = invoiceLine.getQtyInvoiced();
-    		String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
-    		//String codTributo = "20";
-    		ArrayList<String> tributosItems = new ArrayList<String>();
-    		//TributosItem tributosItem = new TributosItem("20", "", invoiceLine.getTaxAmt());
-    		tributosItems.add("20");
-    		
-    		int uniMedida = 1;
-    		String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
-    		BigDecimal precioUni = invoiceLine.getPriceActual();
-    		BigDecimal montoDescu = Env.ZERO;
-    		BigDecimal ventaNoSuj = Env.ZERO;
-    		BigDecimal ventaExenta = Env.ZERO;
-    		BigDecimal ventaGravada = Env.ONEHUNDRED;
-    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
-    			ventaNoSuj = invoiceLine.getLineNetAmt();
-    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT") )
-    			ventaExenta = invoiceLine.getLineNetAmt();
-    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
-    			ventaGravada = invoiceLine.getLineNetAmt(); 
-    		BigDecimal psv = Env.ZERO;
-    		BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
-    		CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(numItem, tipoItem, numeroDocumento, cantidad, codigo, 
-    				null, uniMedida, 
-    				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, tributosItems, psv, noGravado); 
-    		cuerpoDocumentoItem.validateValues();
-    		comprobanteCreditoFiscal.getCuerpoDocumento().add(cuerpoDocumentoItem);
-			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
-    	}  
-	}
+			fillCuerpoDocumento(comprobanteCreditoFiscal, invoice);
+		}
 		catch (Exception e)
 		{
 			error.append(e);
 		}
-    	validateValues(comprobanteCreditoFiscal, error);
-    	
-    	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
-    	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
-    	invoiceElectronic.setei_numeroControl(numeroControl);
-    	invoiceElectronic.setei_ValidationStatus("01");
-    	if (error.length() > 0) {
-    		invoiceElectronic.seterrMsgIntern(error.toString());
-    		invoiceElectronic.setei_ValidationStatus("02");
-        	invoiceElectronic.saveEx();
-    		return error.toString();
-    	}    
-	
-    	
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String json = objectMapper.writeValueAsString(comprobanteCreditoFiscal);
+		validateValues(comprobanteCreditoFiscal, error);
 
-       	invoiceElectronic.setjson(json);
-    	invoiceElectronic.saveEx();
-    	log.config(json);
-    	if (isSaveInHistoric()) {
-    		Path rootpath = Paths.get(absDirectory);
-    		if (!Files.exists(rootpath)) {
-    			invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
-    		}
-    		writeToFile(json, invoice);
-    	}
-		
-    	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-    	System.out.println(json);	    	
+		X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
+		invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
+		invoiceElectronic.setei_numeroControl(numeroControl);
+		invoiceElectronic.setei_ValidationStatus("01");
+		if (error.length() > 0) {
+			invoiceElectronic.seterrMsgIntern(error.toString());
+			invoiceElectronic.setei_ValidationStatus("02");
+			invoiceElectronic.saveEx();
+			return error.toString();
+		}    
+
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		String json = objectMapper.writeValueAsString(comprobanteCreditoFiscal);
+
+		invoiceElectronic.setjson(json);
+		invoiceElectronic.saveEx();
+		log.config(json);
+		if (isSaveInHistoric()) {
+			Path rootpath = Paths.get(absDirectory);
+			if (!Files.exists(rootpath)) {
+				invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
+			}
+			writeToFile(json, invoice);
+		}
+
+		System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
+		System.out.println(json);	    	
 		return "";
 	}
 
@@ -291,36 +256,71 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		
 	}
 	
+	private void fillCuerpoDocumento(ComprobanteCreditoFiscal comprobanteCreditoFiscal, MInvoice invoice) {
+		int i = 0;
+		for (MInvoiceLine invoiceLine:invoice.getLines()) {	
+			i++;
+			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );		
+    		int numItem = invoiceLine.getLine();
+    		int tipoItem = 2;
+    		String numeroDocumento = numeroControl;
+    		BigDecimal cantidad = invoiceLine.getQtyInvoiced();
+    		String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
+    		//String codTributo = "20";
+    		ArrayList<String> tributosItems = new ArrayList<String>();
+    		//TributosItem tributosItem = new TributosItem("20", "", invoiceLine.getTaxAmt());
+    		tributosItems.add("20");
+    		
+    		int uniMedida = 1;
+    		String descripcion = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
+    		BigDecimal precioUni = invoiceLine.getPriceActual();
+    		BigDecimal montoDescu = Env.ZERO;
+    		BigDecimal ventaNoSuj = Env.ZERO;
+    		BigDecimal ventaExenta = Env.ZERO;
+    		BigDecimal ventaGravada = Env.ONEHUNDRED;
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
+    			ventaNoSuj = invoiceLine.getLineNetAmt();
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT") )
+    			ventaExenta = invoiceLine.getLineNetAmt();
+    		if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") )
+    			ventaGravada = invoiceLine.getLineNetAmt(); 
+    		BigDecimal psv = Env.ZERO;
+    		BigDecimal noGravado = ventaNoSuj.add(ventaNoSuj);
+    		CuerpoDocumentoItem cuerpoDocumentoItem = new CuerpoDocumentoItem(i, tipoItem, null, cantidad, codigo, 
+    				null, uniMedida, 
+    				descripcion, precioUni, montoDescu, ventaNoSuj, ventaExenta, ventaGravada, tributosItems, psv, noGravado); 
+    		cuerpoDocumentoItem.validateValues();
+    		comprobanteCreditoFiscal.getCuerpoDocumento().add(cuerpoDocumentoItem);
+			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
+    	}
+	}
+	
 	private void fillResumen(Resumen resumen, MInvoice invoice) {
 
 		//List<TributosItem> tributos;
 		//List<PagosItem> pagos ;  // there must be at least one item
-		
+
 		BigDecimal TotalNoSuj = Env.ZERO;
 		BigDecimal TotalExenta = Env.ZERO;
 		BigDecimal TotalGravada = Env.ZERO;
-		BigDecimal SubTotalVentas = Env.ZERO;
 		BigDecimal DescuNoSuj = Env.ZERO;
 		BigDecimal DescuExenta = Env.ZERO;
 		BigDecimal DescuGravada = Env.ZERO;
 		BigDecimal PorcentajeDescuento = Env.ZERO;
-		BigDecimal SubTotal = invoice.getTotalLines();
 		BigDecimal IvaPerci1 = Env.ZERO;
 		BigDecimal IvaRete1 = Env.ZERO;
-		BigDecimal MontoTotalOperacion = invoice.getGrandTotal();
-		BigDecimal TotalPagar =invoice.getGrandTotal();
 		BigDecimal totalIVA = Env.ZERO;
 
 		int CondicionOperacion =2;
 		List<PagosItem> pagosItems = new ArrayList<PagosItem>();
-    	PagosItem pagoitem = new PagosItem("05",
-    			zero, 
-    			"Transferencia_ Depósito Bancario", 
-    			invoice.getC_PaymentTerm().getE_TimeSpan().getValue(),
-    			invoice.getC_PaymentTerm().getNetDays());
+		PagosItem pagoitem = new PagosItem("05",
+				zero, 
+				"Transferencia_ Depósito Bancario", 
+				invoice.getC_PaymentTerm().getE_TimeSpan().getValue(),
+				invoice.getC_PaymentTerm().getNetDays());
 		pagosItems.add(pagoitem);
 		resumen.setPagos(pagosItems);
-		
+
 		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
 		BigDecimal SaldoFavor = Env.ZERO;
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
@@ -333,9 +333,9 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 				TotalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();
 			}
-				
+
 		}
-		
+
 		resumen.setTotalNoSuj(TotalNoSuj);
 		resumen.setTotalExenta(TotalExenta);
 		resumen.setTotalGravada(TotalGravada);
@@ -351,11 +351,15 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		resumen.setTotalNoGravado(TotalExenta.add(TotalNoSuj));
 		resumen.setTotalPagar(invoice.getGrandTotal());
 		resumen.setTotalLetras(TotalLetras);
-		resumen.setSaldoFavor(invoice.getGrandTotal());
+		resumen.setSaldoFavor(Env.ZERO);
 		resumen.setCondicionOperacion(1);
 		resumen.setTotalDescu(Env.ZERO);
 		resumen.setReteRenta(Env.ZERO);
-			
+		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+			TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
+					invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
+			resumen.getTributos().add(tributosItem);
+		}
 	}
 	
 	private void fillExtension(Extension extension, MInvoice invoice) {

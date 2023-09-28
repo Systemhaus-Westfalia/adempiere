@@ -21,40 +21,40 @@ public abstract class EDocument {
 	public StringBuffer errorMessages = new StringBuffer();
 	
 	public abstract Identificacion getIdentificacion();
-	public abstract StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion);
+	public abstract StringBuffer fillIdentification(JSONObject factoryInput);
 	
 	public abstract List<DocumentoRelacionadoItem> getDocumentoRelacionado();
-	public abstract StringBuffer fillDocumentoRelacionado(JSONObject factoryInput,List<DocumentoRelacionadoItem> documentoRelacionado);
+	public abstract StringBuffer fillDocumentoRelacionado(JSONObject factoryInput);
 
 	public abstract Emisor getEmisor();
-	public abstract StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor);
+	public abstract StringBuffer fillEmisor(JSONObject factoryInput);
 
 	public abstract Receptor getReceptor();
-	public abstract StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor);
+	public abstract StringBuffer fillReceptor(JSONObject factoryInput);
 	
 	public abstract List<OtrosDocumentosItem> getOtrosDocumentos();
-	public abstract  StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos);
+	public abstract  StringBuffer fillOtrosDocumentos(JSONObject factoryInput);
 
 	public abstract VentaTercero getVentaTercero();
-	public abstract StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero);
+	public abstract StringBuffer fillVentaTercero(JSONObject factoryInput);
 	
 	public abstract List<CuerpoDocumentoItem> getCuerpoDocumento();
-	public abstract StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento);
+	public abstract StringBuffer fillCuerpoDocumento(JSONObject factoryInput);
 	
 	public abstract Resumen getResumen();
-	public abstract StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen);
+	public abstract StringBuffer fillResumen(JSONObject factoryInput);
 	
 	public abstract Extension getExtension();
-	public abstract StringBuffer fillExtension(JSONObject factoryInput, Extension extension);
+	public abstract StringBuffer fillExtension(JSONObject factoryInput);
 	
 	public abstract List<ApendiceItem> getApendice();
-	public abstract StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice);
+	public abstract StringBuffer fillApendice(JSONObject factoryInput);
 	
 	public abstract Documento getDocumento();
-	public abstract StringBuffer fillDocumento(JSONObject factoryInput, Documento documento);
+	public abstract StringBuffer fillDocumento(JSONObject factoryInput);
 	
 	public abstract Motivo getMotivo();
-	public abstract StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo);
+	public abstract StringBuffer fillMotivo(JSONObject factoryInput);
 	
 	/**
 	 * Validate the Schema conditions

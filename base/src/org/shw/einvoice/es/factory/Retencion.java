@@ -103,8 +103,8 @@ public class Retencion extends EDocument {
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
 	@Override
-	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		errorMessages = retencionFactory.fillIdentification(factoryInput, (IdentificacionRetencion) identificacion );
+	public StringBuffer fillIdentification(JSONObject factoryInput) {
+		errorMessages = retencionFactory.fillIdentification(factoryInput, identificacion );
 		
 		return errorMessages;
 	}
@@ -125,8 +125,8 @@ public class Retencion extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		errorMessages = retencionFactory.fillEmisor(factoryInput, (EmisorRetencion) emisor);
+	public StringBuffer fillEmisor(JSONObject factoryInput) {
+		errorMessages = retencionFactory.fillEmisor(factoryInput, emisor);
 		return errorMessages;
 	}
 
@@ -146,8 +146,8 @@ public class Retencion extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
-		errorMessages = retencionFactory.fillReceptor(factoryInput, (ReceptorRetencion) receptor);
+	public StringBuffer fillReceptor(JSONObject factoryInput) {
+		errorMessages = retencionFactory.fillReceptor(factoryInput, receptor);
 		return errorMessages;
 	}
 
@@ -172,10 +172,12 @@ public class Retencion extends EDocument {
 		this.cuerpoDocumento = cuerpoDocumentoItemRetencion;
 	}
 
-	
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		errorMessages = retencionFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento); 
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
+		List<?> tmpList = cuerpoDocumento;
+		errorMessages = retencionFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);
 		return errorMessages;
 	}
 
@@ -196,8 +198,8 @@ public class Retencion extends EDocument {
 
 	
 	@Override
-	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
-		errorMessages = retencionFactory.fillResumen(factoryInput, (ResumenRetencion) resumen); 
+	public StringBuffer fillResumen(JSONObject factoryInput) {
+		errorMessages = retencionFactory.fillResumen(factoryInput, resumen); 
 		return errorMessages;
 	}
 
@@ -218,8 +220,8 @@ public class Retencion extends EDocument {
 
 	
 	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
-		errorMessages = retencionFactory.fillExtension(factoryInput, (ExtensionRetencion) extension); 
+	public StringBuffer fillExtension(JSONObject factoryInput) {
+		errorMessages = retencionFactory.fillExtension(factoryInput, extension); 
 		return errorMessages;
 	}
 
@@ -246,8 +248,9 @@ public class Retencion extends EDocument {
 
 	
 	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		errorMessages = retencionFactory.fillApendice(factoryInput, apendice);		 
+	public StringBuffer fillApendice(JSONObject factoryInput) {
+		List<?> tmpList = apendice;
+		errorMessages = retencionFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
 		return errorMessages;
 	}
 
@@ -263,7 +266,7 @@ public class Retencion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
 	}
 
@@ -279,7 +282,7 @@ public class Retencion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
 	}
 
@@ -295,7 +298,7 @@ public class Retencion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
+	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
 	}
 
@@ -311,7 +314,7 @@ public class Retencion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
 	}
 
@@ -327,7 +330,7 @@ public class Retencion extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInputo) {
 		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
 	}
 

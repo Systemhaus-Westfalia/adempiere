@@ -115,8 +115,8 @@ public class CreditoFiscal extends EDocument {
 	 * @param identificacion the (IdentificacionCreditoFiscal) identificacion to set
 	 */
 	@Override
-	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		errorMessages = creditoFiscalFactory.fillIdentification(factoryInput, (IdentificacionCreditoFiscal) identificacion );
+	public StringBuffer fillIdentification(JSONObject factoryInput) {
+		errorMessages = creditoFiscalFactory.fillIdentification(factoryInput, identificacion );
 		
 		return errorMessages;
 	}
@@ -177,11 +177,11 @@ public class CreditoFiscal extends EDocument {
 		this.documentoRelacionado = documentoRelacionadoItemCreditoFiscal;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
-		
-		errorMessages = creditoFiscalFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
-		
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
+		List<?> tmpList = documentoRelacionado;
+		errorMessages = creditoFiscalFactory.fillDocumentoRelacionado(factoryInput, (List<DocumentoRelacionadoItem>) tmpList);	
 		return errorMessages;
 		
 	}
@@ -204,8 +204,8 @@ public class CreditoFiscal extends EDocument {
 	}
 	
 	@Override
-	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		errorMessages = creditoFiscalFactory.fillEmisor(factoryInput, (EmisorCreditoFiscal) emisor);
+	public StringBuffer fillEmisor(JSONObject factoryInput) {
+		errorMessages = creditoFiscalFactory.fillEmisor(factoryInput, emisor);
 		return errorMessages;
 	}
 
@@ -226,8 +226,8 @@ public class CreditoFiscal extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
-		errorMessages = creditoFiscalFactory.fillReceptor(factoryInput, (ReceptorCreditoFiscal) receptor);
+	public StringBuffer fillReceptor(JSONObject factoryInput) {
+		errorMessages = creditoFiscalFactory.fillReceptor(factoryInput, receptor);
 		return errorMessages;
 	}
 
@@ -279,9 +279,11 @@ public class CreditoFiscal extends EDocument {
 		this.otrosDocumentos = otrosDocumentosItemCreditoFiscal;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {	
-		errorMessages = creditoFiscalFactory.fillOtrosDocumentos(factoryInput, otrosDocumentos); 
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
+		List<?> tmpList = otrosDocumentos;
+		errorMessages = creditoFiscalFactory.fillOtrosDocumentos(factoryInput, (List<OtrosDocumentosItem>) tmpList);
 		return errorMessages;
 	}
 
@@ -303,8 +305,8 @@ public class CreditoFiscal extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		errorMessages = creditoFiscalFactory.fillVentaTercero(factoryInput, (VentaTerceroCreditoFiscal) ventaTercero);
+	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
+		errorMessages = creditoFiscalFactory.fillVentaTercero(factoryInput, ventaTercero);
 		return errorMessages;
 	}
 
@@ -360,11 +362,12 @@ public class CreditoFiscal extends EDocument {
 		this.cuerpoDocumento = cuerpoDocumentoItemCreditoFiscal;
 	}
 
-	
-	@Override
-	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
 
-		errorMessages = creditoFiscalFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
+	@SuppressWarnings("unchecked")
+	@Override
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
+		List<?> tmpList = cuerpoDocumento;
+		errorMessages = creditoFiscalFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);
 		return errorMessages;
 		
 	}
@@ -386,8 +389,8 @@ public class CreditoFiscal extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
-		errorMessages = creditoFiscalFactory.fillResumen(factoryInput, (ResumenCreditoFiscal) resumen);
+	public StringBuffer fillResumen(JSONObject factoryInput) {
+		errorMessages = creditoFiscalFactory.fillResumen(factoryInput, resumen);
 		return errorMessages;
 	}
 
@@ -409,8 +412,8 @@ public class CreditoFiscal extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
-		errorMessages = creditoFiscalFactory.fillExtension(factoryInput, (ExtensionCreditoFiscal) extension);
+	public StringBuffer fillExtension(JSONObject factoryInput) {
+		errorMessages = creditoFiscalFactory.fillExtension(factoryInput, extension);
 		return errorMessages;
 	}
 
@@ -464,10 +467,11 @@ public class CreditoFiscal extends EDocument {
 		this.apendice = apendiceItemCreditoFiscal;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {		
-
-		errorMessages = creditoFiscalFactory.fillApendice(factoryInput, apendice);
+	public StringBuffer fillApendice(JSONObject factoryInput) {
+		List<?> tmpList = apendice;
+		errorMessages = creditoFiscalFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
 		return errorMessages;
 		
 	}
@@ -484,7 +488,7 @@ public class CreditoFiscal extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Credito Fiscal calling the method CreditoFiscal.fillDocumento() is not allowed");
 	}
 
@@ -500,7 +504,7 @@ public class CreditoFiscal extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Credito Fiscal calling the method CreditoFiscal.fillMotivo() is not allowed");
 	}
 

@@ -141,8 +141,8 @@ public class Factura extends EDocument {
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
 	@Override
-	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		errorMessages = facturaFactory.fillIdentification(factoryInput, (IdentificacionFactura) identificacion );
+	public StringBuffer fillIdentification(JSONObject factoryInput) {
+		errorMessages = facturaFactory.fillIdentification(factoryInput, identificacion );
 		
 		return errorMessages;
 	}
@@ -203,13 +203,12 @@ public class Factura extends EDocument {
 		this.documentoRelacionado = documentoRelacionadoItemFactura;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {
-		
-		errorMessages = facturaFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
-		
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
+		List<?> tmpList = documentoRelacionado;
+		errorMessages = facturaFactory.fillDocumentoRelacionado(factoryInput, (List<DocumentoRelacionadoItem>) tmpList);		
 		return errorMessages;
-		
 	}
 
 
@@ -230,8 +229,8 @@ public class Factura extends EDocument {
 	}
 	
 	@Override
-	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		errorMessages = facturaFactory.fillEmisor(factoryInput, (EmisorFactura) emisor);
+	public StringBuffer fillEmisor(JSONObject factoryInput) {
+		errorMessages = facturaFactory.fillEmisor(factoryInput, emisor);
 		
 		return errorMessages;
 	}
@@ -252,8 +251,8 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
-		errorMessages = facturaFactory.fillReceptor(factoryInput, (ReceptorFactura) receptor);
+	public StringBuffer fillReceptor(JSONObject factoryInput) {
+		errorMessages = facturaFactory.fillReceptor(factoryInput, receptor);
 		return errorMessages;
 	}
 
@@ -305,9 +304,11 @@ public class Factura extends EDocument {
 		this.otrosDocumentos = otrosDocumentosItemFactura;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
-		errorMessages = facturaFactory.fillOtrosDocumentos(factoryInput, otrosDocumentos);
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
+		List<?> tmpList = otrosDocumentos;
+		errorMessages = facturaFactory.fillOtrosDocumentos(factoryInput, (List<OtrosDocumentosItem>) tmpList);
 		return errorMessages;
 	}
 
@@ -329,8 +330,8 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		errorMessages = facturaFactory.fillVentaTercero(factoryInput, (VentaTerceroFactura) ventaTercero);
+	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
+		errorMessages = facturaFactory.fillVentaTercero(factoryInput, ventaTercero);
 		return errorMessages;
 	}
 
@@ -384,10 +385,12 @@ public class Factura extends EDocument {
 		this.cuerpoDocumento = cuerpoDocumentoItemFactura;
 	}
 
-	
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		errorMessages = facturaFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
+		List<?> tmpList = cuerpoDocumento;
+		errorMessages = facturaFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);	
 		return errorMessages;
 	}
 
@@ -408,8 +411,8 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
-		errorMessages = facturaFactory.fillResumen(factoryInput, (ResumenFactura) resumen);
+	public StringBuffer fillResumen(JSONObject factoryInput) {
+		errorMessages = facturaFactory.fillResumen(factoryInput, resumen);
 		return errorMessages;
 	}
 
@@ -431,8 +434,8 @@ public class Factura extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
-		errorMessages = facturaFactory.fillExtension(factoryInput, (ExtensionFactura) extension);
+	public StringBuffer fillExtension(JSONObject factoryInput) {
+		errorMessages = facturaFactory.fillExtension(factoryInput, extension);
 		return errorMessages;
 	}
 
@@ -486,9 +489,11 @@ public class Factura extends EDocument {
 		this.apendice = apendiceItemFactura;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		errorMessages = facturaFactory.fillApendice(factoryInput, apendice);	
+	public StringBuffer fillApendice(JSONObject factoryInput) {
+		List<?> tmpList = apendice;
+		errorMessages = facturaFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
 		return errorMessages;	
 	}
 
@@ -504,7 +509,7 @@ public class Factura extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Factura calling the method Factura.fillDocumento() is not allowed");
 	}
 
@@ -520,7 +525,7 @@ public class Factura extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Factura calling the method Factura.fillMotivo() is not allowed");
 	}
 

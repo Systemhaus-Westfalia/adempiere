@@ -3,7 +3,6 @@ package org.shw.einvoice.es.factory;
 import java.util.List;
 
 import org.json.JSONObject;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.OtrosDocumentosItemFactura;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
 import org.shw.einvoice.es.util.pojo.Documento;
@@ -28,7 +27,7 @@ public abstract class EDocumentStore {
 		
 		Identificacion identification = eDocument.getIdentificacion();
 		if(identification!=null) {
-			errorMessages.append(eDocument.fillIdentification(factoryInput, identification));
+			errorMessages.append(eDocument.fillIdentification(factoryInput));
 			result = identification.validateValues();
 			if(! result.equals(EDocument.VALIDATION_RESULT_OK)) {
 				errorMessages.append(result);
@@ -37,7 +36,7 @@ public abstract class EDocumentStore {
 		
 		List<DocumentoRelacionadoItem> documentoRelacionado = eDocument.getDocumentoRelacionado();
 		if(documentoRelacionado!=null) {
-			errorMessages.append(eDocument.fillDocumentoRelacionado(factoryInput, documentoRelacionado));
+			errorMessages.append(eDocument.fillDocumentoRelacionado(factoryInput));
 			
 			documentoRelacionado.stream().forEach( documentoRelacionadoItem -> { 
 					String resultLambda = documentoRelacionadoItem.validateValues();
@@ -50,7 +49,7 @@ public abstract class EDocumentStore {
 		
 		Emisor emisor = eDocument.getEmisor();
 		if(emisor!=null) {
-			eDocument.fillEmisor(factoryInput, emisor);
+			eDocument.fillEmisor(factoryInput);
 			result = emisor.validateValues();
 			if(! result.equals(EDocument.VALIDATION_RESULT_OK)) {
 				errorMessages.append(result);
@@ -59,7 +58,7 @@ public abstract class EDocumentStore {
 		
 		List<OtrosDocumentosItem> otrosDocumentos = eDocument.getOtrosDocumentos();
 		if(otrosDocumentos!=null) {
-			eDocument.fillOtrosDocumentos(factoryInput, otrosDocumentos);
+			eDocument.fillOtrosDocumentos(factoryInput);
 			
 			otrosDocumentos.stream().forEach( otrosDocumentosItem -> { 
 				String resultLambda = otrosDocumentosItem.validateValues();
@@ -72,7 +71,7 @@ public abstract class EDocumentStore {
 		
 		VentaTercero ventaTercero = eDocument.getVentaTercero();
 		if(ventaTercero!=null) {
-			eDocument.fillVentaTercero(factoryInput, ventaTercero);
+			eDocument.fillVentaTercero(factoryInput);
 			result = ventaTercero.validateValues();
 			if(! result.equals(EDocument.VALIDATION_RESULT_OK)) {
 				errorMessages.append(result);
@@ -81,7 +80,7 @@ public abstract class EDocumentStore {
 		
 		List<CuerpoDocumentoItem> cuerpoDocumento = eDocument.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
-			eDocument.fillCuerpoDocumento(factoryInput, cuerpoDocumento);
+			eDocument.fillCuerpoDocumento(factoryInput);
 			
 			cuerpoDocumento.stream().forEach( cuerpoDocumentoItem -> { 
 				String resultLambda = cuerpoDocumentoItem.validateValues();
@@ -94,7 +93,7 @@ public abstract class EDocumentStore {
 		
 		Resumen resumen = eDocument.getResumen();
 		if(resumen!=null) {
-			eDocument.fillResumen(factoryInput, resumen);
+			eDocument.fillResumen(factoryInput);
 			result = resumen.validateValues();
 			if(! result.equals(EDocument.VALIDATION_RESULT_OK)) {
 				errorMessages.append(result);
@@ -103,7 +102,7 @@ public abstract class EDocumentStore {
 		
 		Extension extension = eDocument.getExtension();
 		if(extension!=null) {
-			eDocument.fillExtension(factoryInput, extension);
+			eDocument.fillExtension(factoryInput);
 			result = extension.validateValues();
 			if(! result.equals(EDocument.VALIDATION_RESULT_OK)) {
 				errorMessages.append(result);
@@ -112,7 +111,7 @@ public abstract class EDocumentStore {
 		
 		List<ApendiceItem> apendice = eDocument.getApendice();
 		if(apendice!=null) {
-			eDocument.fillApendice(factoryInput, apendice);
+			eDocument.fillApendice(factoryInput);
 			
 			apendice.stream().forEach( apendiceItem -> { 
 				String resultLambda = apendiceItem.validateValues();
@@ -125,7 +124,7 @@ public abstract class EDocumentStore {
 		
 		Documento documento = eDocument.getDocumento();
 		if(documento!=null) {
-			eDocument.fillDocumento(factoryInput, documento);
+			eDocument.fillDocumento(factoryInput);
 			result = documento.validateValues();
 			if(! result.equals(EDocument.VALIDATION_RESULT_OK)) {
 				errorMessages.append(result);
@@ -134,7 +133,7 @@ public abstract class EDocumentStore {
 		
 		Motivo motivo = eDocument.getMotivo();
 		if(documento!=null) {
-			eDocument.fillMotivo(factoryInput, motivo);
+			eDocument.fillMotivo(factoryInput);
 			result = motivo.validateValues();
 			if(! result.equals(EDocument.VALIDATION_RESULT_OK)) {
 				errorMessages.append(result);

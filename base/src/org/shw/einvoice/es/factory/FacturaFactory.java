@@ -211,7 +211,7 @@ public class FacturaFactory implements EDocumentFactory {
 		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemFactura.add((DocumentoRelacionadoItemFactura) e) );
 		
 		// No Documento Relacionado for Factura
-
+		errorMessages.setLength(0);
 		return errorMessages;
 		
 	}
@@ -278,8 +278,7 @@ public class FacturaFactory implements EDocumentFactory {
 		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemFactura.add((OtrosDocumentosItemFactura) e) );
 		
 		// No Otros Documentos for Factura
-
-		
+		errorMessages.setLength(0);
 		return errorMessages;
 	}
 
@@ -289,7 +288,7 @@ public class FacturaFactory implements EDocumentFactory {
 		VentaTerceroFactura ventaTerceroFactura = (VentaTerceroFactura) ventaTercero;
 		
 		// No Venta Tercero for Factura
-
+		errorMessages.setLength(0);
 		return errorMessages;
 	}
 
@@ -381,6 +380,9 @@ public class FacturaFactory implements EDocumentFactory {
 	@Override
 	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
 		ExtensionFactura extensionFactura = (ExtensionFactura) extension;
+		
+		// No Otros Extension for Factura
+		errorMessages.setLength(0);
 		return errorMessages;
 	}
 
@@ -390,6 +392,9 @@ public class FacturaFactory implements EDocumentFactory {
 		// Convert (=cast) all (ApendiceItem) to (ApendiceItemFactura)
 		List<ApendiceItemFactura> apendiceItemFactura = new ArrayList<ApendiceItemFactura>();
 		apendice.stream().forEach(e -> apendiceItemFactura.add((ApendiceItemFactura) e) );
+
+		// No Apendice for Factura
+		errorMessages.setLength(0);
 		return errorMessages;
 	}
 

@@ -100,8 +100,8 @@ public class NotaDeCredito extends EDocument {
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
 	@Override
-	public StringBuffer fillIdentification(JSONObject factoryInput, Identificacion identificacion) {
-		errorMessages = notaDeCreditoFactory.fillIdentification(factoryInput, (IdentificacionNotaDeCredito) identificacion );
+	public StringBuffer fillIdentification(JSONObject factoryInput) {
+		errorMessages = notaDeCreditoFactory.fillIdentification(factoryInput, identificacion );
 		
 		return errorMessages;
 	}
@@ -121,10 +121,11 @@ public class NotaDeCredito extends EDocument {
 		this.documentoRelacionado = documentoRelacionadoItemNotaDeCredito;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput, List<DocumentoRelacionadoItem> documentoRelacionado) {	
-		errorMessages = notaDeCreditoFactory.fillDocumentoRelacionado(factoryInput, documentoRelacionado);
-		
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
+		List<?> tmpList = documentoRelacionado;
+		errorMessages = notaDeCreditoFactory.fillDocumentoRelacionado(factoryInput, (List<DocumentoRelacionadoItem>) tmpList);		
 		return errorMessages;
 	}
 
@@ -144,8 +145,8 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillEmisor(JSONObject factoryInput, Emisor emisor) {
-		errorMessages = notaDeCreditoFactory.fillEmisor(factoryInput, (EmisorNotaDeCredito) emisor);
+	public StringBuffer fillEmisor(JSONObject factoryInput) {
+		errorMessages = notaDeCreditoFactory.fillEmisor(factoryInput, emisor);
 		return errorMessages;
 	}
 
@@ -165,8 +166,8 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillReceptor(JSONObject factoryInput, Receptor receptor) {
-		errorMessages = notaDeCreditoFactory.fillReceptor(factoryInput, (ReceptorNotaDeCredito) receptor);
+	public StringBuffer fillReceptor(JSONObject factoryInput) {
+		errorMessages = notaDeCreditoFactory.fillReceptor(factoryInput, receptor);
 		return errorMessages;
 	}
 
@@ -186,8 +187,8 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput, VentaTercero ventaTercero) {
-		errorMessages = notaDeCreditoFactory.fillVentaTercero(factoryInput, (VentaTerceroNotaDeCredito) ventaTercero); 
+	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
+		errorMessages = notaDeCreditoFactory.fillVentaTercero(factoryInput, ventaTercero); 
 		return errorMessages;
 	}
 
@@ -210,9 +211,11 @@ public class NotaDeCredito extends EDocument {
 		this.cuerpoDocumento = cuerpoDocumentoItemNotaDeCredito;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput, List<CuerpoDocumentoItem> cuerpoDocumento) {
-		errorMessages = notaDeCreditoFactory.fillCuerpoDocumento(factoryInput, cuerpoDocumento); 
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
+		List<?> tmpList = cuerpoDocumento;
+		errorMessages = notaDeCreditoFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);
 		return errorMessages;
 	}
 
@@ -232,8 +235,8 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillResumen(JSONObject factoryInput, Resumen resumen) {
-		errorMessages = notaDeCreditoFactory.fillResumen(factoryInput, (ResumenNotaDeCredito) resumen); 
+	public StringBuffer fillResumen(JSONObject factoryInput) {
+		errorMessages = notaDeCreditoFactory.fillResumen(factoryInput, resumen); 
 		return errorMessages;
 	}
 
@@ -253,8 +256,8 @@ public class NotaDeCredito extends EDocument {
 	}
 
 	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput, Extension extension) {
-		errorMessages = notaDeCreditoFactory.fillExtension(factoryInput, (ExtensionNotaDeCredito) extension); 
+	public StringBuffer fillExtension(JSONObject factoryInput) {
+		errorMessages = notaDeCreditoFactory.fillExtension(factoryInput, extension); 
 		return errorMessages;
 	}
 
@@ -277,9 +280,11 @@ public class NotaDeCredito extends EDocument {
 		this.apendice = apendiceItemNotaDeCredito;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput, List<ApendiceItem> apendice) {
-		errorMessages = notaDeCreditoFactory.fillApendice(factoryInput, apendice); 
+	public StringBuffer fillApendice(JSONObject factoryInput) {
+		List<?> tmpList = apendice;
+		errorMessages = notaDeCreditoFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
 		return errorMessages;
 	}
 
@@ -296,7 +301,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput, List<OtrosDocumentosItem> otrosDocumentos) {
+	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillOtrosDocumentos() is not allowed");
 	}
 
@@ -313,7 +318,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput, Documento documento) {
+	public StringBuffer fillDocumento(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillDocumento() is not allowed");
 	}
 
@@ -331,7 +336,7 @@ public class NotaDeCredito extends EDocument {
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
 	 */
 	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInput, Motivo motivo) {
+	public StringBuffer fillMotivo(JSONObject factoryInput) {
 		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillMotivo() is not allowed");
 	}
 

@@ -284,9 +284,13 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		jsonObjectEmisor.put("descActividad", client.getE_Activity().getName());
 		jsonObjectEmisor.put("nombreComercial", client.getDescription());
 		jsonObjectEmisor.put("tipoEstablecimiento", client.getE_PlantType().getValue());
-		jsonObjectEmisor.put("departamento", orgInfo.getC_Location().getC_City().getC_Region().getValue());
-		jsonObjectEmisor.put("municipio", orgInfo.getC_Location().getC_City().getValue());
-		jsonObjectEmisor.put("complemento", orgInfo.getC_Location().getAddress1());
+
+		JSONObject jsonDireccion = new JSONObject();
+		jsonDireccion.put("departamento", orgInfo.getC_Location().getC_City().getC_Region().getValue());
+		jsonDireccion.put("municipio", orgInfo.getC_Location().getC_City().getValue());
+		jsonDireccion.put("complemento", orgInfo.getC_Location().getAddress1());
+		jsonObjectEmisor.put("direccion", jsonDireccion);
+		
 		jsonObjectEmisor.put("telefono", client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put("correo", client.getEMail());
 
@@ -353,7 +357,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			jsonObjectReceptor.put("codActividad", "");
 			jsonObjectReceptor.put("descActividad", "");
 		}
-		
 
 		JSONObject jsonDireccion = new JSONObject();
 		String departamento = "";
@@ -376,8 +379,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			jsonDireccion.put("departamento", departamento);
 			jsonDireccion.put("municipio", municipio);
 			jsonDireccion.put("complemento", complemento);
-		}
-		
+		}		
 		jsonObjectReceptor.put("direccion", jsonDireccion);
 		
 		jsonObjectReceptor.put("telefono", client.get_ValueAsString("phone"));
@@ -572,9 +574,9 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			jsonCuerpoDocumentoItem.put("ventaNoSuj", ventaNoSuj);
 			jsonCuerpoDocumentoItem.put("ventaExenta", ventaExenta);
 			jsonCuerpoDocumentoItem.put("ventaGravada", ventaGravada);
-			jsonCuerpoDocumentoItem.put("ivaItem", ivaItem);
 			jsonCuerpoDocumentoItem.put("psv", invoiceLine.getTaxAmt());
 			jsonCuerpoDocumentoItem.put("noGravado", ventaNoSuj.add(ventaNoSuj));
+			jsonCuerpoDocumentoItem.put("ivaItem", ivaItem);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");

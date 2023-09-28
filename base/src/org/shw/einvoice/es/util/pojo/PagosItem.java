@@ -16,7 +16,12 @@ public class PagosItem {
 	String referencia=null;  // null possible;
 	String plazo;
 	Integer periodo=null;  // null possible;
-	
+
+	/**
+	 * no params
+	 */
+	public PagosItem() {
+	}
 	
 	/**
 	 * @param codigo

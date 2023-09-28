@@ -10,4 +10,8 @@ public class AnulacionStore extends EDocumentStore {
 		return anulacion;
 	}
 
+	String createJsonObject() {
+		return null;
+	}
+
 }

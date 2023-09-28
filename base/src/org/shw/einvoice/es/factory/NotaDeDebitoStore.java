@@ -10,4 +10,8 @@ public class NotaDeDebitoStore extends EDocumentStore {
 		return notaDeDebito;
 	}
 
+	String createJsonObject() {
+		return null;
+	}
+
 }

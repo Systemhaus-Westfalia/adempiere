@@ -10,4 +10,8 @@ public class FacturaExportacionStore extends EDocumentStore {
 		return facturaExportacion;
 	}
 
+	String createJsonObject() {
+		return null;
+	}
+
 }

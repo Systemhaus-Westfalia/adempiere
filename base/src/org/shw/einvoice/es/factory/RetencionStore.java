@@ -10,4 +10,8 @@ public class RetencionStore extends EDocumentStore {
 		return retencion;
 	}
 
+	String createJsonObject() {
+		return null;
+	}
+
 }

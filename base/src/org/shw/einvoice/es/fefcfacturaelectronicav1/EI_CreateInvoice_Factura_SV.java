@@ -86,7 +86,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es una Factura. Aquí se interrumpe el proceso";
 			errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
-			System.out.println("Process EI_CreateInvoice_Factura_SV : finished");
+			System.out.println("Process EI_CreateInvoice_Factura_SV : finished with errors");
 			return errorMessages.toString();
 		}
 		
@@ -95,13 +95,10 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		int orgID = invoice.getAD_Org_ID();		
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
 		
+		JSONObject jsonInputToFactory = generateJSONInputData(invoice); // Will contain data passed to factory
 		FacturaStore facturaStore = new FacturaStore();
-		JSONObject jsonInputToFactory = generateJSONInputData(invoice); // Will contain data passed to factory	
 		Factura factura = (Factura) facturaStore.generateEDocument(jsonInputToFactory);
 		errorMessages.append(facturaStore.getEDocumentErrorMessages());
-		
-
-		validateValues(factura, errorMessages);
 
     	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
     	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
@@ -110,16 +107,17 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     		invoiceElectronic.seterrMsgIntern(errorMessages.toString());
     		invoiceElectronic.setei_ValidationStatus("02");
         	invoiceElectronic.saveEx();
+			System.out.println(errorMessages.toString());
+			System.out.println("Process EI_CreateInvoice_Factura_SV : finished with errors");
     		return errorMessages.toString();
-    	}    
-	
+    	}	
     	
     	ObjectMapper objectMapper = new ObjectMapper();
     	String json = objectMapper.writeValueAsString(factura);
-
        	invoiceElectronic.setjson(json);
     	invoiceElectronic.saveEx();
     	log.config(json);
+    	
     	if (isSaveInHistoric()) {
     		Path rootpath = Paths.get(absDirectory);
     		if (!Files.exists(rootpath)) {
@@ -157,30 +155,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		numeroControl = "DTE-01-" + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 		return numeroControl;
 	}
-
-	private void fillIdentification(IdentificacionFactura identificacion, MInvoice invoice) {
-		Integer id = invoice.get_ID();
-		
-		String numeroControl = getNumeroControl(invoice);
-		Integer clientID = (Integer)client.getAD_Client_ID();
-		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
-
-		System.out.println("Start fillIdentificacion");
-		identificacion.setNumeroControl(numeroControl);
-		identificacion.setCodigoGeneracion(codigoGeneracion);
-		identificacion.setTipoModelo(1);
-		identificacion.setTipoOperacion(1);
-
-		String fecha = invoice.getDateAcct().toString().substring(0, 10);
-
-		identificacion.setFecEmi(fecha);
-		identificacion.setHorEmi("00:00:00");
-		identificacion.setTipoMoneda("USD");
-		identificacion.setAmbiente("00");
-		
-		System.out.println("fillIdentificacion Finished");
-
-	}
 	
 	private JSONObject generateIdentificationInputData(MInvoice invoice) {
 		System.out.println("Start collecting JSON data for Identificacion");
@@ -204,25 +178,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		System.out.println("Finish collecting JSON data for Identificacion");
 		return jsonObjectIdentificacion;
 		
-	}
-	
-	private void fillemisor(EmisorFactura emisor, MInvoice invoice) {
-		System.out.println("Start fillEmisor");
-		emisor.setNit(orgInfo.getTaxID().replace("-", ""));
-		emisor.setNrc(StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
-		emisor.setNombre(client.getName()); 
-		emisor.setCodActividad(client.getE_Activity().getValue());
-		emisor.setDescActividad(client.getE_Activity().getName());
-		emisor.setNombreComercial(client.getDescription());
-		emisor.setTipoEstablecimiento(client.getE_PlantType().getValue());
-		String departamento = orgInfo.getC_Location().getC_City().getC_Region().getValue();
-		String municipio = orgInfo.getC_Location().getC_City().getValue();
-		String complemento = orgInfo.getC_Location().getAddress1();
-		Direccion direccion = new Direccion(departamento, municipio, complemento);
-		emisor.setDireccion(direccion);
-		emisor.setTelefono(client.get_ValueAsString("phone"));
-		emisor.setCorreo(client.getEMail());
-		System.out.println("fillEmisor Finished");
 	}
 	
 	private JSONObject generateEmisorInputData(MInvoice invoice) {
@@ -249,41 +204,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		System.out.println("Finish collecting JSON data for Emisor");
 		return jsonObjectEmisor;
 		
-	}
-	
-	private void fillReceptor(ReceptorFactura receptor, MInvoice invoice) {
-
-		System.out.println("Start fillemisor");
-
-		MBPartner partner = (MBPartner)invoice.getC_BPartner();
-		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
-			errorMessages.append("SdN: Falta configuracion para Facturacion Electronica");
-			return;
-		}
-		receptor.setTipoDocumento(partner.getE_Recipient_Identification().getValue());
-		if (receptor.getTipoDocumento().equals("36"))
-
-			receptor.setNumDocumento(partner.getTaxID().replace("-", ""));
-		receptor.setNombre(partner.getName());
-		receptor.setCodActividad(partner.getE_Activity().getValue());
-		receptor.setDescActividad(partner.getE_Activity().getName());
-		String departamento = "";
-		String municipio = "";
-		String complemento = "";
-		for (MBPartnerLocation partnerLocation : MBPartnerLocation.getForBPartner(getCtx(), partner.getC_BPartner_ID(), get_TrxName())){
-			if (partnerLocation.isBillTo()) {
-				departamento = partnerLocation.getC_Location().getC_City().getC_Region().getValue();
-				municipio =  partnerLocation.getC_Location().getC_City().getValue();
-				complemento = (partnerLocation.getC_Location().getAddress1() + " " + partnerLocation.getC_Location().getAddress2());
-				break;
-			}
-		}
-		Direccion direccion = new Direccion(departamento, municipio, complemento);
-		receptor.setDireccion(direccion);
-		receptor.setTelefono("79309099");
-		receptor.setCorreo(partner.get_ValueAsString("EMail"));	
-		System.out.println("fillemisor Finished");
-
 	}
 	
 	private JSONObject generateReceptorInputData(MInvoice invoice) {
@@ -340,84 +260,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		System.out.println("Finish collecting JSON data for Receptor");
 		return jsonObjectReceptor;
 		
-	}
-	
-	
-	
-	private void fillResumen(ResumenFactura resumen, MInvoice invoice) {
-		System.out.println("Start fillResumenr");
-
-
-		//List<TributosItem> tributos;
-		//List<PagosItem> pagos ;  // there must be at least one item
-
-		BigDecimal TotalNoSuj = Env.ZERO;
-		BigDecimal TotalExenta = Env.ZERO;
-		BigDecimal TotalGravada = Env.ZERO;
-		BigDecimal SubTotalVentas = Env.ZERO;
-		BigDecimal DescuNoSuj = Env.ZERO;
-		BigDecimal DescuExenta = Env.ZERO;
-		BigDecimal DescuGravada = Env.ZERO;
-		BigDecimal PorcentajeDescuento = Env.ZERO;
-		BigDecimal SubTotal = invoice.getTotalLines();
-		BigDecimal IvaPerci1 = Env.ZERO;
-		BigDecimal IvaRete1 = Env.ZERO;
-		BigDecimal MontoTotalOperacion = invoice.getGrandTotal();
-		BigDecimal TotalPagar =invoice.getGrandTotal();
-		BigDecimal totalIVA = Env.ZERO;
-
-		int CondicionOperacion =2;
-		List<PagosItem> pagosItems = new ArrayList<PagosItem>();
-		PagosItem pagoitem = new PagosItem("05",
-				new BigDecimal(0.00), 
-				"Transferencia_ Depósito Bancario", 
-				invoice.getC_PaymentTerm().getE_TimeSpan().getValue(),
-				invoice.getC_PaymentTerm().getNetDays());
-		pagosItems.add(pagoitem);
-		resumen.setPagos(pagosItems);
-
-		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
-		BigDecimal SaldoFavor = Env.ZERO;
-
-		List<MInvoiceTax> invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
-				.setParameters(invoice.getC_Invoice_ID())
-				.list();
-		
-		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				TotalNoSuj = invoiceTax.getTaxBaseAmt();
-			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00)
-				TotalExenta = invoiceTax.getTaxBaseAmt();
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
-				TotalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();
-			}
-
-		}
-
-		resumen.setTotalNoSuj(TotalNoSuj);
-		resumen.setTotalExenta(TotalExenta);
-		resumen.setTotalGravada(TotalGravada);
-		resumen.setSubTotalVentas(TotalGravada.add(TotalNoSuj).add(TotalExenta));
-		resumen.setDescuNoSuj(DescuNoSuj);
-		resumen.setDescuExenta(DescuExenta);
-		resumen.setDescuGravada(DescuGravada);
-		resumen.setPorcentajeDescuento(PorcentajeDescuento);
-		resumen.setSubTotal(TotalGravada.add(TotalNoSuj).add(TotalExenta));
-		resumen.setIvaRete1(IvaRete1);
-		resumen.setMontoTotalOperacion(invoice.getGrandTotal());
-		resumen.setTotalNoGravado(TotalExenta.add(TotalNoSuj));
-		resumen.setTotalPagar(invoice.getGrandTotal());
-		resumen.setTotalLetras(TotalLetras);
-		resumen.setSaldoFavor(invoice.getGrandTotal());
-		resumen.setCondicionOperacion(1);
-		resumen.setTotalDescu(Env.ZERO);
-		resumen.setReteRenta(Env.ZERO);
-		resumen.setTotalIva(totalIVA);
-		System.out.println("fillResumenr Finished");
-
-
 	}
 	
 	private JSONObject generateResumenInputData(MInvoice invoice) {
@@ -540,65 +382,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		
 		return null;
 	}
-	
-	private void fillExtension(ExtensionFactura extension, MInvoice invoice) {
-		extension.setDocuEntrega("555");
-		extension.setDocuRecibe("555");
-		extension.setNombEntrega("55");
-		extension.setNombRecibe("55");
-		extension.setObservaciones("55");
-		//extension.setPlacaVehiculo("");
-		
-	}
-	
-	private void fillApendiceItem(ApendiceItem apendiceItem, MInvoice invoice) {
-		apendiceItem.setCampo("11");
-		apendiceItem.setEtiqueta("777");
-		apendiceItem.setValor("uu");
-	}
-	
 
-	private void validateValues(Factura factura, StringBuffer error) {
-
-		System.out.println("Start validateValues");
-		System.out.println("Start Resumen validateValues");
-		String result = "";
-		
-		if (factura.getResumen() != null)
-		{
-			result = factura.getResumen().validateValues();
-			if (!result.equals(Factura.VALIDATION_RESULT_OK))
-				error.append(result);
-		}
-
-		System.out.println("Start Identification validateValues");
-		if (factura.getIdentificacion() != null) {
-			result = factura.getIdentificacion().validateValues();
-			if (!result.equals(Factura.VALIDATION_RESULT_OK))
-				error.append(result);
-		}
-
-		System.out.println("Start Receptor validateValues");
-		if (factura.getReceptor() != null){
-			result = factura.getReceptor().validateValues();
-			if (!result.equals(Factura.VALIDATION_RESULT_OK))
-				error.append(result);
-		}
-
-		System.out.println("Start Cuerpo Documento validateValues");
-		if (factura.getCuerpoDocumento() != null) {
-			for (CuerpoDocumentoItem cuerpoDocumentoItem : factura.getCuerpoDocumento()) {
-				cuerpoDocumentoItem = (CuerpoDocumentoItemFactura) cuerpoDocumentoItem;
-				result = cuerpoDocumentoItem.validateValues();
-				if (!result.equals(Factura.VALIDATION_RESULT_OK))
-					error.append(result);			
-			}			
-		}
-
-		System.out.println("validateValues Finished");
-
-
-	}
 	private void writeToFile (String json, MInvoice invoice)
 	{
 		try

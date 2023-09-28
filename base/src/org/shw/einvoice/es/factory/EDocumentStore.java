@@ -20,6 +20,7 @@ public abstract class EDocumentStore {
 	StringBuffer errorMessages = new StringBuffer();
 	EDocument eDocument;
 	abstract EDocument createEDocument();
+	abstract String createJsonObject();
 	
 	public EDocument generateEDocument(JSONObject factoryInput) {
 		String result="";

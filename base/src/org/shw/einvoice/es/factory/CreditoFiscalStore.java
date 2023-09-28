@@ -10,4 +10,8 @@ public class CreditoFiscalStore extends EDocumentStore {
 		return factura;
 	}
 
+	String createJsonObject() {
+		return null;
+	}
+
 }

@@ -27,11 +27,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
 import org.apache.commons.lang3.StringUtils;
@@ -47,13 +43,9 @@ import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.shw.einvoice.es.factory.FacturaStore;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
-import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.PagosItem;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Generated Process for (SHW_Create_ElectronicInvoice)
  *  @author ADempiere (generated) 
@@ -97,7 +89,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		
 		JSONObject jsonInputToFactory = generateJSONInputData(invoice); // Will contain data passed to factory
 		FacturaStore facturaStore = new FacturaStore();
-		Factura factura = (Factura) facturaStore.generateEDocument(jsonInputToFactory);
+		facturaStore.generateEDocument(jsonInputToFactory);
 		errorMessages.append(facturaStore.getEDocumentErrorMessages());
 
     	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
@@ -112,22 +104,21 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     		return errorMessages.toString();
     	}	
     	
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String json = objectMapper.writeValueAsString(factura);
-       	invoiceElectronic.setjson(json);
+    	String facturaAsJsonString = facturaStore.createJsonString();
+       	invoiceElectronic.setjson(facturaAsJsonString);
     	invoiceElectronic.saveEx();
-    	log.config(json);
+    	log.config(facturaAsJsonString);
     	
     	if (isSaveInHistoric()) {
     		Path rootpath = Paths.get(absDirectory);
     		if (!Files.exists(rootpath)) {
     			invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
     		}
-    		writeToFile(json, invoice);
+    		writeToFile(facturaAsJsonString, invoice);
     	}
 		
     	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-    	System.out.println(json);
+    	System.out.println(facturaAsJsonString);
 		System.out.println("Process EI_CreateInvoice_Factura_SV : Finished");
 		return "";
 	}

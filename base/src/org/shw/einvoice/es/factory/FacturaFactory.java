@@ -69,6 +69,7 @@ public class FacturaFactory implements EDocumentFactory {
 	static final String CANTIDAD = "cantidad";
 	static final String CODIGO = "codigo";
 	static final String CODIGOTRIBUTO = "codigoTributo";
+	static final String AMBIENTE = "ambiente";
 	
 	static final String UNIMEDIDA = "uniMedida";
 	static final String DESCRIPCION = "descripcion";
@@ -197,7 +198,7 @@ public class FacturaFactory implements EDocumentFactory {
 		try {identificacionFactura.setFecEmi(identificationJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
 		try {identificacionFactura.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
 		try {identificacionFactura.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
-		try {identificacionFactura.setAmbiente("00");} catch (Exception e) {errorMessages.append(e);}
+		try {identificacionFactura.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
 		
 		System.out.println("End fillIdentificacion"); 
 		return errorMessages;

@@ -60,6 +60,7 @@ public class FacturaExportacion extends EDocument {
 	@SuppressWarnings("unchecked")
 	public FacturaExportacion() {
 		List<?> tmpList;
+		facturaExportacionFactory = new FacturaExportacionFactory();
 		
 		this.identificacion       = (IdentificacionFacturaExportacion) facturaExportacionFactory.createIdentificacion();
 		this.emisor               = (EmisorFacturaExportacion) facturaExportacionFactory.createEmisor();
@@ -77,15 +78,6 @@ public class FacturaExportacion extends EDocument {
 		
 		tmpList = facturaExportacionFactory.createApendice();
 	    this.apendice             = (List<ApendiceItemFacturaExportacion>) tmpList;
-	}
-	
-	/**
-	 * No parameters
-	 */
-	public FacturaExportacion(EDocumentFactory facturaExportacionFactory) {
-		// call constructor without parameters
-		this();
-		this.facturaExportacionFactory = (FacturaExportacionFactory) facturaExportacionFactory;
 	}
 
 	/**

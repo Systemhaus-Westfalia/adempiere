@@ -5,12 +5,11 @@ public class AnulacionStore extends EDocumentStore {
 
 	@Override
 	EDocument createEDocument() {
-		EDocumentFactory anulacionFactory = new AnulacionFactory();
-		EDocument anulacion = new Anulacion(anulacionFactory);  // Anulacion must extend EDocument!!!
+		EDocument anulacion = new Anulacion();  // Anulacion must extend EDocument!!!
 		return anulacion;
 	}
 
-	String createJsonObject() {
+	String createJsonString() {
 		return null;
 	}
 

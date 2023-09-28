@@ -5,12 +5,11 @@ public class CreditoFiscalStore extends EDocumentStore {
 
 	@Override
 	EDocument createEDocument() {
-		EDocumentFactory creditoFiscalFactory = new CreditoFiscalFactory();
-		EDocument factura = new CreditoFiscal(creditoFiscalFactory);  // CreditoFiscal must extend EDocument!!!
-		return factura;
+		EDocument creditoFiscal = new CreditoFiscal();  // CreditoFiscal must extend EDocument!!!
+		return creditoFiscal;
 	}
 
-	String createJsonObject() {
+	String createJsonString() {
 		return null;
 	}
 

@@ -56,6 +56,7 @@ public class Factura extends EDocument {
 	@SuppressWarnings("unchecked")
 	public Factura() {
 		List<?> tmpList;
+		facturaFactory = new FacturaFactory();
 		
 		this.identificacion       = (IdentificacionFactura) facturaFactory.createIdentificacion();
 
@@ -84,15 +85,6 @@ public class Factura extends EDocument {
 		
 		tmpList = facturaFactory.createApendice();
 	    this.apendice             = (List<ApendiceItemFactura>) tmpList;
-	}
-	
-	/**
-	 * No parameters
-	 */
-	public Factura(EDocumentFactory facturaFactory) {
-		// call constructor without parameters
-		this();
-		this.facturaFactory = (FacturaFactory) facturaFactory;
 	}
 
 	/**

@@ -5,12 +5,11 @@ public class NotaDeCreditoStore extends EDocumentStore {
 
 	@Override
 	EDocument createEDocument() {
-		EDocumentFactory notaDeCreditoFactory = new NotaDeCreditoFactory();
-		EDocument notaDeCredito = new NotaDeCredito(notaDeCreditoFactory);  // NotaDeCredito must extend EDocument!!!
+		EDocument notaDeCredito = new NotaDeCredito();  // NotaDeCredito must extend EDocument!!!
 		return notaDeCredito;
 	}
 
-	String createJsonObject() {
+	String createJsonString() {
 		return null;
 	}
 

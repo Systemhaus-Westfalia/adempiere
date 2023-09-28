@@ -5,12 +5,11 @@ public class FacturaExportacionStore extends EDocumentStore {
 
 	@Override
 	EDocument createEDocument() {
-		EDocumentFactory facturaExportacionFactory = new FacturaExportacionFactory();
-		EDocument facturaExportacion = new FacturaExportacion(facturaExportacionFactory);  // FacturaExportacion must extend EDocument!!!
+		EDocument facturaExportacion = new FacturaExportacion();  // FacturaExportacion must extend EDocument!!!
 		return facturaExportacion;
 	}
 
-	String createJsonObject() {
+	String createJsonString() {
 		return null;
 	}
 

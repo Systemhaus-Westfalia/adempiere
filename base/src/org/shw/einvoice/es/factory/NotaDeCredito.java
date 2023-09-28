@@ -51,6 +51,7 @@ public class NotaDeCredito extends EDocument {
 	 */
 	public NotaDeCredito() {
 		List<?> tmpList;
+		notaDeCreditoFactory      = new NotaDeCreditoFactory();
 		this.identificacion       = (IdentificacionNotaDeCredito) notaDeCreditoFactory.createIdentificacion();
 		
 	    tmpList = (List<DocumentoRelacionadoItem>) notaDeCreditoFactory.createDocumentoRelacionado();
@@ -68,15 +69,6 @@ public class NotaDeCredito extends EDocument {
 
 	    tmpList = (List<ApendiceItem>) notaDeCreditoFactory.createApendice();
 	    this.apendice             = (List<ApendiceItemNotaDeCredito>) tmpList;								  // must be eliminated from JSON
-	}
-	
-	/**
-	 * No parameters
-	 */
-	public NotaDeCredito(EDocumentFactory notaDeCreditoFactory) {
-		// call constructor without parameters
-		this();
-		this.notaDeCreditoFactory = (NotaDeCreditoFactory) notaDeCreditoFactory;
 	}
 	
 	/**

@@ -15,12 +15,15 @@ import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
 import org.shw.einvoice.es.util.pojo.Resumen;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public abstract class EDocumentStore {
 
 	StringBuffer errorMessages = new StringBuffer();
 	EDocument eDocument;
 	abstract EDocument createEDocument();
-	abstract String createJsonObject();
+	abstract String createJsonString() throws Exception;
 	
 	public EDocument generateEDocument(JSONObject factoryInput) {
 		String result="";
@@ -150,6 +153,14 @@ public abstract class EDocumentStore {
 	}
 
 	public StringBuffer getEDocumentErrorMessages() {
-		 return this.errorMessages;
+		 return errorMessages;
 	 }
+	
+	boolean deleteJsonNOde(JsonNode node) {
+        if(! node.isEmpty()) {
+            ((ObjectNode) node).removeAll();
+            return true;
+        }
+       return false;
+	}
 }

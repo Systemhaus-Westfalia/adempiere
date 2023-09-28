@@ -54,6 +54,7 @@ public class CreditoFiscal extends EDocument {
 	@SuppressWarnings("unchecked")
 	public CreditoFiscal() {
 		List<?> tmpList;
+		creditoFiscalFactory = new CreditoFiscalFactory();
 		
 		this.identificacion       = (IdentificacionCreditoFiscal) creditoFiscalFactory.createIdentificacion();
 
@@ -79,19 +80,6 @@ public class CreditoFiscal extends EDocument {
 	    tmpList = creditoFiscalFactory.createApendice();
 	    this.apendice             = (List<ApendiceItemCreditoFiscal>) tmpList;
 	    
-	}
-	
-	/**
-	 * validateValues() from super class
-	 */
-	
-	/**
-	 * No parameters
-	 */
-	public CreditoFiscal(EDocumentFactory creditoFiscalFactory) {
-		// call constructor without parameters
-		this();
-		this.creditoFiscalFactory = (CreditoFiscalFactory) creditoFiscalFactory;
 	}
 
 

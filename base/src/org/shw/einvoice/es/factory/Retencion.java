@@ -50,6 +50,7 @@ public class Retencion extends EDocument {
 	 */
 	public Retencion() {
 		List<?> tmpList;
+		retencionFactory          = new RetencionFactory();
 
 		this.identificacion       = (IdentificacionRetencion) retencionFactory.createIdentificacion();
 		this.emisor               = (EmisorRetencion) retencionFactory.createEmisor();
@@ -69,18 +70,6 @@ public class Retencion extends EDocument {
 		// call constructor without parameters
 		this();
 		this.retencionFactory = (RetencionFactory) retencionFactory;
-	}
-
-	/**
-	 * Validate the Schema conditions
-	 */
-	@Override
-	public String validateValues() {
-		if( (getCuerpoDocumento()==null) ||  (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
-			return VALIDATION_CUERPODOCUMENTO_MAX_ITEMS;
-		}
-		
-		return VALIDATION_RESULT_OK;
 	}
 
 	/**

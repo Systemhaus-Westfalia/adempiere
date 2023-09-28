@@ -41,17 +41,11 @@ public class Anulacion extends EDocument {
 	 * No parameters
 	 */
 	public Anulacion() {
+		anulacionFactory    = new AnulacionFactory();
 		this.identificacion = (IdentificacionAnulacion) anulacionFactory.createIdentificacion();
 		this.emisor         = (EmisorAnulacion) anulacionFactory.createEmisor();
 		this.documento      = (DocumentoAnulacion) anulacionFactory.createDocumento();
 		this.motivo         = (MotivoAnulacion) anulacionFactory.createMotivo();
-	}
-
-
-	public Anulacion(EDocumentFactory anulacionFactory) {
-		// call constructor without parameters
-		this();
-		this.anulacionFactory = (AnulacionFactory) anulacionFactory;
 	}
 
 

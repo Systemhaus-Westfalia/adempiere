@@ -19,14 +19,7 @@
 package org.shw.einvoice.es.fefcfacturaelectronicav1;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
@@ -38,7 +31,6 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
-import org.compiere.model.MSysConfig;
 import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
@@ -46,6 +38,7 @@ import org.compiere.util.Msg;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shw.einvoice.es.factory.FacturaStore;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 /** Generated Process for (SHW_Create_ElectronicInvoice)
  *  @author ADempiere (generated) 
@@ -56,7 +49,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	MClient				client = null;
 	MOrgInfo 			orgInfo = null;
 	StringBuffer errorMessages = new StringBuffer();
-	String absDirectory = "";	
 	
 	@Override
 	protected void prepare()
@@ -69,7 +61,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	{	
 		System.out.println("Process EI_CreateInvoice_Factura_SV : started");
 		
-		absDirectory = MSysConfig.getValue("EI_PATH");
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		System.out.println("Process EI_CreateInvoice_Factura_SV : Started with Invoice " + invoice.getDocumentNo());
 		
@@ -110,11 +101,9 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     	log.config(facturaAsJsonString);
     	
     	if (isSaveInHistoric()) {
-    		Path rootpath = Paths.get(absDirectory);
-    		if (!Files.exists(rootpath)) {
+    		if (!EDocumentUtils.writeToFile(facturaAsJsonString, invoice, EDocumentUtils.ABSDIRECTORY)) {
     			invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
     		}
-    		writeToFile(facturaAsJsonString, invoice);
     	}
 		
     	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
@@ -135,36 +124,24 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		return factoryInput;
 
 	}
-
-	private String getNumeroControl(MInvoice invoice) {
-		String 	numeroControl;
-		Integer id = invoice.get_ID();
-		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
-		//final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";	
-		String duns = orgInfo.getDUNS().replace("-", "");
-	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
-		numeroControl = "DTE-01-" + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
-		return numeroControl;
-	}
 	
 	private JSONObject generateIdentificationInputData(MInvoice invoice) {
 		System.out.println("Start collecting JSON data for Identificacion");
 		
-		Integer id = invoice.get_ID();
-		//final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";
-		String numeroControl = getNumeroControl(invoice);
+		Integer invoiceID = invoice.get_ID();
+		String numeroControl = EDocumentUtils.getNumeroControl(invoiceID, orgInfo, "DTE-01-");
 		Integer clientID = (Integer)client.getAD_Client_ID();
-		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(id.toString(), 12,"0");
+		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
 		
 		JSONObject jsonObjectIdentificacion = new JSONObject();
-		jsonObjectIdentificacion.put("numeroControl", numeroControl);
-		jsonObjectIdentificacion.put("codigoGeneracion", codigoGeneracion);
-		jsonObjectIdentificacion.put("tipoModelo", 1);
-		jsonObjectIdentificacion.put("tipoOperacion", 1);
-		jsonObjectIdentificacion.put("fecEmi", invoice.getDateAcct().toString().substring(0, 10));
-		jsonObjectIdentificacion.put("horEmi", "00:00:00");
-		jsonObjectIdentificacion.put("tipoMoneda", "USD");
-		jsonObjectIdentificacion.put("ambiente", "00");
+		jsonObjectIdentificacion.put(EDocumentUtils.NUMEROCONTROL, numeroControl);
+		jsonObjectIdentificacion.put(EDocumentUtils.CODIGOGENERACION, codigoGeneracion);
+		jsonObjectIdentificacion.put(EDocumentUtils.TIPOMODELO, 1);
+		jsonObjectIdentificacion.put(EDocumentUtils.TIPOOPERACION, 1);
+		jsonObjectIdentificacion.put(EDocumentUtils.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
+		jsonObjectIdentificacion.put(EDocumentUtils.HOREMI, "00:00:00");
+		jsonObjectIdentificacion.put(EDocumentUtils.TIPOMONEDA, "USD");
+		jsonObjectIdentificacion.put(EDocumentUtils.AMBIENTE, "00");
 
 		System.out.println("Finish collecting JSON data for Identificacion");
 		return jsonObjectIdentificacion;
@@ -175,22 +152,22 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		System.out.println("Start collecting JSON data for Emisor");
 		
 		JSONObject jsonObjectEmisor = new JSONObject();
-		jsonObjectEmisor.put("nit", orgInfo.getTaxID().replace("-", ""));
-		jsonObjectEmisor.put("nrc", StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
-		jsonObjectEmisor.put("nombre", client.getName());
-		jsonObjectEmisor.put("codActividad", client.getE_Activity().getValue());
-		jsonObjectEmisor.put("descActividad", client.getE_Activity().getName());
-		jsonObjectEmisor.put("nombreComercial", client.getDescription());
-		jsonObjectEmisor.put("tipoEstablecimiento", client.getE_PlantType().getValue());
+		jsonObjectEmisor.put(EDocumentUtils.NIT, orgInfo.getTaxID().replace("-", ""));
+		jsonObjectEmisor.put(EDocumentUtils.NRC, StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
+		jsonObjectEmisor.put(EDocumentUtils.NOMBRE, client.getName());
+		jsonObjectEmisor.put(EDocumentUtils.CODACTIVIDAD, client.getE_Activity().getValue());
+		jsonObjectEmisor.put(EDocumentUtils.DESCACTIVIDAD, client.getE_Activity().getName());
+		jsonObjectEmisor.put(EDocumentUtils.NOMBRECOMERCIAL, client.getDescription());
+		jsonObjectEmisor.put(EDocumentUtils.TIPOESTABLECIMIENTO, client.getE_PlantType().getValue());
 
 		JSONObject jsonDireccion = new JSONObject();
-		jsonDireccion.put("departamento", orgInfo.getC_Location().getC_City().getC_Region().getValue());
-		jsonDireccion.put("municipio", orgInfo.getC_Location().getC_City().getValue());
-		jsonDireccion.put("complemento", orgInfo.getC_Location().getAddress1());
+		jsonDireccion.put(EDocumentUtils.DEPARTAMENTO, orgInfo.getC_Location().getC_City().getC_Region().getValue());
+		jsonDireccion.put(EDocumentUtils.MUNICIPIO, orgInfo.getC_Location().getC_City().getValue());
+		jsonDireccion.put(EDocumentUtils.COMPLEMENTO, orgInfo.getC_Location().getAddress1());
 		jsonObjectEmisor.put("direccion", jsonDireccion);
 		
-		jsonObjectEmisor.put("telefono", client.get_ValueAsString("phone"));
-		jsonObjectEmisor.put("correo", client.getEMail());
+		jsonObjectEmisor.put(EDocumentUtils.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectEmisor.put(EDocumentUtils.CORREO, client.getEMail());
 
 		System.out.println("Finish collecting JSON data for Emisor");
 		return jsonObjectEmisor;
@@ -209,16 +186,16 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		
 		JSONObject jsonObjectReceptor = new JSONObject();
 		
-		jsonObjectReceptor.put("tipoDocumento", partner.getE_Recipient_Identification().getValue());
-		jsonObjectReceptor.put("numDocumento", partner.getTaxID().replace("-", ""));
-		jsonObjectReceptor.put("nombre", partner.getName());
+		jsonObjectReceptor.put(EDocumentUtils.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
+		jsonObjectReceptor.put(EDocumentUtils.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+		jsonObjectReceptor.put(EDocumentUtils.NOMBRE, partner.getName());
 		
 		if (partner.getE_Activity_ID()>0) {
-			jsonObjectReceptor.put("codActividad", partner.getE_Activity().getValue());
-			jsonObjectReceptor.put("descActividad", partner.getE_Activity().getName());
+			jsonObjectReceptor.put(EDocumentUtils.CODACTIVIDAD, partner.getE_Activity().getValue());
+			jsonObjectReceptor.put(EDocumentUtils.DESCACTIVIDAD, partner.getE_Activity().getName());
 		} else  {
-			jsonObjectReceptor.put("codActividad", "");
-			jsonObjectReceptor.put("descActividad", "");
+			jsonObjectReceptor.put(EDocumentUtils.CODACTIVIDAD, "");
+			jsonObjectReceptor.put(EDocumentUtils.DESCACTIVIDAD, "");
 		}
 
 		JSONObject jsonDireccion = new JSONObject();
@@ -230,23 +207,23 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 				departamento = partnerLocation.getC_Location().getC_City().getC_Region().getValue();
 				municipio =  partnerLocation.getC_Location().getC_City().getValue();
 				complemento = (partnerLocation.getC_Location().getAddress1() + " " + partnerLocation.getC_Location().getAddress2());
-				jsonDireccion.put("departamento", departamento);
-				jsonDireccion.put("municipio", municipio);
-				jsonDireccion.put("complemento", complemento);
+				jsonDireccion.put(EDocumentUtils.DEPARTAMENTO, departamento);
+				jsonDireccion.put(EDocumentUtils.MUNICIPIO, municipio);
+				jsonDireccion.put(EDocumentUtils.COMPLEMENTO, complemento);
 				break;
 			}
 		}		
 		
 		// In case there is no address
 		if (departamento.isEmpty()) {
-			jsonDireccion.put("departamento", departamento);
-			jsonDireccion.put("municipio", municipio);
-			jsonDireccion.put("complemento", complemento);
+			jsonDireccion.put(EDocumentUtils.DEPARTAMENTO, departamento);
+			jsonDireccion.put(EDocumentUtils.MUNICIPIO, municipio);
+			jsonDireccion.put(EDocumentUtils.COMPLEMENTO, complemento);
 		}		
 		jsonObjectReceptor.put("direccion", jsonDireccion);
 		
-		jsonObjectReceptor.put("telefono", client.get_ValueAsString("phone"));
-		jsonObjectReceptor.put("correo", partner.get_ValueAsString("EMail"));		
+		jsonObjectReceptor.put(EDocumentUtils.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectReceptor.put(EDocumentUtils.CORREO, partner.get_ValueAsString("EMail"));		
 
 		System.out.println("Finish collecting JSON data for Receptor");
 		return jsonObjectReceptor;
@@ -255,10 +232,10 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	
 	private JSONObject generateResumenInputData(MInvoice invoice) {
 		System.out.println("Start collecting JSON data for Resumen");
-		BigDecimal totalNoSuj = Env.ZERO;
-		BigDecimal totalExenta = Env.ZERO;
+		BigDecimal totalNoSuj 	= Env.ZERO;
+		BigDecimal totalExenta 	= Env.ZERO;
 		BigDecimal totalGravada = Env.ZERO;		
-		BigDecimal totalIVA = Env.ZERO;
+		BigDecimal totalIVA 	= Env.ZERO;
 		
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
 
@@ -270,43 +247,43 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				totalNoSuj = invoiceTax.getTaxBaseAmt();
 			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00)
+			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00) {
 				totalExenta = invoiceTax.getTaxBaseAmt();
+			}
 			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();
 			}
-
 		}
 				
 		JSONObject jsonObjectResumen = new JSONObject();
-		jsonObjectResumen.put("totalNoSuj", totalNoSuj);
-		jsonObjectResumen.put("totalExenta", totalExenta);
-		jsonObjectResumen.put("totalGravada", totalGravada);
-		jsonObjectResumen.put("subTotalVentas", totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put("descuNoSuj", Env.ZERO);
-		jsonObjectResumen.put("descuExenta", Env.ZERO);
-		jsonObjectResumen.put("descuGravada", Env.ZERO);
-		jsonObjectResumen.put("porcentajeDescuento", Env.ZERO);
-		jsonObjectResumen.put("subTotal", totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put("ivaRete1", Env.ZERO);
-		jsonObjectResumen.put("montoTotalOperacion", invoice.getGrandTotal());
-		jsonObjectResumen.put("totalNoGravado", totalExenta.add(totalNoSuj));
-		jsonObjectResumen.put("totalPagar", invoice.getGrandTotal());
-		jsonObjectResumen.put("totalLetras", totalLetras);
-		jsonObjectResumen.put("saldoFavor", invoice.getGrandTotal());
-		jsonObjectResumen.put("condicionOperacion", 1);
-		jsonObjectResumen.put("totalDescu", Env.ZERO);
-		jsonObjectResumen.put("reteRenta", Env.ZERO);
-		jsonObjectResumen.put("totalIva", totalIVA);
+		jsonObjectResumen.put(EDocumentUtils.TOTALNOSUJ, totalNoSuj);
+		jsonObjectResumen.put(EDocumentUtils.TOTALEXENTA, totalExenta);
+		jsonObjectResumen.put(EDocumentUtils.TOTALGRAVADA, totalGravada);
+		jsonObjectResumen.put(EDocumentUtils.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(EDocumentUtils.DESCUNOSUJ, Env.ZERO);
+		jsonObjectResumen.put(EDocumentUtils.DESCUEXENTA, Env.ZERO);
+		jsonObjectResumen.put(EDocumentUtils.DESCUGRAVADA, Env.ZERO);
+		jsonObjectResumen.put(EDocumentUtils.PORCENTAJEDESCUENTO, Env.ZERO);
+		jsonObjectResumen.put(EDocumentUtils.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(EDocumentUtils.IVARETE1, Env.ZERO);
+		jsonObjectResumen.put(EDocumentUtils.MONTOTOTALOPERACION, invoice.getGrandTotal());
+		jsonObjectResumen.put(EDocumentUtils.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
+		jsonObjectResumen.put(EDocumentUtils.TOTALPAGAR, invoice.getGrandTotal());
+		jsonObjectResumen.put(EDocumentUtils.TOTALLETRAS, totalLetras);
+		jsonObjectResumen.put(EDocumentUtils.SALDOFAVOR, invoice.getGrandTotal());
+		jsonObjectResumen.put(EDocumentUtils.CONDICIONOPERACION, 1);
+		jsonObjectResumen.put(EDocumentUtils.TOTALDESCU, Env.ZERO);
+		jsonObjectResumen.put(EDocumentUtils.RETERENTA, Env.ZERO);
+		jsonObjectResumen.put(EDocumentUtils.TOTALIVA, totalIVA);
 
 		JSONArray jsonArrayPagos = new JSONArray();
 			JSONObject jsonPago = new JSONObject();
-			jsonPago.put("codigo", "05");
-			jsonPago.put("montoPago", new BigDecimal(0.00));
-			jsonPago.put("referencia", "Transferencia_ Depósito Bancario");
-			jsonPago.put("plazo", invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
-			jsonPago.put("periodo", invoice.getC_PaymentTerm().getNetDays());
+			jsonPago.put(EDocumentUtils.CODIGO, "05");
+			jsonPago.put(EDocumentUtils.MONTOPAGO, new BigDecimal(0.00));
+			jsonPago.put(EDocumentUtils.REFERENCIA, "Transferencia_ Depósito Bancario");
+			jsonPago.put(EDocumentUtils.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
+			jsonPago.put(EDocumentUtils.PERIODO, invoice.getC_PaymentTerm().getNetDays());
 		jsonArrayPagos.put(jsonPago);
 
 		jsonObjectResumen.put("pagos", jsonArrayPagos);
@@ -324,10 +301,10 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
 			
-			BigDecimal ventaNoSuj = Env.ZERO;
-			BigDecimal ventaExenta = Env.ZERO;
+			BigDecimal ventaNoSuj 	= Env.ZERO;
+			BigDecimal ventaExenta 	= Env.ZERO;
 			BigDecimal ventaGravada = Env.ONEHUNDRED;
-			BigDecimal ivaItem = Env.ZERO;
+			BigDecimal ivaItem 		= Env.ZERO;
 			
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
 				ventaNoSuj = invoiceLine.getLineNetAmt();
@@ -342,26 +319,26 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put("numItem", invoiceLine.getLine());
-			jsonCuerpoDocumentoItem.put("tipoItem", 2);
-			jsonCuerpoDocumentoItem.put("numeroDocumento", getNumeroControl(invoice));
-			jsonCuerpoDocumentoItem.put("cantidad", invoiceLine.getQtyInvoiced());
-			jsonCuerpoDocumentoItem.put("codigo", invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put("codigoTributo", "");  // String codTributo = "20";
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.NUMITEM, invoiceLine.getLine());
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.TIPOITEM, 2);
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.NUMERODOCUMENTO, EDocumentUtils.getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.CANTIDAD, invoiceLine.getQtyInvoiced());
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.CODIGOTRIBUTO, "");  // String codTributo = "20";
 			
 			JSONArray jsonTributosArray = new JSONArray();
 			jsonCuerpoDocumentoArray.put(jsonTributosArray); //tributosItems.add("20");
 			
-			jsonCuerpoDocumentoItem.put("uniMedida", 1);
-			jsonCuerpoDocumentoItem.put("descripcion", invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put("precioUni", invoiceLine.getPriceActual());
-			jsonCuerpoDocumentoItem.put("montoDescu", Env.ZERO);
-			jsonCuerpoDocumentoItem.put("ventaNoSuj", ventaNoSuj);
-			jsonCuerpoDocumentoItem.put("ventaExenta", ventaExenta);
-			jsonCuerpoDocumentoItem.put("ventaGravada", ventaGravada);
-			jsonCuerpoDocumentoItem.put("psv", invoiceLine.getTaxAmt());
-			jsonCuerpoDocumentoItem.put("noGravado", ventaNoSuj.add(ventaNoSuj));
-			jsonCuerpoDocumentoItem.put("ivaItem", ivaItem);
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.UNIMEDIDA, 1);
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.PRECIOUNI, invoiceLine.getPriceActual());
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.MONTODESCU, Env.ZERO);
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.VENTANOSUJ, ventaNoSuj);
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.VENTAEXENTA, ventaExenta);
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.VENTAGRAVADA, ventaGravada);
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.PSV, invoiceLine.getTaxAmt());
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.NOGRAVADO, ventaNoSuj.add(ventaNoSuj));
+			jsonCuerpoDocumentoItem.put(EDocumentUtils.IVAITEM, ivaItem);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");
@@ -372,35 +349,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		System.out.println("Finish collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		
 		return null;
-	}
-
-	private void writeToFile (String json, MInvoice invoice)
-	{
-		try
-		{
-			absDirectory = (absDirectory.endsWith("/")
-					|| absDirectory.endsWith("\\"))
-					? absDirectory:absDirectory + "/";
-			Path path = Paths.get(absDirectory + invoice.getDateAcct().toString().substring(0, 10) + "/");
-			Files.createDirectories(path);
-			//java.nio.file.Files;
-			Files.createDirectories(path);
-			String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
-			File out = new File (filename);
-			Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
-			fw.write(json);
-			fw.flush ();
-			fw.close ();
-			float size = out.length();
-			size /= 1024;
-			log.info(out.getAbsolutePath() + " - " + size + " kB");
-			System.out.println("Printed To: " + filename);
-									
-		}
-		catch (Exception ex)
-		{
-			throw new RuntimeException(ex);
-		}
 	}
   
 

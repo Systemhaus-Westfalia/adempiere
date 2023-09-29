@@ -42,45 +42,45 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
  * 
  */
 public class FacturaFactory implements EDocumentFactory {
-	static final String NUMEROCONTROL =  "numeroControl";
-	static final String CODIGOGENERACION =  "codigoGeneracion";
-	static final String TIPOMODELO =  "tipoModelo";
-	static final String TIPOOPERACION =  "tipoOperacion";
-	static final String FECEMI =  "fecEmi";
-	static final String HOREMI =  "horEmi";
-	static final String TIPOMONEDA =  "tipoMoneda";
-	static final String NIT =  "nit";
-	static final String NRC =  "nrc";
-	static final String NOMBRE =  "nombre";
-	static final String CODACTIVIDAD =  "codActividad";
-	static final String DESCACTIVIDAD =  "descActividad";
-	static final String NOMBRECOMERCIAL =  "nombreComercial";
+	static final String NUMEROCONTROL 		=  "numeroControl";
+	static final String CODIGOGENERACION 	=  "codigoGeneracion";
+	static final String TIPOMODELO 			=  "tipoModelo";
+	static final String TIPOOPERACION 		=  "tipoOperacion";
+	static final String FECEMI 				=  "fecEmi";
+	static final String HOREMI 				=  "horEmi";
+	static final String TIPOMONEDA 			=  "tipoMoneda";
+	static final String NIT 				=  "nit";
+	static final String NRC 				=  "nrc";
+	static final String NOMBRE 				=  "nombre";
+	static final String CODACTIVIDAD 		=  "codActividad";
+	static final String DESCACTIVIDAD 		=  "descActividad";
+	static final String NOMBRECOMERCIAL 	=  "nombreComercial";
 	static final String TIPOESTABLECIMIENTO =  "tipoEstablecimiento";
-	static final String DEPARTAMENTO =  "departamento";
-	static final String MUNICIPIO =  "municipio";
-	static final String COMPLEMENTO =  "complemento";
-	static final String TELEFONO =  "telefono";
-	static final String CORREO =  "correo";
-	static final String TIPODOCUMENTO =  "tipoDocumento";
-	static final String NUMDOCUMENTO =  "numDocumento";
-	static final String NUMITEM = "numItem";
-	static final String TIPOITEM = "tipoItem";
-	static final String NUMERODOCUMENTO = "numeroDocumento";
-	static final String CANTIDAD = "cantidad";
-	static final String CODIGO = "codigo";
-	static final String CODIGOTRIBUTO = "codigoTributo";
-	static final String AMBIENTE = "ambiente";
+	static final String DEPARTAMENTO 		=  "departamento";
+	static final String MUNICIPIO 			=  "municipio";
+	static final String COMPLEMENTO 		=  "complemento";
+	static final String TELEFONO 			=  "telefono";
+	static final String CORREO 				=  "correo";
+	static final String TIPODOCUMENTO 		=  "tipoDocumento";
+	static final String NUMDOCUMENTO 		=  "numDocumento";
+	static final String NUMITEM 			= "numItem";
+	static final String TIPOITEM 			= "tipoItem";
+	static final String NUMERODOCUMENTO 	= "numeroDocumento";
+	static final String CANTIDAD 			= "cantidad";
+	static final String CODIGO 				= "codigo";
+	static final String CODIGOTRIBUTO 		= "codigoTributo";
+	static final String AMBIENTE 			= "ambiente";
 	
-	static final String UNIMEDIDA = "uniMedida";
-	static final String DESCRIPCION = "descripcion";
-	static final String PRECIOUNI = "precioUni";
-	static final String MONTODESCU = "montoDescu";
-	static final String VENTANOSUJ = "ventaNoSuj";
-	static final String VENTAEXENTA = "ventaExenta";
-	static final String VENTAGRAVADA = "ventaGravada";
-	static final String IVAITEM = "ivaItem";
-	static final String PSV = "psv";
-	static final String NOGRAVADO = "noGravado";
+	static final String UNIMEDIDA 			= "uniMedida";
+	static final String DESCRIPCION 		= "descripcion";
+	static final String PRECIOUNI 			= "precioUni";
+	static final String MONTODESCU 			= "montoDescu";
+	static final String VENTANOSUJ 			= "ventaNoSuj";
+	static final String VENTAEXENTA 		= "ventaExenta";
+	static final String VENTAGRAVADA 		= "ventaGravada";
+	static final String IVAITEM 			= "ivaItem";
+	static final String PSV 				= "psv";
+	static final String NOGRAVADO 			= "noGravado";
 
     
 								
@@ -227,8 +227,8 @@ public class FacturaFactory implements EDocumentFactory {
 		JSONObject emisorJson = factoryInput.getJSONObject("emisor");
 		try {emisorFactura.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
 		try {emisorFactura.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
-		try {emisorFactura.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
-		try {emisorFactura.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+		try {emisorFactura.setNombre(emisorJson.getString(NOMBRE));} 							catch (Exception e) {errorMessages.append(e);}
+		try {emisorFactura.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
 		try {emisorFactura.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
 		try {emisorFactura.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
 		try {emisorFactura.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}	catch (Exception e) {errorMessages.append(e);}	

@@ -73,26 +73,29 @@ public class EI_CreateInvoice_Retencion_SV extends EI_CreateInvoice_Retencion_SV
 	protected String doIt() throws Exception
 	{	
 		absDirectory = MSysConfig.getValue("EI_PATH");
-		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
-		
-		
+		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());		
 		List<MLCOInvoiceWithholding> invoiceWithholdings = new Query(getCtx(), MLCOInvoiceWithholding.Table_Name, 
 				" C_Invoice_ID=?", get_TrxName())
 				.setParameters(getInvoiceId())
 				.list();
 		Boolean existsRetencion = false;
-		existsRetencion = !invoiceWithholdings.isEmpty();
-		
-		if (!existsRetencion)
-			return "No hay retenciones en este Credito Fiscal";
+		existsRetencion = !invoiceWithholdings.isEmpty();		
+		if (!existsRetencion) {
+			System.out.println("No hay retenciones en este Credito Fiscal " + invoice.getDocumentNo());
+			return "";
+		}			
 		System.out.println("Process EI_CreateInvoice_Retencion_SV : Started with Invoice " + invoice.getDocumentNo());
 																					   
 		
 		int orgID = invoice.getAD_Org_ID();
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
-		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		Integer id = invoice.get_ID();
-		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
+		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String suffix = invoice.getC_DocType().getDefiniteSequence().getSuffix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		documentno = documentno.replace(suffix, "");
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		String duns = orgInfo.getDUNS().replace("-", "");
 		Retencion comprobanteRetencion   = new Retencion();
 		numeroControl = "DTE-" + comprobanteRetencion.getIdentificacion().getTipoDte()
@@ -244,7 +247,7 @@ public class EI_CreateInvoice_Retencion_SV extends EI_CreateInvoice_Retencion_SV
 		}
 		receptor.setTipoDocumento(partner.getE_Recipient_Identification().getValue());
 		receptor.setNumDocumento(partner.getTaxID().replace("-", ""));
-		receptor.setNrc(StringUtils.leftPad(partner.getDUNS().trim().replace("-", ""), 8,"0"));
+		receptor.setNrc(partner.getDUNS().trim().replace("-", ""));
 		receptor.setNombre(partner.getName());
 		receptor.setCodActividad(partner.getE_Activity().getValue());
 		receptor.setDescActividad(partner.getE_Activity().getName());

@@ -47,6 +47,7 @@ public class Resumen {
 	 */
 public Resumen() {
 	this.pagos = new ArrayList<PagosItem>();
+	this.tributos = new ArrayList<TributosItem>();
 }
 
 /**

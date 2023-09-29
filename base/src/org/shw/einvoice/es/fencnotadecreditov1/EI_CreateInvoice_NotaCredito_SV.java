@@ -46,6 +46,7 @@ import org.compiere.model.MSysConfig;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.Extension;
@@ -94,7 +95,11 @@ public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredit
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		Integer id = invoice.get_ID();
-		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String suffix = invoice.getC_DocType().getDefiniteSequence().getSuffix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		documentno = documentno.replace(suffix, "");
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		//final String PATTERN = "^DTE-03-[A-Z0-9]{8}-[0-9]{15}$";	
 		String duns = orgInfo.getDUNS().replace("-", "");
 		//String test = String.format("%8s", duns).replace(' ', '0');
@@ -197,14 +202,24 @@ public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredit
 	}
 
 	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
-		
+		Boolean inContigencia = false;
+		int tipoModelo = 1;
+		int tipoOperacion = 1;
+		if (TimeUtil.getDaysBetween(invoice.getDateAcct(), TimeUtil.getDay(0))>=3) {
+			inContigencia = true;
+			tipoModelo = 2;
+			tipoOperacion = 2;	
+			identificacion.setMotivoContin("Contigencia por fecha de factura");	
+			identificacion.setTipoContingencia(5);
+		}
+
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);
-		identificacion.setTipoModelo(1);
-		identificacion.setTipoOperacion(1);
-		
+		identificacion.setTipoModelo(tipoModelo);
+		identificacion.setTipoOperacion(tipoOperacion);
+
 		String fecha = invoice.getDateAcct().toString().substring(0, 10);
-		  
+
 		identificacion.setFecEmi(fecha);
 		identificacion.setHorEmi("00:00:00");
 		identificacion.setTipoMoneda("USD");
@@ -238,9 +253,10 @@ public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredit
 			return;
 		}
 		receptor.setNit(partner.getTaxID().replace("-", ""));
-		receptor.setNrc(StringUtils.leftPad(partner.getDUNS().trim().replace("-", ""), 8,"0"));
+		receptor.setNrc(partner.getDUNS().trim().replace("-", ""));
 		receptor.setNombre(partner.getName());
 		receptor.setCodActividad(partner.getE_Activity().getValue());
+		
 		receptor.setDescActividad(partner.getE_Activity().getName());
 		String departamento = "";
 		String municipio = "";
@@ -357,7 +373,10 @@ public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredit
 	
 	private void fillCuerpoDocumento(NotaDeCredito comprobanteNotaCredito, MInvoice invoice) {
 		int i = 0;
-		for (MInvoiceLine invoiceLine:invoice.getLines()) {    
+		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
+			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
+				continue;
+
 			i++;
 			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
 			if (invoiceLine.getRef_InvoiceLine_ID()>0) {

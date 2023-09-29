@@ -44,6 +44,7 @@ import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.Emisor;
@@ -92,14 +93,19 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		invoiceTaxes = new Query(getCtx() , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , get_TrxName())
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
+
+		FacturaElectronica facturaElectronica   = new FacturaElectronica();
 		int orgID = invoice.getAD_Org_ID();
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		Integer id = invoice.get_ID();
-		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		int position = documentno.indexOf("_");
+		documentno = documentno.substring(0,position);
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		String duns = orgInfo.getDUNS().replace("-", "");
 		
-		FacturaElectronica facturaElectronica   = new FacturaElectronica();
 		numeroControl = "DTE-" + facturaElectronica.getIdentificacion().getTipoDte()
 				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 	    //final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
@@ -184,11 +190,22 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 
 	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
 
+		Boolean inContigencia = false;
+		int tipoModelo = 1;
+		int tipoOperacion = 1;
+		if (TimeUtil.getDaysBetween(invoice.getDateAcct(), TimeUtil.getDay(0))>=3) {
+			inContigencia = true;
+			tipoModelo = 2;
+			tipoOperacion = 2;	
+			identificacion.setMotivoContin("Contigencia por fecha de factura");	
+			identificacion.setTipoContingencia(5);
+		}
+		
 		System.out.println("Start fillIdentificacion");
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);
-		identificacion.setTipoModelo(1);
-		identificacion.setTipoOperacion(1);
+		identificacion.setTipoModelo(tipoModelo);
+		identificacion.setTipoOperacion(tipoOperacion);
 		
 		String fecha = invoice.getDateAcct().toString().substring(0, 10);
 		  
@@ -248,7 +265,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		}
 		Direccion direccion = new Direccion(departamento, municipio, complemento);
 		receptor.setDireccion(direccion);
-		receptor.setTelefono("79309099");
+		receptor.setTelefono(partner.getPhone());
 		receptor.setCorreo(partner.get_ValueAsString("EMail"));	
 		System.out.println("fillemisor Finished");
 
@@ -299,6 +316,9 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
 				TotalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();
+				TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
+						invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
+				resumen.getTributos().add(tributosItem);
 			}
 
 		}
@@ -323,9 +343,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		resumen.setReteRenta(Env.ZERO);
 		resumen.setTotalIva(totalIVA);
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
-					invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
-			resumen.getTributos().add(tributosItem);
+			
 			}
 		System.out.println("fillResumenr Finished");
 	}
@@ -349,6 +367,8 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	private void fillCuerpoDocumento(FacturaElectronica facturaElectronica, MInvoice invoice) {
 		int i = 0;
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
+			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
+				continue;
 			i++;
 			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
 

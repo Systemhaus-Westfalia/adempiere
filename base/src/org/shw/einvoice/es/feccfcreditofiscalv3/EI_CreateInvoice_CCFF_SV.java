@@ -39,10 +39,12 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
+import org.compiere.model.MSequence;
 import org.compiere.model.MSysConfig;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.Emisor;
@@ -99,7 +101,11 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		Integer id = invoice.get_ID();
-		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String suffix = invoice.getC_DocType().getDefiniteSequence().getSuffix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		documentno = documentno.replace(suffix, "");
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		String duns = orgInfo.getDUNS().replace("-", "");
 		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();
 		numeroControl = "DTE-" + comprobanteCreditoFiscal.getIdentificacion().getTipoDte()
@@ -184,11 +190,21 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	}
 
 	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
-		
+		Boolean inContigencia = false;
+		int tipoModelo = 1;
+		int tipoOperacion = 1;
+		if (TimeUtil.getDaysBetween(invoice.getDateAcct(), TimeUtil.getDay(0))>=3) {
+			inContigencia = true;
+			tipoModelo = 2;
+			tipoOperacion = 2;	
+			identificacion.setMotivoContin("Contigencia por fecha de factura");	
+			identificacion.setTipoContingencia(5);
+		}
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);
-		identificacion.setTipoModelo(1);
-		identificacion.setTipoOperacion(1);
+		
+		identificacion.setTipoModelo(tipoModelo);
+		identificacion.setTipoOperacion(tipoOperacion);		
 		
 		String fecha = invoice.getDateAcct().toString().substring(0, 10);
 		  
@@ -225,7 +241,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			return;
 		}
 		receptor.setNit(partner.getTaxID().replace("-", ""));
-		receptor.setNrc(StringUtils.leftPad(partner.getDUNS().trim().replace("-", ""), 8,"0"));
+		//receptor.setNrc(StringUtils.leftPad(partner.getDUNS().trim().replace("-", ""), 8,"0"));
+		receptor.setNrc(partner.getDUNS().trim().replace("-", ""));
 		receptor.setNombre(partner.getName());
 		receptor.setCodActividad(partner.getE_Activity().getValue());
 		receptor.setDescActividad(partner.getE_Activity().getName());
@@ -242,7 +259,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		}
 		Direccion direccion = new Direccion(departamento, municipio, complemento);
 		receptor.setDireccion(direccion);
-		receptor.setTelefono("79309099");
+		receptor.setTelefono(partner.getPhone());
 		receptor.setCorreo(partner.get_ValueAsString("EMail"));		
 	}
 	
@@ -259,11 +276,13 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	private void fillCuerpoDocumento(ComprobanteCreditoFiscal comprobanteCreditoFiscal, MInvoice invoice) {
 		int i = 0;
 		for (MInvoiceLine invoiceLine:invoice.getLines()) {	
+			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
+				continue;
 			i++;
-			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );		
-    		int numItem = invoiceLine.getLine();
+			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
     		int tipoItem = 2;
-    		String numeroDocumento = numeroControl;
+    		
+    		
     		BigDecimal cantidad = invoiceLine.getQtyInvoiced();
     		String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
     		//String codTributo = "20";
@@ -310,8 +329,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		BigDecimal IvaPerci1 = Env.ZERO;
 		BigDecimal IvaRete1 = Env.ZERO;
 		BigDecimal totalIVA = Env.ZERO;
+		
 
-		int CondicionOperacion =2;
 		List<PagosItem> pagosItems = new ArrayList<PagosItem>();
 		PagosItem pagoitem = new PagosItem("05",
 				zero, 
@@ -321,9 +340,12 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		pagosItems.add(pagoitem);
 		resumen.setPagos(pagosItems);
 
-		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
-		BigDecimal SaldoFavor = Env.ZERO;
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+			if (invoiceTax.getC_Tax().getC_TaxCategory().getName().equals("Cuenta ajena"))
+				continue;
+			TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
+					invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
+			resumen.getTributos().add(tributosItem);
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				TotalNoSuj = invoiceTax.getTaxBaseAmt();
 			}
@@ -335,7 +357,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			}
 
 		}
-
+		BigDecimal grandtotal = TotalGravada.add(TotalNoSuj).add(TotalExenta).add(totalIVA);
+		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), grandtotal.setScale(2).toString());		
 		resumen.setTotalNoSuj(TotalNoSuj);
 		resumen.setTotalExenta(TotalExenta);
 		resumen.setTotalGravada(TotalGravada);
@@ -347,19 +370,14 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		resumen.setSubTotal(TotalGravada.add(TotalNoSuj).add(TotalExenta));
 		resumen.setIvaPerci1(IvaPerci1);
 		resumen.setIvaRete1(IvaRete1);
-		resumen.setMontoTotalOperacion(invoice.getGrandTotal());
+		resumen.setMontoTotalOperacion(grandtotal);
 		resumen.setTotalNoGravado(TotalExenta.add(TotalNoSuj));
 		resumen.setTotalPagar(invoice.getGrandTotal());
 		resumen.setTotalLetras(TotalLetras);
 		resumen.setSaldoFavor(Env.ZERO);
-		resumen.setCondicionOperacion(1);
+		resumen.setCondicionOperacion(2);
 		resumen.setTotalDescu(Env.ZERO);
 		resumen.setReteRenta(Env.ZERO);
-		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
-					invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
-			resumen.getTributos().add(tributosItem);
-		}
 	}
 	
 	private void fillExtension(Extension extension, MInvoice invoice) {

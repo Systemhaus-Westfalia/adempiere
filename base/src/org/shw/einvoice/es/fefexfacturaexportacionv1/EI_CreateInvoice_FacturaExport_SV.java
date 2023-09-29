@@ -42,6 +42,7 @@ import org.compiere.model.MSysConfig;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.PagosItem;
 import org.shw.einvoice.es.util.pojo.TributosItem;
@@ -93,7 +94,11 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		Integer id = invoice.get_ID();
-		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String suffix = invoice.getC_DocType().getDefiniteSequence().getSuffix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		documentno = documentno.replace(suffix, "");
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		String duns = orgInfo.getDUNS().replace("-", "");
 		FacturaExportacion facturaExportacion = new FacturaExportacion();
 		numeroControl = "DTE-" + facturaExportacion.getIdentificacion().getTipoDte()
@@ -181,12 +186,22 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 
 
 	private void fillIdentification(Identificacion identificacion, MInvoice invoice) {
-
+		Boolean inContigencia = false;
+		int tipoModelo = 1;
+		int tipoOperacion = 1;
+		if (TimeUtil.getDaysBetween(invoice.getDateAcct(), TimeUtil.getDay(0))>=3) {
+			inContigencia = true;
+			tipoModelo = 2;
+			tipoOperacion = 2;	
+			identificacion.setMotivoContigencia("Contigencia por fecha de factura");	
+			identificacion.setTipoContingencia(5);
+		}
+		
     	System.out.println("Start fillIdentification");
 		identificacion.setNumeroControl(numeroControl);
 		identificacion.setCodigoGeneracion(codigoGeneracion);
-		identificacion.setTipoModelo(1);
-		identificacion.setTipoOperacion(1);
+		identificacion.setTipoModelo(tipoModelo);
+		identificacion.setTipoOperacion(tipoOperacion);
 
 		String fecha = invoice.getDateAcct().toString().substring(0, 10);
 
@@ -248,7 +263,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		}
 			//receptor.setNumDocumento(replace(partner.getTaxID(), "-", ""));
 		else
-			receptor.setNumDocumento(partner.getDUNS());
+			receptor.setNumDocumento(partner.getDUNS().trim().replace("-", ""));
 		receptor.setNombreComercial(partner.getName());
 		receptor.setDescActividad(partner.getE_Activity().getName());
 		receptor.setTipoPersona(Integer.valueOf(partner.getE_BPType().getValue()));
@@ -312,7 +327,9 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 	private void fillCuerpoDocumento(FacturaExportacion facturaExportacion, MInvoice invoice) {
 		int i = 0;
 		//Durch InvoiceZeilen laufen
-		for (MInvoiceLine invoiceLine:invoice.getLines()) {
+		for (MInvoiceLine invoiceLine:invoice.getLines()) {						
+			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
+				continue;
 			i++;
 	    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
 			int numItem = invoiceLine.getLine();

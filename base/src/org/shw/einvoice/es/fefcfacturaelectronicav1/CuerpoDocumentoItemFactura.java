@@ -487,7 +487,7 @@ public class CuerpoDocumentoItemFactura implements CuerpoDocumentoItem {
 	 */
 	@Override
 	public String getNumDocumento() {
-		throw new UnsupportedOperationException("In Document Factura calling the method CuerpoDocumentoItem.getNumDocumento() is not allowed");
+		return null;
 	}
 
 
@@ -505,7 +505,7 @@ public class CuerpoDocumentoItemFactura implements CuerpoDocumentoItem {
 	 */
 	@Override
 	public String getFechaEmision() {
-		throw new UnsupportedOperationException("In Document Factura calling the method CuerpoDocumentoItem.getFechaEmision() is not allowed");
+		return null;
 	}
 
 
@@ -523,7 +523,7 @@ public class CuerpoDocumentoItemFactura implements CuerpoDocumentoItem {
 	 */
 	@Override
 	public BigDecimal getMontoSujetoGrav() {
-		throw new UnsupportedOperationException("In Document Factura calling the method CuerpoDocumentoItem.getMontoSujetoGrav() is not allowed");
+		return null;
 	}
 
 
@@ -541,7 +541,7 @@ public class CuerpoDocumentoItemFactura implements CuerpoDocumentoItem {
 	 */
 	@Override
 	public String getCodigoRetencionMH() {
-		throw new UnsupportedOperationException("In Document Factura calling the method CuerpoDocumentoItem.getCodigoRetencionMH() is not allowed");
+		return null;
 	}
 
 
@@ -559,7 +559,7 @@ public class CuerpoDocumentoItemFactura implements CuerpoDocumentoItem {
 	 */
 	@Override
 	public BigDecimal getIvaRetenido() {
-		throw new UnsupportedOperationException("In Document Factura calling the method CuerpoDocumentoItem.getIvaRetenido() is not allowed");
+		return null;
 	}
 
 
@@ -577,7 +577,7 @@ public class CuerpoDocumentoItemFactura implements CuerpoDocumentoItem {
 	 */
 	@Override
 	public String getTipoDte() {
-		throw new UnsupportedOperationException("In Document Factura calling the method CuerpoDocumentoItem.getTipoDte() is not allowed");
+		return null;
 	}
 
 
@@ -595,7 +595,7 @@ public class CuerpoDocumentoItemFactura implements CuerpoDocumentoItem {
 	 */
 	@Override
 	public int getTipoDoc() {
-		throw new UnsupportedOperationException("In Document Factura calling the method CuerpoDocumentoItem.getTipoDoc() is not allowed");
+		return 0;
 	}
 
 

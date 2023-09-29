@@ -215,7 +215,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		}		
 		
 		// In case there is no address
-		if (departamento.isEmpty()) {
+		if (departamento == null) {
 			jsonDireccion.put(EDocumentUtils.DEPARTAMENTO, departamento);
 			jsonDireccion.put(EDocumentUtils.MUNICIPIO, municipio);
 			jsonDireccion.put(EDocumentUtils.COMPLEMENTO, complemento);
@@ -327,7 +327,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			jsonCuerpoDocumentoItem.put(EDocumentUtils.CODIGOTRIBUTO, "");  // String codTributo = "20";
 			
 			JSONArray jsonTributosArray = new JSONArray();
-			jsonCuerpoDocumentoArray.put(jsonTributosArray); //tributosItems.add("20");
+			jsonCuerpoDocumentoItem. put( "tributos", jsonTributosArray); //tributosItems.add("20");
 			
 			jsonCuerpoDocumentoItem.put(EDocumentUtils.UNIMEDIDA, 1);
 			jsonCuerpoDocumentoItem.put(EDocumentUtils.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
@@ -348,7 +348,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		jsonCuerpoDocumento.put("cuerpoDocumento", jsonCuerpoDocumentoArray);
 		System.out.println("Finish collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		
-		return null;
+		return jsonCuerpoDocumento;
 	}
   
 

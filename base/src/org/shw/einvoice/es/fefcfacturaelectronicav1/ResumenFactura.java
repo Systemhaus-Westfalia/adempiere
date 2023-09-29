@@ -484,7 +484,7 @@ public String validateValues() {
 	 */
 	@Override
 	public BigDecimal getIvaPerci1() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getIvaPerci1() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -498,7 +498,7 @@ public String validateValues() {
 	 */
 	@Override
 	public BigDecimal getTotalSujetoRetencion() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getTotalSujetoRetencion() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -512,7 +512,7 @@ public String validateValues() {
 	 */
 	@Override
 	public BigDecimal getTotalIVAretenido() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getTotalIVAretenido() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -526,7 +526,7 @@ public String validateValues() {
 	 */
 	@Override
 	public String getTotalIVAretenidoLetras() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getTotalIVAretenidoLetras() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -540,7 +540,7 @@ public String validateValues() {
 	 */
 	@Override
 	public BigDecimal getDescuento() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getDescuento() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -554,7 +554,7 @@ public String validateValues() {
 	 */
 	@Override
 	public BigDecimal getSeguro() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getSeguro() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -568,7 +568,7 @@ public String validateValues() {
 	 */
 	@Override
 	public BigDecimal getFlete() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getFlete() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -582,7 +582,7 @@ public String validateValues() {
 	 */
 	@Override
 	public String getCodIncoterms() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getCodIncoterms() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -596,7 +596,7 @@ public String validateValues() {
 	 */
 	@Override
 	public String getDescIncoterms() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getDescIncoterms() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -610,7 +610,7 @@ public String validateValues() {
 	 */
 	@Override
 	public String getObservaciones() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getObservaciones() is not allowed");
+		return null;
 	}
 	/**
 	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
@@ -625,7 +625,7 @@ public String validateValues() {
 	 */
 	@Override
 	public List< org.shw.einvoice.es.util.pojo.TributosItem> getTributos() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.getTributos() is not allowed");
+		return null;
 	}
 
 	/**

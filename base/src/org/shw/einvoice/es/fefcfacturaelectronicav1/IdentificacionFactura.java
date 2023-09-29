@@ -347,7 +347,7 @@ public class IdentificacionFactura implements Identificacion {
 	 */
 	@Override
 	public String getFecAnula() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.getFecAnula() is not allowed");
+		return null;
 	}
 
 	/**
@@ -363,7 +363,7 @@ public class IdentificacionFactura implements Identificacion {
 	 */
 	@Override
 	public String getHorAnula() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.getHorAnula() is not allowed");
+		return null;
 	}
 
 	/**
@@ -379,7 +379,7 @@ public class IdentificacionFactura implements Identificacion {
 	 */
 	@Override
 	public String getMotivoContigencia() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.getMotivoContigencia() is not allowed");
+		return null;
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class IdentificacionFactura implements Identificacion {
 	 */
 	@Override
 	public String getMotivoContingencia() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.getMotivoContingencia() is not allowed");
+		return null;
 	}
 	
 	/**

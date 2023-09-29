@@ -261,12 +261,11 @@ public class FacturaFactory implements EDocumentFactory {
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFactura)
 		List<CuerpoDocumentoItemFactura> cuerpoDocumentoItemFactura = new ArrayList<CuerpoDocumentoItemFactura>();
 		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFactura.add((CuerpoDocumentoItemFactura) e) );
-
-		JSONArray cuerpoDocumentoItemsJson = factoryInput.getJSONArray("cuerpoDocumento");
-
-		for (int i=0; i< cuerpoDocumentoItemsJson.length(); i++) {
-			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoItemsJson.getJSONObject(i);		
-
+		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject("cuerpoDocumento");
+		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray("cuerpoDocumento");
+	
+		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) { 
+			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
 			CuerpoDocumentoItemFactura newCuerpoDocumentoItemFactura = new CuerpoDocumentoItemFactura();
 			try {newCuerpoDocumentoItemFactura.setNumItem(cuerpoDocumentoItemJson.getInt(EDocumentUtils.NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
 			try {newCuerpoDocumentoItemFactura.setTipoItem(cuerpoDocumentoItemJson.getInt(EDocumentUtils.TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
@@ -321,7 +320,7 @@ public class FacturaFactory implements EDocumentFactory {
 		try {resumenFactura.setReteRenta(resumenJson.getBigDecimal(EDocumentUtils.RETERENTA));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumenFactura.setTotalIva(resumenJson.getBigDecimal(EDocumentUtils.TOTALIVA));} 						catch (Exception e) {errorMessages.append(e);}
 
-		JSONArray pagosItemsJson = factoryInput.getJSONArray("pagos");
+		JSONArray pagosItemsJson = resumenJson.getJSONArray("pagos");
 		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
 
 		PagosItem newPagosItem = new PagosItem();

@@ -290,7 +290,7 @@ public class ReceptorFactura implements Receptor {
 	 */
 	@Override
 	public String getNit() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getNit() is not allowed");
+		return null;
 	}
 
 	/**
@@ -306,7 +306,7 @@ public class ReceptorFactura implements Receptor {
 	 */
 	@Override
 	public String getNombreComercial() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getNombreComercial() is not allowed");
+		return null;
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class ReceptorFactura implements Receptor {
 	 */
 	@Override
 	public String getNombrePais() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getNombrePais() is not allowed");
+		return null;
 	}
 
 	/**
@@ -338,7 +338,7 @@ public class ReceptorFactura implements Receptor {
 	 */
 	@Override
 	public String getCodPais() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getCodPais() is not allowed");
+		return null;
 	}
 
 	/**
@@ -354,7 +354,7 @@ public class ReceptorFactura implements Receptor {
 	 */
 	@Override
 	public String getComplemento() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getComplemento() is not allowed");
+		return null;
 	}
 
 	/**
@@ -370,7 +370,7 @@ public class ReceptorFactura implements Receptor {
 	 */
 	@Override
 	public int getTipoPersona() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getTipoPersona() is not allowed");
+		return 0;
 	}
 
 	/**

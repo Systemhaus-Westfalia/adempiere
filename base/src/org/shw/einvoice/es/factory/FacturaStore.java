@@ -17,7 +17,7 @@ public class FacturaStore extends EDocumentStore {
 	@Override
 	public String createJsonString() throws Exception {		
     	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsString = objectMapper.writeValueAsString(factura);
+    	String facturaAsString = objectMapper.writeValueAsString((Factura)factura);
         JsonNode facturaAsJsonNode = objectMapper.readTree(facturaAsString);        
         
         deleteJsonNOde(facturaAsJsonNode.path("documentoRelacionado"));
@@ -27,6 +27,8 @@ public class FacturaStore extends EDocumentStore {
         deleteJsonNOde(facturaAsJsonNode.path("apendice"));
         deleteJsonNOde(facturaAsJsonNode.path("documento"));
         deleteJsonNOde(facturaAsJsonNode.path("motivo"));
+
+        deleteJsonNOde(facturaAsJsonNode.path("errorMessages"));
 
         String finalFacturaAsString = objectMapper.writeValueAsString(facturaAsJsonNode);
 		return finalFacturaAsString;

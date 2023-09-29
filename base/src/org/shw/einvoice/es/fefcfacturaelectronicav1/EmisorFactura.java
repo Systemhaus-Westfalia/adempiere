@@ -410,7 +410,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public String getNomEstablecimiento() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getNomEstablecimiento() is not allowed");
+		return null;
 	}
 
 	/**
@@ -426,7 +426,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public String getCodigoMH() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getCodigoMH() is not allowed");
+		return null;
 	}
 
 	/**
@@ -442,7 +442,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public String getCodigo() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getCodigo() is not allowed");
+		return null;
 	}
 
 	/**
@@ -458,7 +458,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public String getPuntoVentaMH() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getPuntoVentaMH() is not allowed");
+		return null;
 	}
 
 	/**
@@ -474,7 +474,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public String getPuntoVenta() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getPuntoVenta() is not allowed");
+		return null;
 	}
 
 	/**
@@ -490,7 +490,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public int getTipoItemExpor() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getTipoItemExpor() is not allowed");
+		return 0;
 	}
 
 	/**
@@ -506,7 +506,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public String getRecintoFiscal() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getRecintoFiscal() is not allowed");
+		return null;
 	}
 
 	/**
@@ -522,7 +522,7 @@ public class EmisorFactura implements Emisor {
 	 */
 	@Override
 	public String getRegimen() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Emisor.getRegimen() is not allowed");
+		return null;
 	}
 
 	/**

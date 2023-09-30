@@ -22,6 +22,19 @@ import org.compiere.model.MSysConfig;
 public class EDocumentUtils {
 	public static String ABSDIRECTORY = MSysConfig.getValue("EI_PATH");	
 	
+	public static final String IDENTIFICACION 		= "identificacion";
+	public static final String EMISOR 				= "emisor";
+	public static final String RESUMEN 				= "resumen";
+	public static final String CUERPODOCUMENTO 		= "cuerpoDocumento";
+	public static final String DOCUMENTORELACIONADO = "documentoRelacionado";
+	public static final String OTROSDOCUMENTOS 		= "otrosDocumentos";
+	public static final String RECEPTOR 			= "receptor";
+	public static final String VENTATERCERO 		= "ventaTercero";        
+	public static final String EXTENSION 			= "extension";
+	public static final String APENDICE 			= "apendice";
+	public static final String DOCUMENTO 			= "documento";
+	public static final String MOTIVO 				= "motivo";
+	
 	public static final String NUMEROCONTROL 		=  "numeroControl";
 	public static final String CODIGOGENERACION 	=  "codigoGeneracion";
 	public static final String TIPOMODELO 			=  "tipoModelo";
@@ -86,6 +99,11 @@ public class EDocumentUtils {
 	public static final String REFERENCIA 			= "referencia";
 	public static final String PLAZO 				= "plazo";
 	public static final String PERIODO 				= "periodo";
+	public static final String TRIBUTOS				= "tributos";
+	public static final String PAGOS				= "pagos";
+	public static final String DIRECCION			= "direccion";
+	
+	public static final String ERRORMESSAGES 		= "errorMessages";
 
 	static public boolean writeToFile (String json, MInvoice invoice, String directory)
 	{

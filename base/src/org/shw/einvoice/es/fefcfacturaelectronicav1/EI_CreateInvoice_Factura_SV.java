@@ -115,11 +115,11 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	private JSONObject generateJSONInputData(MInvoice invoice) {
 		JSONObject factoryInput = new JSONObject();  // Will contain data passed to factory
 
-		factoryInput.put("identificacion", generateIdentificationInputData(invoice));
-		factoryInput.put("receptor", generateReceptorInputData(invoice));
-		factoryInput.put("emisor", generateEmisorInputData(invoice));
-		factoryInput.put("resumen", generateResumenInputData(invoice));
-		factoryInput.put("cuerpoDocumento", generateCuerpoDocumentoInputData(invoice));
+		factoryInput.put(EDocumentUtils.IDENTIFICACION, generateIdentificationInputData(invoice));
+		factoryInput.put(EDocumentUtils.RECEPTOR, generateReceptorInputData(invoice));
+		factoryInput.put(EDocumentUtils.EMISOR, generateEmisorInputData(invoice));
+		factoryInput.put(EDocumentUtils.RESUMEN, generateResumenInputData(invoice));
+		factoryInput.put(EDocumentUtils.CUERPODOCUMENTO, generateCuerpoDocumentoInputData(invoice));
 
 		return factoryInput;
 
@@ -164,7 +164,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		jsonDireccion.put(EDocumentUtils.DEPARTAMENTO, orgInfo.getC_Location().getC_City().getC_Region().getValue());
 		jsonDireccion.put(EDocumentUtils.MUNICIPIO, orgInfo.getC_Location().getC_City().getValue());
 		jsonDireccion.put(EDocumentUtils.COMPLEMENTO, orgInfo.getC_Location().getAddress1());
-		jsonObjectEmisor.put("direccion", jsonDireccion);
+		jsonObjectEmisor.put(EDocumentUtils.DIRECCION, jsonDireccion);
 		
 		jsonObjectEmisor.put(EDocumentUtils.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(EDocumentUtils.CORREO, client.getEMail());
@@ -220,7 +220,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			jsonDireccion.put(EDocumentUtils.MUNICIPIO, municipio);
 			jsonDireccion.put(EDocumentUtils.COMPLEMENTO, complemento);
 		}		
-		jsonObjectReceptor.put("direccion", jsonDireccion);
+		jsonObjectReceptor.put(EDocumentUtils.DIRECCION, jsonDireccion);
 		
 		jsonObjectReceptor.put(EDocumentUtils.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(EDocumentUtils.CORREO, partner.get_ValueAsString("EMail"));		
@@ -286,7 +286,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			jsonPago.put(EDocumentUtils.PERIODO, invoice.getC_PaymentTerm().getNetDays());
 		jsonArrayPagos.put(jsonPago);
 
-		jsonObjectResumen.put("pagos", jsonArrayPagos);
+		jsonObjectResumen.put(EDocumentUtils.PAGOS, jsonArrayPagos);
 		
 		System.out.println("Finish collecting JSON data for Resumen");
 		return jsonObjectResumen;
@@ -327,7 +327,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			jsonCuerpoDocumentoItem.put(EDocumentUtils.CODIGOTRIBUTO, "");  // String codTributo = "20";
 			
 			JSONArray jsonTributosArray = new JSONArray();
-			jsonCuerpoDocumentoItem. put( "tributos", jsonTributosArray); //tributosItems.add("20");
+			jsonCuerpoDocumentoItem. put( EDocumentUtils.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
 			
 			jsonCuerpoDocumentoItem.put(EDocumentUtils.UNIMEDIDA, 1);
 			jsonCuerpoDocumentoItem.put(EDocumentUtils.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
@@ -345,7 +345,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 
 		}  
 		
-		jsonCuerpoDocumento.put("cuerpoDocumento", jsonCuerpoDocumentoArray);
+		jsonCuerpoDocumento.put(EDocumentUtils.CUERPODOCUMENTO, jsonCuerpoDocumentoArray);
 		System.out.println("Finish collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		
 		return jsonCuerpoDocumento;

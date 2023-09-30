@@ -311,9 +311,9 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				TotalNoSuj = invoiceTax.getTaxBaseAmt();
 			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00)
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT"))
 				TotalExenta = invoiceTax.getTaxBaseAmt();
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				TotalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();
 				TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
@@ -342,9 +342,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		resumen.setTotalDescu(Env.ZERO);
 		resumen.setReteRenta(Env.ZERO);
 		resumen.setTotalIva(totalIVA);
-		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			
-			}
 		System.out.println("fillResumenr Finished");
 	}
 	

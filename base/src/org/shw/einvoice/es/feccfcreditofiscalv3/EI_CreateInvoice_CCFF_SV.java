@@ -349,9 +349,9 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				TotalNoSuj = invoiceTax.getTaxBaseAmt();
 			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("EXT") )
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT") )
 				TotalExenta = invoiceTax.getTaxBaseAmt();
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("IVA") ) {
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				TotalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();
 			}

@@ -259,8 +259,9 @@ public class FacturaFactory implements EDocumentFactory {
 		System.out.println("Start fillCuerpoDocumento"); 
 		errorMessages.setLength(0);
 		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFactura)
-		List<CuerpoDocumentoItemFactura> cuerpoDocumentoItemFactura = new ArrayList<CuerpoDocumentoItemFactura>();
-		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFactura.add((CuerpoDocumentoItemFactura) e) );
+		//List<CuerpoDocumentoItemFactura> cuerpoDocumentoItemFactura = new ArrayList<CuerpoDocumentoItemFactura>();
+		
+		//cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFactura.add((CuerpoDocumentoItemFactura) e) );
 		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject("cuerpoDocumento");
 		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray("cuerpoDocumento");
 	
@@ -285,7 +286,7 @@ public class FacturaFactory implements EDocumentFactory {
 			try {newCuerpoDocumentoItemFactura.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(EDocumentUtils.NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
 			try {newCuerpoDocumentoItemFactura.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(EDocumentUtils.IVAITEM));} 				catch (Exception e) {errorMessages.append(e);}
 
-			cuerpoDocumentoItemFactura.add(newCuerpoDocumentoItemFactura);						
+			cuerpoDocumento.add(newCuerpoDocumentoItemFactura);						
 		}
 
 		System.out.println("Start fillCuerpoDocumento"); 

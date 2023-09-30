@@ -18,6 +18,8 @@ import org.shw.einvoice.es.util.pojo.VentaTercero;
 
 public abstract class EDocument {
 	public static final String VALIDATION_RESULT_OK = "OK";
+	public static final String METHODNOTALLOWED = "METHODNOTALLOWED";
+	
 	public StringBuffer errorMessages = new StringBuffer();
 	
 	public abstract Identificacion getIdentificacion();

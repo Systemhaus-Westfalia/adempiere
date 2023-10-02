@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.ApendiceItemFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.CuerpoDocumentoItemFacturaExportacion;
@@ -15,27 +16,19 @@ import org.shw.einvoice.es.fefexfacturaexportacionv1.OtrosDocumentosItemFacturaE
 import org.shw.einvoice.es.fefexfacturaexportacionv1.ReceptorFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.ResumenFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.VentaTerceroFacturaExportacion;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
-import org.shw.einvoice.es.util.pojo.Documento;
-import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
-import org.shw.einvoice.es.util.pojo.Emisor;
-import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.Identificacion;
-import org.shw.einvoice.es.util.pojo.Motivo;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
-import org.shw.einvoice.es.util.pojo.Resumen;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
+import org.shw.einvoice.es.util.pojo.EDocument;
+import org.shw.einvoice.es.util.pojo.PagosItem;
 
 
 /**
  * 
  */
 public class FacturaExportacion extends EDocument {
+	
 	static final int OTROSDOCUMENTOS_MAXIMUM_ITEMS = 20;
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 
+	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_RESUMEN_OR_MONTO_IS_NULL  = "Documento: Factura, clase: FacturaExportacion. Validacion falló: valor de 'getResumen() y getMontoTotalOperacion()' no debe ser ='null'";
 	static final String VALIDATION_CORREO_IS_NULL            = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'receptor.correo' no debe ser ='null'";
 	static final String VALIDATION_OTROSDOCUMENTOS_MAXITEMS  = "Documento: Factura de Exportacion, clase: FacturaExportacion. Validacion falló: valor de 'otrosDocumentos' debe contemner entre 1 y " + 
@@ -52,38 +45,24 @@ public class FacturaExportacion extends EDocument {
 	ResumenFacturaExportacion resumen;
 	List<ApendiceItemFacturaExportacion> apendice=null;  // null allowed
 	
-	FacturaExportacionFactory facturaExportacionFactory;  // This must be eliminated from JSON production.
-
 	/**
 	 * No parameters
 	 */
-	@SuppressWarnings("unchecked")
 	public FacturaExportacion() {
-		List<?> tmpList;
-		facturaExportacionFactory = new FacturaExportacionFactory();
 		
-		this.identificacion       = (IdentificacionFacturaExportacion) facturaExportacionFactory.createIdentificacion();
-		this.emisor               = (EmisorFacturaExportacion) facturaExportacionFactory.createEmisor();
-		this.receptor             = (ReceptorFacturaExportacion) facturaExportacionFactory.createReceptor();
-		
-		tmpList = facturaExportacionFactory.createOtrosDocumentos();
-	    this.otrosDocumentos      = (List<OtrosDocumentosItemFacturaExportacion>) tmpList;
-		
-		this.ventaTercero         = (VentaTerceroFacturaExportacion) facturaExportacionFactory.createVentaTercero();
-
-		tmpList = facturaExportacionFactory.createCuerpoDocumento();
-	    this.cuerpoDocumento      = (List<CuerpoDocumentoItemFacturaExportacion>) tmpList;
-				
-		this.resumen              = (ResumenFacturaExportacion) facturaExportacionFactory.createResumen();
-		
-		tmpList = facturaExportacionFactory.createApendice();
-	    this.apendice             = (List<ApendiceItemFacturaExportacion>) tmpList;
+		this.identificacion       = new IdentificacionFacturaExportacion();
+		this.emisor               = new EmisorFacturaExportacion();
+		this.receptor             = new ReceptorFacturaExportacion();
+	    this.otrosDocumentos      = new ArrayList<OtrosDocumentosItemFacturaExportacion>();		
+		this.ventaTercero         = new VentaTerceroFacturaExportacion();
+		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemFacturaExportacion>();
+		this.resumen              = new ResumenFacturaExportacion();
+	    this.apendice             = new ArrayList<ApendiceItemFacturaExportacion>();
 	}
 
 	/**
 	 * Validate the Schema conditions
 	 */
-	@Override
 	public String validateValues() {
 
 		if( (getResumen()==null) || (getResumen().getMontoTotalOperacion()==null) ) {
@@ -110,8 +89,7 @@ public class FacturaExportacion extends EDocument {
 	/**
 	 * @return the identificacion
 	 */
-	@Override
-	public Identificacion getIdentificacion() {
+	public IdentificacionFacturaExportacion getIdentificacion() {
 		return identificacion;
 	}
 
@@ -126,11 +104,21 @@ public class FacturaExportacion extends EDocument {
 	/**
 	 * @param identificacion the (IdentificacionFacturaExportacion) identificacion to set
 	 */
-	@Override
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		StringBuffer errorMessages = new StringBuffer();
-		facturaExportacionFactory.fillIdentification(factoryInput, identificacion );
-		
+		System.out.println("Start FacturaExportacion.fillIdentificacion()"); 
+		errorMessages.setLength(0);
+
+		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
+//		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setCodigoGeneracion(identificationJson.getString(CODIGOGENERACION));} 	catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoModelo(identificationJson.getInt(TIPOMODELO));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoOperacion(identificationJson.getInt(TIPOOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setFecEmi(identificationJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End FacturaExportacion.fillIdentificacion()");
 		return errorMessages;
 	}
 
@@ -138,8 +126,7 @@ public class FacturaExportacion extends EDocument {
 	/**
 	 * @return the emisor
 	 */
-	@Override
-	public Emisor getEmisor() {
+	public EmisorFacturaExportacion getEmisor() {
 		return emisor;
 	}
 
@@ -151,9 +138,28 @@ public class FacturaExportacion extends EDocument {
 		this.emisor = emisor;
 	}
 	
-	@Override
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		errorMessages = facturaExportacionFactory.fillEmisor(factoryInput, emisor);
+		System.out.println("Start FacturaExportacion.fillEmisor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
+		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
+//		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
+//
+//		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
+//		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//
+//		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End FacturaExportacion.fillEmisor()");
 		return errorMessages;
 	}
 
@@ -161,8 +167,7 @@ public class FacturaExportacion extends EDocument {
 	/**
 	 * @return the receptor
 	 */
-	@Override
-	public Receptor getReceptor() {
+	public ReceptorFacturaExportacion getReceptor() {
 		return receptor;
 	}
 
@@ -173,21 +178,22 @@ public class FacturaExportacion extends EDocument {
 		this.receptor = receptor;
 	}
 
-	@Override
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		errorMessages = facturaExportacionFactory.fillReceptor(factoryInput, receptor);
+		System.out.println("Start FacturaExportacion.fillReceptor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
+		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+		
+		System.out.println("End FacturaExportacion.fillReceptor()");
 		return errorMessages;
 	}
 
 	/**
 	 * @return the otrosDocumentos
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
-	    List<?> tempList = (List<OtrosDocumentosItemFacturaExportacion>) this.otrosDocumentos;
-	    List<OtrosDocumentosItem> finalList = (List<OtrosDocumentosItem>)tempList;
-		return finalList;
+	public List<OtrosDocumentosItemFacturaExportacion> getOtrosDocumentos() {
+		return otrosDocumentos;
 	}
 
 
@@ -198,46 +204,11 @@ public class FacturaExportacion extends EDocument {
 		this.otrosDocumentos = otrosDocumentos;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
-		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
-		//      OtrosDocumentosItemFacturaExportacion is a subtype of OtrosDocumentosItem
-		// 		Integer                    is a subtype of Number,
-		//		List<? extends Integer> intList = new ArrayList<>();
-		//		List<? extends Number>  numList = intList;
-		//
-		//		Also possible I (but unsafe)::
-		//		List<?> tmpList = (List<OtrosDocumentosItem>) otrosDocumentos;
-	    //		List<OtrosDocumentosItemFacturaExportacion> otrosDocumentosFacturaExportacion = (List<OtrosDocumentosItemFacturaExportacion>) tmpList;
-		//		
-		//		Also possible II (safe with compiler directive):
-		// 		@SuppressWarnings("unchecked")
-		//		List<? extends OtrosDocumentosItemFacturaExportacion> otrosDocumentosItemFacturaExportacion = new ArrayList<>();
-		//		List<? extends OtrosDocumentosItem>  otrosDocumentosItem = otrosDocumentosItemFacturaExportacion;  // new ArrayList<>(); would be OK
-		//		setOtrosDocumentos((List<OtrosDocumentosItemFacturaExportacion>) otrosDocumentosItem);
-		//
-		//		Also possible III (cast List):
-		// 		Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemFacturaExportacion)
-		//		List<OtrosDocumentosItemFacturaExportacion> otrosDocumentosItemFacturaExportacion= new ArrayList<OtrosDocumentosItemFacturaExportacion>();
-		//		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemFacturaExportacion.add((OtrosDocumentosItemFacturaExportacion) e) );
-		//
-		//		Also possible IV (cast single entry):
-		//  	OtrosDocumentosItemFacturaExportacion xxx = (OtrosDocumentosItemFacturaExportacion) otrosDocumentos.get(1);	
-
-		List<?> tmpList = otrosDocumentos;
-		errorMessages = facturaExportacionFactory.fillOtrosDocumentos(factoryInput, (List<OtrosDocumentosItem>) tmpList);
-		return errorMessages;
-		
-	}
-
 
 	/**
 	 * @return the ventaTercero
 	 */
-	@Override
-	public VentaTercero getVentaTercero() {
+	public VentaTerceroFacturaExportacion getVentaTercero() {
 		return ventaTercero;
 	}
 
@@ -249,22 +220,11 @@ public class FacturaExportacion extends EDocument {
 		this.ventaTercero = ventaTercero;
 	}
 
-	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
-		errorMessages = facturaExportacionFactory.fillVentaTercero(factoryInput, ventaTercero); 
-		return errorMessages;
-	}
-
-
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
-	    List<?> tempList = (List<CuerpoDocumentoItemFacturaExportacion>) this.cuerpoDocumento;
-	    List<CuerpoDocumentoItem> finalList = (List<CuerpoDocumentoItem>)tempList;
-		return finalList;
+	public List<CuerpoDocumentoItemFacturaExportacion> getCuerpoDocumento() {
+		return cuerpoDocumento;
 	}
 
 
@@ -276,48 +236,45 @@ public class FacturaExportacion extends EDocument {
 	}
 
 
-	@SuppressWarnings("unchecked")
-	@Override
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		// TODO Implement actual code
-		
-		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
-		//      CuerpoDocumentoItemFacturaExportacion is a subtype of CuerpoDocumentoItem
-		// 		Integer                    is a subtype of Number,
-		//		List<? extends Integer> intList = new ArrayList<>();
-		//		List<? extends Number>  numList = intList;
-		//
-		//		Also possible I (but unsafe):
-		//		List<?> tmpList = (List<CuerpoDocumentoItem>) cuerpoDocumento;
-	    //		List<CuerpoDocumentoItemFacturaExportacion> cuerpoDocumentoFacturaExportacion = (List<CuerpoDocumentoItemFacturaExportacion>) tmpList;
-		//		
-		//		Also possible II (safe with compiler directive):
-		// 		@SuppressWarnings("unchecked")
-		//		List<? extends CuerpoDocumentoItemFacturaExportacion> cuerpoDocumentoItemFacturaExportacion = new ArrayList<>();
-		//		List<? extends CuerpoDocumentoItem>  cuerpoDocumentoItem = cuerpoDocumentoItemFacturaExportacion;  // new ArrayList<>(); would be OK
-		//		setCuerpoDocumento((List<CuerpoDocumentoItemFacturaExportacion>) cuerpoDocumentoItem);
-		//
-		//		Also possible III (cast List):
-		//		@SuppressWarnings("unchecked")
-		// 		Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFacturaExportacion)
-		//		List<CuerpoDocumentoItemFacturaExportacion> cuerpoDocumentoItemFacturaExportacion= new ArrayList<CuerpoDocumentoItemFacturaExportacion>();
-		//		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemFacturaExportacion.add((CuerpoDocumentoItemFacturaExportacion) e) );
-		//
-		//		Also possible IV (cast single entry):
-		//  	OtrosDocumentosItemFacturaExportacion xxx = (OtrosDocumentosItemFacturaExportacion) otrosDocumentos.get(1);	
+		System.out.println("Start CreditoFiscal.fillCuerpoDocumento()"); 
+		errorMessages.setLength(0);
 
-		List<?> tmpList = cuerpoDocumento;
-		errorMessages = facturaExportacionFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);
+		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
+		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
+	
+		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) { 
+			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
+			CuerpoDocumentoItemFacturaExportacion cuerpoDocumentoItemFacturaExportacion = new CuerpoDocumentoItemFacturaExportacion();
+			try {cuerpoDocumentoItemFacturaExportacion.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setCodTributo(null);} 																	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setTributos(null);} 																		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemFacturaExportacion.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(IVAITEM));} 				catch (Exception e) {errorMessages.append(e);}
+
+			cuerpoDocumento.add(cuerpoDocumentoItemFacturaExportacion);						
+		}
+
+		System.out.println("End CreditoFiscal.fillCuerpoDocumento()"); 
 		return errorMessages;
-		
 	}
 
 	/**
 	 * @return the resumen
 	 */
-	@Override
-	public Resumen getResumen() {
+	public ResumenFacturaExportacion getResumen() {
 		return resumen;
 	}
 
@@ -329,9 +286,44 @@ public class FacturaExportacion extends EDocument {
 		this.resumen = resumen;
 	}
 
-	@Override
 	public StringBuffer fillResumen(JSONObject factoryInput) {
-		errorMessages = facturaExportacionFactory.fillResumen(factoryInput, resumen); 
+		System.out.println("Start FacturaExportacion.fillResumen()"); 
+		errorMessages.setLength(0);		
+		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
+
+//		try {resumen.setTotalNoSuj(resumenJson.getBigDecimal(TOTALNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalExenta(resumenJson.getBigDecimal(TOTALEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSubTotalVentas(resumenJson.getBigDecimal(SUBTOTALVENTAS));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuNoSuj(resumenJson.getBigDecimal(DESCUNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuGravada(resumenJson.getBigDecimal(DESCUGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));} catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setIvaRete1(resumenJson.getBigDecimal(IVARETE1));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalNoGravado(resumenJson.getBigDecimal(TOTALNOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSaldoFavor(resumenJson.getBigDecimal(SALDOFAVOR));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalIva(resumenJson.getBigDecimal(TOTALIVA));} 						catch (Exception e) {errorMessages.append(e);}
+
+		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
+		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
+
+		PagosItem newPagosItem = new PagosItem();
+		try {newPagosItem.setCodigo(pagosItemJson.getString(CODIGO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setMontoPago(pagosItemJson.getBigDecimal(MONTOPAGO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 	catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 			catch (Exception e) {errorMessages.append(e);}
+
+		resumen.getPagos().add(newPagosItem);
+
+		System.out.println("End FacturaExportacion.fillResumen()"); 
 		return errorMessages;
 	}
 
@@ -339,12 +331,8 @@ public class FacturaExportacion extends EDocument {
 	/**
 	 * @return the apendice
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ApendiceItem> getApendice() {
-	    List<?> tempList = (List<ApendiceItemFacturaExportacion>) this.apendice;
-	    List<ApendiceItem> finalList = (List<ApendiceItem>)tempList;
-		return finalList;
+	public List<ApendiceItemFacturaExportacion> getApendice() {
+		return apendice;
 	}
 
 
@@ -354,112 +342,6 @@ public class FacturaExportacion extends EDocument {
 	public void setApendice(List<ApendiceItemFacturaExportacion> apendice) {
 		this.apendice = apendice;
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput) {
-		// TODO Implement actual code
-		
-		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
-		//      CuerpoDocumentoItemFacturaExportacion is a subtype of CuerpoDocumentoItem
-		// 		Integer                    is a subtype of Number,
-		//		List<? extends Integer> intList = new ArrayList<>();
-		//		List<? extends Number>  numList = intList;
-		//
-		//		Also possible I (but unsafe):
-		//		List<?> tmpList = (List<CuerpoDocumentoItem>) cuerpoDocumento;
-	    //		List<CuerpoDocumentoItemFacturaExportacion> cuerpoDocumentoFacturaExportacion = (List<CuerpoDocumentoItemFacturaExportacion>) tmpList;
-		//		
-		//		Also possible II (safe with compiler directive):
-		// 		@SuppressWarnings("unchecked")
-		//		List<? extends ApendiceItemFacturaExportacion> apendiceFacturaExportacion = new ArrayList<>();
-		//		List<? extends ApendiceItem>  apendiceItem = apendiceFacturaExportacion;  // new ArrayList<>(); would be OK
-		//		setApendice((List<ApendiceItemFacturaExportacion>) apendiceItem);
-		//
-		//		Also possible III (cast List):
-		//		Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemFacturaExportacion)
-		//		List<ApendiceItemFacturaExportacion> apendiceItemFacturaExportacion= new ArrayList<ApendiceItemFacturaExportacion>();
-		//		apendice.stream().forEach(e -> apendiceItemFacturaExportacion.add((ApendiceItemFacturaExportacion) e) );
-		//
-		//		Also possible IV (cast single entry):
-		//  	OtrosDocumentosItemFacturaExportacion xxx = (OtrosDocumentosItemFacturaExportacion) otrosDocumentos.get(1);	
-
-		List<?> tmpList = apendice;
-		errorMessages = facturaExportacionFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
-		return errorMessages;
-		
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A DOCUMENTORELACIONADOITEM PROPERTY
-	 */
-	@Override
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer  fillDocumentoRelacionado(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method Identificacion.fillDocumentoRelacionado() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE AN EXTENSION PROPERTY
-	 */
-	@Override
-	public Extension getExtension() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method Identificacion.fillExtension() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A DOCUMENTO PROPERTY
-	 */
-	@Override
-	public Documento getDocumento() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacion.fillDocumento() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A MOTIVO PROPERTY
-	 */
-	@Override
-	public Motivo getMotivo() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Factura Exportacion calling the method FacturaExportacion.fillMotivo() is not allowed");
-	}
-
-
 
 
 	/**

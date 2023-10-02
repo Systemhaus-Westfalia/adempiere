@@ -1,9 +1,9 @@
 package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.Identificacion;  
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;  
 
-public class IdentificacionFactura implements Identificacion {
+public class IdentificacionFactura {
 
 	static final int VERSION              = 1;
 	static final String TIPO_DE_DOCUMENTO = "01";
@@ -41,7 +41,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * Validate the Schema conditions
 	 */
-	@Override
 	public String validateValues() {
 		if(getTipoOperacion()==1) {
 			if (getTipoModelo() != 1) 
@@ -67,14 +66,13 @@ public class IdentificacionFactura implements Identificacion {
 		        return VALIDATION_MOTIVOCONTINGENCIA_IS_NULL;
 		}
 		
-		return VALIDATION_RESULT_OK;
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 
 	/**
 	 * @return the version
 	 */
-	@Override
 	public int getVersion() {
 		return version;
 	}
@@ -82,7 +80,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @param version the version to set
 	 */
-	@Override
 	public void setVersion(int version) {
 		this.version = version;
 	}
@@ -90,7 +87,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the ambiente
 	 */
-	@Override
 	public String getAmbiente() {
 		return ambiente;
 	}
@@ -101,7 +97,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "enum" : ["00", "01"]
 	 */
-	@Override
 	public void setAmbiente(String ambiente) {
 		if (ambiente.compareTo("00")==0 || ambiente.compareTo("01")==0)
 			this.ambiente = ambiente;
@@ -112,7 +107,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the tipoDte
 	 */
-	@Override
 	public String getTipoDte() {
 		return tipoDte;
 	}
@@ -121,7 +115,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @param tipoDte the tipoDte to set
 	 */
-	@Override
 	public void setTipoDte(String tipoDte) {
 		this.tipoDte = tipoDte;
 	}
@@ -130,7 +123,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the numeroControl
 	 */
-	@Override
 	public String getNumeroControl() {
 		return numeroControl;
 	}
@@ -141,7 +133,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^DTE-01-[A-Z0-9]{8}-[0-9]{15}$"
 	 */
-	@Override
 	public void setNumeroControl(String numeroControl) {
 		final String PATTERN = "^DTE-01-[A-Z0-9]{8}-[0-9]{15}$";
 		boolean patternOK = (numeroControl!=null) && Pattern.matches(PATTERN, numeroControl);  
@@ -156,7 +147,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the codigoGeneracion
 	 */
-	@Override
 	public String getCodigoGeneracion() {
 		return codigoGeneracion;
 	}
@@ -164,7 +154,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the tipoContingencia
 	 */
-	@Override
 	public Integer getTipoContingencia() {
 		return tipoContingencia;
 	}
@@ -174,7 +163,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "enum" : [1,2,3,4,5], null
 	 */
-	@Override
 	public void setTipoContingencia(Integer tipoContingencia) {
 		if (tipoContingencia==null || tipoContingencia==1 || tipoContingencia==2 || tipoContingencia==3 || tipoContingencia==4 || tipoContingencia==5)
 			this.tipoContingencia = tipoContingencia;
@@ -192,7 +180,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$"
 	 */
-	@Override
 	public void setCodigoGeneracion(String codigoGeneracion) {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		boolean patternOK = (codigoGeneracion!=null) && Pattern.matches(PATTERN, codigoGeneracion);  
@@ -207,7 +194,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the motivoContin
 	 */
-	@Override
 	public String getMotivoContin() {
 		return motivoContin;
 	}
@@ -218,7 +204,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "minLength" : 5, "maxLength" : 150
 	 */
-	@Override
 	public void setMotivoContin(String motivoContin) {
 		final int MINLENGTH = 5;		
 		final int MAXLENGTH = 150;
@@ -234,7 +219,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the fecEmi
 	 */
-	@Override
 	public String getFecEmi() {
 		return fecEmi;
 	}
@@ -244,7 +228,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * @param fecEmi the fecEmi to set<br>
 	 * null not allowed
 	 */
-	@Override
 	public void setFecEmi(String fecEmi) {
 		if (fecEmi!=null)
 			this.fecEmi = fecEmi;
@@ -256,7 +239,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the horEmi
 	 */
-	@Override
 	public String getHorEmi() {
 		return horEmi;
 	}
@@ -267,7 +249,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]?$"
 	 */
-	@Override
 	public void setHorEmi(String horEmi) {
 		final String PATTERN = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]?$";
 		boolean patternOK = (horEmi!=null) && Pattern.matches(PATTERN, horEmi);  
@@ -282,7 +263,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the tipoMoneda
 	 */
-	@Override
 	public String getTipoMoneda() {
 		return tipoMoneda;
 	}
@@ -291,7 +271,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @param tipoMoneda the tipoMoneda to set
 	 */
-	@Override
 	public void setTipoMoneda(String tipoMoneda) {
 		this.tipoMoneda = tipoMoneda;
 	}
@@ -299,7 +278,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the tipoModelo
 	 */
-	@Override
 	public int getTipoModelo() {
 		return tipoModelo;
 	}
@@ -309,7 +287,6 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "enum" : [1,2]
 	 */
-	@Override
 	public void setTipoModelo(int tipoModelo) {
 		if (tipoModelo==1 || tipoModelo==2)
 			this.tipoModelo = tipoModelo;
@@ -320,7 +297,6 @@ public class IdentificacionFactura implements Identificacion {
 	/**
 	 * @return the tipoOperacion
 	 */
-	@Override
 	public int getTipoOperacion() {
 		return tipoOperacion;
 	}
@@ -330,80 +306,11 @@ public class IdentificacionFactura implements Identificacion {
 	 * The parameter is validated.<br>
 	 * "enum" : [1,2]
 	 */
-	@Override
 	public void setTipoOperacion(int tipoOperacion) {
 		if (tipoOperacion==1 || tipoOperacion==2)
 			this.tipoOperacion = tipoOperacion;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'tipoOperacion' in Factura.Identificacion.setTipoOperacion()");
-	}
-
-
-	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
-	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getFecAnula() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setFecAnula(String fecAnula) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.setFecAnula() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getHorAnula() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setHorAnula(String horAnula) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.setHorAnula() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getMotivoContigencia() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setMotivoContigencia(String motivoContigencia) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.setMotivoContigencia() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getMotivoContingencia() {
-		return null;
-	}
-	
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setMotivoContingencia(String motivoContingencia) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Identificacion.setMotivoContingencia() is not allowed");
 	}
 
 	

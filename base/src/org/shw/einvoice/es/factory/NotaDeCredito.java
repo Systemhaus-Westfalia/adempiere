@@ -5,6 +5,7 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shw.einvoice.es.fencnotadecreditov1.ApendiceItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.CuerpoDocumentoItemNotaDeCredito;
@@ -15,24 +16,14 @@ import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.ReceptorNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.ResumenNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.VentaTerceroNotaDeCredito;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
-import org.shw.einvoice.es.util.pojo.Documento;
-import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
-import org.shw.einvoice.es.util.pojo.Emisor;
-import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.Identificacion;
-import org.shw.einvoice.es.util.pojo.Motivo;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
-import org.shw.einvoice.es.util.pojo.Resumen;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
+import org.shw.einvoice.es.util.pojo.EDocument;
 
 
 /**
  * 
  */
 public class NotaDeCredito extends EDocument {
+	public StringBuffer errorMessages = new StringBuffer();
 
 	IdentificacionNotaDeCredito identificacion;
 	List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionado;
@@ -44,31 +35,19 @@ public class NotaDeCredito extends EDocument {
 	ExtensionNotaDeCredito extension;
 	List<ApendiceItemNotaDeCredito> apendice=null;  // null allowed
 
-	NotaDeCreditoFactory notaDeCreditoFactory;  // This must be eliminated from JSON production.
-
 	/**
 	 * No parameters
 	 */
 	public NotaDeCredito() {
-		List<?> tmpList;
-		notaDeCreditoFactory      = new NotaDeCreditoFactory();
-		this.identificacion       = (IdentificacionNotaDeCredito) notaDeCreditoFactory.createIdentificacion();
-		
-	    tmpList = (List<DocumentoRelacionadoItem>) notaDeCreditoFactory.createDocumentoRelacionado();
-	    this.documentoRelacionado = (List<DocumentoRelacionadoItemNotaDeCredito>) tmpList;
-
-		this.emisor               = (EmisorNotaDeCredito) notaDeCreditoFactory.createEmisor();
-		this.receptor             = (ReceptorNotaDeCredito) notaDeCreditoFactory.createReceptor();
-		this.ventaTercero         = (VentaTerceroNotaDeCredito) notaDeCreditoFactory.createVentaTercero();  // must be eliminated from JSON
-
-	    tmpList = (List<CuerpoDocumentoItem>) notaDeCreditoFactory.createCuerpoDocumento();
-	    this.cuerpoDocumento      = (List<CuerpoDocumentoItemNotaDeCredito>) tmpList;
-
-		this.resumen              = (ResumenNotaDeCredito) notaDeCreditoFactory.createResumen();
-		this.extension            = (ExtensionNotaDeCredito) notaDeCreditoFactory.createExtension();
-
-	    tmpList = (List<ApendiceItem>) notaDeCreditoFactory.createApendice();
-	    this.apendice             = (List<ApendiceItemNotaDeCredito>) tmpList;								  // must be eliminated from JSON
+		this.identificacion       = new IdentificacionNotaDeCredito();
+	    this.documentoRelacionado      = new ArrayList<DocumentoRelacionadoItemNotaDeCredito>();
+		this.emisor               = new EmisorNotaDeCredito();
+		this.receptor             = new ReceptorNotaDeCredito();
+		this.ventaTercero         = new VentaTerceroNotaDeCredito();
+	    this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemNotaDeCredito>();
+		this.resumen              = new ResumenNotaDeCredito();
+		this.extension            = new ExtensionNotaDeCredito();
+	    this.apendice      = new ArrayList<ApendiceItemNotaDeCredito>();
 	}
 	
 	/**
@@ -78,258 +57,250 @@ public class NotaDeCredito extends EDocument {
 	/**
 	 * @return the identificacion
 	 */
-	@Override
-	public Identificacion getIdentificacion() {
+	public IdentificacionNotaDeCredito getIdentificacion() {
 		return identificacion;
 	}
 
-	public void setIdentificacion(Identificacion identificacion) {
-		this.identificacion = (IdentificacionNotaDeCredito) identificacion;
+	public void setIdentificacion(IdentificacionNotaDeCredito identificacion) {
+		this.identificacion = identificacion;
 	}
 
 
 	/**
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
-	@Override
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		errorMessages = notaDeCreditoFactory.fillIdentification(factoryInput, identificacion );
-		
+		System.out.println("Start NotaDeCredito.fillIdentificacion()"); 
+		errorMessages.setLength(0);
+
+		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
+//		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setCodigoGeneracion(identificationJson.getString(CODIGOGENERACION));} 	catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoModelo(identificationJson.getInt(TIPOMODELO));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoOperacion(identificationJson.getInt(TIPOOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setFecEmi(identificationJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End NotaDeCredito.fillIdentificacion()");
 		return errorMessages;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
-		List<?> tempList = (List<DocumentoRelacionadoItemNotaDeCredito>) this.documentoRelacionado;
-		List<DocumentoRelacionadoItem> finalList = (List<DocumentoRelacionadoItem>)tempList;
-		return finalList;
+	public List<DocumentoRelacionadoItemNotaDeCredito> getDocumentoRelacionado() {
+		return documentoRelacionado;
 	}
 
-	public void setDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
-		List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionadoItemNotaDeCredito = new ArrayList<DocumentoRelacionadoItemNotaDeCredito>();
-		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemNotaDeCredito.add((DocumentoRelacionadoItemNotaDeCredito) e) );
-
-		this.documentoRelacionado = documentoRelacionadoItemNotaDeCredito;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
-		List<?> tmpList = documentoRelacionado;
-		errorMessages = notaDeCreditoFactory.fillDocumentoRelacionado(factoryInput, (List<DocumentoRelacionadoItem>) tmpList);		
-		return errorMessages;
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionado) {
+		this.documentoRelacionado = documentoRelacionado;
 	}
 
 	/**
 	 * @return the emisor
 	 */
-	@Override
-	public Emisor getEmisor() {
+	public EmisorNotaDeCredito getEmisor() {
 		return emisor;
 	}
 
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
-		this.emisor = (EmisorNotaDeCredito) emisor;
+	public void setEmisor(EmisorNotaDeCredito emisor) {
+		this.emisor = emisor;
 	}
 
-	@Override
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		errorMessages = notaDeCreditoFactory.fillEmisor(factoryInput, emisor);
+		System.out.println("Start NotaDeCredito.fillEmisor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
+		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
+//		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
+//
+//		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
+//		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//
+//		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End NotaDeCredito.fillEmisor()");
 		return errorMessages;
 	}
 
 	/**
 	 * @return the receptor
 	 */
-	@Override
-	public Receptor getReceptor() {
+	public ReceptorNotaDeCredito getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(Receptor receptor) {
-		this.receptor = (ReceptorNotaDeCredito) receptor;
+	public void setReceptor(ReceptorNotaDeCredito receptor) {
+		this.receptor = receptor;
 	}
 
-	@Override
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		errorMessages = notaDeCreditoFactory.fillReceptor(factoryInput, receptor);
+		System.out.println("Start NotaDeCredito.fillReceptor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
+		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+		
+		System.out.println("End NotaDeCredito.fillReceptor()");
 		return errorMessages;
 	}
 
 	/**
 	 * @return the ventaTercero
 	 */
-	@Override
-	public VentaTercero getVentaTercero() {
+	public VentaTerceroNotaDeCredito getVentaTercero() {
 		return ventaTercero;
 	}
 
 	/**
 	 * @param ventaTercero the ventaTercero to set
 	 */
-	public void setVentaTercero(VentaTercero ventaTercero) {
-		this.ventaTercero = (VentaTerceroNotaDeCredito) ventaTercero;
-	}
-
-	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
-		errorMessages = notaDeCreditoFactory.fillVentaTercero(factoryInput, ventaTercero); 
-		return errorMessages;
+	public void setVentaTercero(VentaTerceroNotaDeCredito ventaTercero) {
+		this.ventaTercero = ventaTercero;
 	}
 
 	/**
 	 * @return the cuerpoDocumento
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
-		List<?> tempList = (List<CuerpoDocumentoItemNotaDeCredito>) this.cuerpoDocumento ;
-		List<CuerpoDocumentoItem> finalList = (List<CuerpoDocumentoItem>)tempList;
-		return finalList;
+	public List<CuerpoDocumentoItemNotaDeCredito> getCuerpoDocumento() {
+		return cuerpoDocumento;
 	}
 
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
-		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemNotaDeCredito)
-		List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumentoItemNotaDeCredito = new ArrayList<CuerpoDocumentoItemNotaDeCredito>();
-		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemNotaDeCredito.add((CuerpoDocumentoItemNotaDeCredito) e) );
-
-		this.cuerpoDocumento = cuerpoDocumentoItemNotaDeCredito;
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumento) {
+		this.cuerpoDocumento = cuerpoDocumento;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		List<?> tmpList = cuerpoDocumento;
-		errorMessages = notaDeCreditoFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);
+		System.out.println("Start NotaDeCredito.fillCuerpoDocumento()"); 
+		errorMessages.setLength(0);
+
+		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
+		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
+	
+		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) { 
+			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
+			CuerpoDocumentoItemNotaDeCredito cuerpoDocumentoItemNotaDeCredito = new CuerpoDocumentoItemNotaDeCredito();
+			try {cuerpoDocumentoItemNotaDeCredito.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setCodTributo(null);} 																	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setTributos(null);} 																		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemNotaDeCredito.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(IVAITEM));} 				catch (Exception e) {errorMessages.append(e);}
+
+			cuerpoDocumento.add(cuerpoDocumentoItemNotaDeCredito);						
+		}
+
+		System.out.println("End NotaDeCredito.fillCuerpoDocumento()"); 
 		return errorMessages;
 	}
 
 	/**
 	 * @return the resumen
 	 */
-	@Override
-	public Resumen getResumen() {
+	public ResumenNotaDeCredito getResumen() {
 		return resumen;
 	}
 
 	/**
 	 * @param resumen the resumen to set
 	 */
-	public void setResumen(Resumen resumen) {
-		this.resumen = (ResumenNotaDeCredito) resumen;
+	public void setResumen(ResumenNotaDeCredito resumen) {
+		this.resumen = resumen;
 	}
 
-	@Override
 	public StringBuffer fillResumen(JSONObject factoryInput) {
-		errorMessages = notaDeCreditoFactory.fillResumen(factoryInput, resumen); 
+		System.out.println("Start NotaDeCredito.fillResumen()"); 
+		errorMessages.setLength(0);		
+		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
+
+		try {resumen.setTotalNoSuj(resumenJson.getBigDecimal(TOTALNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalExenta(resumenJson.getBigDecimal(TOTALEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSubTotalVentas(resumenJson.getBigDecimal(SUBTOTALVENTAS));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuNoSuj(resumenJson.getBigDecimal(DESCUNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuGravada(resumenJson.getBigDecimal(DESCUGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));} catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setIvaRete1(resumenJson.getBigDecimal(IVARETE1));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalNoGravado(resumenJson.getBigDecimal(TOTALNOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSaldoFavor(resumenJson.getBigDecimal(SALDOFAVOR));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalIva(resumenJson.getBigDecimal(TOTALIVA));} 						catch (Exception e) {errorMessages.append(e);}
+//
+//		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
+//		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
+//
+//		PagosItem newPagosItem = new PagosItem();
+//		try {newPagosItem.setCodigo(pagosItemJson.getString(CODIGO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setMontoPago(pagosItemJson.getBigDecimal(MONTOPAGO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 	catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 			catch (Exception e) {errorMessages.append(e);}
+
+		//resumen.getPagos().add(newPagosItem);
+
+		System.out.println("End NotaDeCredito.fillResumen()"); 
 		return errorMessages;
 	}
 
 	/**
 	 * @return the extension
 	 */
-	@Override
-	public Extension getExtension() {
+	public ExtensionNotaDeCredito getExtension() {
 		return extension;
 	}
 
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(Extension extension) {
-		this.extension = (ExtensionNotaDeCredito) extension;
-	}
-
-	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput) {
-		errorMessages = notaDeCreditoFactory.fillExtension(factoryInput, extension); 
-		return errorMessages;
+	public void setExtension(ExtensionNotaDeCredito extension) {
+		this.extension = extension;
 	}
 
 	/**
 	 * @return the apendice
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<ApendiceItem> getApendice() {	
-		List<?> tempList = (List<ApendiceItemNotaDeCredito>) this.apendice;
-		List<ApendiceItem> finalList = (List<ApendiceItem>)tempList;
-		return finalList;
+	public List<ApendiceItemNotaDeCredito> getApendice() {
+		return apendice;
 	}
 
-	public void setApendice(List<ApendiceItem> apendice) {
-		// Convert (=cast) all (ApendiceItem) to (ApendiceItemNotaDeCredito)
-		List<ApendiceItemNotaDeCredito> apendiceItemNotaDeCredito = new ArrayList<ApendiceItemNotaDeCredito>();
-		apendice.stream().forEach(e -> apendiceItemNotaDeCredito.add((ApendiceItemNotaDeCredito) e) );
-
-		this.apendice = apendiceItemNotaDeCredito;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput) {
-		List<?> tmpList = apendice;
-		errorMessages = notaDeCreditoFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
-		return errorMessages;
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A OTROSDOCUMENTOSITEM PROPERTY
-	 */
-	@Override
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillOtrosDocumentos() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A DOCUMENTO PROPERTY
-	 */
-	@Override
-	public Documento getDocumento() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillDocumento() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A MOTIVO PROPERTY
-	 */
-	@Override
-	public Motivo getMotivo() {
-		return null;
-	}
-
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method NotaDeCredito.fillMotivo() is not allowed");
+	public void setApendice(List<ApendiceItemNotaDeCredito> apendice) {
+		this.apendice = apendice;
 	}
 
 

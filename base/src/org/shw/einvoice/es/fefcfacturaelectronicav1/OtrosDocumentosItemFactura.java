@@ -5,14 +5,13 @@ package org.shw.einvoice.es.fefcfacturaelectronicav1;
 
 import java.util.Objects;
 
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 import org.shw.einvoice.es.util.pojo.Medico;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
-
 
 /**
  * 
  */
-public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
+public class OtrosDocumentosItemFactura {
 	static final String VALIDATION_MEDICO_IS_NULL            = "Documento: Factura, clase: OtrosDocumentosItem. Validacion falló: valor de 'medico' no debe ser ='null'";
 	static final String VALIDATION_DESCDOCUMENTO_NOT_NULL    = "Documento: Factura, clase: OtrosDocumentosItem. Validacion falló: valor de 'descDocumento' debe ser ='null'";
 	static final String VALIDATION_DETALLEDOCUMENTO_NOT_NULL = "Documento: Factura, clase: OtrosDocumentosItem. Validacion falló: valor de 'detalleDocumento' debe ser ='null'";
@@ -35,7 +34,7 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	@Override
+
 	public String validateValues() {
 		if(getCodDocAsociado()==3) {
 			if (Objects.isNull(getMedico()))
@@ -53,13 +52,13 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 				return VALIDATION_DETALLEDOCUMENTO_IS_NULL;
 		}
 		
-		return VALIDATION_RESULT_OK;
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 	/**
 	 * @return the codDocAsociado
 	 */
-	@Override
+
 	public int getCodDocAsociado() {
 		return codDocAsociado;
 	}
@@ -70,7 +69,7 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	 * The parameter is validated.<br>
 	 * "minimum" : 1, "maximum" : 4
 	 */
-	@Override
+
 	public void setCodDocAsociado(int codDocAsociado) {
 		final int MINIMUM = 1;
 		final int MAXIMUM = 4;
@@ -85,7 +84,7 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	/**
 	 * @return the descDocumento
 	 */
-	@Override
+
 	public String getDescDocumento() {
 		return descDocumento;
 	}
@@ -95,7 +94,7 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	 * The parameter is validated; null also possible.<br>
 	 * "maxLength" : 100
 	 */
-	@Override
+
 	public void setDescDocumento(String descDocumento) {
 		final int MAXLENGTH = 100;
 		int length = descDocumento==null?0:descDocumento.length();
@@ -109,7 +108,7 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	/**
 	 * @return the detalleDocumento
 	 */
-	@Override
+
 	public String getDetalleDocumento() {
 		return detalleDocumento;
 	}
@@ -119,7 +118,7 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	 * The parameter is validated; null also possible.<br>.<br>
 	 * "maxLength" : 300
 	 */
-	@Override
+
 	public void setDetalleDocumento(String detalleDocumento) {
 		final int MAXLENGTH = 300;
 		int length = detalleDocumento==null?0:detalleDocumento.length();
@@ -133,7 +132,7 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	/**
 	 * @return the medico
 	 */
-	@Override
+
 	public Medico getMedico() {
 		return medico;
 	}
@@ -141,73 +140,9 @@ public class OtrosDocumentosItemFactura implements OtrosDocumentosItem {
 	/**
 	 * @param medico the medico to set
 	 */
-	@Override
+
 	public void setMedico(Medico medico) {
 		this.medico = medico;
-	}
-
-
-
-    
-	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
-	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getPlacaTrans() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getPlacaTrans() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setPlacaTrans(String placaTrans) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.setPlacaTrans() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public Integer getModoTransp() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getModoTransp() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setModoTransp(Integer modoTransp) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.setModoTransp() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getNumConductor() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getNumConductor() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setNumConductor(String numConductor) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.setNumConductor() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getNombreConductor() {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.getNombreConductor() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setNombreConductor(String nombreConductor) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Receptor.setNombreConductor() is not allowed");
 	}
 
 

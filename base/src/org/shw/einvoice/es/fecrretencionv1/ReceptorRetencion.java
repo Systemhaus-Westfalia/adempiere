@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.Receptor;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 /**
  * 
  */
-public class ReceptorRetencion implements Receptor {
+public class ReceptorRetencion {
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Retencion, clase: Receptor. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 	static final String VALIDATION_NRC_PATTERN_FAILED              = "Documento: Retencion, clase: Receptor. Validacion falló: valor de 'nrc' no corresponde a patrón";
 
@@ -68,7 +68,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * Validate the Schema conditions
 	 */
-	@Override
+
 	public String validateValues() {
 		String pattern;
 		boolean patternOK;
@@ -97,13 +97,13 @@ public class ReceptorRetencion implements Receptor {
 				return VALIDATION_NRC_PATTERN_FAILED;
 		}
 
-		return VALIDATION_RESULT_OK;
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 	
 	/**
 	 * @return the tipoDocumento
 	 */
-	@Override
+
 	public String getTipoDocumento() {
 		return tipoDocumento;
 	}
@@ -114,7 +114,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "enum" : [null,"36","13","02","03","37"]; null permitted.
 	 */
-	@Override
+
 	public void setTipoDocumento(String tipoDocumento) {
 		String[] validTipoDocumento = { "36", "13", "02", "03", "37" };
 		
@@ -128,7 +128,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the numDocumento
 	 */
-	@Override
+
 	public String getNumDocumento() {
 		return numDocumento;
 	}
@@ -139,7 +139,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "minLength" : 3, "maxLength" : 20; null not possible
 	 */
-	@Override
+
 	public void setNumDocumento(String numDocumento) {
 		final int MINLENGTH = 3;
 		final int MAXLENGTH = 20;
@@ -155,7 +155,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the nrc
 	 */
-	@Override
+
 	public String getNrc() {
 		return nrc;
 	}
@@ -165,7 +165,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{1,8}$"
 	 */
-	@Override
+
 	public void setNrc(String nrc) {
 		final String PATTERN = "^[0-9]{1,8}$";
 		boolean patternOK = (nrc!=null) && Pattern.matches(PATTERN, nrc);  
@@ -179,7 +179,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the nombre
 	 */
-	@Override
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -189,7 +189,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 250; null not permitted
 	 */
-	@Override
+
 	public void setNombre(String nombre) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 250;
@@ -204,7 +204,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the codActividad
 	 */
-	@Override
+
 	public String getCodActividad() {
 		return codActividad;
 	}
@@ -214,7 +214,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{5,6}$"
 	 */
-	@Override
+
 	public void setCodActividad(String codActividad) {
 		final String PATTERN = "^[0-9]{5,6}$";
 		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
@@ -228,7 +228,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the descActividad
 	 */
-	@Override
+
 	public String getDescActividad() {
 		return descActividad;
 	}
@@ -238,7 +238,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "minLength" : 5, "maxLength" : 150; null not possible
 	 */
-	@Override
+
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 5;
 		final int MAXLENGTH = 150;
@@ -253,7 +253,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the nombreComercial
 	 */
-	@Override
+
 	public String getNombreComercial() {
 		return nombreComercial;
 	}
@@ -265,7 +265,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 150; null also possible
 	 */
-	@Override
+
 	public void setNombreComercial(String nombreComercial) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
@@ -282,7 +282,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the direccion
 	 */
-	@Override
+
 	public Direccion getDireccion() {
 		return direccion;
 	}
@@ -290,7 +290,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @param direccion the direccion to set
 	 */
-	@Override
+
 	public void setDireccion(Direccion direccion) {
 		this.direccion = direccion;
 	}
@@ -298,7 +298,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the telefono
 	 */
-	@Override
+
 	public String getTelefono() {
 		return telefono;
 	}
@@ -308,7 +308,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "minLength" : 8, "maxLength" : 30; null also possible
 	 */
-	@Override
+
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 30;
@@ -323,7 +323,7 @@ public class ReceptorRetencion implements Receptor {
 	/**
 	 * @return the correo
 	 */
-	@Override
+
 	public String getCorreo() {
 		return correo;
 	}
@@ -333,7 +333,7 @@ public class ReceptorRetencion implements Receptor {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 100
 	 */
-	@Override
+
 	public void setCorreo(String correo) {
 		final int MAXLENGTH = 100;
 		int length = correo==null?0:correo.length();
@@ -342,92 +342,6 @@ public class ReceptorRetencion implements Receptor {
 			this.correo = correo;
 		else
 	        throw new IllegalArgumentException("Wrong parameter 'correo' in Retencion.Receptor.setCorreo()");
-	}
-
-
-    
-	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
-	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getNit() {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.getNit() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setNit(String nit) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.setNit() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getNombrePais() {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.getNombrePais() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setNombrePais(String nombrePais) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.setNombrePais() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getCodPais() {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.getCodPais() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setCodPais(String codPais) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.setCodPais() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getComplemento() {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.getComplemento() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setComplemento(String complemento) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.setComplemento() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public int getTipoPersona() {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.getTipoPersona() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setTipoPersona(int tipoPersona) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Receptor.setTipoPersona() is not allowed");
 	}
 	
 	/**

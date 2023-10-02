@@ -3,25 +3,13 @@
  */
 package org.shw.einvoice.es.factory;
 
-import java.util.List;
-
 import org.json.JSONObject;
 import org.shw.einvoice.es.anulacionv2.DocumentoAnulacion;
 import org.shw.einvoice.es.anulacionv2.EmisorAnulacion;
 import org.shw.einvoice.es.anulacionv2.IdentificacionAnulacion;
 import org.shw.einvoice.es.anulacionv2.MotivoAnulacion;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
-import org.shw.einvoice.es.util.pojo.Documento;
-import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
-import org.shw.einvoice.es.util.pojo.Emisor;
-import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.Identificacion;
-import org.shw.einvoice.es.util.pojo.Motivo;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
-import org.shw.einvoice.es.util.pojo.Resumen;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
+import org.shw.einvoice.es.util.pojo.EDocument;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 /**
  * 
@@ -34,25 +22,20 @@ public class Anulacion extends EDocument {
 	EmisorAnulacion emisor;
 	DocumentoAnulacion documento;
 	MotivoAnulacion motivo;
-	
-	AnulacionFactory anulacionFactory;  // This must be eliminated from JSON production.
-
 	/**
 	 * No parameters
 	 */
 	public Anulacion() {
-		anulacionFactory    = new AnulacionFactory();
-		this.identificacion = (IdentificacionAnulacion) anulacionFactory.createIdentificacion();
-		this.emisor         = (EmisorAnulacion) anulacionFactory.createEmisor();
-		this.documento      = (DocumentoAnulacion) anulacionFactory.createDocumento();
-		this.motivo         = (MotivoAnulacion) anulacionFactory.createMotivo();
+		this.identificacion = new IdentificacionAnulacion();
+		this.emisor         = new EmisorAnulacion();
+		this.documento      = new DocumentoAnulacion();
+		this.motivo         = new MotivoAnulacion();
 	}
 
 
 	/**
 	 * Validate the Schema conditions
 	 */
-	@Override
 	public String validateValues() {
 
 		if(getMotivo().getTipoAnulacion()==2) {
@@ -63,15 +46,14 @@ public class Anulacion extends EDocument {
 				return VALIDATION_CODIGOGENERACIONR_IS_NULL;
 		}
 
-		return VALIDATION_RESULT_OK;
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 
 	/**
 	 * @return the identificacion
 	 */
-	@Override
-	public Identificacion getIdentificacion() {
+	public IdentificacionAnulacion getIdentificacion() {
 		return identificacion;
 	}
 
@@ -79,16 +61,21 @@ public class Anulacion extends EDocument {
 	/**
 	 * @param identificacion the identificacion to set
 	 */
-	public void setIdentificacion(Identificacion identificacion) {
-		this.identificacion = (IdentificacionAnulacion) identificacion;
+	public void setIdentificacion(IdentificacionAnulacion identificacion) {
+		this.identificacion = identificacion;
 	}
 
 
 
-	@Override
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		errorMessages = anulacionFactory.fillIdentification(factoryInput, identificacion );
-		
+		System.out.println("Start Anulacion.fillIdentificacion()"); 
+		errorMessages.setLength(0);
+
+		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
+		try {identificacion.setVersion(identificationJson.getInt(VERSION));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillIdentificacion()");
 		return errorMessages;
 	}
 
@@ -97,8 +84,7 @@ public class Anulacion extends EDocument {
 	/**
 	 * @return the emisor
 	 */
-	@Override
-	public Emisor getEmisor() {
+	public EmisorAnulacion getEmisor() {
 		return emisor;
 	}
 
@@ -106,15 +92,21 @@ public class Anulacion extends EDocument {
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
-		this.emisor = (EmisorAnulacion) emisor;
+	public void setEmisor(EmisorAnulacion emisor) {
+		this.emisor = emisor;
 	}
 
 
 
-	@Override
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		errorMessages = anulacionFactory.fillEmisor(factoryInput, emisor );
+		System.out.println("Start Anulacion.fillEmisor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
+		try {emisor.setCodEstable(emisorJson.getString(CODESTABLE));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillEmisor()");
 		return errorMessages;
 	}
 
@@ -123,8 +115,7 @@ public class Anulacion extends EDocument {
 	/**
 	 * @return the documento
 	 */
-	@Override
-	public Documento getDocumento() {
+	public DocumentoAnulacion getDocumento() {
 		return documento;
 	}
 
@@ -132,15 +123,20 @@ public class Anulacion extends EDocument {
 	/**
 	 * @param documento the documento to set
 	 */
-	public void setDocumento(DocumentoAnulacion
-			documento) {
+	public void setDocumento(DocumentoAnulacion	documento) {
 		this.documento = documento;
 	}
 
 
-	@Override
 	public StringBuffer fillDocumento(JSONObject factoryInput) {
-		errorMessages = anulacionFactory.fillDocumento(factoryInput, documento );
+		System.out.println("Start Anulacion.fillDocumento()"); 
+		errorMessages.setLength(0);
+
+		JSONObject documentoJson = factoryInput.getJSONObject(DOCUMENTO);
+		try {documento.setCodigoGeneracion(documentoJson.getString(CODIGOGENERACION));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillDocumento()");
 		return errorMessages;
 	}
 
@@ -148,8 +144,7 @@ public class Anulacion extends EDocument {
 	/**
 	 * @return the motivo
 	 */
-	@Override
-	public Motivo getMotivo() {
+	public MotivoAnulacion getMotivo() {
 		return motivo;
 	}
 
@@ -162,154 +157,16 @@ public class Anulacion extends EDocument {
 	}
 
 
-	@Override
 	public StringBuffer fillMotivo(JSONObject factoryInput) {
-		errorMessages = anulacionFactory.fillMotivo(factoryInput, motivo );
+		System.out.println("Start Anulacion.fillDocumento()"); 
+		errorMessages.setLength(0);
+
+		JSONObject motivoJson = factoryInput.getJSONObject(DOCUMENTO);
+		try {motivo.setMotivoAnulacion(motivoJson.getString(MOTIVOANULACION));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillDocumento()");
 		return errorMessages;
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A DOCUMENTORELACIONADOITEM PROPERTY
-	 */
-	@Override
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillDocumentoRelacionado() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A RECEPTOR PROPERTY
-	 */
-	@Override
-	public Receptor getReceptor() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillReceptor() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE AN OTROSDOCUMENTOSITEM PROPERTY
-	 */
-	@Override
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillOtrosDocumentos() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A VENTATERCERO PROPERTY
-	 */
-	@Override
-	public VentaTercero getVentaTercero() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillVentaTercero() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A CUERPODOCUMENTOITEM PROPERTY
-	 */
-	@Override
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillCuerpoDocumento() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A RESUMEN PROPERTY
-	 */
-	@Override
-	public Resumen getResumen() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillResumen(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillResumen() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE AN EXTENSION PROPERTY
-	 */
-	@Override
-	public Extension getExtension() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillExtension() is not allowed");
-	}
-
-
-	/**
-	 * THIS CLASS DOESN'T HAVE AN APENDICE PROPERTY
-	 */
-	@Override
-	public List<ApendiceItem> getApendice() {
-		return null;
-	}
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Anulacion calling the method Anulacion.fillApendice() is not allowed");
 	}
 
 

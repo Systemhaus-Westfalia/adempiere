@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 /**
  * 
  */
-public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
+public class CuerpoDocumentoItemNotaDeCredito {
 	static final String VALIDATION_VENTAGRAVADA_IS_NULL     = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'ventaGravada' no debe ser = null";
 	static final String VALIDATION_TRIBUTOS_NOT_NULL        = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='null'";
 	static final String VALIDATION_TRIBUTOS_EMPTY           = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no debe ser vacío";
@@ -86,7 +86,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * Validate the Schema conditions
 	 */
-	@Override
 	public String validateValues() {
 		if(getVentaGravada()==null) {
 			return VALIDATION_VENTAGRAVADA_IS_NULL;
@@ -117,13 +116,12 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 				return VALIDATION_TRIBUTOS_PATTERN_FAILED;			
 		}
 		
-		return VALIDATION_RESULT_OK;
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 	/**
 	 * @return the numItem
 	 */
-	@Override
 	public int getNumItem() {
 		return numItem;
 	}
@@ -133,7 +131,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * The parameter is validated.<br>
 	 * "minimum" : 1, "maximum" : 2000
 	 */
-	@Override
 	public void setNumItem(int numItem) {
 		final int MINIMUM = 1;
 		final int MAXIMUM = 2000;
@@ -148,7 +145,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the tipoItem
 	 */
-	@Override
 	public int getTipoItem() {
 		return tipoItem;
 	}
@@ -158,7 +154,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * The parameter is validated.<br>
 	 * "enum" : [1,2,3,4]
 	 */
-	@Override
 	public void setTipoItem(int tipoItem) {
 		if (tipoItem==1 || tipoItem==2 || tipoItem==3 || tipoItem==4)
 			this.tipoItem = tipoItem;
@@ -169,7 +164,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the numeroDocumento
 	 */
-	@Override
 	public String getNumeroDocumento() {
 		return numeroDocumento;
 	}
@@ -179,7 +173,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 36
 	 */
-	@Override
 	public void setNumeroDocumento(String numeroDocumento) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 36;
@@ -195,7 +188,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the cantidad
 	 */
-	@Override
 	public BigDecimal getCantidad() {
 		return cantidad;
 	}
@@ -204,7 +196,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * @param cantidad the cantidad to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	@Override
 	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
@@ -212,7 +203,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the codigo
 	 */
-	@Override
 	public String getCodigo() {
 		return codigo;
 	}
@@ -222,7 +212,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 25; null also allowed
 	 */
-	@Override
 	public void setCodigo(String codigo) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 25;
@@ -237,7 +226,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the codTributo
 	 */
-	@Override
 	public String getCodTributo() {
 		return codTributo;
 	}
@@ -247,7 +235,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * The parameter is validated.<br>
 	 * "enum" : ["A8", "57", "90", "D4", "D5", "25", "A6"]; null also allowed
 	 */
-	@Override
 	public void setCodTributo(String codTributo) {
 		if (codTributo==null || codTributo.compareTo("A8")==0 || codTributo.compareTo("57")==0 || codTributo.compareTo("90")==0 || codTributo.compareTo("D4")==0 || 
 				codTributo.compareTo("D5")==0 || codTributo.compareTo("25")==0 || codTributo.compareTo("A6")==0)
@@ -260,7 +247,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the uniMedida
 	 */
-	@Override
 	public int getUniMedida() {
 		return uniMedida;
 	}
@@ -270,7 +256,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * The parameter is validated.<br>
 	 * "minimum" : 1, "maximum" : 99
 	 */
-	@Override
 	public void setUniMedida(int uniMedida) {
 		final int MINIMUM = 1;
 		final int MAXIMUM = 99;
@@ -284,7 +269,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the descripcion
 	 */
-	@Override
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -294,7 +278,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 1000; null also allowed
 	 */
-	@Override
 	public void setDescripcion(String descripcion) {
 		final int MAXLENGTH = 1000;
 		int length = descripcion==null?0:descripcion.length();
@@ -309,7 +292,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the precioUni
 	 */
-	@Override
 	public BigDecimal getPrecioUni() {
 		return precioUni;
 	}
@@ -318,7 +300,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * @param precioUni the precioUni to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	@Override
 	public void setPrecioUni(BigDecimal precioUni) {
 		this.precioUni = precioUni;
 	}
@@ -326,7 +307,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the montoDescu
 	 */
-	@Override
 	public BigDecimal getMontoDescu() {
 		return montoDescu;
 	}
@@ -335,7 +315,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * @param montoDescu the montoDescu to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	@Override
 	public void setMontoDescu(BigDecimal montoDescu) {
 		this.montoDescu = montoDescu;
 	}
@@ -343,7 +322,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the ventaNoSuj
 	 */
-	@Override
 	public BigDecimal getVentaNoSuj() {
 		return ventaNoSuj;
 	}
@@ -352,7 +330,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * @param ventaNoSuj the ventaNoSuj to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	@Override
 	public void setVentaNoSuj(BigDecimal ventaNoSuj) {
 		this.ventaNoSuj = ventaNoSuj;
 	}
@@ -360,7 +337,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the ventaExenta
 	 */
-	@Override
 	public BigDecimal getVentaExenta() {
 		return ventaExenta;
 	}
@@ -369,7 +345,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * @param ventaExenta the ventaExenta to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	@Override
 	public void setVentaExenta(BigDecimal ventaExenta) {
 		this.ventaExenta = ventaExenta;
 	}
@@ -377,7 +352,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the ventaGravada
 	 */
-	@Override
 	public BigDecimal getVentaGravada() {
 		return ventaGravada;
 	}
@@ -386,7 +360,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * @param ventaGravada the ventaGravada to set
 	 * Condition according to schema: "multipleOf" : 0.00000001
 	 */
-	@Override
 	public void setVentaGravada(BigDecimal ventaGravada) {
 		this.ventaGravada = ventaGravada;
 	}
@@ -394,7 +367,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	/**
 	 * @return the tributos
 	 */
-	@Override
 	public ArrayList<String> getTributos() {
 		return tributos;
 	}
@@ -404,7 +376,6 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	 * Very complex logic: either null or a two-character string
 	 * "type" : ["array", "null"], "items" : {"type" : "string", "maxLength" : 2, "minLength" : 2}, "minItems": 1
 	 */
-	@Override
 	public void setTributos(ArrayList<String> tributos) {
 		final int MINLENGTH = 1;
 		
@@ -415,152 +386,7 @@ public class CuerpoDocumentoItemNotaDeCredito implements CuerpoDocumentoItem {
 	        throw new IllegalArgumentException("Wrong expression 'tributos' in NotaDeCredito.CuerpoDocumentoItem.setTributos()");
 	}
 
-
-    
-	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
-	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
-
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getPsv() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getPsv() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setPsv(BigDecimal psv) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setPsv() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getNoGravado() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getNoGravado() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setNoGravado(BigDecimal noGravado) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setNoGravado() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getNumDocumento() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getNumDocumento() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setNumDocumento(String numDocumento) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setNumDocumento() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getFechaEmision() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getFechaEmision() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setFechaEmision(String fechaEmision) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setFechaEmision() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getMontoSujetoGrav() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getMontoSujetoGrav() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setMontoSujetoGrav(BigDecimal montoSujetoGrav) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setMontoSujetoGrav() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getCodigoRetencionMH() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getCodigoRetencionMH() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setCodigoRetencionMH(String codigoRetencionMH) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setCodigoRetencionMH() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getIvaRetenido() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getIvaRetenido() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setIvaRetenido(BigDecimal ivaRetenido) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setIvaRetenido() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getTipoDte() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getTipoDte() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setTipoDte(String tipoDte) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setTipoDte() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public int getTipoDoc() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getTipoDoc() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setTipoDoc(int tipoDoc) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setTipoDoc() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getIvaItem() {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.getIvaItem() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setIvaItem(BigDecimal ivaItem) {
-		throw new UnsupportedOperationException("In Document Nota de Credito calling the method CuerpoDocumentoItem.setIvaItem() is not allowed");
-	}
+	
 	/**
 	 * @param args
 	 */

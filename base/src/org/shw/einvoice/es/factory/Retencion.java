@@ -5,8 +5,9 @@ package org.shw.einvoice.es.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
-import org.python.antlr.PythonParser.return_stmt_return;
+import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
 import org.shw.einvoice.es.fecrretencionv1.ApendiceItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.CuerpoDocumentoItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.EmisorRetencion;
@@ -15,24 +16,16 @@ import org.shw.einvoice.es.fecrretencionv1.IdentificacionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ReceptorRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ResumenRetencion;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
-import org.shw.einvoice.es.util.pojo.Documento;
-import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
-import org.shw.einvoice.es.util.pojo.Emisor;
-import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.Identificacion;
-import org.shw.einvoice.es.util.pojo.Motivo;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
-import org.shw.einvoice.es.util.pojo.Resumen;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
+import org.shw.einvoice.es.util.pojo.EDocument;
+import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 
 
 /**
  * 
  */
-public class Retencion extends EDocument {
+public class Retencion extends EDocument {	
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 500;
+	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Retencion, clase: Retencion. Validacion falló: valor de 'cuerpoDocumento' debe  contener de 1 a 500 elementos";
 	
 	IdentificacionRetencion identificacion;
@@ -42,41 +35,25 @@ public class Retencion extends EDocument {
 	ResumenRetencion resumen;
 	ExtensionRetencion extension;
 	List<ApendiceItemRetencion> apendice=null;  // null allowed
-	
-	RetencionFactory retencionFactory;  // This must be eliminated from JSON production.
 
 	/**
 	 * No parameters
 	 */
 	public Retencion() {
-		List<?> tmpList;
-		retencionFactory          = new RetencionFactory();
 
-		this.identificacion       = (IdentificacionRetencion) retencionFactory.createIdentificacion();
-		this.emisor               = (EmisorRetencion) retencionFactory.createEmisor();
-		this.receptor             = (ReceptorRetencion) retencionFactory.createReceptor();		
-
-		tmpList = retencionFactory.createCuerpoDocumento();
-	    this.cuerpoDocumento      = (List<CuerpoDocumentoItemRetencion>) tmpList;
-
-		this.resumen              = (ResumenRetencion) retencionFactory.createResumen();
-		this.extension            = (ExtensionRetencion) retencionFactory.createExtension();
-		
-		tmpList = retencionFactory.createApendice();
-	    this.apendice             = (List<ApendiceItemRetencion>) tmpList;
-	}
-	
-	public Retencion(EDocumentFactory retencionFactory) {
-		// call constructor without parameters
-		this();
-		this.retencionFactory = (RetencionFactory) retencionFactory;
+		this.identificacion       =  new IdentificacionRetencion();
+		this.emisor               = new EmisorRetencion();
+		this.receptor             = new ReceptorRetencion();
+	    this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemRetencion>();
+		this.resumen              = new ResumenRetencion();
+		this.extension            = new ExtensionRetencion();
+	    this.apendice             = new ArrayList<ApendiceItemRetencion>();
 	}
 
 	/**
 	 * @return the identificacion
 	 */
-	@Override
-	public Identificacion getIdentificacion() {
+	public IdentificacionRetencion getIdentificacion() {
 		return identificacion;
 	}
 
@@ -84,46 +61,68 @@ public class Retencion extends EDocument {
 	/**
 	 * @param identificacion the identificacion to set
 	 */
-	public void setIdentificacion(Identificacion identificacion) {
-		this.identificacion = (IdentificacionRetencion) identificacion;
+	public void setIdentificacion(IdentificacionRetencion identificacion) {
+		this.identificacion = identificacion;
 	}
 
 	/**
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
-	@Override
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		errorMessages = retencionFactory.fillIdentification(factoryInput, identificacion );
-		
+		System.out.println("Start Retencion.fillIdentificacion()"); 
+		errorMessages.setLength(0);
+
+		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
+		try {identificacion.setVersion(identificationJson.getInt(VERSION));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Retencion.fillIdentificacion()");
 		return errorMessages;
 	}
 
 	/**
 	 * @return the emisor
 	 */
-	@Override
-	public Emisor getEmisor() {
+	public EmisorRetencion getEmisor() {
 		return emisor;
 	}
 
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
-		this.emisor = (EmisorRetencion) emisor;
+	public void setEmisor(EmisorRetencion emisor) {
+		this.emisor = emisor;
 	}
 
-	@Override
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		errorMessages = retencionFactory.fillEmisor(factoryInput, emisor);
+		System.out.println("Start Retencion.fillEmisor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
+		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
+//		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
+//
+//		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
+//		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//
+//		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Retencion.fillEmisor()");
 		return errorMessages;
 	}
 
 	/**
 	 * @return the receptor
 	 */
-	@Override
-	public Receptor getReceptor() {
+	public ReceptorRetencion getReceptor() {
 		return receptor;
 	}
 
@@ -131,50 +130,75 @@ public class Retencion extends EDocument {
 	 * @param receptor the receptor to set
 	 */
 	public void setReceptor(ReceptorRetencion receptor) {
-		this.receptor = (ReceptorRetencion) receptor;
+		this.receptor = receptor;
 	}
 
-	@Override
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		errorMessages = retencionFactory.fillReceptor(factoryInput, receptor);
+		System.out.println("Start Retencion.fillReceptor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
+		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+		
+		System.out.println("End Retencion.fillReceptor()");
 		return errorMessages;
 	}
 
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
-	    List<?> tempList = (List<CuerpoDocumentoItemRetencion>) this.cuerpoDocumento;
-	    List<CuerpoDocumentoItem> finalList = (List<CuerpoDocumentoItem>)tempList;
-		return finalList;
+	public List<CuerpoDocumentoItemRetencion> getCuerpoDocumento() {
+		return cuerpoDocumento;
 	}
 
 	/**
 	 * @param cuerpoDocumento the cuerpoDocumento to set
 	 */
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
-		List<CuerpoDocumentoItemRetencion> cuerpoDocumentoItemRetencion = new ArrayList<CuerpoDocumentoItemRetencion>();
-		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemRetencion.add((CuerpoDocumentoItemRetencion) e) );
-		
-		this.cuerpoDocumento = cuerpoDocumentoItemRetencion;
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemRetencion> cuerpoDocumento) {
+		this.cuerpoDocumento = cuerpoDocumento;
 	}
 
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		List<?> tmpList = cuerpoDocumento;
-		errorMessages = retencionFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);
+		System.out.println("Start Retencion.fillCuerpoDocumento()"); 
+		errorMessages.setLength(0);
+
+		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
+		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
+	
+		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) { 
+			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
+			CuerpoDocumentoItemRetencion cuerpoDocumentoItemRetencion = new CuerpoDocumentoItemRetencion();
+//			try {cuerpoDocumentoItemRetencion.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setCodTributo(null);} 																	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setTributos(null);} 																		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemRetencion.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(IVAITEM));} 				catch (Exception e) {errorMessages.append(e);}
+
+			cuerpoDocumento.add(cuerpoDocumentoItemRetencion);						
+		}
+
+		System.out.println("End Retencion.fillCuerpoDocumento()"); 
 		return errorMessages;
 	}
 
 	/**
 	 * @return the resumen
 	 */
-	@Override
-	public Resumen getResumen() {
+	public ResumenRetencion getResumen() {
 		return resumen;
 	}
 
@@ -186,17 +210,21 @@ public class Retencion extends EDocument {
 	}
 
 	
-	@Override
 	public StringBuffer fillResumen(JSONObject factoryInput) {
-		errorMessages = retencionFactory.fillResumen(factoryInput, resumen); 
+		System.out.println("Start Retencion.fillResumen()"); 
+		errorMessages.setLength(0);		
+		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
+
+		try {resumen.setTotalIVAretenido(resumenJson.getBigDecimal(TOTALIVARETENIDO));} 					catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Retencion.fillResumen()"); 
 		return errorMessages;
 	}
 
 	/**
 	 * @return the extension
 	 */
-	@Override
-	public Extension getExtension() {
+	public ExtensionRetencion getExtension() {
 		return extension;
 	}
 
@@ -207,120 +235,18 @@ public class Retencion extends EDocument {
 		this.extension = extension;
 	}
 
-	
-	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput) {
-		errorMessages = retencionFactory.fillExtension(factoryInput, extension); 
-		return errorMessages;
-	}
-
 	/**
 	 * @return the apendice
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ApendiceItem> getApendice() {
-	    List<?> tempList = (List<ApendiceItemRetencion>) this.apendice;
-	    List<ApendiceItem> finalList = (List<ApendiceItem>)tempList;
-		return finalList;
+	public List<ApendiceItemRetencion> getApendice() {
+		return apendice;
 	}
 
 	/**
 	 * @param apendice the apendice to set
 	 */
-	public void setApendice(List<ApendiceItem> apendice) {
-		List<ApendiceItemRetencion> apendiceItemRetencion = new ArrayList<ApendiceItemRetencion>();
-		apendice.stream().forEach(e -> apendiceItemRetencion.add((ApendiceItemRetencion) e) );
-		
-		this.apendice = apendiceItemRetencion;
-	}
-
-	
-	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput) {
-		List<?> tmpList = apendice;
-		errorMessages = retencionFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
-		return errorMessages;
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A DOCUMENTORELACIONADOITEM PROPERTY
-	 */
-	@Override
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE AN OTROSDOCUMENTOS PROPERTY
-	 */
-	@Override
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A VENTATERCERO PROPERTY
-	 */
-	@Override
-	public VentaTercero getVentaTercero() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A DOCUMENTO PROPERTY
-	 */
-	@Override
-	public Documento getDocumento() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A MOTIVO PROPERTY
-	 */
-	@Override
-	public Motivo getMotivo() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInputo) {
-		throw new UnsupportedOperationException("In Document Retencion calling the method Retencion.createDocumentoRelacionado() is not allowed");
+	public void setApendice(List<ApendiceItemRetencion> apendice) {
+		this.apendice = apendice;
 	}
 
 	/**

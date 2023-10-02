@@ -7,13 +7,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.Resumen;
 
 /**
  * 
  */
-public class ResumenFactura implements Resumen {
+public class ResumenFactura {
 	static final String VALIDATION_TOTALGRAVADA_IS_NULL = "Documento: Factura, clase: Resumen. Validacion falló: valor de 'totlaGravada' no debe ser = null";
 	static final String VALIDATION_TOTALGRAVADA_IVARETE1 = "Documento: Factura, clase: Resumen. Validacion falló: valor de 'ivaRete1' no debe ser mayor que cero";
 	
@@ -52,7 +52,6 @@ public ResumenFactura() {
 /**
  * Validate the Schema conditions
  */
-@Override
 public String validateValues() {
 	if(getTotalGravada()==null) {
 		return VALIDATION_TOTALGRAVADA_IS_NULL;
@@ -63,12 +62,11 @@ public String validateValues() {
 			return VALIDATION_TOTALGRAVADA_IVARETE1;
 	} 
 	
-	return VALIDATION_RESULT_OK;
+	return EDocumentUtils.VALIDATION_RESULT_OK;
 }
 	/**
 	 * @return the totalNoSuj
 	 */
-	@Override
 	public BigDecimal getTotalNoSuj() {
 		return totalNoSuj;
 	}
@@ -77,7 +75,6 @@ public String validateValues() {
 	/**
 	 * @param totalNoSuj the totalNoSuj to set
 	 */
-	@Override
 	public void setTotalNoSuj(BigDecimal totalNoSuj) {
 		this.totalNoSuj = totalNoSuj;
 	}
@@ -86,7 +83,6 @@ public String validateValues() {
 	/**
 	 * @return the totalExenta
 	 */
-	@Override
 	public BigDecimal getTotalExenta() {
 		return totalExenta;
 	}
@@ -95,7 +91,6 @@ public String validateValues() {
 	/**
 	 * @param totalExenta the totalExenta to set
 	 */
-	@Override
 	public void setTotalExenta(BigDecimal totalExenta) {
 		this.totalExenta = totalExenta;
 	}
@@ -104,7 +99,6 @@ public String validateValues() {
 	/**
 	 * @return the totalGravada
 	 */
-	@Override
 	public BigDecimal getTotalGravada() {
 		return totalGravada;
 	}
@@ -113,7 +107,6 @@ public String validateValues() {
 	/**
 	 * @param totalGravada the totalGravada to set
 	 */
-	@Override
 	public void setTotalGravada(BigDecimal totalGravada) {
 		this.totalGravada = totalGravada;
 	}
@@ -122,7 +115,6 @@ public String validateValues() {
 	/**
 	 * @return the subTotalVentas
 	 */
-	@Override
 	public BigDecimal getSubTotalVentas() {
 		return subTotalVentas;
 	}
@@ -131,7 +123,6 @@ public String validateValues() {
 	/**
 	 * @param subTotalVentas the subTotalVentas to set
 	 */
-	@Override
 	public void setSubTotalVentas(BigDecimal subTotalVentas) {
 		this.subTotalVentas = subTotalVentas;
 	}
@@ -140,7 +131,6 @@ public String validateValues() {
 	/**
 	 * @return the descuNoSuj
 	 */
-	@Override
 	public BigDecimal getDescuNoSuj() {
 		return descuNoSuj;
 	}
@@ -149,7 +139,6 @@ public String validateValues() {
 	/**
 	 * @param descuNoSuj the descuNoSuj to set
 	 */
-	@Override
 	public void setDescuNoSuj(BigDecimal descuNoSuj) {
 		this.descuNoSuj = descuNoSuj;
 	}
@@ -158,7 +147,6 @@ public String validateValues() {
 	/**
 	 * @return the descuExenta
 	 */
-	@Override
 	public BigDecimal getDescuExenta() {
 		return descuExenta;
 	}
@@ -167,7 +155,6 @@ public String validateValues() {
 	/**
 	 * @param descuExenta the descuExenta to set
 	 */
-	@Override
 	public void setDescuExenta(BigDecimal descuExenta) {
 		this.descuExenta = descuExenta;
 	}
@@ -176,7 +163,6 @@ public String validateValues() {
 	/**
 	 * @return the descuGravada
 	 */
-	@Override
 	public BigDecimal getDescuGravada() {
 		return descuGravada;
 	}
@@ -185,7 +171,6 @@ public String validateValues() {
 	/**
 	 * @param descuGravada the descuGravada to set
 	 */
-	@Override
 	public void setDescuGravada(BigDecimal descuGravada) {
 		this.descuGravada = descuGravada;
 	}
@@ -194,7 +179,6 @@ public String validateValues() {
 	/**
 	 * @return the porcentajeDescuento
 	 */
-	@Override
 	public BigDecimal getPorcentajeDescuento() {
 		return porcentajeDescuento;
 	}
@@ -203,7 +187,6 @@ public String validateValues() {
 	/**
 	 * @param porcentajeDescuento the porcentajeDescuento to set
 	 */
-	@Override
 	public void setPorcentajeDescuento(BigDecimal porcentajeDescuento) {
 		this.porcentajeDescuento = porcentajeDescuento;
 	}
@@ -212,7 +195,6 @@ public String validateValues() {
 	/**
 	 * @return the totalDescu
 	 */
-	@Override
 	public BigDecimal getTotalDescu() {
 		return totalDescu;
 	}
@@ -221,7 +203,6 @@ public String validateValues() {
 	/**
 	 * @param totalDescu the totalDescu to set
 	 */
-	@Override
 	public void setTotalDescu(BigDecimal totalDescu) {
 		this.totalDescu = totalDescu;
 	}
@@ -229,7 +210,6 @@ public String validateValues() {
 	/**
 	 * @return the subTotal
 	 */
-	@Override
 	public BigDecimal getSubTotal() {
 		return subTotal;
 	}
@@ -238,7 +218,6 @@ public String validateValues() {
 	/**
 	 * @param subTotal the subTotal to set
 	 */
-	@Override
 	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
 	}
@@ -247,7 +226,6 @@ public String validateValues() {
 	/**
 	 * @return the ivaRete1
 	 */
-	@Override
 	public BigDecimal getIvaRete1() {
 		return ivaRete1;
 	}
@@ -256,7 +234,6 @@ public String validateValues() {
 	/**
 	 * @param ivaRete1 the ivaRete1 to set
 	 */
-	@Override
 	public void setIvaRete1(BigDecimal ivaRete1) {
 		this.ivaRete1 = ivaRete1;
 	}
@@ -265,7 +242,6 @@ public String validateValues() {
 	/**
 	 * @return the reteRenta
 	 */
-	@Override
 	public BigDecimal getReteRenta() {
 		return reteRenta;
 	}
@@ -273,7 +249,6 @@ public String validateValues() {
 	/**
 	 * @param reteRenta the reteRenta to set
 	 */
-	@Override
 	public void setReteRenta(BigDecimal reteRenta) {
 		this.reteRenta = reteRenta;
 	}
@@ -282,7 +257,6 @@ public String validateValues() {
 	/**
 	 * @return the montoTotalOperacion
 	 */
-	@Override
 	public BigDecimal getMontoTotalOperacion() {
 		return montoTotalOperacion;
 	}
@@ -291,7 +265,6 @@ public String validateValues() {
 	/**
 	 * @param montoTotalOperacion the montoTotalOperacion to set
 	 */
-	@Override
 	public void setMontoTotalOperacion(BigDecimal montoTotalOperacion) {
 		this.montoTotalOperacion = montoTotalOperacion;
 	}
@@ -300,7 +273,6 @@ public String validateValues() {
 	/**
 	 * @return the totalNoGravado
 	 */
-	@Override
 	public BigDecimal getTotalNoGravado() {
 		return totalNoGravado;
 	}
@@ -309,7 +281,6 @@ public String validateValues() {
 	/**
 	 * @param totalNoGravado the totalNoGravado to set
 	 */
-	@Override
 	public void setTotalNoGravado(BigDecimal totalNoGravado) {
 		this.totalNoGravado = totalNoGravado;
 	}
@@ -318,7 +289,6 @@ public String validateValues() {
 	/**
 	 * @return the totalPagar
 	 */
-	@Override
 	public BigDecimal getTotalPagar() {
 		return totalPagar;
 	}
@@ -327,7 +297,6 @@ public String validateValues() {
 	/**
 	 * @param totalPagar the totalPagar to set
 	 */
-	@Override
 	public void setTotalPagar(BigDecimal totalPagar) {
 		this.totalPagar = totalPagar;
 	}
@@ -336,7 +305,6 @@ public String validateValues() {
 	/**
 	 * @return the totalLetras
 	 */
-	@Override
 	public String getTotalLetras() {
 		return totalLetras;
 	}
@@ -347,7 +315,6 @@ public String validateValues() {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 200
 	 */
-	@Override
 	public void setTotalLetras(String totalLetras) {
 		final int MAXLENGTH = 200;
 		int length = totalLetras==null?0:totalLetras.length();
@@ -362,7 +329,6 @@ public String validateValues() {
 	/**
 	 * @return the totalIva
 	 */
-	@Override
 	public BigDecimal getTotalIva() {
 		return totalIva;
 	}
@@ -370,7 +336,6 @@ public String validateValues() {
 	/**
 	 * @param totalIva the totalIva to set
 	 */
-	@Override
 	public void setTotalIva(BigDecimal totalIva) {
 		this.totalIva = totalIva;
 	}
@@ -378,7 +343,6 @@ public String validateValues() {
 	/**
 	 * @return the saldoFavor
 	 */
-	@Override
 	public BigDecimal getSaldoFavor() {
 		return saldoFavor;
 	}
@@ -387,7 +351,6 @@ public String validateValues() {
 	/**
 	 * @param saldoFavor the saldoFavor to set
 	 */
-	@Override
 	public void setSaldoFavor(BigDecimal saldoFavor) {
 		this.saldoFavor = saldoFavor;
 	}
@@ -396,7 +359,6 @@ public String validateValues() {
 	/**
 	 * @return the condicionOperacion
 	 */
-	@Override
 	public int getCondicionOperacion() {
 		return condicionOperacion;
 	}
@@ -407,7 +369,6 @@ public String validateValues() {
 	 * The parameter is validated.<br>
 	 * "enum" : [1,2, 3]
 	 */
-	@Override
 	public void setCondicionOperacion(int condicionOperacion) {
 		if (condicionOperacion==1 || condicionOperacion==2 || condicionOperacion==2)
 			this.condicionOperacion = condicionOperacion;
@@ -419,7 +380,6 @@ public String validateValues() {
 	/**
 	 * @return the pagos
 	 */
-	@Override
 	public List<PagosItem> getPagos() {
 		return pagos;
 	}
@@ -428,7 +388,6 @@ public String validateValues() {
 	/**
 	 * @param pagos the pagos to set
 	 */
-	@Override
 	public void setPagos(List<PagosItem> pagos) {
 		this.pagos = pagos;
 	}
@@ -437,7 +396,6 @@ public String validateValues() {
 	/**
 	 * @return the numPagoElectronico
 	 */
-	@Override
 	public String getNumPagoElectronico() {
 		return numPagoElectronico;
 	}
@@ -448,7 +406,6 @@ public String validateValues() {
 	 * The parameter is validated.<br>
 	 * "maxLength" : 100; null also possible
 	 */
-	@Override
 	public void setNumPagoElectronico(String numPagoElectronico) {
 		final int MAXLENGTH = 100;
 		int length = numPagoElectronico==null?0:numPagoElectronico.length();
@@ -475,166 +432,7 @@ public String validateValues() {
 		this.tributos = tributos;
 	}
 
-    
-	// HERE, GETTERS AND SETTERS ONLY TO COMPLY WITH INTERFACE.
-	// THEY ARE ACTUALLY NOT ALLOWED AND MUST THROW AN EXCEPTION
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getIvaPerci1() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setIvaPerci1(BigDecimal ivaPerci1) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setIvaPerci1() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getTotalSujetoRetencion() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setTotalSujetoRetencion(BigDecimal totalSujetoRetencion) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setTotalSujetoRetencion() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getTotalIVAretenido() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setTotalIVAretenido(BigDecimal totalIVAretenido) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setTotalIVAretenido() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getTotalIVAretenidoLetras() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setTotalIVAretenidoLetras(String totalIVAretenidoLetras) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setTotalIVAretenidoLetras() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getDescuento() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setDescuento(BigDecimal descuento) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setDescuento() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getSeguro() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setSeguro(BigDecimal seguro) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setSeguro() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public BigDecimal getFlete() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setFlete(BigDecimal flete) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setFlete() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getCodIncoterms() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setCodIncoterms(String codIncoterms) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setCodIncoterms() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getDescIncoterms() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setDescIncoterms(String descIncoterms) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setDescIncoterms() is not allowed");
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public String getObservaciones() {
-		return null;
-	}
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setObservaciones(String observaciones) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setObservaciones() is not allowed");
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public List< org.shw.einvoice.es.util.pojo.TributosItem> getTributos() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public void setTributos(List< org.shw.einvoice.es.util.pojo.TributosItem> tributos) {
-		throw new UnsupportedOperationException("In Document Factura calling the method Resumen.setTributos() is not allowed");
-	}
+	
 
 	/**
 	 * @param args

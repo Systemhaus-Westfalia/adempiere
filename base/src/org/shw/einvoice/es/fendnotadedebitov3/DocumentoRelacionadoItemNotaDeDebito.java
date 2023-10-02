@@ -2,9 +2,10 @@ package org.shw.einvoice.es.fendnotadedebitov3;
 
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
-public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionadoItem {
+
+public class DocumentoRelacionadoItemNotaDeDebito {
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Nota de Debito, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";
 	
 	String tipoDocumento;
@@ -36,7 +37,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	/**
 	 * Validate the Schema conditions
 	 */
-	@Override
 	public String validateValues() {
 		final String PATTERN = "^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$";
 		if(getTipoGeneracion()==2) {
@@ -45,13 +45,12 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 			if(!patternOK)
 				return VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED;
 		}
-		return VALIDATION_RESULT_OK;
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 	/**
 	 * @return the tipoDocumento
 	 */
-	@Override
 	public String getTipoDocumento() {
 		return tipoDocumento;
 	}
@@ -61,7 +60,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	 * The parameter is validated.<br>
 	 * "enum" : ["03", "07"]
 	 */
-	@Override
 	public void setTipoDocumento(String tipoDocumento) {
 		if (tipoDocumento.compareTo("03")==0 || tipoDocumento.compareTo("07")==0)
 			this.tipoDocumento = tipoDocumento;
@@ -72,7 +70,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	/**
 	 * @return the tipoGeneracion
 	 */
-	@Override
 	public int getTipoGeneracion() {
 		return tipoGeneracion;
 	}
@@ -82,7 +79,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	 * The parameter is validated.<br>
 	 * "enum" : [1,2]
 	 */
-	@Override
 	public void setTipoGeneracion(int tipoGeneracion) {	
 		if (tipoGeneracion==1 || tipoGeneracion==2)
 			this.tipoGeneracion = tipoGeneracion;
@@ -93,7 +89,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	/**
 	 * @return the numeroDocumento
 	 */
-	@Override
 	public String getNumeroDocumento() {
 		return numeroDocumento;
 	}
@@ -103,7 +98,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 36
 	 */
-	@Override
 	public void setNumeroDocumento(String numeroDocumento) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 36;
@@ -118,7 +112,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	/**
 	 * @return the fechaEmision
 	 */
-	@Override
 	public String getFechaEmision() {
 		return fechaEmision;
 	}
@@ -127,7 +120,6 @@ public class DocumentoRelacionadoItemNotaDeDebito implements DocumentoRelacionad
 	 * @param fechaEmision the fechaEmision to set<br>
 	 * null not allowed
 	 */
-	@Override
 	public void setFechaEmision(String fechaEmision) {
 		if(fechaEmision!=null)
 			this.fechaEmision = fechaEmision;

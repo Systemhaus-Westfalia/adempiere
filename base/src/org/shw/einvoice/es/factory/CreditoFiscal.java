@@ -2,10 +2,10 @@
  * 
  */
 package org.shw.einvoice.es.factory;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ApendiceItemCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
@@ -17,24 +17,14 @@ import org.shw.einvoice.es.feccfcreditofiscalv3.OtrosDocumentosItemCreditoFiscal
 import org.shw.einvoice.es.feccfcreditofiscalv3.ReceptorCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ResumenCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.VentaTerceroCreditoFiscal;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.CuerpoDocumentoItem;
-import org.shw.einvoice.es.util.pojo.Documento;
-import org.shw.einvoice.es.util.pojo.DocumentoRelacionadoItem;
-import org.shw.einvoice.es.util.pojo.Emisor;
-import org.shw.einvoice.es.util.pojo.Extension;
-import org.shw.einvoice.es.util.pojo.Identificacion;
-import org.shw.einvoice.es.util.pojo.Motivo;
-import org.shw.einvoice.es.util.pojo.OtrosDocumentosItem;
-import org.shw.einvoice.es.util.pojo.Receptor;
-import org.shw.einvoice.es.util.pojo.Resumen;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
+import org.shw.einvoice.es.util.pojo.EDocument;
 
 
 /**
  * 
  */
 public class CreditoFiscal extends EDocument {
+	
 	IdentificacionCreditoFiscal identificacion;
 	List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionado = null;
 	EmisorCreditoFiscal emisor;
@@ -45,8 +35,6 @@ public class CreditoFiscal extends EDocument {
 	ResumenCreditoFiscal resumen;
 	ExtensionCreditoFiscal extension;
 	List<ApendiceItemCreditoFiscal> apendice=null;  // null allowed
-	
-	CreditoFiscalFactory creditoFiscalFactory;  // This must be eliminated from JSON production.
 
 	/**
 	 * No parameters
@@ -54,40 +42,24 @@ public class CreditoFiscal extends EDocument {
 	@SuppressWarnings("unchecked")
 	public CreditoFiscal() {
 		List<?> tmpList;
-		creditoFiscalFactory = new CreditoFiscalFactory();
 		
-		this.identificacion       = (IdentificacionCreditoFiscal) creditoFiscalFactory.createIdentificacion();
-
-		// This is necessary, because though DocumentoRelacionadoItemCreditoFiscal is a subtype of DocumentoRelacionadoItem,
-		// a List<DocumentoRelacionadoItemCreditoFiscal> is not a subtype of List<DocumentoRelacionadoItem>
-	    tmpList = creditoFiscalFactory.createDocumentoRelacionado(); 
-		this.documentoRelacionado = (List<DocumentoRelacionadoItemCreditoFiscal>) tmpList;
-
-		this.emisor               = (EmisorCreditoFiscal) creditoFiscalFactory.createEmisor();
-		this.receptor             = (ReceptorCreditoFiscal) creditoFiscalFactory.createReceptor();
-		
-		tmpList = creditoFiscalFactory.createOtrosDocumentos();
-	    this.otrosDocumentos      = (List<OtrosDocumentosItemCreditoFiscal>) tmpList;
-		
-		this.ventaTercero         = (VentaTerceroCreditoFiscal) creditoFiscalFactory.createVentaTercero();
-
-		tmpList = creditoFiscalFactory.createCuerpoDocumento();
-	    this.cuerpoDocumento      = (List<CuerpoDocumentoItemCreditoFiscal>) tmpList;
-				
-		this.resumen              = (ResumenCreditoFiscal) creditoFiscalFactory.createResumen();
-		this.extension            = (ExtensionCreditoFiscal) creditoFiscalFactory.createExtension();
-		
-	    tmpList = creditoFiscalFactory.createApendice();
-	    this.apendice             = (List<ApendiceItemCreditoFiscal>) tmpList;
-	    
+		this.identificacion       = new IdentificacionCreditoFiscal();
+		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemCreditoFiscal>();
+		this.emisor               = new EmisorCreditoFiscal();
+		this.receptor             = new ReceptorCreditoFiscal();
+	    this.otrosDocumentos      = new ArrayList<OtrosDocumentosItemCreditoFiscal>();
+		this.ventaTercero         = new VentaTerceroCreditoFiscal();
+	    this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemCreditoFiscal>();	
+		this.resumen              = new ResumenCreditoFiscal();
+		this.extension            = new ExtensionCreditoFiscal();
+	    this.apendice             = new ArrayList<ApendiceItemCreditoFiscal>();
 	}
 
 
 	/**
 	 * @return the identificacion
 	 */
-	@Override
-	public Identificacion getIdentificacion() {
+	public IdentificacionCreditoFiscal getIdentificacion() {
 		return identificacion;
 	}
 
@@ -95,17 +67,28 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @param identificacion the identificacion to set
 	 */
-	public void setIdentificacion(Identificacion identificacion) {
-		this.identificacion = (IdentificacionCreditoFiscal) identificacion;
+	public void setIdentificacion(IdentificacionCreditoFiscal identificacion) {
+		this.identificacion = identificacion;
 	}
 
 	/**
 	 * @param identificacion the (IdentificacionCreditoFiscal) identificacion to set
 	 */
-	@Override
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		errorMessages = creditoFiscalFactory.fillIdentification(factoryInput, identificacion );
-		
+		System.out.println("Start Credito Fiscal.fillIdentificacion()"); 
+		errorMessages.setLength(0);
+
+		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
+//		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setCodigoGeneracion(identificationJson.getString(CODIGOGENERACION));} 	catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoModelo(identificationJson.getInt(TIPOMODELO));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoOperacion(identificationJson.getInt(TIPOOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setFecEmi(identificationJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Credito Fiscal.fillIdentificacion()");
 		return errorMessages;
 	}
 
@@ -120,11 +103,8 @@ public class CreditoFiscal extends EDocument {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<DocumentoRelacionadoItem> getDocumentoRelacionado() {
-	    List<?> tempList = (List<DocumentoRelacionadoItemCreditoFiscal>) this.documentoRelacionado;
-	    List<DocumentoRelacionadoItem> finalList = (List<DocumentoRelacionadoItem>)tempList;
-		return finalList;
+	public List<DocumentoRelacionadoItemCreditoFiscal> getDocumentoRelacionado() {
+		return documentoRelacionado;
 	}
 
 
@@ -132,54 +112,34 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @param documentoRelacionado the documentoRelacionado to set
 	 */
-	public void setDocumentoRelacionado(List<DocumentoRelacionadoItem> documentoRelacionado) {
-		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
-		//      DocumentoRelacionadoItemCreditoFiscal is a subtype of DocumentoRelacionadoItem
-		// 		Integer                         is a subtype of Number,
-		//		List<? extends Integer> intList = new ArrayList<>();
-		//		List<? extends Number>  numList = intList;
-		//
-		//		Also possible I (but unsafe):
-		//		List<?> tmpList = (List<DocumentoRelacionadoItem>) documentoRelacionado;
-	    //		List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoCreditoFiscal = (List<DocumentoRelacionadoItemCreditoFiscal>) tmpList;
-		//		
-		//		Also possible II (safe with compiler directive):
-		// 		@SuppressWarnings("unchecked")
-		//		List<? extends DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItemCreditoFiscal = new ArrayList<>();
-		//		List<? extends DocumentoRelacionadoItem>  documentoRelacionadoItem = documentoRelacionadoItemCreditoFiscal;  
-		//		setDocumentoRelacionado((List<DocumentoRelacionadoItemCreditoFiscal>) documentoRelacionadoItem);
-		//
-		//		Also possible III (cast List):
-		// 		Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemCreditoFiscal)
-		//		List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItemCreditoFiscal= new ArrayList<DocumentoRelacionadoItemCreditoFiscal>();
-		//		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemCreditoFiscal.add((DocumentoRelacionadoItemCreditoFiscal) e) );
-		//
-		//		Also possible IV (cast single entry):
-		//  	DocumentoRelacionadoItemCreditoFiscal xxx = (DocumentoRelacionadoItemCreditoFiscal) documentoRelacionado.get(1);
-		
-		// Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemCreditoFiscal)
-		List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionadoItemCreditoFiscal= new ArrayList<DocumentoRelacionadoItemCreditoFiscal>();
-		documentoRelacionado.stream().forEach(e -> documentoRelacionadoItemCreditoFiscal.add((DocumentoRelacionadoItemCreditoFiscal) e) );
-		
-		this.documentoRelacionado = documentoRelacionadoItemCreditoFiscal;
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionado) {		
+		this.documentoRelacionado = documentoRelacionado;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
 	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
-		List<?> tmpList = documentoRelacionado;
-		errorMessages = creditoFiscalFactory.fillDocumentoRelacionado(factoryInput, (List<DocumentoRelacionadoItem>) tmpList);	
+		System.out.println("Start CreditoFiscal.fillDocumentoRelacionado()"); 
+		errorMessages.setLength(0);
+
+		JSONObject documentoRelacionadoItemsJson = factoryInput.getJSONObject(DOCUMENTORELACIONADO);
+		JSONArray documentoRelacionadoArrayJson = documentoRelacionadoItemsJson.getJSONArray(DOCUMENTORELACIONADO);
+	
+		for (int i=0; i< documentoRelacionadoArrayJson.length(); i++) {
+			JSONObject cuerpoDocumentoRelacionadoItemJson = documentoRelacionadoArrayJson.getJSONObject(i);
+			DocumentoRelacionadoItemCreditoFiscal documentoRelacionadoItemCreditoFiscal = new DocumentoRelacionadoItemCreditoFiscal();
+			try {documentoRelacionadoItemCreditoFiscal.setNumeroDocumento(cuerpoDocumentoRelacionadoItemJson.getString(NUMERODOCUMENTO));} 					catch (Exception e) {errorMessages.append(e);}
+
+			documentoRelacionado.add(documentoRelacionadoItemCreditoFiscal);						
+		}
+
+		System.out.println("End CreditoFiscal.fillDocumentoRelacionado()"); 
 		return errorMessages;
-		
 	}
 
 
 	/**
 	 * @return the emisor
 	 */
-	@Override
-	public Emisor getEmisor() {
+	public EmisorCreditoFiscal getEmisor() {
 		return emisor;
 	}
 
@@ -187,13 +147,32 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
-		this.emisor = (EmisorCreditoFiscal) emisor;
+	public void setEmisor(EmisorCreditoFiscal emisor) {
+		this.emisor = emisor;
 	}
 	
-	@Override
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		errorMessages = creditoFiscalFactory.fillEmisor(factoryInput, emisor);
+		System.out.println("Start CreditoFiscal.fillEmisor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
+		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
+//		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
+//
+//		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
+//		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//
+//		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End CreditoFiscal.fillEmisor()");
 		return errorMessages;
 	}
 
@@ -201,21 +180,25 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @return the receptor
 	 */
-	@Override
-	public Receptor getReceptor() {
+	public ReceptorCreditoFiscal getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(Receptor receptor) {
-		this.receptor = (ReceptorCreditoFiscal) receptor;
+	public void setReceptor(ReceptorCreditoFiscal receptor) {
+		this.receptor = receptor;
 	}
 
-	@Override
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		errorMessages = creditoFiscalFactory.fillReceptor(factoryInput, receptor);
+		System.out.println("Start CreditoFiscal.fillReceptor()"); 
+		errorMessages.setLength(0);
+
+		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
+		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+		
+		System.out.println("End CreditoFiscal.fillReceptor()");
 		return errorMessages;
 	}
 
@@ -223,64 +206,23 @@ public class CreditoFiscal extends EDocument {
 	 * @return the otrosDocumentos
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<OtrosDocumentosItem> getOtrosDocumentos() {
-	    List<?> tempList = (List<OtrosDocumentosItemCreditoFiscal>) this.otrosDocumentos;
-	    List<OtrosDocumentosItem> finalList = (List<OtrosDocumentosItem>)tempList;
-		return finalList;
+	public List<OtrosDocumentosItemCreditoFiscal> getOtrosDocumentos() {
+		return otrosDocumentos;
 	}
 
 
 	/**
 	 * @param otrosDocumentos the otrosDocumentos to set
 	 */
-	public void setOtrosDocumentos(List<OtrosDocumentosItem> otrosDocumentos) {
-		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
-		//      OtrosDocumentosItemCreditoFiscal is a subtype of OtrosDocumentosItem
-		// 		Integer                    is a subtype of Number,
-		//		List<? extends Integer> intList = new ArrayList<>();
-		//		List<? extends Number>  numList = intList;
-		//
-		//		Also possible I (but unsafe)::
-		//		List<?> tmpList = (List<OtrosDocumentosItem>) otrosDocumentos;
-	    //		List<OtrosDocumentosItemCreditoFiscal> otrosDocumentosCreditoFiscal = (List<OtrosDocumentosItemCreditoFiscal>) tmpList;
-		//		
-		//		Also possible II (safe with compiler directive):
-		// 		@SuppressWarnings("unchecked")
-		//		List<? extends OtrosDocumentosItemCreditoFiscal> otrosDocumentosItemCreditoFiscal = new ArrayList<>();
-		//		List<? extends OtrosDocumentosItem>  otrosDocumentosItem = otrosDocumentosItemCreditoFiscal;  // new ArrayList<>(); would be OK
-		//		setOtrosDocumentos((List<OtrosDocumentosItemCreditoFiscal>) otrosDocumentosItem);
-		//
-		//		Also possible III (cast List):
-		// 		Convert (=cast) all (DocumentoRelacionadoItem) to (DocumentoRelacionadoItemCreditoFiscal)
-		//		List<OtrosDocumentosItemCreditoFiscal> otrosDocumentosItemCreditoFiscal= new ArrayList<OtrosDocumentosItemCreditoFiscal>();
-		//		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemCreditoFiscal.add((OtrosDocumentosItemCreditoFiscal) e) );
-		//
-		//		Also possible IV (cast single entry):
-		//  	OtrosDocumentosItemCreditoFiscal xxx = (OtrosDocumentosItemCreditoFiscal) otrosDocumentos.get(1);
-
-		// Convert (=cast) all (OtrosDocumentosItem) to (OtrosDocumentosItemCreditoFiscal)
-		List<OtrosDocumentosItemCreditoFiscal> otrosDocumentosItemCreditoFiscal = new ArrayList<OtrosDocumentosItemCreditoFiscal>();
-		otrosDocumentos.stream().forEach(e -> otrosDocumentosItemCreditoFiscal.add((OtrosDocumentosItemCreditoFiscal) e) );
-		
-		this.otrosDocumentos = otrosDocumentosItemCreditoFiscal;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public StringBuffer fillOtrosDocumentos(JSONObject factoryInput) {
-		List<?> tmpList = otrosDocumentos;
-		errorMessages = creditoFiscalFactory.fillOtrosDocumentos(factoryInput, (List<OtrosDocumentosItem>) tmpList);
-		return errorMessages;
+	public void setOtrosDocumentos(List<OtrosDocumentosItemCreditoFiscal> otrosDocumentos) {
+		this.otrosDocumentos = otrosDocumentos;
 	}
 
 
 	/**
 	 * @return the ventaTercero
 	 */
-	@Override
-	public VentaTercero getVentaTercero() {
+	public VentaTerceroCreditoFiscal getVentaTercero() {
 		return ventaTercero;
 	}
 
@@ -288,14 +230,8 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @param ventaTercero the ventaTercero to set
 	 */
-	public void setVentaTercero(VentaTercero ventaTercero) {
-		this.ventaTercero = (VentaTerceroCreditoFiscal) ventaTercero;
-	}
-
-	@Override
-	public StringBuffer fillVentaTercero(JSONObject factoryInput) {
-		errorMessages = creditoFiscalFactory.fillVentaTercero(factoryInput, ventaTercero);
-		return errorMessages;
+	public void setVentaTercero(VentaTerceroCreditoFiscal ventaTercero) {
+		this.ventaTercero = ventaTercero;
 	}
 
 
@@ -303,68 +239,58 @@ public class CreditoFiscal extends EDocument {
 	 * @return the cuerpoDocumento
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
-	    List<?> tempList = (List<CuerpoDocumentoItemCreditoFiscal>) this.cuerpoDocumento;
-	    List<CuerpoDocumentoItem> finalList = (List<CuerpoDocumentoItem>)tempList;
-		return finalList;
+	public List<CuerpoDocumentoItemCreditoFiscal> getCuerpoDocumento() {
+		return cuerpoDocumento;
 	}
 
 
 	/**
 	 * @param cuerpoDocumento the cuerpoDocumento to set
 	 */
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
-		// TODO Implement actual code
-		
-		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
-		//      CuerpoDocumentoItemCreditoFiscal is a subtype of CuerpoDocumentoItem
-		// 		Integer                    is a subtype of Number,
-		//		List<? extends Integer> intList = new ArrayList<>();
-		//		List<? extends Number>  numList = intList;
-		//
-		//		Also possible I (but unsafe):
-		//		List<?> tmpList = (List<CuerpoDocumentoItem>) cuerpoDocumento;
-	    //		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoCreditoFiscal = (List<CuerpoDocumentoItemCreditoFiscal>) tmpList;
-		//		
-		//		Also possible II (safe with compiler directive):
-		// 		@SuppressWarnings("unchecked")
-		//		List<? extends CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoItemCreditoFiscal = new ArrayList<>();
-		//		List<? extends CuerpoDocumentoItem>  cuerpoDocumentoItem = cuerpoDocumentoItemCreditoFiscal;  // new ArrayList<>(); would be OK
-		//		setCuerpoDocumento((List<CuerpoDocumentoItemCreditoFiscal>) cuerpoDocumentoItem);
-		//
-		//		Also possible III (cast List):
-		//		@SuppressWarnings("unchecked")
-		// 		Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemCreditoFiscal)
-		//		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoItemCreditoFiscal= new ArrayList<CuerpoDocumentoItemCreditoFiscal>();
-		//		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemCreditoFiscal.add((CuerpoDocumentoItemCreditoFiscal) e) );
-		//
-		//		Also possible IV (cast single entry):
-		//  	OtrosDocumentosItemCreditoFiscal xxx = (OtrosDocumentosItemCreditoFiscal) otrosDocumentos.get(1);	
-		
-		// Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemCreditoFiscal)
-		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoItemCreditoFiscal = new ArrayList<CuerpoDocumentoItemCreditoFiscal>();
-		cuerpoDocumento.stream().forEach(e -> cuerpoDocumentoItemCreditoFiscal.add((CuerpoDocumentoItemCreditoFiscal) e) );
-		
-		this.cuerpoDocumento = cuerpoDocumentoItemCreditoFiscal;
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento) {
+		this.cuerpoDocumento = cuerpoDocumento;
 	}
 
 
-	@SuppressWarnings("unchecked")
-	@Override
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		List<?> tmpList = cuerpoDocumento;
-		errorMessages = creditoFiscalFactory.fillCuerpoDocumento(factoryInput, (List<CuerpoDocumentoItem>) tmpList);
+		System.out.println("Start CreditoFiscal.fillCuerpoDocumento()"); 
+		errorMessages.setLength(0);
+
+		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
+		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
+	
+		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) { 
+			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
+			CuerpoDocumentoItemCreditoFiscal cuerpoDocumentoItemCreditoFiscal = new CuerpoDocumentoItemCreditoFiscal();
+			try {cuerpoDocumentoItemCreditoFiscal.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setCodTributo(null);} 																	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setTributos(null);} 																		catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+//			try {cuerpoDocumentoItemCreditoFiscal.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(IVAITEM));} 				catch (Exception e) {errorMessages.append(e);}
+
+			cuerpoDocumento.add(cuerpoDocumentoItemCreditoFiscal);						
+		}
+
+		System.out.println("End CreditoFiscal.fillCuerpoDocumento()"); 
 		return errorMessages;
-		
 	}
 
 	/**
 	 * @return the resumen
 	 */
-	@Override
-	public Resumen getResumen() {
+	public ResumenCreditoFiscal getResumen() {
 		return resumen;
 	}
 
@@ -372,13 +298,48 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @param resumen the resumen to set
 	 */
-	public void setResumen(Resumen resumen) {
-		this.resumen = (ResumenCreditoFiscal) resumen;
+	public void setResumen(ResumenCreditoFiscal resumen) {
+		this.resumen = resumen;
 	}
 
-	@Override
 	public StringBuffer fillResumen(JSONObject factoryInput) {
-		errorMessages = creditoFiscalFactory.fillResumen(factoryInput, resumen);
+		System.out.println("Start CreditoFiscal.fillResumen()"); 
+		errorMessages.setLength(0);		
+		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
+
+		try {resumen.setTotalNoSuj(resumenJson.getBigDecimal(TOTALNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalExenta(resumenJson.getBigDecimal(TOTALEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSubTotalVentas(resumenJson.getBigDecimal(SUBTOTALVENTAS));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuNoSuj(resumenJson.getBigDecimal(DESCUNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setDescuGravada(resumenJson.getBigDecimal(DESCUGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));} catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setIvaRete1(resumenJson.getBigDecimal(IVARETE1));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalNoGravado(resumenJson.getBigDecimal(TOTALNOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setSaldoFavor(resumenJson.getBigDecimal(SALDOFAVOR));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {resumen.setTotalIva(resumenJson.getBigDecimal(TOTALIVA));} 						catch (Exception e) {errorMessages.append(e);}
+//
+//		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
+//		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
+//
+//		PagosItem newPagosItem = new PagosItem();
+//		try {newPagosItem.setCodigo(pagosItemJson.getString(CODIGO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setMontoPago(pagosItemJson.getBigDecimal(MONTOPAGO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 	catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 			catch (Exception e) {errorMessages.append(e);}
+//		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 			catch (Exception e) {errorMessages.append(e);}
+
+		//resumen.getPagos().add(newPagosItem);
+
+		System.out.println("End CreditoFiscal.fillResumen()"); 
 		return errorMessages;
 	}
 
@@ -386,8 +347,7 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @return the extension
 	 */
-	@Override
-	public Extension getExtension() {
+	public ExtensionCreditoFiscal getExtension() {
 		return extension;
 	}
 
@@ -395,14 +355,8 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(Extension extension) {
-		this.extension = (ExtensionCreditoFiscal) extension;
-	}
-
-	@Override
-	public StringBuffer fillExtension(JSONObject factoryInput) {
-		errorMessages = creditoFiscalFactory.fillExtension(factoryInput, extension);
-		return errorMessages;
+	public void setExtension(ExtensionCreditoFiscal extension) {
+		this.extension = extension;
 	}
 
 
@@ -411,92 +365,17 @@ public class CreditoFiscal extends EDocument {
 	 * @return the apendice
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<ApendiceItem> getApendice() {
-	    List<?> tempList = (List<ApendiceItemCreditoFiscal>) this.apendice;
-	    List<ApendiceItem> finalList = (List<ApendiceItem>)tempList;
-		return finalList;
+	public List<ApendiceItemCreditoFiscal> getApendice() {
+		return apendice;
 	}
 
 
 	/**
 	 * @param apendice the apendice to set
 	 */
-	public void setApendice(List<ApendiceItem> apendice) {
-		// See: https://stackoverflow.com/questions/933447/how-do-you-cast-a-list-of-supertypes-to-a-list-of-subtypes
-		// See: https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html
-		//      CuerpoDocumentoItemCreditoFiscal is a subtype of CuerpoDocumentoItem
-		// 		Integer                    is a subtype of Number,
-		//		List<? extends Integer> intList = new ArrayList<>();
-		//		List<? extends Number>  numList = intList;
-		//
-		//		Also possible I (but unsafe):
-		//		List<?> tmpList = (List<CuerpoDocumentoItem>) cuerpoDocumento;
-	    //		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumentoCreditoFiscal = (List<CuerpoDocumentoItemCreditoFiscal>) tmpList;
-		//		
-		//		Also possible II (safe with compiler directive):
-		// 		@SuppressWarnings("unchecked")
-		//		List<? extends ApendiceItemCreditoFiscal> apendiceCreditoFiscal = new ArrayList<>();
-		//		List<? extends ApendiceItem>  apendiceItem = apendiceCreditoFiscal;  // new ArrayList<>(); would be OK
-		//		setApendice((List<ApendiceItemCreditoFiscal>) apendiceItem);
-		//
-		//		Also possible III (cast List):
-		//		Convert (=cast) all (CuerpoDocumentoItem) to (CuerpoDocumentoItemCreditoFiscal)
-		//		List<ApendiceItemCreditoFiscal> apendiceItemCreditoFiscal= new ArrayList<ApendiceItemCreditoFiscal>();
-		//		apendice.stream().forEach(e -> apendiceItemCreditoFiscal.add((ApendiceItemCreditoFiscal) e) );
-		//
-		//		Also possible IV (cast single entry):
-		//  	OtrosDocumentosItemCreditoFiscal xxx = (OtrosDocumentosItemCreditoFiscal) otrosDocumentos.get(1);	
-
-		// Convert (=cast) all (ApendiceItem) to (ApendiceItemCreditoFiscal)
-		List<ApendiceItemCreditoFiscal> apendiceItemCreditoFiscal = new ArrayList<ApendiceItemCreditoFiscal>();
-		apendice.stream().forEach(e -> apendiceItemCreditoFiscal.add((ApendiceItemCreditoFiscal) e) );
-		
-		this.apendice = apendiceItemCreditoFiscal;
+	public void setApendice(List<ApendiceItemCreditoFiscal> apendice) {		
+		this.apendice = apendice;
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public StringBuffer fillApendice(JSONObject factoryInput) {
-		List<?> tmpList = apendice;
-		errorMessages = creditoFiscalFactory.fillApendice(factoryInput, (List<ApendiceItem>) tmpList);
-		return errorMessages;
-		
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A DOCUMENTO PROPERTY
-	 */
-	@Override
-	public Documento getDocumento() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillDocumento(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Credito Fiscal calling the method CreditoFiscal.fillDocumento() is not allowed");
-	}
-
-	/**
-	 * THIS CLASS DOESN'T HAVE A MOTIVO PROPERTY
-	 */
-	@Override
-	public Motivo getMotivo() {
-		return null;
-	}
-
-	/**
-	 * DO NO USE THIS METHOD!! IT WILL YIELD A RUNTIME EXCEPTION!!!!!
-	 */
-	@Override
-	public StringBuffer fillMotivo(JSONObject factoryInput) {
-		throw new UnsupportedOperationException("In Document Credito Fiscal calling the method CreditoFiscal.fillMotivo() is not allowed");
-	}
-
-
 
 
 	/**

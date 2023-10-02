@@ -308,6 +308,9 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), invoice.getGrandTotal().setScale(2).toString());
 		BigDecimal SaldoFavor = Env.ZERO;
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+			TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
+					invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
+			resumen.getTributos().add(tributosItem);
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				TotalNoSuj = invoiceTax.getTaxBaseAmt();
 			}
@@ -316,9 +319,7 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				TotalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();
-				TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
-						invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
-				resumen.getTributos().add(tributosItem);
+
 			}
 
 		}
@@ -364,8 +365,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	private void fillCuerpoDocumento(FacturaElectronica facturaElectronica, MInvoice invoice) {
 		int i = 0;
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
-			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
-				continue;
 			i++;
 			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
 

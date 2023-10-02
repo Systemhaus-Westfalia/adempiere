@@ -327,9 +327,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 	private void fillCuerpoDocumento(FacturaExportacion facturaExportacion, MInvoice invoice) {
 		int i = 0;
 		//Durch InvoiceZeilen laufen
-		for (MInvoiceLine invoiceLine:invoice.getLines()) {						
-			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
-				continue;
+		for (MInvoiceLine invoiceLine:invoice.getLines()) {
 			i++;
 	    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
 			int numItem = invoiceLine.getLine();
@@ -357,7 +355,6 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 					precioUni, montoDescu,  ventaGravada, tributosItems, noGravado); 
 			cuerpoDocumentoItem.validateValues();
 			facturaExportacion.getCuerpoDocumento().add(cuerpoDocumentoItem);
-
 	    	System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() + " Finished");
 		}  		
 		

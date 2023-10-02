@@ -290,19 +290,19 @@ public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredit
 		//List<TributosItem> tributos;
 		//List<PagosItem> pagos ;  // there must be at least one item
 		
-		BigDecimal TotalNoSuj = Env.ZERO;
-		BigDecimal TotalExenta = Env.ZERO;
-		BigDecimal TotalGravada = Env.ZERO;
-		BigDecimal SubTotalVentas = Env.ZERO;
-		BigDecimal DescuNoSuj = Env.ZERO;
-		BigDecimal DescuExenta = Env.ZERO;
-		BigDecimal DescuGravada = Env.ZERO;
-		BigDecimal PorcentajeDescuento = Env.ZERO;
-		BigDecimal SubTotal = invoice.getTotalLines();
-		BigDecimal IvaPerci1 = Env.ZERO;
-		BigDecimal IvaRete1 = Env.ZERO;
-		BigDecimal MontoTotalOperacion = invoice.getGrandTotal();
-		BigDecimal TotalPagar =invoice.getGrandTotal();
+		BigDecimal totalNoSuj = Env.ZERO;
+		BigDecimal totalExenta = Env.ZERO;
+		BigDecimal totalGravada = Env.ZERO;
+		BigDecimal subTotalVentas = Env.ZERO;
+		BigDecimal descuNoSuj = Env.ZERO;
+		BigDecimal descuExenta = Env.ZERO;
+		BigDecimal descuGravada = Env.ZERO;
+		BigDecimal porcentajeDescuento = Env.ZERO;
+		BigDecimal subTotal = invoice.getTotalLines();
+		BigDecimal ivaPerci1 = Env.ZERO;
+		BigDecimal ivaRete1 = Env.ZERO;
+		BigDecimal montoTotalOperacion = invoice.getGrandTotal();
+		BigDecimal totalPagar =invoice.getGrandTotal();
 		BigDecimal totalIVA = Env.ZERO;
 
 		int CondicionOperacion =2;
@@ -311,48 +311,32 @@ public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredit
 		BigDecimal SaldoFavor = Env.ZERO;
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				TotalNoSuj = invoiceTax.getTaxBaseAmt();
+				totalNoSuj = invoiceTax.getTaxBaseAmt();
 			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00)
-				TotalExenta = invoiceTax.getTaxBaseAmt();
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
-				TotalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT"))
+				totalExenta = invoiceTax.getTaxBaseAmt();
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA") ) {
+				totalIVA = totalIVA.add(invoiceTax.getTaxAmt());
+				totalGravada = totalGravada.add(invoiceTax.getTaxBaseAmt());
 			}
-				
 		}
 		
-		resumen.setTotalNoSuj(TotalNoSuj);
-		resumen.setTotalExenta(TotalExenta);
-		resumen.setTotalGravada(TotalGravada);
-		resumen.setSubTotalVentas(TotalGravada.add(TotalNoSuj).add(TotalExenta));
-		resumen.setDescuNoSuj(DescuNoSuj);
-		resumen.setDescuExenta(DescuExenta);
-		resumen.setDescuGravada(DescuGravada);
-		resumen.setSubTotal(TotalGravada.add(TotalNoSuj).add(TotalExenta));
-		resumen.setIvaPerci1(IvaPerci1);
-		resumen.setIvaRete1(IvaRete1);
+		resumen.setTotalNoSuj(totalNoSuj);
+		resumen.setTotalExenta(totalExenta);
+		resumen.setTotalGravada(totalGravada);
+		resumen.setSubTotalVentas(totalGravada.add(totalNoSuj).add(totalExenta));
+		resumen.setDescuNoSuj(descuNoSuj);
+		resumen.setDescuExenta(descuExenta);
+		resumen.setDescuGravada(descuGravada);
+		resumen.setSubTotal(totalGravada.add(totalNoSuj).add(totalExenta));
+		resumen.setIvaPerci1(ivaPerci1);
+		resumen.setIvaRete1(ivaRete1);
 		resumen.setMontoTotalOperacion(invoice.getGrandTotal());		resumen.setTotalLetras(TotalLetras);
 		resumen.setCondicionOperacion(1);
 		resumen.setTotalDescu(Env.ZERO);
 		resumen.setReteRenta(Env.ZERO);
 	
 		
-		ArrayList<Integer> taxList = new ArrayList<>();
-		for (MInvoiceLine invoiceLine : invoice.getLines(true)) {
-			if (!taxList.contains(invoiceLine.getC_Tax_ID())) {
-				Optional<MInvoiceTax> maybeInvoiceTax = Optional.ofNullable(MInvoiceTax.get(invoiceLine, invoice.getPrecision(), false, get_TrxName())); //	current Tax
-				if (maybeInvoiceTax.isPresent()) {
-					MInvoiceTax invoiceTax = maybeInvoiceTax.get();
-					if (invoiceTax.getTaxAmt().compareTo(Env.ZERO) != 0) {
-						taxList.add(invoiceLine.getC_Tax_ID());
-						TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
-								invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
-						resumen.getTributos().add(tributosItem);						
-					}
-				}
-			}
-		}			
 	}
 	
 	private void fillExtension(Extension extension, MInvoice invoice) {
@@ -374,9 +358,7 @@ public class EI_CreateInvoice_NotaCredito_SV extends EI_CreateInvoice_NotaCredit
 	private void fillCuerpoDocumento(NotaDeCredito comprobanteNotaCredito, MInvoice invoice) {
 		int i = 0;
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
-			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
-				continue;
-
+			
 			i++;
 			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
 			if (invoiceLine.getRef_InvoiceLine_ID()>0) {

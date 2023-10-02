@@ -276,8 +276,6 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 	private void fillCuerpoDocumento(ComprobanteCreditoFiscal comprobanteCreditoFiscal, MInvoice invoice) {
 		int i = 0;
 		for (MInvoiceLine invoiceLine:invoice.getLines()) {	
-			if (invoiceLine.getC_Charge_ID() > 0 && invoiceLine.getC_Charge().getC_ChargeType().getName().equals("Cuenta ajena"))
-				continue;
 			i++;
 			System.out.println("Fill Cuerpo Documento: " + invoice.getDocumentNo() + " Line: " + invoiceLine.getLine() );
     		int tipoItem = 2;
@@ -341,8 +339,6 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		resumen.setPagos(pagosItems);
 
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			if (invoiceTax.getC_Tax().getC_TaxCategory().getName().equals("Cuenta ajena"))
-				continue;
 			TributosItem tributosItem = new TributosItem(invoiceTax.getC_Tax().getE_Duties().getValue(), 
 					invoiceTax.getC_Tax().getE_Duties().getName(), invoiceTax.getTaxAmt());
 			resumen.getTributos().add(tributosItem);
@@ -357,7 +353,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			}
 
 		}
-		BigDecimal grandtotal = TotalGravada.add(TotalNoSuj).add(TotalExenta).add(totalIVA);
+		BigDecimal grandtotal = invoice.getGrandTotal();
 		String TotalLetras=Msg.getAmtInWords(Env.getLanguage(getCtx()), grandtotal.setScale(2).toString());		
 		resumen.setTotalNoSuj(TotalNoSuj);
 		resumen.setTotalExenta(TotalExenta);

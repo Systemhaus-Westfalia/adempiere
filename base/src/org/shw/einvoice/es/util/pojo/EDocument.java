@@ -94,11 +94,14 @@ public class EDocument {
 
 	public static final String VERSION				= "version";
 	
+	
 	public static final String CODESTABLE			= "codEstable";
 	public static final String MOTIVOANULACION		= "motivoAnulacion";
 	
 	public static final String TOTALIVARETENIDO 	= "totalIVAretenido";
 	
 	public static final String ERRORMESSAGES 		= "errorMessages";
-
+	public static final String MOTIVOCONTIN			= "motivoContin";
+	public static final String TIPOCONTINGENCIA		= "tipoContingencia";
+	public static final String VALOR				= "valor";
 }

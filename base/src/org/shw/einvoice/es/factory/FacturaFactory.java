@@ -23,6 +23,7 @@ import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItemFactura;
@@ -30,6 +31,7 @@ import org.shw.einvoice.es.fefcfacturaelectronicav1.EmisorFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.Factura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.IdentificacionFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.ResumenFactura;
+import org.shw.einvoice.es.fefcfacturaelectronicav1.TributosItemFactura;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
@@ -186,21 +188,44 @@ public class FacturaFactory extends EDocumentFactory {
 	
 	private JSONObject generateIdentificationInputData() {
 		System.out.println("Start collecting JSON data for Identificacion");
+
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		int position = documentno.indexOf("_");
+		documentno = documentno.substring(0,position);
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
+		String duns = orgInfo.getDUNS().replace("-", "");
 		
+		String numeroControl = "DTE-" + factura.getIdentificacion().getTipoDte()
+				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 		Integer invoiceID = invoice.get_ID();
-		String numeroControl = getNumeroControl(invoiceID, orgInfo, "DTE-01-");
+		//String numeroControl = getNumeroControl(invoiceID, orgInfo, "DTE-01-");
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
 		
 		JSONObject jsonObjectIdentificacion = new JSONObject();
+		Boolean isContigencia = false;
+		if (TimeUtil.getDaysBetween(invoice.getDateAcct(), TimeUtil.getDay(0))>=3) {
+			isContigencia = true;
+		}
+
+		int tipoModelo = isContigencia?2:1;
+		int tipoOperacion = isContigencia?2:1;
 		jsonObjectIdentificacion.put(Factura.NUMEROCONTROL, numeroControl);
 		jsonObjectIdentificacion.put(Factura.CODIGOGENERACION, codigoGeneracion);
-		jsonObjectIdentificacion.put(Factura.TIPOMODELO, 1);
-		jsonObjectIdentificacion.put(Factura.TIPOOPERACION, 1);
+		jsonObjectIdentificacion.put(Factura.TIPOMODELO, tipoModelo);
+		jsonObjectIdentificacion.put(Factura.TIPOOPERACION, tipoOperacion);
 		jsonObjectIdentificacion.put(Factura.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
 		jsonObjectIdentificacion.put(Factura.HOREMI, "00:00:00");
 		jsonObjectIdentificacion.put(Factura.TIPOMONEDA, "USD");
-		jsonObjectIdentificacion.put(Factura.AMBIENTE, "00");
+		jsonObjectIdentificacion.put(Factura.AMBIENTE, client.getE_Enviroment().getValue());
+		
+		if (isContigencia) {
+			jsonObjectIdentificacion.put(Factura.MOTIVOCONTIN, "Contigencia por fecha de factura");
+			jsonObjectIdentificacion.put(Factura.TIPOCONTINGENCIA, 5);
+		}
+		
+		
 
 		System.out.println("Finish collecting JSON data for Identificacion");
 		return jsonObjectIdentificacion;
@@ -301,21 +326,58 @@ public class FacturaFactory extends EDocumentFactory {
 		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
-		
-		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				totalNoSuj = invoiceTax.getTaxBaseAmt();
-			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00) {
-				totalExenta = invoiceTax.getTaxBaseAmt();
-			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
-				totalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();
-			}
-		}
+
+//		JSONArray jsonTributosArray = new JSONArray();
+//		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
+//				totalNoSuj = invoiceTax.getTaxBaseAmt();
+//				JSONObject jsonTributoItem = new JSONObject();				
+//				jsonTributoItem.put(Factura.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
+//				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
+//				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
+//				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
+//			}
+//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
+//				totalExenta = invoiceTax.getTaxBaseAmt();
+//			}
+//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
+//				totalGravada = invoiceTax.getTaxBaseAmt();
+//				totalIVA = invoiceTax.getTaxAmt();
+//			}
+//		}
 				
 		JSONObject jsonObjectResumen = new JSONObject();
+		
+
+		JSONArray jsonTributosArray = new JSONArray();
+		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("RET"))
+				continue;
+			JSONObject jsonTributoItem = new JSONObject();		
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
+				totalNoSuj = invoiceTax.getTaxBaseAmt();		
+				jsonTributoItem.put(Factura.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
+			}
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
+				totalExenta = invoiceTax.getTaxBaseAmt();
+				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
+			}
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
+				totalGravada = invoiceTax.getTaxBaseAmt();
+				totalIVA = invoiceTax.getTaxAmt();	
+				jsonTributoItem.put(Factura.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
+			}
+			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
+		}
+		if (!jsonTributosArray.isEmpty())
+			jsonObjectResumen.put(Factura.TRIBUTOS, jsonTributosArray);
+		
+		
 		jsonObjectResumen.put(Factura.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(Factura.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(Factura.TOTALGRAVADA, totalGravada);
@@ -346,6 +408,9 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonArrayPagos.put(jsonPago);
 
 		jsonObjectResumen.put(Factura.PAGOS, jsonArrayPagos);
+		
+		
+		
 		
 		System.out.println("Finish collecting JSON data for Resumen");
 		return jsonObjectResumen;
@@ -415,56 +480,7 @@ public class FacturaFactory extends EDocumentFactory {
     	String facturaAsString    = objectMapper.writeValueAsString(factura);
         JSONObject  facturaAsJson = new JSONObject(facturaAsString);
         
-        facturaAsJson.remove(Factura.DOCUMENTORELACIONADO);
-        facturaAsJson.remove(Factura.OTROSDOCUMENTOS);
-        facturaAsJson.remove(Factura.RECEPTOR);
-        facturaAsJson.remove(Factura.VENTATERCERO);        
-        facturaAsJson.remove(Factura.EXTENSION);
-        facturaAsJson.remove(Factura.APENDICE);
-        facturaAsJson.remove(Factura.DOCUMENTO);
-        facturaAsJson.remove(Factura.MOTIVO);
-        facturaAsJson.remove(Factura.ERRORMESSAGES);
 
-        facturaAsJson.getJSONObject(Factura.IDENTIFICACION).remove("horAnula");
-        facturaAsJson.getJSONObject(Factura.IDENTIFICACION).remove("motivoContigencia");
-        facturaAsJson.getJSONObject(Factura.IDENTIFICACION).remove("fecAnula");
-        facturaAsJson.getJSONObject(Factura.IDENTIFICACION).remove("motivoContingencia");
-
-        facturaAsJson.getJSONObject(Factura.RESUMEN).remove("seguro");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("totalSujetoRetencion");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("tributos");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("tributosFactura");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("numPagoElectronico");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("flete");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("ivaPerci1");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("descuento");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("codIncoterms");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("totalIVAretenidoLetras");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("descIncoterms");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("observaciones");
-		facturaAsJson.getJSONObject(Factura.RESUMEN).remove("totalIVAretenido");
-
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove("numDocumento");
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove("fechaEmision");
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove("tributos");
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove("codTributo");
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove("codigoRetencionMH");
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove("montoSujetoGrav");
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove(" ivaRetenido");
-		facturaAsJson.getJSONObject(Factura.CUERPODOCUMENTO).remove("tipoDte");
-
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("codigo");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("puntoVentaMH");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("direccion");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("codEstable");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("codPuntoVenta");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("codigoMH");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("codEstableMH");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("puntoVenta");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("recintoFiscal");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("regimen");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("nomEstablecimiento");
-		facturaAsJson.getJSONObject(Factura.EMISOR).remove("codPuntoVentaMH");
 
         String finalFacturaAsString = objectMapper.writeValueAsString(facturaAsJson);
 		return finalFacturaAsString;

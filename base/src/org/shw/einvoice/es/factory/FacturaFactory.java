@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 
-import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
 import org.apache.commons.lang3.StringUtils;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
@@ -39,19 +38,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class FacturaFactory extends EDocumentFactory {
-	MClient				client = null;
-	MOrgInfo 			orgInfo = null;
-	String trxName;
-	Properties contextProperties;
-	JSONObject jsonInputToFactory;
 	Factura factura;
 	MInvoice invoice;
 	
 	public FacturaFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
-		this.trxName = trxName;
-		this.contextProperties = contextProperties;
-		this.client  = client;
-		this.orgInfo = orgInfo;
+		super(trxName, contextProperties, client, orgInfo);
 		this.invoice = invoice;
 	}
 
@@ -182,16 +173,15 @@ public class FacturaFactory extends EDocumentFactory {
 		return factura;
 	}
 
+	@Override
 	public void generateJSONInputData() {
-		JSONObject factoryInput = new JSONObject();  // Will contain data passed to factory
+		jsonInputToFactory = new JSONObject();
 
-		factoryInput.put(Factura.IDENTIFICACION, generateIdentificationInputData());
-		factoryInput.put(Factura.RECEPTOR, generateReceptorInputData());
-		factoryInput.put(Factura.EMISOR, generateEmisorInputData());
-		factoryInput.put(Factura.RESUMEN, generateResumenInputData());
-		factoryInput.put(Factura.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
-
-		this.jsonInputToFactory = factoryInput;	
+		jsonInputToFactory.put(Factura.IDENTIFICACION, generateIdentificationInputData());
+		jsonInputToFactory.put(Factura.RECEPTOR, generateReceptorInputData());
+		jsonInputToFactory.put(Factura.EMISOR, generateEmisorInputData());
+		jsonInputToFactory.put(Factura.RESUMEN, generateResumenInputData());
+		jsonInputToFactory.put(Factura.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -488,6 +478,7 @@ public class FacturaFactory extends EDocumentFactory {
 	}
 	
 
+	@Override
 	public StringBuffer getEDocumentErrorMessages() {
 		 return factura.errorMessages;
 	 }

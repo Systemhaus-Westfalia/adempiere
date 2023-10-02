@@ -1,0 +1,526 @@
+package org.shw.einvoice.es.factory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.commons.lang3.StringUtils;
+import org.compiere.model.MBPartner;
+import org.compiere.model.MBPartnerLocation;
+import org.compiere.model.MClient;
+import org.compiere.model.MInvoice;
+import org.compiere.model.MInvoiceLine;
+import org.compiere.model.MInvoiceTax;
+import org.compiere.model.MOrgInfo;
+import org.compiere.model.MTax;
+import org.compiere.model.Query;
+import org.compiere.util.Env;
+import org.compiere.util.Msg;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
+import org.shw.einvoice.es.feccfcreditofiscalv3.EmisorCreditoFiscal;
+import org.shw.einvoice.es.feccfcreditofiscalv3.IdentificacionCreditoFiscal;
+import org.shw.einvoice.es.feccfcreditofiscalv3.ResumenCreditoFiscal;
+import org.shw.einvoice.es.util.pojo.EDocumentFactory;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+public class CreditoFiscalFactory extends EDocumentFactory {
+	CreditoFiscal creditoFiscal;
+	MInvoice invoice;
+	
+	public CreditoFiscalFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
+		super(trxName, contextProperties, client, orgInfo);
+		this.invoice = invoice;
+	}
+
+	public CreditoFiscal generateEDocument() {
+		String result="";
+		creditoFiscal = new CreditoFiscal();
+		
+		IdentificacionCreditoFiscal identification = creditoFiscal.getIdentificacion();
+		if(identification!=null) {
+			creditoFiscal.errorMessages.append(creditoFiscal.fillIdentification(jsonInputToFactory));
+			result = identification.validateValues();
+			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+				creditoFiscal.errorMessages.append(result);
+			}
+		}
+		
+//		List<DocumentoRelacionadoItem> documentoRelacionado = factura.getDocumentoRelacionado();
+//		if(documentoRelacionado!=null) {
+//			errorMessages.append(factura.fillDocumentoRelacionado(jsonInputToFactory));
+//			
+//			documentoRelacionado.stream().forEach( documentoRelacionadoItem -> { 
+//					String resultLambda = documentoRelacionadoItem.validateValues();
+//					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//						errorMessages.append(resultLambda);
+//					}
+//				} 
+//			);
+//		}
+		
+		EmisorCreditoFiscal emisor = creditoFiscal.getEmisor();
+		if(emisor!=null) {
+			creditoFiscal.fillEmisor(jsonInputToFactory);
+			result = emisor.validateValues();
+			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+				creditoFiscal.errorMessages.append(result);
+			}
+		}
+		
+//		List<OtrosDocumentosItem> otrosDocumentos = factura.getOtrosDocumentos();
+//		if(otrosDocumentos!=null) {
+//			factura.fillOtrosDocumentos(jsonInputToFactory);
+//			
+//			otrosDocumentos.stream().forEach( otrosDocumentosItem -> { 
+//				String resultLambda = otrosDocumentosItem.validateValues();
+//					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//						errorMessages.append(resultLambda);
+//					}
+//				} 
+//			);
+//		}
+		
+//		VentaTercero ventaTercero = factura.getVentaTercero();
+//		if(ventaTercero!=null) {
+//			factura.fillVentaTercero(jsonInputToFactory);
+//			result = ventaTercero.validateValues();
+//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//				errorMessages.append(result);
+//			}
+//		}
+		
+		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento = creditoFiscal.getCuerpoDocumento();
+		if(cuerpoDocumento!=null) {
+			creditoFiscal.fillCuerpoDocumento(jsonInputToFactory);
+			
+			cuerpoDocumento.stream().forEach( cuerpoDocumentoItem -> { 
+				String resultLambda = cuerpoDocumentoItem.validateValues();
+					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+						creditoFiscal.errorMessages.append(resultLambda);
+					}
+				} 
+			);
+		}
+		
+		ResumenCreditoFiscal resumen = creditoFiscal.getResumen();
+		if(resumen!=null) {
+			creditoFiscal.fillResumen(jsonInputToFactory);
+			result = resumen.validateValues();
+			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+				creditoFiscal.errorMessages.append(result);
+			}
+		}
+		
+//		Extension extension = factura.getExtension();
+//		if(extension!=null) {
+//			factura.fillExtension(jsonInputToFactory);
+//			result = extension.validateValues();
+//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//				errorMessages.append(result);
+//			}
+//		}
+		
+//		List<ApendiceItem> apendice = factura.getApendice();
+//		if(apendice!=null) {
+//			factura.fillApendice(jsonInputToFactory);
+//			
+//			apendice.stream().forEach( apendiceItem -> { 
+//				String resultLambda = apendiceItem.validateValues();
+//					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//						errorMessages.append(resultLambda);
+//					}
+//				} 
+//			);
+//		}
+		
+//		Documento documento = eDocument.getDocumento();
+//		if(documento!=null) {
+//			eDocument.fillDocumento(jsonInputToFactory);
+//			result = documento.validateValues();
+//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//				errorMessages.append(result);
+//			}
+//		}
+		
+//		Motivo motivo = eDocument.getMotivo();
+//		if(documento!=null) {
+//			eDocument.fillMotivo(jsonInputToFactory);
+//			result = motivo.validateValues();
+//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//				errorMessages.append(result);
+//			}
+//		}
+
+		creditoFiscal.validateValues();
+		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+			creditoFiscal.errorMessages.append(result);
+		}
+		
+		return creditoFiscal;
+	}
+
+	@Override
+	public void generateJSONInputData() {
+		jsonInputToFactory = new JSONObject();
+
+		jsonInputToFactory.put(CreditoFiscal.IDENTIFICACION, generateIdentificationInputData());
+		jsonInputToFactory.put(CreditoFiscal.RECEPTOR, generateReceptorInputData());
+		jsonInputToFactory.put(CreditoFiscal.EMISOR, generateEmisorInputData());
+		jsonInputToFactory.put(CreditoFiscal.RESUMEN, generateResumenInputData());
+		jsonInputToFactory.put(CreditoFiscal.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+	}
+	
+	private JSONObject generateIdentificationInputData() {
+		System.out.println("Start collecting JSON data for Identificacion");
+		
+		Integer invoiceID = invoice.get_ID();
+		String numeroControl = getNumeroControl(invoiceID, orgInfo, "DTE-01-");
+		Integer clientID = (Integer)client.getAD_Client_ID();
+		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
+		
+		JSONObject jsonObjectIdentificacion = new JSONObject();
+		jsonObjectIdentificacion.put(CreditoFiscal.NUMEROCONTROL, numeroControl);
+		jsonObjectIdentificacion.put(CreditoFiscal.CODIGOGENERACION, codigoGeneracion);
+		jsonObjectIdentificacion.put(CreditoFiscal.TIPOMODELO, 1);
+		jsonObjectIdentificacion.put(CreditoFiscal.TIPOOPERACION, 1);
+		jsonObjectIdentificacion.put(CreditoFiscal.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
+		jsonObjectIdentificacion.put(CreditoFiscal.HOREMI, "00:00:00");
+		jsonObjectIdentificacion.put(CreditoFiscal.TIPOMONEDA, "USD");
+		jsonObjectIdentificacion.put(CreditoFiscal.AMBIENTE, "00");
+
+		System.out.println("Finish collecting JSON data for Identificacion");
+		return jsonObjectIdentificacion;
+		
+	}
+	
+	private JSONObject generateEmisorInputData() {
+		System.out.println("Start collecting JSON data for Emisor");
+		
+		JSONObject jsonObjectEmisor = new JSONObject();
+		jsonObjectEmisor.put(CreditoFiscal.NIT, orgInfo.getTaxID().replace("-", ""));
+		jsonObjectEmisor.put(CreditoFiscal.NRC, StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
+		jsonObjectEmisor.put(CreditoFiscal.NOMBRE, client.getName());
+		jsonObjectEmisor.put(CreditoFiscal.CODACTIVIDAD, client.getE_Activity().getValue());
+		jsonObjectEmisor.put(CreditoFiscal.DESCACTIVIDAD, client.getE_Activity().getName());
+		jsonObjectEmisor.put(CreditoFiscal.NOMBRECOMERCIAL, client.getDescription());
+		jsonObjectEmisor.put(CreditoFiscal.TIPOESTABLECIMIENTO, client.getE_PlantType().getValue());
+
+		JSONObject jsonDireccion = new JSONObject();
+		jsonDireccion.put(CreditoFiscal.DEPARTAMENTO, orgInfo.getC_Location().getC_City().getC_Region().getValue());
+		jsonDireccion.put(CreditoFiscal.MUNICIPIO, orgInfo.getC_Location().getC_City().getValue());
+		jsonDireccion.put(CreditoFiscal.COMPLEMENTO, orgInfo.getC_Location().getAddress1());
+		jsonObjectEmisor.put(CreditoFiscal.DIRECCION, jsonDireccion);
+		
+		jsonObjectEmisor.put(CreditoFiscal.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectEmisor.put(CreditoFiscal.CORREO, client.getEMail());
+
+		System.out.println("Finish collecting JSON data for Emisor");
+		return jsonObjectEmisor;
+		
+	}
+	
+	private JSONObject generateReceptorInputData() {
+		System.out.println("Start collecting JSON data for Receptor");
+
+		MBPartner partner = (MBPartner)invoice.getC_BPartner();
+		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para CreditoFiscalcion Electronica"; 
+			creditoFiscal.errorMessages.append(errorMessage);
+			System.out.println(errorMessage);
+		}
+		
+		JSONObject jsonObjectReceptor = new JSONObject();
+		
+		jsonObjectReceptor.put(CreditoFiscal.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
+		jsonObjectReceptor.put(CreditoFiscal.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+		jsonObjectReceptor.put(CreditoFiscal.NOMBRE, partner.getName());
+		
+		if (partner.getE_Activity_ID()>0) {
+			jsonObjectReceptor.put(CreditoFiscal.CODACTIVIDAD, partner.getE_Activity().getValue());
+			jsonObjectReceptor.put(CreditoFiscal.DESCACTIVIDAD, partner.getE_Activity().getName());
+		} else  {
+			jsonObjectReceptor.put(CreditoFiscal.CODACTIVIDAD, "");
+			jsonObjectReceptor.put(CreditoFiscal.DESCACTIVIDAD, "");
+		}
+
+		JSONObject jsonDireccion = new JSONObject();
+		String departamento = "";
+		String municipio = "";
+		String complemento = "";
+		for (MBPartnerLocation partnerLocation : MBPartnerLocation.getForBPartner(contextProperties, partner.getC_BPartner_ID(), trxName)){
+			if (partnerLocation.isBillTo()) {
+				departamento = partnerLocation.getC_Location().getC_City().getC_Region().getValue();
+				municipio =  partnerLocation.getC_Location().getC_City().getValue();
+				complemento = (partnerLocation.getC_Location().getAddress1() + " " + partnerLocation.getC_Location().getAddress2());
+				jsonDireccion.put(CreditoFiscal.DEPARTAMENTO, departamento);
+				jsonDireccion.put(CreditoFiscal.MUNICIPIO, municipio);
+				jsonDireccion.put(CreditoFiscal.COMPLEMENTO, complemento);
+				break;
+			}
+		}		
+		
+		// In case there is no address
+		if (departamento == null) {
+			jsonDireccion.put(CreditoFiscal.DEPARTAMENTO, departamento);
+			jsonDireccion.put(CreditoFiscal.MUNICIPIO, municipio);
+			jsonDireccion.put(CreditoFiscal.COMPLEMENTO, complemento);
+		}		
+		jsonObjectReceptor.put(CreditoFiscal.DIRECCION, jsonDireccion);
+		
+		jsonObjectReceptor.put(CreditoFiscal.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectReceptor.put(CreditoFiscal.CORREO, partner.get_ValueAsString("EMail"));		
+
+		System.out.println("Finish collecting JSON data for Receptor");
+		return jsonObjectReceptor;
+		
+	}
+	
+	private JSONObject generateResumenInputData() {
+		System.out.println("Start collecting JSON data for Resumen");
+		BigDecimal totalNoSuj 	= Env.ZERO;
+		BigDecimal totalExenta 	= Env.ZERO;
+		BigDecimal totalGravada = Env.ZERO;		
+		BigDecimal totalIVA 	= Env.ZERO;
+		
+		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
+
+		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
+				.setParameters(invoice.getC_Invoice_ID())
+				.list();
+		
+		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
+				totalNoSuj = invoiceTax.getTaxBaseAmt();
+			}
+			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00) {
+				totalExenta = invoiceTax.getTaxBaseAmt();
+			}
+			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
+				totalGravada = invoiceTax.getTaxBaseAmt();
+				totalIVA = invoiceTax.getTaxAmt();
+			}
+		}
+				
+		JSONObject jsonObjectResumen = new JSONObject();
+		jsonObjectResumen.put(CreditoFiscal.TOTALNOSUJ, totalNoSuj);
+		jsonObjectResumen.put(CreditoFiscal.TOTALEXENTA, totalExenta);
+		jsonObjectResumen.put(CreditoFiscal.TOTALGRAVADA, totalGravada);
+		jsonObjectResumen.put(CreditoFiscal.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(CreditoFiscal.DESCUNOSUJ, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.DESCUEXENTA, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.DESCUGRAVADA, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.PORCENTAJEDESCUENTO, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(CreditoFiscal.IVARETE1, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.MONTOTOTALOPERACION, invoice.getGrandTotal());
+		jsonObjectResumen.put(CreditoFiscal.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
+		jsonObjectResumen.put(CreditoFiscal.TOTALPAGAR, invoice.getGrandTotal());
+		jsonObjectResumen.put(CreditoFiscal.TOTALLETRAS, totalLetras);
+		jsonObjectResumen.put(CreditoFiscal.SALDOFAVOR, invoice.getGrandTotal());
+		jsonObjectResumen.put(CreditoFiscal.CONDICIONOPERACION, 1);
+		jsonObjectResumen.put(CreditoFiscal.TOTALDESCU, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.RETERENTA, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.TOTALIVA, totalIVA);
+
+		JSONArray jsonArrayPagos = new JSONArray();
+			JSONObject jsonPago = new JSONObject();
+			jsonPago.put(CreditoFiscal.CODIGO, "05");
+			jsonPago.put(CreditoFiscal.MONTOPAGO, new BigDecimal(0.00));
+			jsonPago.put(CreditoFiscal.REFERENCIA, "Transferencia_ Depósito Bancario");
+			jsonPago.put(CreditoFiscal.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
+			jsonPago.put(CreditoFiscal.PERIODO, invoice.getC_PaymentTerm().getNetDays());
+		jsonArrayPagos.put(jsonPago);
+
+		jsonObjectResumen.put(CreditoFiscal.PAGOS, jsonArrayPagos);
+		
+		System.out.println("Finish collecting JSON data for Resumen");
+		return jsonObjectResumen;
+		
+	}
+	
+	private JSONObject generateCuerpoDocumentoInputData() {
+		System.out.println("Start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		JSONObject jsonCuerpoDocumento = new JSONObject();
+		JSONArray jsonCuerpoDocumentoArray = new JSONArray();
+		
+		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
+			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
+			
+			BigDecimal ventaNoSuj 	= Env.ZERO;
+			BigDecimal ventaExenta 	= Env.ZERO;
+			BigDecimal ventaGravada = Env.ONEHUNDRED;
+			BigDecimal ivaItem 		= Env.ZERO;
+			
+			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
+				ventaNoSuj = invoiceLine.getLineNetAmt();
+			if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
+				ventaExenta = invoiceLine.getLineNetAmt();
+			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
+				ventaGravada = invoiceLine.getLineNetAmt(); 
+				MTax tax = (MTax)invoiceLine.getC_Tax();
+				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
+					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
+			}
+			
+			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
+                
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMITEM, invoiceLine.getLine());
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.TIPOITEM, 2);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.CANTIDAD, invoiceLine.getQtyInvoiced());
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGOTRIBUTO, "");  // String codTributo = "20";
+			
+			JSONArray jsonTributosArray = new JSONArray();
+			jsonCuerpoDocumentoItem. put( CreditoFiscal.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
+			
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.UNIMEDIDA, 1);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.PRECIOUNI, invoiceLine.getPriceActual());
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.MONTODESCU, Env.ZERO);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTANOSUJ, ventaNoSuj);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTAEXENTA, ventaExenta);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTAGRAVADA, ventaGravada);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.PSV, invoiceLine.getTaxAmt());
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.NOGRAVADO, ventaNoSuj.add(ventaNoSuj));
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.IVAITEM, ivaItem);
+
+			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
+			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");
+
+		}  
+		
+		jsonCuerpoDocumento.put(CreditoFiscal.CUERPODOCUMENTO, jsonCuerpoDocumentoArray);
+		System.out.println("Finish collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		
+		return jsonCuerpoDocumento;
+	}
+
+	public String createJsonString() throws Exception {
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	String facturaAsString    = objectMapper.writeValueAsString(creditoFiscal);
+        JSONObject  facturaAsJson = new JSONObject(facturaAsString);
+        
+        facturaAsJson.remove(CreditoFiscal.DOCUMENTORELACIONADO);
+        facturaAsJson.remove(CreditoFiscal.OTROSDOCUMENTOS);
+        facturaAsJson.remove(CreditoFiscal.RECEPTOR);
+        facturaAsJson.remove(CreditoFiscal.VENTATERCERO);        
+        facturaAsJson.remove(CreditoFiscal.EXTENSION);
+        facturaAsJson.remove(CreditoFiscal.APENDICE);
+        facturaAsJson.remove(CreditoFiscal.DOCUMENTO);
+        facturaAsJson.remove(CreditoFiscal.MOTIVO);
+        facturaAsJson.remove(CreditoFiscal.ERRORMESSAGES);
+
+        facturaAsJson.getJSONObject(CreditoFiscal.IDENTIFICACION).remove("horAnula");
+        facturaAsJson.getJSONObject(CreditoFiscal.IDENTIFICACION).remove("motivoContigencia");
+        facturaAsJson.getJSONObject(CreditoFiscal.IDENTIFICACION).remove("fecAnula");
+        facturaAsJson.getJSONObject(CreditoFiscal.IDENTIFICACION).remove("motivoContingencia");
+
+        facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("seguro");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("totalSujetoRetencion");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("tributos");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("tributosCreditoFiscal");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("numPagoElectronico");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("flete");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("ivaPerci1");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("descuento");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("codIncoterms");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("totalIVAretenidoLetras");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("descIncoterms");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("observaciones");
+		facturaAsJson.getJSONObject(CreditoFiscal.RESUMEN).remove("totalIVAretenido");
+
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove("numDocumento");
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove("fechaEmision");
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove("tributos");
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove("codTributo");
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove("codigoRetencionMH");
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove("montoSujetoGrav");
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove(" ivaRetenido");
+		facturaAsJson.getJSONObject(CreditoFiscal.CUERPODOCUMENTO).remove("tipoDte");
+
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("codigo");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("puntoVentaMH");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("direccion");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("codEstable");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("codPuntoVenta");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("codigoMH");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("codEstableMH");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("puntoVenta");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("recintoFiscal");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("regimen");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("nomEstablecimiento");
+		facturaAsJson.getJSONObject(CreditoFiscal.EMISOR).remove("codPuntoVentaMH");
+
+        String finalCreditoFiscalAsString = objectMapper.writeValueAsString(facturaAsJson);
+		return finalCreditoFiscalAsString;
+	}
+
+	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {
+		String idIdentification  = StringUtils.leftPad(id.toString(), 15,"0");
+		String duns = orgInfo.getDUNS().replace("-", "");
+		String numeroControl = prefix + StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
+		return numeroControl;
+	}
+	
+
+	@Override
+	public StringBuffer getEDocumentErrorMessages() {
+		 return creditoFiscal.errorMessages;
+	 }
+	
+	public boolean writeToFile (String json, MInvoice invoice, String directory)
+		{
+			try
+			{
+	    		Path rootpath = Paths.get(directory);
+	    		if (!Files.exists(rootpath)) {
+	    			return false;
+	    		}    	
+	    		
+				directory = (directory.endsWith("/")
+						|| directory.endsWith("\\"))
+						? directory:directory + "/";
+				Path path = Paths.get(directory + invoice.getDateAcct().toString().substring(0, 10) + "/");
+				Files.createDirectories(path);
+				//java.nio.file.Files;
+				Files.createDirectories(path);
+				String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
+				File out = new File (filename);
+				Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
+				fw.write(json);
+				fw.flush ();
+				fw.close ();
+				float size = out.length();
+				size /= 1024;
+				System.out.println("File size: " + out.getAbsolutePath() + " - " + size + " kB");
+				System.out.println("Printed To: " + filename);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				throw new RuntimeException(ex);
+			}
+		}
+	
+	boolean deleteJsonNOde(JsonNode node) {
+        if(! node.isEmpty()) {
+            ((ObjectNode) node).removeAll();
+            return true;
+        }
+       return false;
+	}
+}

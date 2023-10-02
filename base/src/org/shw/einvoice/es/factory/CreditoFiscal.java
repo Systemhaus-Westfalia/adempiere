@@ -2,6 +2,7 @@
  * 
  */
 package org.shw.einvoice.es.factory;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.shw.einvoice.es.feccfcreditofiscalv3.ReceptorCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ResumenCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.VentaTerceroCreditoFiscal;
 import org.shw.einvoice.es.util.pojo.EDocument;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 
 /**
@@ -53,6 +55,13 @@ public class CreditoFiscal extends EDocument {
 		this.resumen              = new ResumenCreditoFiscal();
 		this.extension            = new ExtensionCreditoFiscal();
 	    this.apendice             = new ArrayList<ApendiceItemCreditoFiscal>();
+	}
+	
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {	
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 

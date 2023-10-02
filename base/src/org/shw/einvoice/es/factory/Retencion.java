@@ -2,6 +2,7 @@
  * 
  */
 package org.shw.einvoice.es.factory;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.shw.einvoice.es.fecrretencionv1.ResumenRetencion;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.EDocument;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 
 /**
@@ -55,6 +57,13 @@ public class Retencion extends EDocument {
 	 */
 	public IdentificacionRetencion getIdentificacion() {
 		return identificacion;
+	}
+
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {		
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 

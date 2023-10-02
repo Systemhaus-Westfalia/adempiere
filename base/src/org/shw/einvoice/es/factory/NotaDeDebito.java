@@ -18,6 +18,7 @@ import org.shw.einvoice.es.fendnotadedebitov3.ResumenNotaDeDebito;
 import org.shw.einvoice.es.fendnotadedebitov3.VentaTerceroNotaDeDebito;
 import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.EDocument;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 
 /**
@@ -48,10 +49,13 @@ public class NotaDeDebito extends EDocument {
 		this.extension            = new ExtensionNotaDeDebito();
 	    this.apendice             = new ArrayList<ApendiceItemNotaDeDebito>();
 	    }
-	
+
 	/**
-	 * validateValues() from super class
+	 * Validate the Schema conditions
 	 */
+	public String validateValues() {		
+		return EDocumentUtils.VALIDATION_RESULT_OK;
+	}
 
 	/**
 	 * @return the identificacion

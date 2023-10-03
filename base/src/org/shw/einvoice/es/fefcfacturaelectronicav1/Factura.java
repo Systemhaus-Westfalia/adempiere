@@ -26,25 +26,34 @@ public class Factura extends EDocument {
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'cuerpoDocumento' debe  contener máximo " + CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	
 	IdentificacionFactura identificacion;
-	//List<DocumentoRelacionadoItemFactura> documentoRelacionado = null;
 	EmisorFactura emisor;
 	ReceptorFactura receptor;
-	//VentaTerceroFactura ventaTercero = null;
 	List<CuerpoDocumentoItemFactura> cuerpoDocumento;
 	ResumenFactura resumen;
-	ExtensionFactura extension;
-	//List<ApendiceItemFactura> apendice=null;  // null allowed
+
+	ExtensionFactura extension = null;
+	List<ApendiceItemFactura> apendice=null;  // null allowed
+	List<DocumentoRelacionadoItemFactura> documentoRelacionado = null;
+	List<OtrosDocumentosItemFactura> otrosDocumentos = null;
+	VentaTerceroFactura ventaTercero = null;
 
 	/**
 	 * No parameters
 	 */
 	@SuppressWarnings("unchecked")
 	public Factura() {
-		this.identificacion       = new IdentificacionFactura();
-		this.emisor               = new EmisorFactura();
-		this.receptor             = new ReceptorFactura();
-	    this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemFactura>();
-		this.resumen              = new ResumenFactura();
+		this.identificacion       	= new IdentificacionFactura();
+		this.emisor               	= new EmisorFactura();
+		this.receptor             	= new ReceptorFactura();
+	    this.cuerpoDocumento      	= new ArrayList<CuerpoDocumentoItemFactura>();
+		this.resumen              	= new ResumenFactura();
+		
+		//leer
+		this.extension				= new ExtensionFactura();
+		this.apendice				= new ArrayList<ApendiceItemFactura>();
+		this.documentoRelacionado	= new ArrayList<DocumentoRelacionadoItemFactura>();
+		this.ventaTercero			= new VentaTerceroFactura();
+		this.otrosDocumentos		= new ArrayList<OtrosDocumentosItemFactura>();
 	}
 
 	/**
@@ -304,14 +313,60 @@ public class Factura extends EDocument {
 			try {tributosItemFactura.setDescripcion(tributosItemJson.getString(DESCRIPCION));} 					catch (Exception e) {errorMessages.append(e);}
 			try {tributosItemFactura.setValor(tributosItemJson.getBigDecimal(VALOR));} 	catch (Exception e) {errorMessages.append(e);}
 			
-			resumen.getTributosFactura().add(tributosItemFactura);		
+			resumen.getTributos().add(tributosItemFactura);		
 		}
 		
 
 		System.out.println("End Factura.fillResumen()"); 
 		return errorMessages;
 	}
+	
 
+	
+	
+	public ExtensionFactura getExtension() {
+		return extension;
+	}
+
+	public void setExtension(ExtensionFactura extension) {
+		this.extension = extension;
+	}
+
+
+
+	public List<DocumentoRelacionadoItemFactura> getDocumentoRelacionado() {
+		return documentoRelacionado;
+	}
+
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemFactura> documentoRelacionado) {
+		this.documentoRelacionado = documentoRelacionado;
+	}
+
+	public VentaTerceroFactura getVentaTercero() {
+		return ventaTercero;
+	}
+
+	public void setVentaTercero(VentaTerceroFactura ventaTercero) {
+		this.ventaTercero = ventaTercero;
+	}
+
+	public List<ApendiceItemFactura> getApendice() {
+		return apendice;
+	}
+
+	public void setApendice(List<ApendiceItemFactura> apendice) {
+		this.apendice = apendice;
+	}
+	
+	
+
+	public List<OtrosDocumentosItemFactura> getOtrosDocumentos() {
+		return otrosDocumentos;
+	}
+
+	public void setOtrosDocumentos(List<OtrosDocumentosItemFactura> otrosDocumentos) {
+		this.otrosDocumentos = otrosDocumentos;
+	}
 
 	/**
 	 * @param args

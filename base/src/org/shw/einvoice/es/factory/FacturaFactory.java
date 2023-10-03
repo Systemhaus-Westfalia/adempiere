@@ -376,13 +376,13 @@ public class FacturaFactory extends EDocumentFactory {
 				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
+			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
 				totalExenta = invoiceTax.getTaxBaseAmt();
 				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
 				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
+			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();	
 				//jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
@@ -495,6 +495,8 @@ public class FacturaFactory extends EDocumentFactory {
     	String facturaAsString    = objectMapper.writeValueAsString(factura);
         JSONObject  facturaAsJson = new JSONObject(facturaAsString);
         
+
+		//facturaAsJson.getJSONObject(Factura.RESUMEN).remove("tributos");
         facturaAsJson.remove(Factura.ERRORMESSAGES);
 
 		System.out.println("Factura: end generating JSON object from Document");

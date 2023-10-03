@@ -421,7 +421,7 @@ public String validateValues() {
 	 * @return the tributos
 	 * // Special getter, different from interface Resumen
 	 */
-	public List<TributosItemFactura> getTributosFactura() {
+	public List<TributosItemFactura> getTributos() {
 		return tributos;
 	}
 
@@ -429,7 +429,7 @@ public String validateValues() {
 	 * @param tributos the tributos to set
 	 * Special setter(), different from interface Resumen
 	 */
-	public void setTributosFactura(List<TributosItemFactura> tributos) {
+	public void setTributos(List<TributosItemFactura> tributos) {
 		this.tributos = tributos;
 	}
 

@@ -32,6 +32,7 @@ public class EmisorFacturaExportacion {
 	 * 
 	 */
 	public EmisorFacturaExportacion() {
+		this.direccion = new Direccion();
 	}
 
 /**

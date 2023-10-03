@@ -26,6 +26,7 @@ public class EmisorRetencion {
 	 * 
 	 */
 	public EmisorRetencion() {
+		this.direccion = new Direccion();
 	}
 
 

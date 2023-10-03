@@ -27,6 +27,7 @@ public class EmisorFactura {
 	 * 
 	 */
 	public EmisorFactura() {
+		this.direccion = new Direccion();
 	}
 
 

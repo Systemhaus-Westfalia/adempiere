@@ -23,6 +23,7 @@ public class EmisorNotaDeCredito {
 	 * 
 	 */
 	public EmisorNotaDeCredito() {
+		this.direccion = new Direccion();
 	}
 
 

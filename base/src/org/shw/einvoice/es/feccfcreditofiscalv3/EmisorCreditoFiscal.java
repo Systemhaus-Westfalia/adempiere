@@ -27,6 +27,7 @@ public class EmisorCreditoFiscal {
 	 * 
 	 */
 	public EmisorCreditoFiscal() {
+		this.direccion = new Direccion();
 	}
 
 

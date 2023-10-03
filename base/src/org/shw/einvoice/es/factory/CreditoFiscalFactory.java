@@ -334,34 +334,14 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		BigDecimal totalExenta 	= Env.ZERO;
 		BigDecimal totalGravada = Env.ZERO;		
 		BigDecimal totalIVA 	= Env.ZERO;
-		
+
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 
 		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
-
-//		JSONArray jsonTributosArray = new JSONArray();
-//		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-//				totalNoSuj = invoiceTax.getTaxBaseAmt();
-//				JSONObject jsonTributoItem = new JSONObject();				
-//				jsonTributoItem.put(CreditoFiscal.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
-//				jsonTributoItem.put(CreditoFiscal.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
-//				jsonTributoItem.put(CreditoFiscal.VALOR), invoiceTax.getTaxAmt());
-//				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
-//			}
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
-//				totalExenta = invoiceTax.getTaxBaseAmt();
-//			}
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
-//				totalGravada = invoiceTax.getTaxBaseAmt();
-//				totalIVA = invoiceTax.getTaxAmt();
-//			}
-//		}
-				
 		JSONObject jsonObjectResumen = new JSONObject();
-		
+
 
 		JSONArray jsonTributosArray = new JSONArray();
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
@@ -383,16 +363,15 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();	
-				//jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				//jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				//jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
+				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
 			}
-			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
+			//jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 		}
-		if (!jsonTributosArray.isEmpty())
-			jsonObjectResumen.put(CreditoFiscal.TRIBUTOS, jsonTributosArray);
-		
-		
+		jsonObjectResumen.put(CreditoFiscal.TRIBUTOS, jsonTributosArray);
+
+
 		jsonObjectResumen.put(CreditoFiscal.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(CreditoFiscal.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(CreditoFiscal.TOTALGRAVADA, totalGravada);
@@ -414,20 +393,20 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		jsonObjectResumen.put(CreditoFiscal.TOTALIVA, totalIVA);
 
 		JSONArray jsonArrayPagos = new JSONArray();
-			JSONObject jsonPago = new JSONObject();
-			jsonPago.put(CreditoFiscal.CODIGO, "05");
-			jsonPago.put(CreditoFiscal.MONTOPAGO, new BigDecimal(0.00));
-			jsonPago.put(CreditoFiscal.REFERENCIA, "Transferencia_ Depósito Bancario");
-			jsonPago.put(CreditoFiscal.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
-			jsonPago.put(CreditoFiscal.PERIODO, invoice.getC_PaymentTerm().getNetDays());
+		JSONObject jsonPago = new JSONObject();
+		jsonPago.put(CreditoFiscal.CODIGO, "05");
+		jsonPago.put(CreditoFiscal.MONTOPAGO, new BigDecimal(0.00));
+		jsonPago.put(CreditoFiscal.REFERENCIA, "Transferencia_ Depósito Bancario");
+		jsonPago.put(CreditoFiscal.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
+		jsonPago.put(CreditoFiscal.PERIODO, invoice.getC_PaymentTerm().getNetDays());
 		jsonArrayPagos.put(jsonPago);
 
 		jsonObjectResumen.put(CreditoFiscal.PAGOS, jsonArrayPagos);
-		
+
 
 		System.out.println("CreditoFiscal: end collecting JSON data for Resumen");
 		return jsonObjectResumen;
-		
+
 	}
 	
 	private JSONObject generateCuerpoDocumentoInputData() {

@@ -52,6 +52,7 @@ public class ResumenCreditoFiscal {
 	 */
 	public ResumenCreditoFiscal() {
 		this.pagos = new ArrayList<PagosItem>();
+		this.tributos = new ArrayList<TributosItem>();
 	}
 
 	/**

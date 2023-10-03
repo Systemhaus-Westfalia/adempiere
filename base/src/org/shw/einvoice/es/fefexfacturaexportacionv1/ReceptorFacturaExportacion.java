@@ -26,7 +26,7 @@ public class ReceptorFacturaExportacion {
 	String complemento;
 	int tipoPersona;
 	String descActividad;
-	// Direccion direccion;
+	// Direccion direccion;  // Direccion not in schema
 	String telefono = null; // null possible
 	String correo = null; // null possible
 

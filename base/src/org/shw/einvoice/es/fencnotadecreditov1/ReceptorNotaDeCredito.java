@@ -27,6 +27,7 @@ public class ReceptorNotaDeCredito {
 	 * No parameters
 	 */
 	public ReceptorNotaDeCredito() {
+		this.direccion = new Direccion();
 	}
 
 

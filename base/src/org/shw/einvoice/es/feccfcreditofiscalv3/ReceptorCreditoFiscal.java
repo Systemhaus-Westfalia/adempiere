@@ -27,6 +27,7 @@ public class ReceptorCreditoFiscal {
 	 * No parameters
 	 */
 	public ReceptorCreditoFiscal() {
+		this.direccion = new Direccion();
 	}
 
 

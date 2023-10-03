@@ -27,6 +27,7 @@ public class ReceptorNotaDeDebito {
 	 * No parameters
 	 */
 	public ReceptorNotaDeDebito() {
+		this.direccion = new Direccion();
 	}
 
 

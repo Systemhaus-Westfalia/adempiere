@@ -46,6 +46,7 @@ public class ResumenNotaDeDebito {
 	 * No parameters
 	 */
 	public ResumenNotaDeDebito() {
+		this.tributos = new ArrayList<TributosItem>();
 	}
 
 	/**

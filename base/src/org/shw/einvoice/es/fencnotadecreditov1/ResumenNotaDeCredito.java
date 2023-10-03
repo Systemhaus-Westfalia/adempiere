@@ -45,6 +45,7 @@ public class ResumenNotaDeCredito {
 	 * No parameters
 	 */
 	public ResumenNotaDeCredito() {
+		this.tributos = new ArrayList<TributosItem>();
 	}
 
 	/**

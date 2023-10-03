@@ -32,6 +32,7 @@ public class ReceptorRetencion {
 	 * No parameters
 	 */
 	public ReceptorRetencion() {
+		this.direccion = new Direccion();
 	}
 	
 

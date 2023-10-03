@@ -40,7 +40,6 @@ public class Factura extends EDocument {
 	/**
 	 * No parameters
 	 */
-	@SuppressWarnings("unchecked")
 	public Factura() {
 		this.identificacion       	= new IdentificacionFactura();
 		this.emisor               	= new EmisorFactura();

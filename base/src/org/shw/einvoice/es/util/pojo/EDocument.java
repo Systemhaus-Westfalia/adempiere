@@ -104,4 +104,10 @@ public class EDocument {
 	public static final String MOTIVOCONTIN			= "motivoContin";
 	public static final String TIPOCONTINGENCIA		= "tipoContingencia";
 	public static final String VALOR				= "valor";
+	
+	
+	public static final int		TIPOMODELO_NOCONTIGENCIA			=1;
+	public static final int		TIPOMODELO_CONTIGENCIA				=2;
+	public static final int		TIPOOPERACION_NOCONTIGENCIA			=1;
+	public static final int		TIPOOPERACION_CONTIGENCIA			=2;
 }

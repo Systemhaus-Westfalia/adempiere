@@ -30,6 +30,7 @@ public class ReceptorFactura {
 	 * No parameters
 	 */
 	public ReceptorFactura() {
+		this.direccion = new Direccion();
 	}
 	
 

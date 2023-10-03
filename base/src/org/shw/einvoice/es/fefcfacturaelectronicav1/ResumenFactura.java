@@ -47,6 +47,7 @@ public class ResumenFactura {
 	 */
 public ResumenFactura() {
 	this.pagos = new ArrayList<PagosItem>();
+	this.tributos = new ArrayList<TributosItemFactura>();
 }
 
 /**

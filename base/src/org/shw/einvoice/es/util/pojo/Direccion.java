@@ -21,6 +21,10 @@ public class Direccion {
 		this.complemento = complemento;
 	}
 	
+
+	public Direccion() {
+	}
+	
 	/**
 	 * Validate the Schema conditions
 	 */

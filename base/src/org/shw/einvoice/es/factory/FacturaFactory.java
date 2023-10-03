@@ -30,6 +30,7 @@ import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItemFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.EmisorFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.Factura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.IdentificacionFactura;
+import org.shw.einvoice.es.fefcfacturaelectronicav1.ReceptorFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.ResumenFactura;
 import org.shw.einvoice.es.fefcfacturaelectronicav1.TributosItemFactura;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
@@ -127,6 +128,16 @@ public class FacturaFactory extends EDocumentFactory {
 			}
 		}
 		
+
+		ReceptorFactura receptor = factura.getReceptor();
+		if(receptor!=null) {
+			factura.fillReceptor(jsonInputToFactory);
+			result = receptor.validateValues();
+			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+				factura.errorMessages.append(result);
+			}
+		}
+		
 //		Extension extension = factura.getExtension();
 //		if(extension!=null) {
 //			factura.fillExtension(jsonInputToFactory);
@@ -196,7 +207,7 @@ public class FacturaFactory extends EDocumentFactory {
 		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		String duns = orgInfo.getDUNS().replace("-", "");
 		
-		String numeroControl = "DTE-" + factura.getIdentificacion().getTipoDte()
+		String numeroControl = "DTE-" + invoice.getC_DocType().getE_DocType().getValue()
 				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 		Integer invoiceID = invoice.get_ID();
 		//String numeroControl = getNumeroControl(invoiceID, orgInfo, "DTE-01-");
@@ -209,8 +220,8 @@ public class FacturaFactory extends EDocumentFactory {
 			isContigencia = true;
 		}
 
-		int tipoModelo = isContigencia?2:1;
-		int tipoOperacion = isContigencia?2:1;
+		int tipoModelo = isContigencia?Factura.TIPOMODELO_CONTIGENCIA:Factura.TIPOMODELO_NOCONTIGENCIA;
+		int tipoOperacion = isContigencia?Factura.TIPOOPERACION_CONTIGENCIA:Factura.TIPOOPERACION_NOCONTIGENCIA;
 		jsonObjectIdentificacion.put(Factura.NUMEROCONTROL, numeroControl);
 		jsonObjectIdentificacion.put(Factura.CODIGOGENERACION, codigoGeneracion);
 		jsonObjectIdentificacion.put(Factura.TIPOMODELO, tipoModelo);
@@ -356,21 +367,22 @@ public class FacturaFactory extends EDocumentFactory {
 			JSONObject jsonTributoItem = new JSONObject();		
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				totalNoSuj = invoiceTax.getTaxBaseAmt();		
-				jsonTributoItem.put(Factura.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
+				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
 				totalExenta = invoiceTax.getTaxBaseAmt();
-				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
+				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();	
-				jsonTributoItem.put(Factura.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
+				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
 			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 		}
@@ -392,7 +404,7 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonObjectResumen.put(Factura.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
 		jsonObjectResumen.put(Factura.TOTALPAGAR, invoice.getGrandTotal());
 		jsonObjectResumen.put(Factura.TOTALLETRAS, totalLetras);
-		jsonObjectResumen.put(Factura.SALDOFAVOR, invoice.getGrandTotal());
+		jsonObjectResumen.put(Factura.SALDOFAVOR, Env.ZERO);
 		jsonObjectResumen.put(Factura.CONDICIONOPERACION, 1);
 		jsonObjectResumen.put(Factura.TOTALDESCU, Env.ZERO);
 		jsonObjectResumen.put(Factura.RETERENTA, Env.ZERO);
@@ -443,7 +455,7 @@ public class FacturaFactory extends EDocumentFactory {
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put(Factura.NUMITEM, invoiceLine.getLine());
+			jsonCuerpoDocumentoItem.put(Factura.NUMITEM, invoiceLine.getLine()/10);
 			jsonCuerpoDocumentoItem.put(Factura.TIPOITEM, 2);
 			jsonCuerpoDocumentoItem.put(Factura.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(Factura.CANTIDAD, invoiceLine.getQtyInvoiced());
@@ -480,10 +492,9 @@ public class FacturaFactory extends EDocumentFactory {
     	String facturaAsString    = objectMapper.writeValueAsString(factura);
         JSONObject  facturaAsJson = new JSONObject(facturaAsString);
         
+        facturaAsJson.remove(Factura.ERRORMESSAGES);
 
-
-        String finalFacturaAsString = objectMapper.writeValueAsString(facturaAsJson);
-		return finalFacturaAsString;
+		return facturaAsJson.toString();
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

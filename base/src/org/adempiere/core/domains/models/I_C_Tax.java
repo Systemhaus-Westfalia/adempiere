@@ -19,6 +19,7 @@ package org.adempiere.core.domains.models;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+
 import org.compiere.model.MTable;
 import org.compiere.util.KeyNamePair;
 
@@ -87,8 +88,6 @@ public interface I_C_Tax
 	  * Country 
 	  */
 	public int getC_Country_ID();
-
-	public org.adempiere.core.domains.models.I_C_Country getC_Country() throws RuntimeException;
 
     /** Column name C_Region_ID */
     public static final String COLUMNNAME_C_Region_ID = "C_Region_ID";
@@ -161,6 +160,30 @@ public interface I_C_Tax
 	  * Optional short description of the record
 	  */
 	public String getDescription();
+
+    /** Column name E_Duties_ID */
+    public static final String COLUMNNAME_E_Duties_ID = "E_Duties_ID";
+
+	/** Set CAT-015 Tributos	  */
+	public void setE_Duties_ID (int E_Duties_ID);
+
+	/** Get CAT-015 Tributos	  */
+	public int getE_Duties_ID();
+	
+	public org.adempiere.core.domains.models.I_E_Duties getE_Duties() throws RuntimeException;
+
+    /** Column name E_WithholdingType_ID */
+    public static final String COLUMNNAME_E_WithholdingType_ID = "E_WithholdingType_ID";
+
+	/** Set CAT-006 Retención IVA MH	  */
+	public void setE_WithholdingType_ID (int E_WithholdingType_ID);
+
+	/** Get CAT-006 Retención IVA MH	  */
+	public int getE_WithholdingType_ID();
+	
+
+	public org.adempiere.core.domains.models.I_E_WithholdingType getE_WithholdingType() throws RuntimeException;
+
 
     /** Column name IsActive */
     public static final String COLUMNNAME_IsActive = "IsActive";
@@ -294,6 +317,15 @@ public interface I_C_Tax
 	  */
 	public boolean isRequiresTaxCertificate();
 
+    /** Column name shw_Taxtype */
+    public static final String COLUMNNAME_shw_Taxtype = "shw_Taxtype";
+
+	/** Set shw_Taxtype	  */
+	public void setshw_Taxtype (String shw_Taxtype);
+
+	/** Get shw_Taxtype	  */
+	public String getshw_Taxtype();
+
     /** Column name SOPOType */
     public static final String COLUMNNAME_SOPOType = "SOPOType";
 
@@ -332,8 +364,6 @@ public interface I_C_Tax
 	  * Receiving Country
 	  */
 	public int getTo_Country_ID();
-
-	public org.adempiere.core.domains.models.I_C_Country getTo_Country() throws RuntimeException;
 
     /** Column name To_Region_ID */
     public static final String COLUMNNAME_To_Region_ID = "To_Region_ID";

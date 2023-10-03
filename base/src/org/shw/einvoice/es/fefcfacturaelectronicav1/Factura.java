@@ -103,6 +103,11 @@ public class Factura extends EDocument {
 		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
+		
+		if (identificationJson.getInt(TIPOMODELO) == TIPOMODELO_CONTIGENCIA) {
+			try{identificacion.setMotivoContin(identificationJson.getString(MOTIVOCONTIN));} 		catch (Exception e) {errorMessages.append(e);}
+			try{identificacion.setTipoContingencia(identificationJson.getInt(TIPOCONTINGENCIA));} 	catch (Exception e) {errorMessages.append(e);}
+		}
 
 		System.out.println("End Factura.fillIdentificacion()");
 		return errorMessages;
@@ -279,6 +284,7 @@ public class Factura extends EDocument {
 
 		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
 		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
+		
 
 		PagosItem newPagosItem = new PagosItem();
 		try {newPagosItem.setCodigo(pagosItemJson.getString(CODIGO));} 			catch (Exception e) {errorMessages.append(e);}
@@ -288,6 +294,18 @@ public class Factura extends EDocument {
 		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 			catch (Exception e) {errorMessages.append(e);}
 
 		resumen.getPagos().add(newPagosItem);
+
+		JSONArray tributosArrayJson = resumenJson.getJSONArray(TRIBUTOS);	
+		for (int i=0; i< tributosArrayJson.length(); i++) { 
+			JSONObject tributosItemJson = tributosArrayJson.getJSONObject(i);
+			TributosItemFactura tributosItemFactura = new TributosItemFactura();
+			try {tributosItemFactura.setCodigo(tributosItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
+			try {tributosItemFactura.setDescripcion(tributosItemJson.getString(DESCRIPCION));} 					catch (Exception e) {errorMessages.append(e);}
+			try {tributosItemFactura.setValor(tributosItemJson.getBigDecimal(VALOR));} 	catch (Exception e) {errorMessages.append(e);}
+			
+			resumen.getTributosFactura().add(tributosItemFactura);		
+		}
+		
 
 		System.out.println("End Factura.fillResumen()"); 
 		return errorMessages;

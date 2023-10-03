@@ -26,6 +26,7 @@ import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.feccfcreditofiscalv3.CreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.EmisorCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.IdentificacionCreditoFiscal;
@@ -284,8 +285,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		
 		JSONObject jsonObjectReceptor = new JSONObject();
 		
-		jsonObjectReceptor.put(CreditoFiscal.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
-		jsonObjectReceptor.put(CreditoFiscal.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+		jsonObjectReceptor.put(CreditoFiscal.NIT, partner.getTaxID().replace("-", ""));
+		jsonObjectReceptor.put(CreditoFiscal.NRC, partner.getDUNS().trim().replace("-", ""));
 		jsonObjectReceptor.put(CreditoFiscal.NOMBRE, partner.getName());
 		
 		if (partner.getE_Activity_ID()>0) {
@@ -332,8 +333,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		System.out.println("CreditoFiscal: start collecting JSON data for Resumen");
 		BigDecimal totalNoSuj 	= Env.ZERO;
 		BigDecimal totalExenta 	= Env.ZERO;
-		BigDecimal totalGravada = Env.ZERO;		
-		BigDecimal totalIVA 	= Env.ZERO;
+		BigDecimal totalGravada = Env.ZERO;	
+		BigDecimal ivaRete1 	= Env.ZERO;
 
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 
@@ -345,8 +346,9 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 
 		JSONArray jsonTributosArray = new JSONArray();
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("RET"))
-				continue;
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("RET")) {
+				ivaRete1 = ivaRete1.add(invoiceTax.getTaxAmt());
+			}
 			JSONObject jsonTributoItem = new JSONObject();		
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				totalNoSuj = invoiceTax.getTaxBaseAmt();		
@@ -362,7 +364,6 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			}
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();	
 				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
 				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
@@ -381,16 +382,16 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		jsonObjectResumen.put(CreditoFiscal.DESCUGRAVADA, Env.ZERO);
 		jsonObjectResumen.put(CreditoFiscal.PORCENTAJEDESCUENTO, Env.ZERO);
 		jsonObjectResumen.put(CreditoFiscal.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(CreditoFiscal.IVARETE1, Env.ZERO);
+		jsonObjectResumen.put(CreditoFiscal.IVARETE1, ivaRete1);
 		jsonObjectResumen.put(CreditoFiscal.MONTOTOTALOPERACION, invoice.getGrandTotal());
 		jsonObjectResumen.put(CreditoFiscal.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
 		jsonObjectResumen.put(CreditoFiscal.TOTALPAGAR, invoice.getGrandTotal());
 		jsonObjectResumen.put(CreditoFiscal.TOTALLETRAS, totalLetras);
 		jsonObjectResumen.put(CreditoFiscal.SALDOFAVOR, Env.ZERO);
-		jsonObjectResumen.put(CreditoFiscal.CONDICIONOPERACION, 1);
+		jsonObjectResumen.put(CreditoFiscal.CONDICIONOPERACION, CreditoFiscal.CONDICIONOPERACION_A_CREDITO);
 		jsonObjectResumen.put(CreditoFiscal.TOTALDESCU, Env.ZERO);
 		jsonObjectResumen.put(CreditoFiscal.RETERENTA, Env.ZERO);
-		jsonObjectResumen.put(CreditoFiscal.TOTALIVA, totalIVA);
+		jsonObjectResumen.put(CreditoFiscal.IVAPERCI1, Env.ZERO);
 
 		JSONArray jsonArrayPagos = new JSONArray();
 		JSONObject jsonPago = new JSONObject();
@@ -421,6 +422,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			BigDecimal ventaExenta 	= Env.ZERO;
 			BigDecimal ventaGravada = Env.ONEHUNDRED;
 			BigDecimal ivaItem 		= Env.ZERO;
+			String codTributo 		= "";
 			
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
 				ventaNoSuj = invoiceLine.getLineNetAmt();
@@ -428,6 +430,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 				ventaExenta = invoiceLine.getLineNetAmt();
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				ventaGravada = invoiceLine.getLineNetAmt(); 
+				codTributo = "20";
 				MTax tax = (MTax)invoiceLine.getC_Tax();
 				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
 					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
@@ -436,14 +439,13 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMITEM, invoiceLine.getLine()/10);
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.TIPOITEM, 2);
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.TIPOITEM, CreditoFiscal.TIPOITEM_SERVICIO);
+			//jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.CANTIDAD, invoiceLine.getQtyInvoiced());
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGOTRIBUTO, "");  // String codTributo = "20";
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGOTRIBUTO, codTributo);  // String codTributo = "20";
 			
-			JSONArray jsonTributosArray = new JSONArray();
-			jsonCuerpoDocumentoItem. put( CreditoFiscal.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
+
 			
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.UNIMEDIDA, 1);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
@@ -452,9 +454,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTANOSUJ, ventaNoSuj);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTAEXENTA, ventaExenta);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTAGRAVADA, ventaGravada);
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.PSV, invoiceLine.getTaxAmt());
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.NOGRAVADO, ventaNoSuj.add(ventaNoSuj));
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.IVAITEM, ivaItem);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.PSV, Env.ZERO);
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.NOGRAVADO, ventaNoSuj.add(ventaExenta));
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");

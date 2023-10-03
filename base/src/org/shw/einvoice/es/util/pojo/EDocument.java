@@ -91,6 +91,7 @@ public class EDocument {
 	public static final String TRIBUTOS				= "tributos";
 	public static final String PAGOS				= "pagos";
 	public static final String DIRECCION			= "direccion";
+	public static final String IVAPERCI1			= "ivaPerci1";
 
 	public static final String VERSION				= "version";
 	
@@ -104,10 +105,18 @@ public class EDocument {
 	public static final String MOTIVOCONTIN			= "motivoContin";
 	public static final String TIPOCONTINGENCIA		= "tipoContingencia";
 	public static final String VALOR				= "valor";
+	public static final String TIPOITEMEXPOR		= "tipoItemExpor";
+	public static final String CODPAIS				= "codPais";
+	public static final String NOMBREPAIS			= "nombrePais";
+	public static final String DESCUENTO			= "descuento";
 	
 	
 	public static final int		TIPOMODELO_NOCONTIGENCIA			=1;
 	public static final int		TIPOMODELO_CONTIGENCIA				=2;
 	public static final int		TIPOOPERACION_NOCONTIGENCIA			=1;
 	public static final int		TIPOOPERACION_CONTIGENCIA			=2;
+	public static final int		CONDICIONOPERACION_AL_CONTADO		=1;
+	public static final int		CONDICIONOPERACION_A_CREDITO		=2;
+	public static final int		TIPOITEM_SERVICIO					=2;
+	
 }

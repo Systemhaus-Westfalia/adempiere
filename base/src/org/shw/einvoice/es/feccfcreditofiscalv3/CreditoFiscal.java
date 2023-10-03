@@ -1,23 +1,12 @@
 /**
  * 
  */
-package org.shw.einvoice.es.factory;
-import java.math.BigDecimal;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.feccfcreditofiscalv3.ApendiceItemCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.DocumentoRelacionadoItemCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.EmisorCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.ExtensionCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.IdentificacionCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.OtrosDocumentosItemCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.ReceptorCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.ResumenCreditoFiscal;
-import org.shw.einvoice.es.feccfcreditofiscalv3.VentaTerceroCreditoFiscal;
 import org.shw.einvoice.es.util.pojo.EDocument;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 

@@ -19,38 +19,15 @@
 package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.adempiere.core.domains.models.X_E_InvoiceElectronic;
-import org.apache.commons.lang3.StringUtils;
-import org.compiere.model.MBPartner;
-import org.compiere.model.MBPartnerLocation;
 import org.compiere.model.MClient;
 import org.compiere.model.MInvoice;
-import org.compiere.model.MInvoiceLine;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
-import org.compiere.model.MSysConfig;
-import org.compiere.model.Query;
-import org.compiere.util.Env;
-import org.compiere.util.Msg;
-import org.shw.einvoice.es.factory.CreditoFiscal;
 import org.shw.einvoice.es.factory.CreditoFiscalFactory;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
-import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.VentaTercero;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Generated Process for (SHW_Create_ElectronicInvoice)
  *  @author ADempiere (generated) 

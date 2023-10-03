@@ -411,7 +411,7 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonObjectResumen.put(Factura.TOTALPAGAR, invoice.getGrandTotal());
 		jsonObjectResumen.put(Factura.TOTALLETRAS, totalLetras);
 		jsonObjectResumen.put(Factura.SALDOFAVOR, Env.ZERO);
-		jsonObjectResumen.put(Factura.CONDICIONOPERACION, 1);
+		jsonObjectResumen.put(Factura.CONDICIONOPERACION, Factura.CONDICIONOPERACION_A_CREDITO);
 		jsonObjectResumen.put(Factura.TOTALDESCU, Env.ZERO);
 		jsonObjectResumen.put(Factura.RETERENTA, Env.ZERO);
 		jsonObjectResumen.put(Factura.TOTALIVA, totalIVA);
@@ -461,10 +461,10 @@ public class FacturaFactory extends EDocumentFactory {
                 
 			jsonCuerpoDocumentoItem.put(Factura.NUMITEM, invoiceLine.getLine()/10);
 			jsonCuerpoDocumentoItem.put(Factura.TIPOITEM, 2);
-			jsonCuerpoDocumentoItem.put(Factura.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
+			//jsonCuerpoDocumentoItem.put(Factura.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(Factura.CANTIDAD, invoiceLine.getQtyInvoiced());
 			jsonCuerpoDocumentoItem.put(Factura.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(Factura.CODIGOTRIBUTO, "");  // String codTributo = "20";
+			jsonCuerpoDocumentoItem.put(Factura.CODIGOTRIBUTO, "20");  // String codTributo = "20";
 			
 			JSONArray jsonTributosArray = new JSONArray();
 			jsonCuerpoDocumentoItem. put( Factura.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
@@ -477,7 +477,7 @@ public class FacturaFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(Factura.VENTAEXENTA, ventaExenta);
 			jsonCuerpoDocumentoItem.put(Factura.VENTAGRAVADA, ventaGravada);
 			jsonCuerpoDocumentoItem.put(Factura.PSV, invoiceLine.getTaxAmt());
-			jsonCuerpoDocumentoItem.put(Factura.NOGRAVADO, ventaNoSuj.add(ventaNoSuj));
+			jsonCuerpoDocumentoItem.put(Factura.NOGRAVADO, ventaNoSuj.add(ventaExenta));
 			jsonCuerpoDocumentoItem.put(Factura.IVAITEM, ivaItem);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);

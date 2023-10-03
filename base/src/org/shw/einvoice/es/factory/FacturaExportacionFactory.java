@@ -234,6 +234,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		
 		jsonObjectEmisor.put(FacturaExportacion.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(FacturaExportacion.CORREO, client.getEMail());
+		jsonObjectEmisor.put(FacturaExportacion.TIPOITEMEXPOR, 2);
 
 		System.out.println("Finish collecting JSON data for Emisor");
 		return jsonObjectEmisor;
@@ -249,51 +250,47 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 			facturaExportacion.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
-		
+
+
 		JSONObject jsonObjectReceptor = new JSONObject();
-		
+
 		jsonObjectReceptor.put(FacturaExportacion.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
-		jsonObjectReceptor.put(FacturaExportacion.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+		if (partner.getE_Recipient_Identification().getValue().equals("36"))
+		{
+			jsonObjectReceptor.put(FacturaExportacion.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+		}
+		else {
+			jsonObjectReceptor.put(FacturaExportacion.NUMDOCUMENTO,partner.getDUNS().trim().replace("-", ""));
+		}
+
 		jsonObjectReceptor.put(FacturaExportacion.NOMBRE, partner.getName());
-		
+		jsonObjectReceptor.put(FacturaExportacion.NOMBRECOMERCIAL, partner.getName());
+
 		if (partner.getE_Activity_ID()>0) {
-			jsonObjectReceptor.put(FacturaExportacion.CODACTIVIDAD, partner.getE_Activity().getValue());
 			jsonObjectReceptor.put(FacturaExportacion.DESCACTIVIDAD, partner.getE_Activity().getName());
 		} else  {
-			jsonObjectReceptor.put(FacturaExportacion.CODACTIVIDAD, "");
 			jsonObjectReceptor.put(FacturaExportacion.DESCACTIVIDAD, "");
 		}
 
-		JSONObject jsonDireccion = new JSONObject();
-		String departamento = "";
-		String municipio = "";
 		String complemento = "";
+		String codPais = "";
+		String nombrePais = "";
 		for (MBPartnerLocation partnerLocation : MBPartnerLocation.getForBPartner(contextProperties, partner.getC_BPartner_ID(), trxName)){
 			if (partnerLocation.isBillTo()) {
-				departamento = partnerLocation.getC_Location().getC_City().getC_Region().getValue();
-				municipio =  partnerLocation.getC_Location().getC_City().getValue();
 				complemento = (partnerLocation.getC_Location().getAddress1() + " " + partnerLocation.getC_Location().getAddress2());
-				jsonDireccion.put(FacturaExportacion.DEPARTAMENTO, departamento);
-				jsonDireccion.put(FacturaExportacion.MUNICIPIO, municipio);
-				jsonDireccion.put(FacturaExportacion.COMPLEMENTO, complemento);
+				jsonObjectReceptor.put(FacturaExportacion.CODPAIS, partnerLocation.getC_Location().getC_Country().getValue());
+				jsonObjectReceptor.put(FacturaExportacion.NOMBREPAIS,  partnerLocation.getC_Location().getC_Country().getName());
+				jsonObjectReceptor.put(FacturaExportacion.COMPLEMENTO, complemento);
 				break;
 			}
 		}		
-		
-		// In case there is no address
-		if (departamento == null) {
-			jsonDireccion.put(FacturaExportacion.DEPARTAMENTO, departamento);
-			jsonDireccion.put(FacturaExportacion.MUNICIPIO, municipio);
-			jsonDireccion.put(FacturaExportacion.COMPLEMENTO, complemento);
-		}		
-		jsonObjectReceptor.put(FacturaExportacion.DIRECCION, jsonDireccion);
-		
+
 		jsonObjectReceptor.put(FacturaExportacion.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(FacturaExportacion.CORREO, partner.get_ValueAsString("EMail"));		
 
 		System.out.println("Finish collecting JSON data for Receptor");
 		return jsonObjectReceptor;
-		
+
 	}
 	
 	private JSONObject generateResumenInputData() {
@@ -310,38 +307,23 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 				.list();
 		
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				totalNoSuj = invoiceTax.getTaxBaseAmt();
-			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00) {
-				totalExenta = invoiceTax.getTaxBaseAmt();
-			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();
+				break;
 			}
-		}
 				
 		JSONObject jsonObjectResumen = new JSONObject();
-		jsonObjectResumen.put(FacturaExportacion.TOTALNOSUJ, totalNoSuj);
-		jsonObjectResumen.put(FacturaExportacion.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(FacturaExportacion.TOTALGRAVADA, totalGravada);
-		jsonObjectResumen.put(FacturaExportacion.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(FacturaExportacion.DESCUNOSUJ, Env.ZERO);
-		jsonObjectResumen.put(FacturaExportacion.DESCUEXENTA, Env.ZERO);
-		jsonObjectResumen.put(FacturaExportacion.DESCUGRAVADA, Env.ZERO);
 		jsonObjectResumen.put(FacturaExportacion.PORCENTAJEDESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(FacturaExportacion.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(FacturaExportacion.IVARETE1, Env.ZERO);
-		jsonObjectResumen.put(FacturaExportacion.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(FacturaExportacion.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
+		jsonObjectResumen.put(FacturaExportacion.TOTALNOGRAVADO, Env.ZERO);
 		jsonObjectResumen.put(FacturaExportacion.TOTALPAGAR, invoice.getGrandTotal());
 		jsonObjectResumen.put(FacturaExportacion.TOTALLETRAS, totalLetras);
-		jsonObjectResumen.put(FacturaExportacion.SALDOFAVOR, invoice.getGrandTotal());
-		jsonObjectResumen.put(FacturaExportacion.CONDICIONOPERACION, 1);
+		jsonObjectResumen.put(FacturaExportacion.CONDICIONOPERACION, FacturaExportacion.CONDICIONOPERACION_A_CREDITO);
 		jsonObjectResumen.put(FacturaExportacion.TOTALDESCU, Env.ZERO);
-		jsonObjectResumen.put(FacturaExportacion.RETERENTA, Env.ZERO);
-		jsonObjectResumen.put(FacturaExportacion.TOTALIVA, totalIVA);
+		jsonObjectResumen.put(FacturaExportacion.DESCUENTO, Env.ZERO);
+		jsonObjectResumen.put(FacturaExportacion.MONTOTOTALOPERACION, invoice.getGrandTotal());
+		
+		
+
 
 		JSONArray jsonArrayPagos = new JSONArray();
 			JSONObject jsonPago = new JSONObject();
@@ -385,14 +367,13 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put(FacturaExportacion.NUMITEM, invoiceLine.getLine());
-			jsonCuerpoDocumentoItem.put(FacturaExportacion.TIPOITEM, 2);
-			jsonCuerpoDocumentoItem.put(FacturaExportacion.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
+			jsonCuerpoDocumentoItem.put(FacturaExportacion.NUMITEM, invoiceLine.getLine()/10);
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.CANTIDAD, invoiceLine.getQtyInvoiced());
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(FacturaExportacion.CODIGOTRIBUTO, "");  // String codTributo = "20";
 			
 			JSONArray jsonTributosArray = new JSONArray();
+			JSONObject jsonTributosItem = new JSONObject("C3");
+			jsonTributosArray.put(jsonTributosItem);
 			jsonCuerpoDocumentoItem. put( FacturaExportacion.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
 			
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.UNIMEDIDA, 1);
@@ -402,9 +383,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.VENTANOSUJ, ventaNoSuj);
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.VENTAEXENTA, ventaExenta);
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.VENTAGRAVADA, ventaGravada);
-			jsonCuerpoDocumentoItem.put(FacturaExportacion.PSV, invoiceLine.getTaxAmt());
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.NOGRAVADO, ventaNoSuj.add(ventaNoSuj));
-			jsonCuerpoDocumentoItem.put(FacturaExportacion.IVAITEM, ivaItem);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");

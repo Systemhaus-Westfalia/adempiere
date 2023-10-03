@@ -385,9 +385,9 @@ public class FacturaFactory extends EDocumentFactory {
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();	
-				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
+				//jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				//jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				//jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
 			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 		}

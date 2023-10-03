@@ -328,7 +328,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		JSONArray jsonArrayPagos = new JSONArray();
 			JSONObject jsonPago = new JSONObject();
 			jsonPago.put(FacturaExportacion.CODIGO, "05");
-			jsonPago.put(FacturaExportacion.MONTOPAGO, new BigDecimal(0.00));
+			jsonPago.put(FacturaExportacion.MONTOPAGO, invoice.getGrandTotal());
 			jsonPago.put(FacturaExportacion.REFERENCIA, "Transferencia_ Depósito Bancario");
 			jsonPago.put(FacturaExportacion.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
 			jsonPago.put(FacturaExportacion.PERIODO, invoice.getC_PaymentTerm().getNetDays());

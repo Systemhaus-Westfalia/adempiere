@@ -75,7 +75,6 @@ public class NotaDeCredito extends EDocument {
 	 */
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
 		System.out.println("Start NotaDeCredito.fillIdentificacion()"); 
-		errorMessages.setLength(0);
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
 //		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
@@ -116,7 +115,6 @@ public class NotaDeCredito extends EDocument {
 
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
 		System.out.println("Start NotaDeCredito.fillEmisor()"); 
-		errorMessages.setLength(0);
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -155,7 +153,6 @@ public class NotaDeCredito extends EDocument {
 
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
 		System.out.println("Start NotaDeCredito.fillReceptor()"); 
-		errorMessages.setLength(0);
 
 		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
 		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -193,7 +190,6 @@ public class NotaDeCredito extends EDocument {
 	@SuppressWarnings("unchecked")
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
 		System.out.println("Start NotaDeCredito.fillCuerpoDocumento()"); 
-		errorMessages.setLength(0);
 
 		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
 		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
@@ -242,7 +238,6 @@ public class NotaDeCredito extends EDocument {
 
 	public StringBuffer fillResumen(JSONObject factoryInput) {
 		System.out.println("Start NotaDeCredito.fillResumen()"); 
-		errorMessages.setLength(0);		
 		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
 
 		try {resumen.setTotalNoSuj(resumenJson.getBigDecimal(TOTALNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}

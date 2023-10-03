@@ -2,13 +2,11 @@
  * 
  */
 package org.shw.einvoice.es.factory;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
 import org.shw.einvoice.es.fecrretencionv1.ApendiceItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.CuerpoDocumentoItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.EmisorRetencion;
@@ -16,9 +14,7 @@ import org.shw.einvoice.es.fecrretencionv1.ExtensionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.IdentificacionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ReceptorRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ResumenRetencion;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.EDocument;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 
@@ -79,7 +75,6 @@ public class Retencion extends EDocument {
 	 */
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
 		System.out.println("Start Retencion.fillIdentificacion()"); 
-		errorMessages.setLength(0);
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
 		try {identificacion.setVersion(identificationJson.getInt(VERSION));} 		catch (Exception e) {errorMessages.append(e);}
@@ -105,7 +100,6 @@ public class Retencion extends EDocument {
 
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
 		System.out.println("Start Retencion.fillEmisor()"); 
-		errorMessages.setLength(0);
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -144,7 +138,6 @@ public class Retencion extends EDocument {
 
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
 		System.out.println("Start Retencion.fillReceptor()"); 
-		errorMessages.setLength(0);
 
 		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
 		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -171,7 +164,6 @@ public class Retencion extends EDocument {
 	@SuppressWarnings("unchecked")
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
 		System.out.println("Start Retencion.fillCuerpoDocumento()"); 
-		errorMessages.setLength(0);
 
 		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
 		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
@@ -221,7 +213,6 @@ public class Retencion extends EDocument {
 	
 	public StringBuffer fillResumen(JSONObject factoryInput) {
 		System.out.println("Start Retencion.fillResumen()"); 
-		errorMessages.setLength(0);		
 		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
 
 		try {resumen.setTotalIVAretenido(resumenJson.getBigDecimal(TOTALIVARETENIDO));} 					catch (Exception e) {errorMessages.append(e);}

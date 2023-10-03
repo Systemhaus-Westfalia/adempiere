@@ -168,11 +168,13 @@ public class AnulacionFactory extends EDocumentFactory {
 	
 	
 	public String createJsonString() throws Exception {
+		System.out.println("Anulacion: start generating JSON object from Document");
     	ObjectMapper objectMapper = new ObjectMapper();
     	String facturaAsString    = objectMapper.writeValueAsString(anulacion);
         JSONObject  facturaAsJson = new JSONObject(facturaAsString);
         
         String finalAnulacionAsString = objectMapper.writeValueAsString(facturaAsJson);
+		System.out.println("Anulacion: start generating JSON object from Document");
 		return finalAnulacionAsString;
 	}
 
@@ -189,39 +191,40 @@ public class AnulacionFactory extends EDocumentFactory {
 		 return anulacion.errorMessages;
 	 }
 	
-	public boolean writeToFile (String json, MInvoice invoice, String directory)
+	public boolean writeToFile (String json, MInvoice invoice, String directory) {
+		System.out.println("Anulacion: start writing to file");
+		try
 		{
-			try
-			{
-	    		Path rootpath = Paths.get(directory);
-	    		if (!Files.exists(rootpath)) {
-	    			return false;
-	    		}    	
-	    		
-				directory = (directory.endsWith("/")
-						|| directory.endsWith("\\"))
-						? directory:directory + "/";
-				Path path = Paths.get(directory + invoice.getDateAcct().toString().substring(0, 10) + "/");
-				Files.createDirectories(path);
-				//java.nio.file.Files;
-				Files.createDirectories(path);
-				String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
-				File out = new File (filename);
-				Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
-				fw.write(json);
-				fw.flush ();
-				fw.close ();
-				float size = out.length();
-				size /= 1024;
-				System.out.println("File size: " + out.getAbsolutePath() + " - " + size + " kB");
-				System.out.println("Printed To: " + filename);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				throw new RuntimeException(ex);
-			}
+			Path rootpath = Paths.get(directory);
+			if (!Files.exists(rootpath)) {
+				return false;
+			}    	
+
+			directory = (directory.endsWith("/")
+					|| directory.endsWith("\\"))
+					? directory:directory + "/";
+			Path path = Paths.get(directory + invoice.getDateAcct().toString().substring(0, 10) + "/");
+			Files.createDirectories(path);
+			//java.nio.file.Files;
+			Files.createDirectories(path);
+			String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
+			File out = new File (filename);
+			Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
+			fw.write(json);
+			fw.flush ();
+			fw.close ();
+			float size = out.length();
+			size /= 1024;
+			System.out.println("File size: " + out.getAbsolutePath() + " - " + size + " kB");
+			System.out.println("Printed To: " + filename);
+			System.out.println("Anulacion: end writing to file");
+			return true;
 		}
+		catch (Exception ex)
+		{
+			throw new RuntimeException(ex);
+		}
+	}
 	
 	boolean deleteJsonNOde(JsonNode node) {
         if(! node.isEmpty()) {

@@ -485,12 +485,14 @@ public class FacturaFactory extends EDocumentFactory {
 	}
 
 	public String createJsonString() throws Exception {
+		System.out.println("Factura: start generating JSON object from Document");
     	ObjectMapper objectMapper = new ObjectMapper();
     	String facturaAsString    = objectMapper.writeValueAsString(factura);
         JSONObject  facturaAsJson = new JSONObject(facturaAsString);
         
         facturaAsJson.remove(Factura.ERRORMESSAGES);
 
+		System.out.println("Factura: end generating JSON object from Document");
 		return facturaAsJson.toString();
 	}
 

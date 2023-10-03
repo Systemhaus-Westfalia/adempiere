@@ -502,7 +502,9 @@ public class FacturaFactory extends EDocumentFactory {
         		replace(":[],", ":null,").
         		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
         		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\"::null},").
-        		replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null}]");
+        		replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null}]").
+        		replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
+        				"\"extension\":null},");
 
 		System.out.println("Factura: end generating JSON object from Document");
 		return facturaAsStringFinal;

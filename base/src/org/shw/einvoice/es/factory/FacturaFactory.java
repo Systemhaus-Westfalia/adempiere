@@ -375,12 +375,14 @@ public class FacturaFactory extends EDocumentFactory {
 				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
 				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
+				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 			}
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
 				totalExenta = invoiceTax.getTaxBaseAmt();
 				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
 				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
+				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 			}
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
@@ -389,10 +391,9 @@ public class FacturaFactory extends EDocumentFactory {
 				//jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				//jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
-			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 		}
-		if (!jsonTributosArray.isEmpty())
-			jsonObjectResumen.put(Factura.TRIBUTOS, jsonTributosArray);
+		// (!jsonTributosArray.isEmpty())
+		jsonObjectResumen.put(Factura.TRIBUTOS, jsonTributosArray);
 		
 		
 		jsonObjectResumen.put(Factura.TOTALNOSUJ, totalNoSuj);

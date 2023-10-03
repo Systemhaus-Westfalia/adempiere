@@ -299,15 +299,17 @@ public class Factura extends EDocument {
 
 		resumen.getPagos().add(newPagosItem);
 
-		JSONArray tributosArrayJson = resumenJson.getJSONArray(TRIBUTOS);	
-		for (int i=0; i< tributosArrayJson.length(); i++) { 
-			JSONObject tributosItemJson = tributosArrayJson.getJSONObject(i);
-			TributosItemFactura tributosItemFactura = new TributosItemFactura();
-			try {tributosItemFactura.setCodigo(tributosItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
-			try {tributosItemFactura.setDescripcion(tributosItemJson.getString(DESCRIPCION));} 					catch (Exception e) {errorMessages.append(e);}
-			try {tributosItemFactura.setValor(tributosItemJson.getBigDecimal(VALOR));} 	catch (Exception e) {errorMessages.append(e);}
-			
-			resumen.getTributos().add(tributosItemFactura);		
+		JSONArray tributosArrayJson = resumenJson.getJSONArray(TRIBUTOS);
+		if (tributosArrayJson.length() >0) {		
+			for (int i=0; i< tributosArrayJson.length(); i++) { 
+				JSONObject tributosItemJson = tributosArrayJson.getJSONObject(i);
+				TributosItemFactura tributosItemFactura = new TributosItemFactura();
+				try {tributosItemFactura.setCodigo(tributosItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
+				try {tributosItemFactura.setDescripcion(tributosItemJson.getString(DESCRIPCION));} 					catch (Exception e) {errorMessages.append(e);}
+				try {tributosItemFactura.setValor(tributosItemJson.getBigDecimal(VALOR));} 	catch (Exception e) {errorMessages.append(e);}
+
+				resumen.getTributos().add(tributosItemFactura);		
+			}
 		}
 		
 

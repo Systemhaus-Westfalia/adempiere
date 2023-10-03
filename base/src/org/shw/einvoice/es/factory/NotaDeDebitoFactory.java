@@ -49,7 +49,8 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 		System.out.println("Nota de Debito: start generating and filling the Document");
 		String result="";
 		notaDeDebito = new NotaDeDebito();
-		
+
+		System.out.println("Instatiate, fill and verify Identificacion");		
 		IdentificacionNotaDeDebito identification = notaDeDebito.getIdentificacion();
 		if(identification!=null) {
 			notaDeDebito.errorMessages.append(notaDeDebito.fillIdentification(jsonInputToFactory));
@@ -71,7 +72,8 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 //				} 
 //			);
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Emisor");
 		EmisorNotaDeDebito emisor = notaDeDebito.getEmisor();
 		if(emisor!=null) {
 			notaDeDebito.fillEmisor(jsonInputToFactory);
@@ -102,7 +104,8 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 //				errorMessages.append(result);
 //			}
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Cuerpo Documento");
 		List<CuerpoDocumentoItemNotaDeDebito> cuerpoDocumento = notaDeDebito.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
 			notaDeDebito.fillCuerpoDocumento(jsonInputToFactory);
@@ -115,7 +118,8 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 				} 
 			);
 		}
-		
+
+		System.out.println("Instatiate, fill and verify Resumen");
 		ResumenNotaDeDebito resumen = notaDeDebito.getResumen();
 		if(resumen!=null) {
 			notaDeDebito.fillResumen(jsonInputToFactory);

@@ -38,7 +38,8 @@ public class AnulacionFactory extends EDocumentFactory {
 		System.out.println("Anulacion: start generating and filling the Document");
 		String result="";
 		anulacion = new Anulacion();
-		
+
+		System.out.println("Instatiate, fill and verify Identificacion");
 		IdentificacionAnulacion identification = anulacion.getIdentificacion();
 		if(identification!=null) {
 			anulacion.errorMessages.append(anulacion.fillIdentification(jsonInputToFactory));
@@ -47,7 +48,8 @@ public class AnulacionFactory extends EDocumentFactory {
 				anulacion.errorMessages.append(result);
 			}
 		}
-		
+
+		System.out.println("Instatiate, fill and verify Emisor");
 		EmisorAnulacion emisor = anulacion.getEmisor();
 		if(emisor!=null) {
 			anulacion.fillEmisor(jsonInputToFactory);
@@ -56,7 +58,8 @@ public class AnulacionFactory extends EDocumentFactory {
 				anulacion.errorMessages.append(result);
 			}
 		}
-		
+
+		System.out.println("Instatiate, fill and verify Documento");
 		DocumentoAnulacion documento = anulacion.getDocumento();
 		if(documento!=null) {
 			anulacion.fillDocumento(jsonInputToFactory);
@@ -66,6 +69,7 @@ public class AnulacionFactory extends EDocumentFactory {
 			}
 		}
 //		
+		System.out.println("Instatiate, fill and verify Motivo");
 		MotivoAnulacion motivo = anulacion.getMotivo();
 		if(documento!=null) {
 			anulacion.fillMotivo(jsonInputToFactory);

@@ -49,7 +49,8 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		System.out.println("Nota de Credito: start generating and filling the Document");
 		String result="";
 		notaDeCredito = new NotaDeCredito();
-		
+
+		System.out.println("Instatiate, fill and verify Identificacion");		
 		IdentificacionNotaDeCredito identification = notaDeCredito.getIdentificacion();
 		if(identification!=null) {
 			notaDeCredito.errorMessages.append(notaDeCredito.fillIdentification(jsonInputToFactory));
@@ -71,7 +72,8 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 //				} 
 //			);
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Emisor");
 		EmisorNotaDeCredito emisor = notaDeCredito.getEmisor();
 		if(emisor!=null) {
 			notaDeCredito.fillEmisor(jsonInputToFactory);
@@ -102,7 +104,8 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 //				errorMessages.append(result);
 //			}
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Cuerpo Documento");
 		List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumento = notaDeCredito.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
 			notaDeCredito.fillCuerpoDocumento(jsonInputToFactory);
@@ -115,7 +118,8 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 				} 
 			);
 		}
-		
+
+		System.out.println("Instatiate, fill and verify Resumen");
 		ResumenNotaDeCredito resumen = notaDeCredito.getResumen();
 		if(resumen!=null) {
 			notaDeCredito.fillResumen(jsonInputToFactory);

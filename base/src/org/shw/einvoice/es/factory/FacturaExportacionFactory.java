@@ -50,7 +50,8 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		System.out.println("Factura Exportacion: start generating and filling the Document");
 		String result="";
 		facturaExportacion = new FacturaExportacion();
-		
+
+		System.out.println("Instatiate, fill and verify Identificacion");
 		IdentificacionFacturaExportacion identification = facturaExportacion.getIdentificacion();
 		if(identification!=null) {
 			facturaExportacion.errorMessages.append(facturaExportacion.fillIdentification(jsonInputToFactory));
@@ -72,7 +73,8 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 //				} 
 //			);
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Emisor");
 		EmisorFacturaExportacion emisor = facturaExportacion.getEmisor();
 		if(emisor!=null) {
 			facturaExportacion.fillEmisor(jsonInputToFactory);
@@ -103,7 +105,8 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 //				errorMessages.append(result);
 //			}
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Cuerpo Documento");
 		List<CuerpoDocumentoItemFacturaExportacion> cuerpoDocumento = facturaExportacion.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
 			facturaExportacion.fillCuerpoDocumento(jsonInputToFactory);
@@ -116,7 +119,8 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 				} 
 			);
 		}
-		
+
+		System.out.println("Instatiate, fill and verify Resumen");
 		ResumenFacturaExportacion resumen = facturaExportacion.getResumen();
 		if(resumen!=null) {
 			facturaExportacion.fillResumen(jsonInputToFactory);

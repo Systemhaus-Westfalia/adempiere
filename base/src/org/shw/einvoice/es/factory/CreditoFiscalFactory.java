@@ -49,7 +49,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		System.out.println("Credito Fiscal: start generating and filling the Document");
 		String result="";
 		creditoFiscal = new CreditoFiscal();
-		
+
+		System.out.println("Instatiate, fill and verify Identificacion");
 		IdentificacionCreditoFiscal identification = creditoFiscal.getIdentificacion();
 		if(identification!=null) {
 			creditoFiscal.errorMessages.append(creditoFiscal.fillIdentification(jsonInputToFactory));
@@ -71,7 +72,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 //				} 
 //			);
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Emisor");
 		EmisorCreditoFiscal emisor = creditoFiscal.getEmisor();
 		if(emisor!=null) {
 			creditoFiscal.fillEmisor(jsonInputToFactory);
@@ -102,7 +104,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 //				errorMessages.append(result);
 //			}
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Cuerpo Documento");
 		List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento = creditoFiscal.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
 			creditoFiscal.fillCuerpoDocumento(jsonInputToFactory);
@@ -115,7 +118,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 				} 
 			);
 		}
-		
+
+		System.out.println("Instatiate, fill and verify Resumen");
 		ResumenCreditoFiscal resumen = creditoFiscal.getResumen();
 		if(resumen!=null) {
 			creditoFiscal.fillResumen(jsonInputToFactory);

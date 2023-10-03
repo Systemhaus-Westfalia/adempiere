@@ -49,7 +49,8 @@ public class RetencionFactory extends EDocumentFactory {
 		System.out.println("Retencion: start generating and filling the Document");
 		String result="";
 		retencion = new Retencion();
-		
+
+		System.out.println("Instatiate, fill and verify Identificacion");
 		IdentificacionRetencion identification = retencion.getIdentificacion();
 		if(identification!=null) {
 			retencion.errorMessages.append(retencion.fillIdentification(jsonInputToFactory));
@@ -71,7 +72,8 @@ public class RetencionFactory extends EDocumentFactory {
 //				} 
 //			);
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Emisor");
 		EmisorRetencion emisor = retencion.getEmisor();
 		if(emisor!=null) {
 			retencion.fillEmisor(jsonInputToFactory);
@@ -102,7 +104,8 @@ public class RetencionFactory extends EDocumentFactory {
 //				errorMessages.append(result);
 //			}
 //		}
-		
+
+		System.out.println("Instatiate, fill and verify Cuerpo Documento");
 		List<CuerpoDocumentoItemRetencion> cuerpoDocumento = retencion.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
 			retencion.fillCuerpoDocumento(jsonInputToFactory);
@@ -115,7 +118,8 @@ public class RetencionFactory extends EDocumentFactory {
 				} 
 			);
 		}
-		
+
+		System.out.println("Instatiate, fill and verify Resumen");
 		ResumenRetencion resumen = retencion.getResumen();
 		if(resumen!=null) {
 			retencion.fillResumen(jsonInputToFactory);

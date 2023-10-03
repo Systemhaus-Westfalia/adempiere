@@ -189,7 +189,7 @@ public class FacturaFactory extends EDocumentFactory {
 			factura.errorMessages.append(result);
 		}
 
-		System.out.println("Factura: start generating and filling the Document");
+		System.out.println("Factura: end generating and filling the Document");
 		return factura;
 	}
 

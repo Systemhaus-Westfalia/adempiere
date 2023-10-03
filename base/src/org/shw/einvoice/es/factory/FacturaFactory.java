@@ -501,7 +501,8 @@ public class FacturaFactory extends EDocumentFactory {
         String facturaAsStringFinal    = facturaAsJson.toString().
         		replace(":[],", ":null,").
         		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
-        		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\"::null},");
+        		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\"::null},").
+        		replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null}]");
 
 		System.out.println("Factura: end generating JSON object from Document");
 		return facturaAsStringFinal;

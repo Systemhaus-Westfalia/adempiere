@@ -492,13 +492,19 @@ public class FacturaFactory extends EDocumentFactory {
 	public String createJsonString() throws Exception {
 		System.out.println("Factura: start generating JSON object from Document");
     	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsString    = objectMapper.writeValueAsString(factura);
-        JSONObject  facturaAsJson = new JSONObject(facturaAsString);
+    	String facturaAsStringTmp = objectMapper.writeValueAsString(factura);
+        JSONObject facturaAsJson  = new JSONObject(facturaAsStringTmp);
         
         facturaAsJson.remove(Factura.ERRORMESSAGES);
 
+        // Manipulate generated JSON string
+        String facturaAsStringFinal    = facturaAsJson.toString().
+        		replace(":[],", ":null,").
+        		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+        		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\"::null},");
+
 		System.out.println("Factura: end generating JSON object from Document");
-		return facturaAsJson.toString();
+		return facturaAsStringFinal;
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

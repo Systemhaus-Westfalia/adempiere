@@ -50,6 +50,7 @@ public class FacturaFactory extends EDocumentFactory {
 	}
 
 	public Factura generateEDocument() {
+		System.out.println("Factura: start generating and filling the Document");
 		String result="";
 		factura = new Factura();
 		
@@ -182,7 +183,8 @@ public class FacturaFactory extends EDocumentFactory {
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
 			factura.errorMessages.append(result);
 		}
-		
+
+		System.out.println("Factura: start generating and filling the Document");
 		return factura;
 	}
 
@@ -198,7 +200,7 @@ public class FacturaFactory extends EDocumentFactory {
 	}
 	
 	private JSONObject generateIdentificationInputData() {
-		System.out.println("Start collecting JSON data for Identificacion");
+		System.out.println("Factura: start collecting JSON data for Identificacion");
 
 		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
 		String documentno = invoice.getDocumentNo().replace(prefix,"");
@@ -236,15 +238,13 @@ public class FacturaFactory extends EDocumentFactory {
 			jsonObjectIdentificacion.put(Factura.TIPOCONTINGENCIA, 5);
 		}
 		
-		
-
-		System.out.println("Finish collecting JSON data for Identificacion");
+		System.out.println("Factura: end collecting JSON data for Identificacion");
 		return jsonObjectIdentificacion;
 		
 	}
 	
 	private JSONObject generateEmisorInputData() {
-		System.out.println("Start collecting JSON data for Emisor");
+		System.out.println("Factura: start collecting JSON data for Emisor");
 		
 		JSONObject jsonObjectEmisor = new JSONObject();
 		jsonObjectEmisor.put(Factura.NIT, orgInfo.getTaxID().replace("-", ""));
@@ -264,13 +264,13 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonObjectEmisor.put(Factura.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(Factura.CORREO, client.getEMail());
 
-		System.out.println("Finish collecting JSON data for Emisor");
+		System.out.println("Factura: end collecting JSON data for Emisor");
 		return jsonObjectEmisor;
 		
 	}
 	
 	private JSONObject generateReceptorInputData() {
-		System.out.println("Start collecting JSON data for Receptor");
+		System.out.println("Factura: start collecting JSON data for Receptor");
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
@@ -320,13 +320,13 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonObjectReceptor.put(Factura.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(Factura.CORREO, partner.get_ValueAsString("EMail"));		
 
-		System.out.println("Finish collecting JSON data for Receptor");
+		System.out.println("Factura: end collecting JSON data for Receptor");
 		return jsonObjectReceptor;
 		
 	}
 	
 	private JSONObject generateResumenInputData() {
-		System.out.println("Start collecting JSON data for Resumen");
+		System.out.println("Factura: start collecting JSON data for Resumen");
 		BigDecimal totalNoSuj 	= Env.ZERO;
 		BigDecimal totalExenta 	= Env.ZERO;
 		BigDecimal totalGravada = Env.ZERO;		
@@ -421,16 +421,14 @@ public class FacturaFactory extends EDocumentFactory {
 
 		jsonObjectResumen.put(Factura.PAGOS, jsonArrayPagos);
 		
-		
-		
-		
-		System.out.println("Finish collecting JSON data for Resumen");
+
+		System.out.println("Factura: end collecting JSON data for Resumen");
 		return jsonObjectResumen;
 		
 	}
 	
 	private JSONObject generateCuerpoDocumentoInputData() {
-		System.out.println("Start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		System.out.println("Factura: start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		JSONObject jsonCuerpoDocumento = new JSONObject();
 		JSONArray jsonCuerpoDocumentoArray = new JSONArray();
 		
@@ -480,9 +478,8 @@ public class FacturaFactory extends EDocumentFactory {
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");
 
 		}  
-		
 		jsonCuerpoDocumento.put(Factura.CUERPODOCUMENTO, jsonCuerpoDocumentoArray);
-		System.out.println("Finish collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		System.out.println("Factura: end collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		
 		return jsonCuerpoDocumento;
 	}
@@ -510,39 +507,40 @@ public class FacturaFactory extends EDocumentFactory {
 		 return factura.errorMessages;
 	 }
 	
-	public boolean writeToFile (String json, MInvoice invoice, String directory)
+	public boolean writeToFile (String json, MInvoice invoice, String directory) {
+		System.out.println("Factura: start writing to file");
+		try
 		{
-			try
-			{
-	    		Path rootpath = Paths.get(directory);
-	    		if (!Files.exists(rootpath)) {
-	    			return false;
-	    		}    	
-	    		
-				directory = (directory.endsWith("/")
-						|| directory.endsWith("\\"))
-						? directory:directory + "/";
-				Path path = Paths.get(directory + invoice.getDateAcct().toString().substring(0, 10) + "/");
-				Files.createDirectories(path);
-				//java.nio.file.Files;
-				Files.createDirectories(path);
-				String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
-				File out = new File (filename);
-				Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
-				fw.write(json);
-				fw.flush ();
-				fw.close ();
-				float size = out.length();
-				size /= 1024;
-				System.out.println("File size: " + out.getAbsolutePath() + " - " + size + " kB");
-				System.out.println("Printed To: " + filename);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				throw new RuntimeException(ex);
-			}
+			Path rootpath = Paths.get(directory);
+			if (!Files.exists(rootpath)) {
+				return false;
+			}    	
+
+			directory = (directory.endsWith("/")
+					|| directory.endsWith("\\"))
+					? directory:directory + "/";
+			Path path = Paths.get(directory + invoice.getDateAcct().toString().substring(0, 10) + "/");
+			Files.createDirectories(path);
+			//java.nio.file.Files;
+			Files.createDirectories(path);
+			String filename = path +"/" + invoice.getDocumentNo().replace(" ", "") + ".json"; 
+			File out = new File (filename);
+			Writer fw = new OutputStreamWriter(new FileOutputStream(out, false), "UTF-8");
+			fw.write(json);
+			fw.flush ();
+			fw.close ();
+			float size = out.length();
+			size /= 1024;
+			System.out.println("File size: " + out.getAbsolutePath() + " - " + size + " kB");
+			System.out.println("Printed To: " + filename);
+			System.out.println("Factura: end writing to file");
+			return true;
 		}
+		catch (Exception ex)
+		{
+			throw new RuntimeException(ex);
+		}
+	}
 	
 	boolean deleteJsonNOde(JsonNode node) {
         if(! node.isEmpty()) {

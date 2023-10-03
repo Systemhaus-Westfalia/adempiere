@@ -47,6 +47,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 	}
 
 	public FacturaExportacion generateEDocument() {
+		System.out.println("Factura Exportacion: start generating and filling the Document");
 		String result="";
 		facturaExportacion = new FacturaExportacion();
 		
@@ -169,7 +170,8 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
 			facturaExportacion.errorMessages.append(result);
 		}
-		
+
+		System.out.println("Factura Exportacion: end generating and filling the Document");	
 		return facturaExportacion;
 	}
 

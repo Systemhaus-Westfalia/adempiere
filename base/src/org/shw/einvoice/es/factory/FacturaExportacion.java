@@ -64,6 +64,7 @@ public class FacturaExportacion extends EDocument {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
+		System.out.println("Factura de Exportacion: start validating values");
 
 		if( (getResumen()==null) || (getResumen().getMontoTotalOperacion()==null) ) {
 			return VALIDATION_RESUMEN_OR_MONTO_IS_NULL;
@@ -81,7 +82,8 @@ public class FacturaExportacion extends EDocument {
 		if( (getCuerpoDocumento()==null) || (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
 			return VALIDATION_CUERPODOCUMENTO_MAXITEMS;
 		}
-		
+
+		System.out.println("Factura de Exportacion: end validating values");
 		return VALIDATION_RESULT_OK;
 	}
 

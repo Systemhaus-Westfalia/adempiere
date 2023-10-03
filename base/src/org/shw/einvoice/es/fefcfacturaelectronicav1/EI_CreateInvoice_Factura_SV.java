@@ -31,8 +31,6 @@ import org.shw.einvoice.es.factory.FacturaFactory;
  */
 public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbstract
 {
-	MClient	 client = null;
-	MOrgInfo orgInfo = null;
 	
 	@Override
 	protected void prepare()
@@ -44,6 +42,8 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 	protected String doIt() throws Exception
 	{	
 		System.out.println("Process EI_CreateInvoice_Factura_SV : started");
+		MClient	 client = null;
+		MOrgInfo orgInfo = null;
 		
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		System.out.println("Process EI_CreateInvoice_Factura_SV : Started with Invoice " + invoice.getDocumentNo());

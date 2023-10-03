@@ -37,7 +37,7 @@ public class Anulacion extends EDocument {
 	 * Validate the Schema conditions
 	 */
 	public String validateValues() {
-
+		System.out.println("Anulacion: start validating values");
 		if(getMotivo().getTipoAnulacion()==2) {
 			if ( getDocumento().getCodigoGeneracionR()!= null)
 				return VALIDATION_CODIGOGENERACIONR_IS_NOT_NULL;
@@ -46,6 +46,7 @@ public class Anulacion extends EDocument {
 				return VALIDATION_CODIGOGENERACIONR_IS_NULL;
 		}
 
+		System.out.println("Anulacion: end validating values");
 		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 

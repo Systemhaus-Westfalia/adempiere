@@ -46,6 +46,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 	}
 
 	public CreditoFiscal generateEDocument() {
+		System.out.println("Credito Fiscal: start generating and filling the Document");
 		String result="";
 		creditoFiscal = new CreditoFiscal();
 		
@@ -168,7 +169,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
 			creditoFiscal.errorMessages.append(result);
 		}
-		
+
+		System.out.println("Credito Fiscal: end generating and filling the Document");
 		return creditoFiscal;
 	}
 

@@ -46,6 +46,7 @@ public class RetencionFactory extends EDocumentFactory {
 	}
 
 	public Retencion generateEDocument() {
+		System.out.println("Retencion: start generating and filling the Document");
 		String result="";
 		retencion = new Retencion();
 		
@@ -168,7 +169,8 @@ public class RetencionFactory extends EDocumentFactory {
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
 			retencion.errorMessages.append(result);
 		}
-		
+
+		System.out.println("Retencion: end generating and filling the Document");	
 		return retencion;
 	}
 

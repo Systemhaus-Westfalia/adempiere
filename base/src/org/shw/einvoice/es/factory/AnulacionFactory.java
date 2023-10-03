@@ -35,6 +35,7 @@ public class AnulacionFactory extends EDocumentFactory {
 	}
 
 	public Anulacion generateEDocument() {
+		System.out.println("Anulacion: start generating and filling the Document");
 		String result="";
 		anulacion = new Anulacion();
 		
@@ -78,7 +79,8 @@ public class AnulacionFactory extends EDocumentFactory {
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
 			anulacion.errorMessages.append(result);
 		}
-		
+
+		System.out.println("Anulacion: end generating and filling the Document");
 		return anulacion;
 	}
 

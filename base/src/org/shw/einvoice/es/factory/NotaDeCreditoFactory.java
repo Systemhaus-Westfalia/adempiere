@@ -46,6 +46,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 	}
 
 	public NotaDeCredito generateEDocument() {
+		System.out.println("Nota de Credito: start generating and filling the Document");
 		String result="";
 		notaDeCredito = new NotaDeCredito();
 		
@@ -168,7 +169,8 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
 			notaDeCredito.errorMessages.append(result);
 		}
-		
+
+		System.out.println("Nota de Credito: end generating and filling the Document");	
 		return notaDeCredito;
 	}
 

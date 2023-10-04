@@ -448,10 +448,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			//jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.CANTIDAD, invoiceLine.getQtyInvoiced());
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGOTRIBUTO, codTributo);  // String codTributo = "20";
-			
-
-			
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODTRIBUTO, codTributo);  // String codTributo = "20";
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.UNIMEDIDA, 1);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.PRECIOUNI, invoiceLine.getPriceActual());

@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.feccfcreditofiscalv3.DocumentoRelacionadoItemCreditoFiscal;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 /**
@@ -33,7 +34,7 @@ public class CuerpoDocumentoItemFacturaExportacion {
 	 * Constructor without parameters. 
 	 */
 	public CuerpoDocumentoItemFacturaExportacion() {
-		
+		this.tributos= new ArrayList<String>();
 	}	
 
 	/**

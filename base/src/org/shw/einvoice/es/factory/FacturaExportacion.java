@@ -111,14 +111,14 @@ public class FacturaExportacion extends EDocument {
 		errorMessages.setLength(0);
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
-//		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
-//		try {identificacion.setCodigoGeneracion(identificationJson.getString(CODIGOGENERACION));} 	catch (Exception e) {errorMessages.append(e);}
-//		try {identificacion.setTipoModelo(identificationJson.getInt(TIPOMODELO));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {identificacion.setTipoOperacion(identificationJson.getInt(TIPOOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
-//		try {identificacion.setFecEmi(identificationJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
-//		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
-//		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
-//		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setCodigoGeneracion(identificationJson.getString(CODIGOGENERACION));} 	catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoModelo(identificationJson.getInt(TIPOMODELO));} 					catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoOperacion(identificationJson.getInt(TIPOOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setFecEmi(identificationJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
 
 		System.out.println("End FacturaExportacion.fillIdentificacion()");
 		return errorMessages;
@@ -146,20 +146,21 @@ public class FacturaExportacion extends EDocument {
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
-//		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
-//
-//		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
-//		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
-//
-//		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
-//		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
+		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
+
+		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
+		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+		try {emisor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+		try {emisor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+
+		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setTipoItemExpor(emisorJson.getInt(TIPOITEMEXPOR));} 					catch (Exception e) {errorMessages.append(e);}
 
 		System.out.println("End FacturaExportacion.fillEmisor()");
 		return errorMessages;
@@ -185,7 +186,16 @@ public class FacturaExportacion extends EDocument {
 		errorMessages.setLength(0);
 
 		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
-		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setTipoDocumento(receptorJson.getString(TIPODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNumDocumento(receptorJson.getString(NUMDOCUMENTO));} 		catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNombre(receptorJson.getString(NOMBRE));} 					catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNombreComercial(receptorJson.getString(NOMBRECOMERCIAL));}	catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setDescActividad(receptorJson.getString(DESCACTIVIDAD));} 	catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setCodPais(receptorJson.getString(CODPAIS));} 				catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNombrePais(receptorJson.getString(NOMBREPAIS));} 			catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setComplemento(receptorJson.getString(COMPLEMENTO));} 		catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setTelefono(receptorJson.getString(TELEFONO));} 				catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setCorreo(receptorJson.getString(CORREO));} 					catch (Exception e) {errorMessages.append(e);}
 		
 		System.out.println("End FacturaExportacion.fillReceptor()");
 		return errorMessages;
@@ -249,22 +259,21 @@ public class FacturaExportacion extends EDocument {
 			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
 			CuerpoDocumentoItemFacturaExportacion cuerpoDocumentoItemFacturaExportacion = new CuerpoDocumentoItemFacturaExportacion();
 			try {cuerpoDocumentoItemFacturaExportacion.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setCodTributo(null);} 																	catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setTributos(null);} 																		catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
-//			try {cuerpoDocumentoItemFacturaExportacion.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(IVAITEM));} 				catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaExportacion.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaExportacion.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
+			
+			JSONArray tributosArrayJson = cuerpoDocumentoItemJson.getJSONArray(TRIBUTOS);
+			for (int j=0; j< cuerpoDocumentoArrayJson.length(); j++) { 
+				JSONObject tributosItemJson = tributosArrayJson.getJSONObject(j);
+				try {cuerpoDocumentoItemFacturaExportacion.getTributos().add(tributosItemJson.toString());} 					catch (Exception e) {errorMessages.append(e);}	
+			}
+
+			try {cuerpoDocumentoItemFacturaExportacion.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaExportacion.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaExportacion.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaExportacion.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaExportacion.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));}	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaExportacion.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 		catch (Exception e) {errorMessages.append(e);}
 
 			cuerpoDocumento.add(cuerpoDocumentoItemFacturaExportacion);						
 		}
@@ -293,35 +302,25 @@ public class FacturaExportacion extends EDocument {
 		errorMessages.setLength(0);		
 		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
 
-//		try {resumen.setTotalNoSuj(resumenJson.getBigDecimal(TOTALNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setTotalExenta(resumenJson.getBigDecimal(TOTALEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setSubTotalVentas(resumenJson.getBigDecimal(SUBTOTALVENTAS));} 			catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setDescuNoSuj(resumenJson.getBigDecimal(DESCUNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setDescuGravada(resumenJson.getBigDecimal(DESCUGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));} catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setIvaRete1(resumenJson.getBigDecimal(IVARETE1));} 						catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setTotalNoGravado(resumenJson.getBigDecimal(TOTALNOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setSaldoFavor(resumenJson.getBigDecimal(SALDOFAVOR));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 		catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 					catch (Exception e) {errorMessages.append(e);}
-//		try {resumen.setTotalIva(resumenJson.getBigDecimal(TOTALIVA));} 						catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));} catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalNoGravado(resumenJson.getBigDecimal(TOTALNOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 		catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setDescuento(resumenJson.getBigDecimal(DESCUENTO));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} catch (Exception e) {errorMessages.append(e);}
 
 		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
 		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
 
 		PagosItem newPagosItem = new PagosItem();
 		try {newPagosItem.setCodigo(pagosItemJson.getString(CODIGO));} 			catch (Exception e) {errorMessages.append(e);}
-//		try {newPagosItem.setMontoPago(pagosItemJson.getBigDecimal(MONTOPAGO));}	catch (Exception e) {errorMessages.append(e);}
-//		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 	catch (Exception e) {errorMessages.append(e);}
-//		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 			catch (Exception e) {errorMessages.append(e);}
-//		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 			catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setMontoPago(pagosItemJson.getBigDecimal(MONTOPAGO));}	catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 	catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 			catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 			catch (Exception e) {errorMessages.append(e);}
 
 		resumen.getPagos().add(newPagosItem);
 

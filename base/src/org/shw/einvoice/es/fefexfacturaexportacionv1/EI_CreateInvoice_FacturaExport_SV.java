@@ -64,7 +64,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 		
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
 				!invoice.getC_DocType().getE_DocType().getValue().equals(IdentificacionFacturaExportacion.TIPO_DE_DOCUMENTO)) {
-			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es una Factura. Aquí se interrumpe el proceso";
+			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es una Factura de Exportacion. Aquí se interrumpe el proceso";
 			System.out.println(errorMessage);
 			System.out.println("Process EI_CreateInvoice_CCFF_SV : finished with errors");
 			return errorMessage;
@@ -86,23 +86,24 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
     		invoiceElectronic.seterrMsgIntern(facturaExportacionBuilder.getEDocumentErrorMessages().toString());
     		invoiceElectronic.setei_ValidationStatus("02");
         	invoiceElectronic.saveEx();
+			System.out.println("Process EI_CreateInvoice_CCFF_SV : produced the following errors:");
 			System.out.println(facturaExportacionBuilder.getEDocumentErrorMessages().toString());
-			System.out.println("Process EI_CreateInvoice_CCFF_SV : finished with errors");
+			System.out.println("Process EI_CreateInvoice_CCFF_SV : finished");
     		return facturaExportacionBuilder.getEDocumentErrorMessages().toString();
     	}	
     	
-    	String facturaAsJsonString = facturaExportacionBuilder.createJsonString();
-       	invoiceElectronic.setjson(facturaAsJsonString);
+    	String creditoFiscalAsJsonString = facturaExportacionBuilder.createJsonString();
+       	invoiceElectronic.setjson(creditoFiscalAsJsonString);
     	invoiceElectronic.saveEx();
     	
     	if (isSaveInHistoric()) {
-    		if (!facturaExportacionBuilder.writeToFile(facturaAsJsonString, invoice, FacturaExportacion.ABSDIRECTORY)) {
+    		if (!facturaExportacionBuilder.writeToFile(creditoFiscalAsJsonString, invoice, FacturaExportacion.ABSDIRECTORY)) {
     			invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
     		}
     	}
 		
-    	System.out.println("CreditoFiscal generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-    	System.out.println(facturaAsJsonString);
+    	System.out.println("Factura de Exportacion generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
+    	System.out.println(creditoFiscalAsJsonString);
 		System.out.println("Process EI_CreateInvoice_CCFF_SV : Finished");
 		return "";
 	}

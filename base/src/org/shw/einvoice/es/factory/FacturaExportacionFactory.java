@@ -25,6 +25,7 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.fefcfacturaelectronicav1.Factura;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.CuerpoDocumentoItemFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.EmisorFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
@@ -181,6 +182,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 
 	@Override
 	public void generateJSONInputData() {
+		System.out.println("Factura de Exportacion: start collecting JSON data for all components");
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(FacturaExportacion.IDENTIFICACION, generateIdentificationInputData());
@@ -188,6 +190,10 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		jsonInputToFactory.put(FacturaExportacion.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(FacturaExportacion.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(FacturaExportacion.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+		
+		System.out.println("Generated JSON object from Invoice:");
+		System.out.println(jsonInputToFactory.toString());
+		System.out.println("Factura de Exportacion: end collecting JSON data for all components");
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -407,63 +413,27 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 	}
 
 	public String createJsonString() throws Exception {
+		System.out.println("Factura de Exportacion: start generating JSON object from Document");
     	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsString    = objectMapper.writeValueAsString(facturaExportacion);
-        JSONObject  facturaAsJson = new JSONObject(facturaAsString);
+    	String facturaExportacionAsString    = objectMapper.writeValueAsString(facturaExportacion);
+        JSONObject facturaExportacionAsJson = new JSONObject(facturaExportacionAsString);
         
-        facturaAsJson.remove(FacturaExportacion.DOCUMENTORELACIONADO);
-        facturaAsJson.remove(FacturaExportacion.OTROSDOCUMENTOS);
-        facturaAsJson.remove(FacturaExportacion.RECEPTOR);
-        facturaAsJson.remove(FacturaExportacion.VENTATERCERO);        
-        facturaAsJson.remove(FacturaExportacion.EXTENSION);
-        facturaAsJson.remove(FacturaExportacion.APENDICE);
-        facturaAsJson.remove(FacturaExportacion.DOCUMENTO);
-        facturaAsJson.remove(FacturaExportacion.MOTIVO);
-        facturaAsJson.remove(FacturaExportacion.ERRORMESSAGES);
+        facturaExportacionAsJson.remove(Factura.ERRORMESSAGES);
 
-        facturaAsJson.getJSONObject(FacturaExportacion.IDENTIFICACION).remove("horAnula");
-        facturaAsJson.getJSONObject(FacturaExportacion.IDENTIFICACION).remove("motivoContigencia");
-        facturaAsJson.getJSONObject(FacturaExportacion.IDENTIFICACION).remove("fecAnula");
-        facturaAsJson.getJSONObject(FacturaExportacion.IDENTIFICACION).remove("motivoContingencia");
+     // Manipulate generated JSON string
+        String facturaExportacionAsStringFinal = facturaExportacionAsJson.toString().
+        		replace(":[],", ":null,").
+        		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+        		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
+        		replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
+        		replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
+        				"\"extension\":null,");
 
-        facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("seguro");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("totalSujetoRetencion");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("tributos");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("tributosFacturaExportacion");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("numPagoElectronico");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("flete");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("ivaPerci1");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("descuento");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("codIncoterms");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("totalIVAretenidoLetras");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("descIncoterms");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("observaciones");
-		facturaAsJson.getJSONObject(FacturaExportacion.RESUMEN).remove("totalIVAretenido");
-
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove("numDocumento");
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove("fechaEmision");
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove("tributos");
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove("codTributo");
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove("codigoRetencionMH");
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove("montoSujetoGrav");
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove(" ivaRetenido");
-		facturaAsJson.getJSONObject(FacturaExportacion.CUERPODOCUMENTO).remove("tipoDte");
-
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("codigo");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("puntoVentaMH");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("direccion");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("codEstable");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("codPuntoVenta");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("codigoMH");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("codEstableMH");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("puntoVenta");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("recintoFiscal");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("regimen");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("nomEstablecimiento");
-		facturaAsJson.getJSONObject(FacturaExportacion.EMISOR).remove("codPuntoVentaMH");
-
-        String finalFacturaExportacionAsString = objectMapper.writeValueAsString(facturaAsJson);
-		return finalFacturaExportacionAsString;
+		System.out.println("Factura de Exportacion: generated JSON object from Document:");
+		System.out.println(facturaExportacionAsStringFinal);
+		System.out.println("Factura de Exportacion: end generating JSON object from Document");
+		return facturaExportacionAsStringFinal;
+	
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

@@ -195,6 +195,7 @@ public class FacturaFactory extends EDocumentFactory {
 
 	@Override
 	public void generateJSONInputData() {
+		System.out.println("Factura: start collecting JSON data for all components");
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(Factura.IDENTIFICACION, generateIdentificationInputData());
@@ -202,6 +203,10 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonInputToFactory.put(Factura.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(Factura.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(Factura.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+		
+		System.out.println("Generated JSON object from Invoice:");
+		System.out.println(jsonInputToFactory.toString());
+		System.out.println("Factura: end collecting JSON data for all components");
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -499,7 +504,7 @@ public class FacturaFactory extends EDocumentFactory {
         facturaAsJson.remove(Factura.ERRORMESSAGES);
 
      // Manipulate generated JSON string
-        String facturaAsStringFinal    = facturaAsJson.toString().
+        String facturaAsStringFinal = facturaAsJson.toString().
         		replace(":[],", ":null,").
         		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
         		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
@@ -507,6 +512,8 @@ public class FacturaFactory extends EDocumentFactory {
         		replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
         				"\"extension\":null,");
 
+		System.out.println("Factura: generated JSON object from Document:");
+		System.out.println(facturaAsStringFinal);
 		System.out.println("Factura: end generating JSON object from Document");
 		return facturaAsStringFinal;
 	}

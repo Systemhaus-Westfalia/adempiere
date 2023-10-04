@@ -194,6 +194,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 
 	@Override
 	public void generateJSONInputData() {
+		System.out.println("Credito Fiscal: start collecting JSON data for all components");
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(CreditoFiscal.IDENTIFICACION, generateIdentificationInputData());
@@ -201,6 +202,10 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		jsonInputToFactory.put(CreditoFiscal.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(CreditoFiscal.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(CreditoFiscal.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+		
+		System.out.println("Generated JSON object from Invoice:");
+		System.out.println(jsonInputToFactory.toString());
+		System.out.println("Credito Fiscal: end collecting JSON data for all components");
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -469,14 +474,14 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 
 	public String createJsonString() throws Exception {
 		System.out.println("CreditoFiscal: start generating JSON object from Document");
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsStringTmp = objectMapper.writeValueAsString(creditoFiscal);
-        JSONObject facturaAsJson  = new JSONObject(facturaAsStringTmp);
+    	ObjectMapper objectMapper       = new ObjectMapper();
+    	String creditoFiscalAsStringTmp = objectMapper.writeValueAsString(creditoFiscal);
+        JSONObject creditoFiscalAsJson  = new JSONObject(creditoFiscalAsStringTmp);
         
-        facturaAsJson.remove(CreditoFiscal.ERRORMESSAGES);
+        creditoFiscalAsJson.remove(CreditoFiscal.ERRORMESSAGES);
 
      // Manipulate generated JSON string
-        String facturaAsStringFinal    = facturaAsJson.toString().
+        String creditoFiscalAsStringFinal = creditoFiscalAsJson.toString().
         		replace(":[],", ":null,").
         		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
         		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
@@ -484,8 +489,10 @@ public class CreditoFiscalFactory extends EDocumentFactory {
         		replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
         				"\"extension\":null,");
 
-		System.out.println("CreditoFiscal: end generating JSON object from Document");
-		return facturaAsStringFinal;
+		System.out.println("Credito Fiscal: generated JSON object from Document:");
+		System.out.println(creditoFiscalAsStringFinal);
+		System.out.println("Credito Fiscal: end generating JSON object from Document");
+		return creditoFiscalAsStringFinal;
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

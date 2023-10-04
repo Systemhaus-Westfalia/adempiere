@@ -72,8 +72,9 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     		invoiceElectronic.seterrMsgIntern(facturaBuilder.getEDocumentErrorMessages().toString());
     		invoiceElectronic.setei_ValidationStatus("02");
         	invoiceElectronic.saveEx();
+			System.out.println("Process EI_CreateInvoice_Factura_SV : produced the following errors:");
 			System.out.println(facturaBuilder.getEDocumentErrorMessages().toString());
-			System.out.println("Process EI_CreateInvoice_Factura_SV : finished with errors");
+			System.out.println("Process EI_CreateInvoice_Factura_SV : finished");
     		return facturaBuilder.getEDocumentErrorMessages().toString();
     	}	
     	

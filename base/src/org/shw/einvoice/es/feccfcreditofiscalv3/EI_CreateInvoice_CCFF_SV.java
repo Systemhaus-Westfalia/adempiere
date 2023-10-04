@@ -104,7 +104,8 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
 		String suffix = invoice.getC_DocType().getDefiniteSequence().getSuffix();
 		String documentno = invoice.getDocumentNo().replace(prefix,"");
-		documentno = documentno.replace(suffix, "");
+		int position = documentno.indexOf("_");
+		documentno = documentno.substring(0,position);
 		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		String duns = orgInfo.getDUNS().replace("-", "");
 		ComprobanteCreditoFiscal comprobanteCreditoFiscal   = new ComprobanteCreditoFiscal();

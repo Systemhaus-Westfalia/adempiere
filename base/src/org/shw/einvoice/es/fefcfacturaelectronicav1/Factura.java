@@ -223,22 +223,22 @@ public class Factura extends EDocument {
 			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
 			CuerpoDocumentoItemFactura cuerpoDocumentoItemFactura = new CuerpoDocumentoItemFactura();
 			try {cuerpoDocumentoItemFactura.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 				catch (Exception e) {errorMessages.append(e);}
 			//try {cuerpoDocumentoItemFactura.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFactura.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFactura.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setCodTributo(null);} 																	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setCodTributo(null);} 													catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFactura.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 		catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFactura.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFactura.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 	catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFactura.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setTributos(null);} 																		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFactura.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(IVAITEM));} 				catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setTributos(null);} 													catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 					catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFactura.setIvaItem(cuerpoDocumentoItemJson.getBigDecimal(IVAITEM));} 			catch (Exception e) {errorMessages.append(e);}
 
 			cuerpoDocumento.add(cuerpoDocumentoItemFactura);						
 		}
@@ -267,23 +267,23 @@ public class Factura extends EDocument {
 		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
 
 		try {resumen.setTotalNoSuj(resumenJson.getBigDecimal(TOTALNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setTotalExenta(resumenJson.getBigDecimal(TOTALEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalExenta(resumenJson.getBigDecimal(TOTALEXENTA));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setSubTotalVentas(resumenJson.getBigDecimal(SUBTOTALVENTAS));} 			catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setDescuNoSuj(resumenJson.getBigDecimal(DESCUNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 				catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setDescuGravada(resumenJson.getBigDecimal(DESCUGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));} catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));} 	catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setIvaRete1(resumenJson.getBigDecimal(IVARETE1));} 						catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} 	catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalNoGravado(resumenJson.getBigDecimal(TOTALNOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setSaldoFavor(resumenJson.getBigDecimal(SALDOFAVOR));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 		catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalIva(resumenJson.getBigDecimal(TOTALIVA));} 						catch (Exception e) {errorMessages.append(e);}
 
 		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
@@ -291,11 +291,11 @@ public class Factura extends EDocument {
 		
 
 		PagosItem newPagosItem = new PagosItem();
-		try {newPagosItem.setCodigo(pagosItemJson.getString(CODIGO));} 			catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setCodigo(pagosItemJson.getString(CODIGO));} 				catch (Exception e) {errorMessages.append(e);}
 		try {newPagosItem.setMontoPago(pagosItemJson.getBigDecimal(MONTOPAGO));}	catch (Exception e) {errorMessages.append(e);}
-		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 	catch (Exception e) {errorMessages.append(e);}
-		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 			catch (Exception e) {errorMessages.append(e);}
-		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 			catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 		catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 				catch (Exception e) {errorMessages.append(e);}
+		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 				catch (Exception e) {errorMessages.append(e);}
 
 		resumen.getPagos().add(newPagosItem);
 
@@ -304,9 +304,9 @@ public class Factura extends EDocument {
 			for (int i=0; i< tributosArrayJson.length(); i++) { 
 				JSONObject tributosItemJson = tributosArrayJson.getJSONObject(i);
 				TributosItemFactura tributosItemFactura = new TributosItemFactura();
-				try {tributosItemFactura.setCodigo(tributosItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
-				try {tributosItemFactura.setDescripcion(tributosItemJson.getString(DESCRIPCION));} 					catch (Exception e) {errorMessages.append(e);}
-				try {tributosItemFactura.setValor(tributosItemJson.getBigDecimal(VALOR));} 	catch (Exception e) {errorMessages.append(e);}
+				try {tributosItemFactura.setCodigo(tributosItemJson.getString(CODIGO));} 			catch (Exception e) {errorMessages.append(e);}
+				try {tributosItemFactura.setDescripcion(tributosItemJson.getString(DESCRIPCION));}	catch (Exception e) {errorMessages.append(e);}
+				try {tributosItemFactura.setValor(tributosItemJson.getBigDecimal(VALOR));} 			catch (Exception e) {errorMessages.append(e);}
 
 				resumen.getTributos().add(tributosItemFactura);		
 			}

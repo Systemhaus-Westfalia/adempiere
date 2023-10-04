@@ -51,7 +51,7 @@ public class ResumenCreditoFiscal {
 	 * No parameters
 	 */
 	public ResumenCreditoFiscal() {
-		this.pagos = new ArrayList<PagosItem>();
+		this.pagos    = new ArrayList<PagosItem>();
 		this.tributos = new ArrayList<TributosItem>();
 	}
 

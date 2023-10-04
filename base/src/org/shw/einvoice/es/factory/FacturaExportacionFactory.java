@@ -25,7 +25,6 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.Factura;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.CuerpoDocumentoItemFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.EmisorFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
@@ -418,7 +417,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
     	String facturaExportacionAsString    = objectMapper.writeValueAsString(facturaExportacion);
         JSONObject facturaExportacionAsJson = new JSONObject(facturaExportacionAsString);
         
-        facturaExportacionAsJson.remove(Factura.ERRORMESSAGES);
+        facturaExportacionAsJson.remove(FacturaExportacion.ERRORMESSAGES);
 
      // Manipulate generated JSON string
         String facturaExportacionAsStringFinal = facturaExportacionAsJson.toString().

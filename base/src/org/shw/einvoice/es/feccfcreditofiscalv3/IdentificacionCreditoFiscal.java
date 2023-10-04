@@ -202,14 +202,14 @@ public class IdentificacionCreditoFiscal {
 	/**
 	 * @param motivoContin the motivoContin to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 150
+	 * "minLength" : 1, "maxLength" : 150; , null
 	 */
 	public void setMotivoContin(String motivoContin) {
 		final int MINLENGTH = 1;		
 		final int MAXLENGTH = 150;
 		int length = motivoContin==null?0:motivoContin.length();
 
-		if(length>=MINLENGTH && length<=MAXLENGTH)
+		if(motivoContin==null || (length>=MINLENGTH && length<=MAXLENGTH))
 			this.motivoContin = motivoContin;
 		else
 			throw new IllegalArgumentException("Wrong parameter 'motivoContin' in CreditoFiscal.Identificacion.setMotivoContin()");

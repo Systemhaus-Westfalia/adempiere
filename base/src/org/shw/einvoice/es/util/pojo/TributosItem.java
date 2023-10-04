@@ -25,6 +25,12 @@ public class TributosItem {
 		this.descripcion = descripcion;
 		this.valor = valor;
 	}
+	
+	/**
+	 * Constructor without parameters
+	 */
+	public TributosItem() {
+	}
 
 	/**
 	 * @return the codigo

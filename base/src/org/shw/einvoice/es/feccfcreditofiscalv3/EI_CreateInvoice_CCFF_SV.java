@@ -331,7 +331,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 
 		List<PagosItem> pagosItems = new ArrayList<PagosItem>();
 		PagosItem pagoitem = new PagosItem("05",
-				zero, 
+				invoice.getGrandTotal(), 
 				"Transferencia_ Depósito Bancario", 
 				invoice.getC_PaymentTerm().getE_TimeSpan().getValue(),
 				invoice.getC_PaymentTerm().getNetDays());

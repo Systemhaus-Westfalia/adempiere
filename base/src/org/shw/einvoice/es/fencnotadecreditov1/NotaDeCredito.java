@@ -6,11 +6,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.shw.einvoice.es.util.pojo.EDocument;
+
 
 /**
  * 
  */
-public class NotaDeCredito {
+public class NotaDeCredito extends EDocument {
 	
 	IdentificacionNotaDeCredito identificacion;
 	List<DocumentoRelacionadoItemNotaDeCredito> documentoRelacionado;

@@ -100,7 +100,6 @@ public class FacturaExportacion extends EDocument {
 	 */
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
 		System.out.println("Start FacturaExportacion.fillIdentificacion()"); 
-		errorMessages.setLength(0);
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
 		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
@@ -133,8 +132,7 @@ public class FacturaExportacion extends EDocument {
 	}
 	
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		System.out.println("Start FacturaExportacion.fillEmisor()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start FacturaExportacion.fillEmisor()");
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -174,8 +172,7 @@ public class FacturaExportacion extends EDocument {
 	}
 
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		System.out.println("Start FacturaExportacion.fillReceptor()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start FacturaExportacion.fillReceptor()");
 
 		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
 		try {receptor.setTipoDocumento(receptorJson.getString(TIPODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
@@ -242,8 +239,7 @@ public class FacturaExportacion extends EDocument {
 
 
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		System.out.println("Start CreditoFiscal.fillCuerpoDocumento()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start CreditoFiscal.fillCuerpoDocumento()");
 
 		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
 		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
@@ -292,8 +288,7 @@ public class FacturaExportacion extends EDocument {
 	}
 
 	public StringBuffer fillResumen(JSONObject factoryInput) {
-		System.out.println("Start FacturaExportacion.fillResumen()"); 
-		errorMessages.setLength(0);		
+		System.out.println("Start FacturaExportacion.fillResumen()");
 		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
 
 		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}

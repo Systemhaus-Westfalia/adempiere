@@ -76,7 +76,6 @@ public class CreditoFiscal extends EDocument {
 	 */
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
 		System.out.println("Start Credito Fiscal.fillIdentificacion()"); 
-		errorMessages.setLength(0);
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
 		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
@@ -120,7 +119,6 @@ public class CreditoFiscal extends EDocument {
 
 	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
 		System.out.println("Start CreditoFiscal.fillDocumentoRelacionado()"); 
-		errorMessages.setLength(0);
 
 		JSONObject documentoRelacionadoItemsJson = factoryInput.getJSONObject(DOCUMENTORELACIONADO);
 		JSONArray documentoRelacionadoArrayJson = documentoRelacionadoItemsJson.getJSONArray(DOCUMENTORELACIONADO);
@@ -154,8 +152,7 @@ public class CreditoFiscal extends EDocument {
 	}
 	
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		System.out.println("Start CreditoFiscal.fillEmisor()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start CreditoFiscal.fillEmisor()");
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -320,8 +317,7 @@ public class CreditoFiscal extends EDocument {
 	}
 
 	public StringBuffer fillResumen(JSONObject factoryInput) {
-		System.out.println("Start CreditoFiscal.fillResumen()"); 
-		errorMessages.setLength(0);		
+		System.out.println("Start CreditoFiscal.fillResumen()");
 		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);
 
 		JSONArray tributosArrayJson = resumenJson.getJSONArray(TRIBUTOS);	

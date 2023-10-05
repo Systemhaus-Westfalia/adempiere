@@ -69,8 +69,7 @@ public class Anulacion extends EDocument {
 
 
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		System.out.println("Start Anulacion.fillIdentificacion()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Anulacion.fillIdentificacion()");
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
 		try {identificacion.setVersion(identificationJson.getInt(VERSION));} 		catch (Exception e) {errorMessages.append(e);}
@@ -100,8 +99,7 @@ public class Anulacion extends EDocument {
 
 
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		System.out.println("Start Anulacion.fillEmisor()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Anulacion.fillEmisor()");
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setCodEstable(emisorJson.getString(CODESTABLE));} 		catch (Exception e) {errorMessages.append(e);}
@@ -130,8 +128,7 @@ public class Anulacion extends EDocument {
 
 
 	public StringBuffer fillDocumento(JSONObject factoryInput) {
-		System.out.println("Start Anulacion.fillDocumento()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Anulacion.fillDocumento()");
 
 		JSONObject documentoJson = factoryInput.getJSONObject(DOCUMENTO);
 		try {documento.setCodigoGeneracion(documentoJson.getString(CODIGOGENERACION));} 		catch (Exception e) {errorMessages.append(e);}
@@ -159,8 +156,7 @@ public class Anulacion extends EDocument {
 
 
 	public StringBuffer fillMotivo(JSONObject factoryInput) {
-		System.out.println("Start Anulacion.fillDocumento()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Anulacion.fillDocumento()");
 
 		JSONObject motivoJson = factoryInput.getJSONObject(DOCUMENTO);
 		try {motivo.setMotivoAnulacion(motivoJson.getString(MOTIVOANULACION));} 		catch (Exception e) {errorMessages.append(e);}

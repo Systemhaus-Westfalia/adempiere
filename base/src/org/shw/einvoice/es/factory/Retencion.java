@@ -78,8 +78,7 @@ public class Retencion extends EDocument {
 	 * @param identificacion the (IdentificacionFactura) identificacion to set
 	 */
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		System.out.println("Start Retencion.fillIdentificacion()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Retencion.fillIdentificacion()");
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
 		try {identificacion.setVersion(identificationJson.getInt(VERSION));} 		catch (Exception e) {errorMessages.append(e);}
@@ -104,8 +103,7 @@ public class Retencion extends EDocument {
 	}
 
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		System.out.println("Start Retencion.fillEmisor()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Retencion.fillEmisor()");
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -143,8 +141,7 @@ public class Retencion extends EDocument {
 	}
 
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		System.out.println("Start Retencion.fillReceptor()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Retencion.fillReceptor()");
 
 		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
 		try {emisor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -170,8 +167,7 @@ public class Retencion extends EDocument {
 
 	@SuppressWarnings("unchecked")
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		System.out.println("Start Retencion.fillCuerpoDocumento()"); 
-		errorMessages.setLength(0);
+		System.out.println("Start Retencion.fillCuerpoDocumento()");
 
 		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
 		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
@@ -220,8 +216,7 @@ public class Retencion extends EDocument {
 
 	
 	public StringBuffer fillResumen(JSONObject factoryInput) {
-		System.out.println("Start Retencion.fillResumen()"); 
-		errorMessages.setLength(0);		
+		System.out.println("Start Retencion.fillResumen()");
 		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
 
 		try {resumen.setTotalIVAretenido(resumenJson.getBigDecimal(TOTALIVARETENIDO));} 					catch (Exception e) {errorMessages.append(e);}

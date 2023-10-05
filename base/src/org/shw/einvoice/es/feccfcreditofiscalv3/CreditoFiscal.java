@@ -84,9 +84,10 @@ public class CreditoFiscal extends EDocument {
 		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
-
-		try {identificacion.setMotivoContin(identificationJson.getString(MOTIVOCONTIN));} 			catch (Exception e) {errorMessages.append(e);}
-		try {identificacion.setTipoContingencia(identificationJson.getInt(TIPOCONTINGENCIA));} 		catch (Exception e) {errorMessages.append(e);}
+		if (!identificationJson.getString(MOTIVOCONTIN).equals("")) {		
+			try {identificacion.setMotivoContin(identificationJson.getString(MOTIVOCONTIN));} 			catch (Exception e) {errorMessages.append(e);}
+			try {identificacion.setTipoContingencia(identificationJson.getInt(TIPOCONTINGENCIA));} 		catch (Exception e) {errorMessages.append(e);}
+		}
 		System.out.println("End Credito Fiscal.fillIdentificacion()");
 		return errorMessages;
 	}
@@ -272,7 +273,12 @@ public class CreditoFiscal extends EDocument {
 			//try {cuerpoDocumentoItemCreditoFiscal.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemCreditoFiscal.setCodTributo(cuerpoDocumentoItemJson.getString(CODTRIBUTO));} 			catch (Exception e) {errorMessages.append(e);}
+			
+			if (cuerpoDocumentoItemJson.getString(CODTRIBUTO).equals(""))
+				try {cuerpoDocumentoItemCreditoFiscal.setCodTributo(null);} 												catch (Exception e) {errorMessages.append(e);}
+			else
+				try {cuerpoDocumentoItemCreditoFiscal.setCodTributo(cuerpoDocumentoItemJson.getString(CODTRIBUTO));} 		catch (Exception e) {errorMessages.append(e);}
+
 			try {cuerpoDocumentoItemCreditoFiscal.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}

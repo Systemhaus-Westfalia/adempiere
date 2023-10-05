@@ -89,7 +89,6 @@ public class NotaDeDebito extends EDocument {
 		return errorMessages;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<DocumentoRelacionadoItemNotaDeDebito> getDocumentoRelacionado() {
 		return this.documentoRelacionado;
 	}
@@ -185,7 +184,6 @@ public class NotaDeDebito extends EDocument {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 
-	@SuppressWarnings("unchecked")
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
 		System.out.println("Start NotaDeDebito.fillCuerpoDocumento()");
 

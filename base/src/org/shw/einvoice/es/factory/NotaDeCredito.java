@@ -90,7 +90,6 @@ public class NotaDeCredito extends EDocument {
 		return errorMessages;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<DocumentoRelacionadoItemNotaDeCredito> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
@@ -178,7 +177,6 @@ public class NotaDeCredito extends EDocument {
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	@SuppressWarnings("unchecked")
 	public List<CuerpoDocumentoItemNotaDeCredito> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
@@ -187,7 +185,7 @@ public class NotaDeCredito extends EDocument {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
 		System.out.println("Start NotaDeCredito.fillCuerpoDocumento()");
 

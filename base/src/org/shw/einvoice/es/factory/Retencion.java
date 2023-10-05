@@ -165,7 +165,6 @@ public class Retencion extends EDocument {
 	}
 
 
-	@SuppressWarnings("unchecked")
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
 		System.out.println("Start Retencion.fillCuerpoDocumento()");
 

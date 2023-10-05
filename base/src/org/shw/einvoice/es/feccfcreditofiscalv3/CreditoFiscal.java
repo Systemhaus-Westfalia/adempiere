@@ -32,9 +32,7 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * No parameters
 	 */
-	@SuppressWarnings("unchecked")
 	public CreditoFiscal() {
-		List<?> tmpList;
 		
 		this.identificacion       = new IdentificacionCreditoFiscal();
 		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemCreditoFiscal>();
@@ -103,7 +101,6 @@ public class CreditoFiscal extends EDocument {
 	 * List<A> a = (List<A>)t;
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	public List<DocumentoRelacionadoItemCreditoFiscal> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
@@ -216,7 +213,6 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @return the otrosDocumentos
 	 */
-	@SuppressWarnings("unchecked")
 	public List<OtrosDocumentosItemCreditoFiscal> getOtrosDocumentos() {
 		return otrosDocumentos;
 	}
@@ -249,7 +245,6 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	@SuppressWarnings("unchecked")
 	public List<CuerpoDocumentoItemCreditoFiscal> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
@@ -387,7 +382,6 @@ public class CreditoFiscal extends EDocument {
 	/**
 	 * @return the apendice
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ApendiceItemCreditoFiscal> getApendice() {
 		return apendice;
 	}

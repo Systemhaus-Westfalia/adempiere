@@ -25,9 +25,12 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.fefexfacturaexportacionv1.ReceptorFacturaExportacion;
 import org.shw.einvoice.es.fencnotadecreditov1.CuerpoDocumentoItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.EmisorNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
+import org.shw.einvoice.es.fencnotadecreditov1.NotaDeCredito;
+import org.shw.einvoice.es.fencnotadecreditov1.ReceptorNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.ResumenNotaDeCredito;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
@@ -128,6 +131,17 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 				notaDeCredito.errorMessages.append(result);
 			}
 		}
+
+		System.out.println("Instatiate, fill and verify Receptor");
+		ReceptorNotaDeCredito receptor = notaDeCredito.getReceptor();
+		if(receptor!=null) {
+			notaDeCredito.fillReceptor(jsonInputToFactory);
+			result = receptor.validateValues();
+			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+				notaDeCredito.errorMessages.append(result);
+			}
+		}
+		
 		
 //		Extension extension = factura.getExtension();
 //		if(extension!=null) {

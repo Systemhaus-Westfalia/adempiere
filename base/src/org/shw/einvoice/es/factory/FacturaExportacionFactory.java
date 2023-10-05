@@ -130,8 +130,6 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 				facturaExportacion.errorMessages.append(result);
 			}
 		}
-		
-
 
 		System.out.println("Instatiate, fill and verify Receptor");
 		ReceptorFacturaExportacion receptor = facturaExportacion.getReceptor();

@@ -55,22 +55,24 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
 	@Override
 	protected String doIt() throws Exception
 	{	
-		System.out.println("Process EI_CreateInvoice_CCFF_SV : started");
+		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : started");
 		MClient	 client = null;
 		MOrgInfo orgInfo = null;
 		
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
-		System.out.println("Process EI_CreateInvoice_CCFF_SV : Started with Invoice " + invoice.getDocumentNo());
+		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
 		
 		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
 				!invoice.getC_DocType().getE_DocType().getValue().equals(IdentificacionFacturaExportacion.TIPO_DE_DOCUMENTO)) {
 			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es una Factura de Exportacion. Aquí se interrumpe el proceso";
 			System.out.println(errorMessage);
-			System.out.println("Process EI_CreateInvoice_CCFF_SV : finished with errors");
+			System.out.println("Process EI_CreateInvoice_FacturaExport_SV : finished with errors");
 			return errorMessage;
+		} else  {
+			System.out.println("Process EI_CreateInvoice_FacturaExport_SV : produced no errors");			
 		}
 		
-		System.out.println("Process EI_CreateInvoice_CCFF_SV : Started with Invoice " + invoice.getDocumentNo());
+		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Started with Invoice " + invoice.getDocumentNo());
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		int orgID = invoice.getAD_Org_ID();		
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
@@ -86,9 +88,9 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
     		invoiceElectronic.seterrMsgIntern(facturaExportacionBuilder.getEDocumentErrorMessages().toString());
     		invoiceElectronic.setei_ValidationStatus("02");
         	invoiceElectronic.saveEx();
-			System.out.println("Process EI_CreateInvoice_CCFF_SV : produced the following errors:");
+			System.out.println("Process EI_CreateInvoice_FacturaExport_SV : produced the following errors:");
 			System.out.println(facturaExportacionBuilder.getEDocumentErrorMessages().toString());
-			System.out.println("Process EI_CreateInvoice_CCFF_SV : finished");
+			System.out.println("Process EI_CreateInvoice_FacturaExport_SV : finished");
     		return facturaExportacionBuilder.getEDocumentErrorMessages().toString();
     	}	
     	
@@ -103,7 +105,7 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
     	}
 		
     	System.out.println("Factura de Exportacion generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-		System.out.println("Process EI_CreateInvoice_CCFF_SV : Finished");
+		System.out.println("Process EI_CreateInvoice_FacturaExport_SV : Finished");
 		return "";
 	}
 

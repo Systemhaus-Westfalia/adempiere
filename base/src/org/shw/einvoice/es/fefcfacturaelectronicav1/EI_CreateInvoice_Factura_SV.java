@@ -54,6 +54,8 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
 			System.out.println(errorMessage);
 			System.out.println("Process EI_CreateInvoice_Factura_SV : finished with errors");
 			return errorMessage;
+		} else  {
+			System.out.println("Process EI_CreateInvoice_Factura_SV : produced no errors");			
 		}
 		
 		System.out.println("Process EI_CreateInvoice_Factura_SV : Started with Invoice " + invoice.getDocumentNo());

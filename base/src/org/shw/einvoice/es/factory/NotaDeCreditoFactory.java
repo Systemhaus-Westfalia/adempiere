@@ -405,12 +405,12 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put(NotaDeCredito.NUMITEM, invoiceLine.getLine());
+			jsonCuerpoDocumentoItem.put(NotaDeCredito.NUMITEM, invoiceLine.getLine()/10);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.TIPOITEM, 2);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.CANTIDAD, invoiceLine.getQtyInvoiced());
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(NotaDeCredito.CODIGOTRIBUTO, "");  // String codTributo = "20";
+			jsonCuerpoDocumentoItem.put(NotaDeCredito.CODTRIBUTO, "");  // String codTributo = "20";
 			
 			JSONArray jsonTributosArray = new JSONArray();
 			jsonCuerpoDocumentoItem. put( NotaDeCredito.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
@@ -422,9 +422,6 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTANOSUJ, ventaNoSuj);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTAEXENTA, ventaExenta);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTAGRAVADA, ventaGravada);
-			jsonCuerpoDocumentoItem.put(NotaDeCredito.PSV, invoiceLine.getTaxAmt());
-			jsonCuerpoDocumentoItem.put(NotaDeCredito.NOGRAVADO, ventaNoSuj.add(ventaNoSuj));
-			jsonCuerpoDocumentoItem.put(NotaDeCredito.IVAITEM, ivaItem);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");

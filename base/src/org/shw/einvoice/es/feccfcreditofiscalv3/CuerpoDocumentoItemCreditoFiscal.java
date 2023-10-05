@@ -44,6 +44,7 @@ public class CuerpoDocumentoItemCreditoFiscal {
 	 * Constructor without parameters. 
 	 */
 	public CuerpoDocumentoItemCreditoFiscal() {
+		tributos = new ArrayList<String>();
 		
 	}
 

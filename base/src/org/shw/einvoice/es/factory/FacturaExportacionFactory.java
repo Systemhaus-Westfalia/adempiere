@@ -25,10 +25,12 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.feccfcreditofiscalv3.ReceptorCreditoFiscal;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.CuerpoDocumentoItemFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.EmisorFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.IdentificacionFacturaExportacion;
+import org.shw.einvoice.es.fefexfacturaexportacionv1.ReceptorFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.ResumenFacturaExportacion;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
@@ -125,6 +127,18 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		if(resumen!=null) {
 			facturaExportacion.fillResumen(jsonInputToFactory);
 			result = resumen.validateValues();
+			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+				facturaExportacion.errorMessages.append(result);
+			}
+		}
+		
+
+
+		System.out.println("Instatiate, fill and verify Receptor");
+		ReceptorFacturaExportacion receptor = facturaExportacion.getReceptor();
+		if(receptor!=null) {
+			facturaExportacion.fillReceptor(jsonInputToFactory);
+			result = receptor.validateValues();
 			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
 				facturaExportacion.errorMessages.append(result);
 			}
@@ -261,7 +275,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
-			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para FacturaExportacioncion Electronica"; 
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Facturacion Electronica"; 
 			facturaExportacion.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
@@ -280,6 +294,8 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 
 		jsonObjectReceptor.put(FacturaExportacion.NOMBRE, partner.getName());
 		jsonObjectReceptor.put(FacturaExportacion.NOMBRECOMERCIAL, partner.getName());
+		jsonObjectReceptor.put(FacturaExportacion.TIPOPERSONA, Integer.valueOf(partner.getE_BPType().getValue()));
+		
 
 		if (partner.getE_Activity_ID()>0) {
 			jsonObjectReceptor.put(FacturaExportacion.DESCACTIVIDAD, partner.getE_Activity().getName());
@@ -288,8 +304,6 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		}
 
 		String complemento = "";
-		String codPais = "";
-		String nombrePais = "";
 		for (MBPartnerLocation partnerLocation : MBPartnerLocation.getForBPartner(contextProperties, partner.getC_BPartner_ID(), trxName)){
 			if (partnerLocation.isBillTo()) {
 				complemento = (partnerLocation.getC_Location().getAddress1() + " " + partnerLocation.getC_Location().getAddress2());
@@ -310,10 +324,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 	
 	private JSONObject generateResumenInputData() {
 		System.out.println("Start collecting JSON data for Resumen");
-		BigDecimal totalNoSuj 	= Env.ZERO;
-		BigDecimal totalExenta 	= Env.ZERO;
-		BigDecimal totalGravada = Env.ZERO;		
-		BigDecimal totalIVA 	= Env.ZERO;
+		BigDecimal totalGravada = Env.ZERO;	
 		
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 
@@ -368,6 +379,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 			BigDecimal ventaExenta 	= Env.ZERO;
 			BigDecimal ventaGravada = Env.ONEHUNDRED;
 			BigDecimal ivaItem 		= Env.ZERO;
+			MTax tax = null;
 			
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
 				ventaNoSuj = invoiceLine.getLineNetAmt();
@@ -375,7 +387,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 				ventaExenta = invoiceLine.getLineNetAmt();
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				ventaGravada = invoiceLine.getLineNetAmt(); 
-				MTax tax = (MTax)invoiceLine.getC_Tax();
+				tax = (MTax)invoiceLine.getC_Tax();
 				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
 					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
 			}
@@ -387,8 +399,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
 			
 			JSONArray jsonTributosArray = new JSONArray();
-			JSONObject jsonTributosItem = new JSONObject("C3");
-			jsonTributosArray.put(jsonTributosItem);
+			jsonTributosArray.put("C3");
 			jsonCuerpoDocumentoItem. put( FacturaExportacion.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
 			
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.UNIMEDIDA, 1);

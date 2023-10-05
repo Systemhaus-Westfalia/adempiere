@@ -32,6 +32,7 @@ import org.shw.einvoice.es.feccfcreditofiscalv3.EmisorCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.IdentificacionCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ReceptorCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ResumenCreditoFiscal;
+import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
@@ -283,7 +284,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
-			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para CreditoFiscalcion Electronica"; 
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Facturacion Electronica"; 
 			creditoFiscal.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
@@ -297,9 +298,6 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		if (partner.getE_Activity_ID()>0) {
 			jsonObjectReceptor.put(CreditoFiscal.CODACTIVIDAD, partner.getE_Activity().getValue());
 			jsonObjectReceptor.put(CreditoFiscal.DESCACTIVIDAD, partner.getE_Activity().getName());
-		} else  {
-			jsonObjectReceptor.put(CreditoFiscal.CODACTIVIDAD, "");
-			jsonObjectReceptor.put(CreditoFiscal.DESCACTIVIDAD, "");
 		}
 
 		JSONObject jsonDireccion = new JSONObject();
@@ -428,6 +426,9 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			BigDecimal ventaGravada = Env.ONEHUNDRED;
 			BigDecimal ivaItem 		= Env.ZERO;
 			String codTributo 		= "";
+			MTax tax = null;
+			
+			
 			
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
 				ventaNoSuj = invoiceLine.getLineNetAmt();
@@ -436,7 +437,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				ventaGravada = invoiceLine.getLineNetAmt(); 
 				codTributo = "20";
-				MTax tax = (MTax)invoiceLine.getC_Tax();
+				tax = (MTax)invoiceLine.getC_Tax();
 				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
 					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
 			}
@@ -445,10 +446,8 @@ public class CreditoFiscalFactory extends EDocumentFactory {
                 
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMITEM, invoiceLine.getLine()/10);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.TIPOITEM, CreditoFiscal.TIPOITEM_SERVICIO);
-			//jsonCuerpoDocumentoItem.put(CreditoFiscal.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.CANTIDAD, invoiceLine.getQtyInvoiced());
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODTRIBUTO, codTributo);  // String codTributo = "20";
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.UNIMEDIDA, 1);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.PRECIOUNI, invoiceLine.getPriceActual());
@@ -459,7 +458,13 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.PSV, Env.ZERO);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.NOGRAVADO, ventaNoSuj.add(ventaExenta));
 
+			JSONArray jsonTributosArray = new JSONArray();
+			jsonTributosArray.put(tax.getE_Duties().getValue());
+			jsonCuerpoDocumentoItem.put( CreditoFiscal.TRIBUTOS, jsonTributosArray);
+
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
+
+		
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");
 
 		}  

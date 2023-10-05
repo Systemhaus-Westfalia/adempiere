@@ -39,6 +39,7 @@ public class EDocument {
 	public static final String DESCACTIVIDAD 		=  "descActividad";
 	public static final String NOMBRECOMERCIAL 		=  "nombreComercial";
 	public static final String TIPOESTABLECIMIENTO =  "tipoEstablecimiento";
+	public static final String TIPOPERSONA 			=  "tipoPersona";
 	public static final String DEPARTAMENTO 		=  "departamento";
 	public static final String MUNICIPIO 			=  "municipio";
 	public static final String COMPLEMENTO 			=  "complemento";

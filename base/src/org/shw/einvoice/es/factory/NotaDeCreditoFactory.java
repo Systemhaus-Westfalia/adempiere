@@ -246,6 +246,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		System.out.println("Finish collecting JSON data for Emisor");
 		return jsonObjectEmisor;
 		
+		
 	}
 	
 	private JSONObject generateReceptorInputData() {

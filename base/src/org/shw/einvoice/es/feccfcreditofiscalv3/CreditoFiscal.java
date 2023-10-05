@@ -195,17 +195,24 @@ public class CreditoFiscal extends EDocument {
 
 	public StringBuffer fillReceptor(JSONObject factoryInput) {
 		System.out.println("Start CreditoFiscal.fillReceptor()"); 
-		errorMessages.setLength(0);
 
+		
 		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
-		try {emisor.setNit(receptorJson.getString(NIT));} 						catch (Exception e) {errorMessages.append(e);}
-		try {emisor.setNrc(receptorJson.getString(NRC));} 						catch (Exception e) {errorMessages.append(e);}
-		try {emisor.setNombre(receptorJson.getString(NOMBRE));} 				catch (Exception e) {errorMessages.append(e);}
-		
-		try {emisor.setCodActividad(receptorJson.getString(CODACTIVIDAD));} 	catch (Exception e) {errorMessages.append(e);}
-		try {emisor.setDescActividad(receptorJson.getString(DESCACTIVIDAD));}	catch (Exception e) {errorMessages.append(e);}
-		
-		System.out.println("End CreditoFiscal.fillReceptor()");
+		try {receptor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNrc(receptorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNombre(receptorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setCodActividad(receptorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setDescActividad(receptorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+
+		JSONObject jsonDireccion = receptorJson.getJSONObject(DIRECCION);
+		try {receptor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+		try {receptor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+		try {receptor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+
+		try {receptor.setTelefono(receptorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setCorreo(receptorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Factura.fillReceptor()"); 
 		return errorMessages;
 	}
 
@@ -261,7 +268,6 @@ public class CreditoFiscal extends EDocument {
 
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
 		System.out.println("Start CreditoFiscal.fillCuerpoDocumento()"); 
-		errorMessages.setLength(0);
 
 		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
 		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
@@ -282,9 +288,14 @@ public class CreditoFiscal extends EDocument {
 			try {cuerpoDocumentoItemCreditoFiscal.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemCreditoFiscal.setTributos(null);} 														catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemCreditoFiscal.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+			
+			JSONArray tributosArrayJson = cuerpoDocumentoItemJson.getJSONArray(TRIBUTOS);
+			for (int j=0; j< tributosArrayJson.length(); j++) { 
+				String tributosItemJson = tributosArrayJson.getString(j);
+				try {cuerpoDocumentoItemCreditoFiscal.getTributos().add(tributosItemJson);} 								catch (Exception e) {errorMessages.append(e);}	
+			}
 
 			cuerpoDocumento.add(cuerpoDocumentoItemCreditoFiscal);						
 		}

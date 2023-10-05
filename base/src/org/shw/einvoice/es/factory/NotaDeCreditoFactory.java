@@ -23,9 +23,9 @@ import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.fefexfacturaexportacionv1.ReceptorFacturaExportacion;
 import org.shw.einvoice.es.fencnotadecreditov1.CuerpoDocumentoItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.EmisorNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
@@ -210,7 +210,17 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 	
 	private JSONObject generateIdentificationInputData() {
 		System.out.println("Start collecting JSON data for Identificacion");
-
+		
+		String motivoContin      = null;
+		Integer tipoContingencia = null;
+		int tipoModelo           = 1;
+		int tipoOperacion        = 1;
+		if (TimeUtil.getDaysBetween(invoice.getDateAcct(), TimeUtil.getDay(0))>=3) {
+			tipoModelo       = 2;
+			tipoOperacion    = 2;	
+			motivoContin     = "Contigencia por fecha de factura";	
+			tipoContingencia = 5;
+		}
 
 		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
 		String documentno = invoice.getDocumentNo().replace(prefix,"");
@@ -227,14 +237,16 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
 		
 		JSONObject jsonObjectIdentificacion = new JSONObject();
+		jsonObjectIdentificacion.put(NotaDeCredito.MOTIVOCONTIN, motivoContin);
+		jsonObjectIdentificacion.put(NotaDeCredito.TIPOCONTINGENCIA, tipoContingencia);
 		jsonObjectIdentificacion.put(NotaDeCredito.NUMEROCONTROL, numeroControl);
 		jsonObjectIdentificacion.put(NotaDeCredito.CODIGOGENERACION, codigoGeneracion);
-		jsonObjectIdentificacion.put(NotaDeCredito.TIPOMODELO, 1);
-		jsonObjectIdentificacion.put(NotaDeCredito.TIPOOPERACION, 1);
+		jsonObjectIdentificacion.put(NotaDeCredito.TIPOMODELO, tipoModelo);
+		jsonObjectIdentificacion.put(NotaDeCredito.TIPOOPERACION, tipoOperacion);
 		jsonObjectIdentificacion.put(NotaDeCredito.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
 		jsonObjectIdentificacion.put(NotaDeCredito.HOREMI, "00:00:00");
 		jsonObjectIdentificacion.put(NotaDeCredito.TIPOMONEDA, "USD");
-		jsonObjectIdentificacion.put(NotaDeCredito.AMBIENTE, "00");
+		jsonObjectIdentificacion.put(NotaDeCredito.AMBIENTE, client.getE_Enviroment().getValue());
 
 		System.out.println("Finish collecting JSON data for Identificacion");
 		return jsonObjectIdentificacion;
@@ -273,7 +285,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
-			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para NotaDeCreditocion Electronica"; 
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Nota de Credito Electronica"; 
 			notaDeCredito.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
@@ -330,26 +342,22 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		BigDecimal totalExenta 	= Env.ZERO;
 		BigDecimal totalGravada = Env.ZERO;		
 		BigDecimal totalIVA 	= Env.ZERO;
-		
-		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
+		List<MInvoiceTax> invoiceTaxes = null;
 
-		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
-				.setParameters(invoice.getC_Invoice_ID())
-				.list();
-		
+		String totalLetras = Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
+
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				totalNoSuj = invoiceTax.getTaxBaseAmt();
 			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00) {
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT"))
 				totalExenta = invoiceTax.getTaxBaseAmt();
-			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
-				totalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA") ) {
+				totalIVA = totalIVA.add(invoiceTax.getTaxAmt());
+				totalGravada = totalGravada.add(invoiceTax.getTaxBaseAmt());
 			}
 		}
-				
+
 		JSONObject jsonObjectResumen = new JSONObject();
 		jsonObjectResumen.put(NotaDeCredito.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(NotaDeCredito.TOTALEXENTA, totalExenta);
@@ -358,33 +366,17 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		jsonObjectResumen.put(NotaDeCredito.DESCUNOSUJ, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.DESCUEXENTA, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.DESCUGRAVADA, Env.ZERO);
-		jsonObjectResumen.put(NotaDeCredito.PORCENTAJEDESCUENTO, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(NotaDeCredito.IVAPERCI1, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.IVARETE1, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(NotaDeCredito.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
-		jsonObjectResumen.put(NotaDeCredito.TOTALPAGAR, invoice.getGrandTotal());
-		jsonObjectResumen.put(NotaDeCredito.TOTALLETRAS, totalLetras);
-		jsonObjectResumen.put(NotaDeCredito.SALDOFAVOR, invoice.getGrandTotal());
 		jsonObjectResumen.put(NotaDeCredito.CONDICIONOPERACION, 1);
 		jsonObjectResumen.put(NotaDeCredito.TOTALDESCU, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.RETERENTA, Env.ZERO);
-		jsonObjectResumen.put(NotaDeCredito.TOTALIVA, totalIVA);
 
-		JSONArray jsonArrayPagos = new JSONArray();
-			JSONObject jsonPago = new JSONObject();
-			jsonPago.put(NotaDeCredito.CODIGO, "05");
-			jsonPago.put(NotaDeCredito.MONTOPAGO, new BigDecimal(0.00));
-			jsonPago.put(NotaDeCredito.REFERENCIA, "Transferencia_ Depósito Bancario");
-			jsonPago.put(NotaDeCredito.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
-			jsonPago.put(NotaDeCredito.PERIODO, invoice.getC_PaymentTerm().getNetDays());
-		jsonArrayPagos.put(jsonPago);
-
-		jsonObjectResumen.put(NotaDeCredito.PAGOS, jsonArrayPagos);
-		
 		System.out.println("Finish collecting JSON data for Resumen");
 		return jsonObjectResumen;
-		
+
 	}
 	
 	private JSONObject generateCuerpoDocumentoInputData() {

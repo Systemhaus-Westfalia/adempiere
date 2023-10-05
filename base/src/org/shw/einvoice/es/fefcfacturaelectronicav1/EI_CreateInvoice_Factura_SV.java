@@ -89,7 +89,6 @@ public class EI_CreateInvoice_Factura_SV extends EI_CreateInvoice_Factura_SVAbst
     	}
 		
     	System.out.println("Factura generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-    	System.out.println(facturaAsJsonString);
 		System.out.println("Process EI_CreateInvoice_Factura_SV : Finished");
 		return "";
 	}  

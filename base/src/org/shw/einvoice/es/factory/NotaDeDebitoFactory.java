@@ -180,6 +180,7 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 
 	@Override
 	public void generateJSONInputData() {
+		System.out.println("Nota  de Debito: start collecting JSON data for all components");
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(NotaDeDebito.IDENTIFICACION, generateIdentificationInputData());
@@ -187,6 +188,10 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 		jsonInputToFactory.put(NotaDeDebito.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(NotaDeDebito.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(NotaDeDebito.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+		
+		System.out.println("Generated JSON object from Invoice:");
+		System.out.println(jsonInputToFactory.toString());
+		System.out.println("Nota  de Debito: end collecting JSON data for all components");
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -417,64 +422,25 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 
 	public String createJsonString() throws Exception {
 		System.out.println("Nota de Debito: start generating JSON object from Document");
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsString    = objectMapper.writeValueAsString(notaDeDebito);
-        JSONObject  facturaAsJson = new JSONObject(facturaAsString);
-        
-        facturaAsJson.remove(NotaDeDebito.DOCUMENTORELACIONADO);
-        facturaAsJson.remove(NotaDeDebito.OTROSDOCUMENTOS);
-        facturaAsJson.remove(NotaDeDebito.RECEPTOR);
-        facturaAsJson.remove(NotaDeDebito.VENTATERCERO);        
-        facturaAsJson.remove(NotaDeDebito.EXTENSION);
-        facturaAsJson.remove(NotaDeDebito.APENDICE);
-        facturaAsJson.remove(NotaDeDebito.DOCUMENTO);
-        facturaAsJson.remove(NotaDeDebito.MOTIVO);
-        facturaAsJson.remove(NotaDeDebito.ERRORMESSAGES);
+		ObjectMapper objectMapper     = new ObjectMapper();
+		String notaDeDebitoAsString   = objectMapper.writeValueAsString(notaDeDebito);
+		JSONObject notaDeDebitoAsJson = new JSONObject(notaDeDebitoAsString);
 
-        facturaAsJson.getJSONObject(NotaDeDebito.IDENTIFICACION).remove("horAnula");
-        facturaAsJson.getJSONObject(NotaDeDebito.IDENTIFICACION).remove("motivoContigencia");
-        facturaAsJson.getJSONObject(NotaDeDebito.IDENTIFICACION).remove("fecAnula");
-        facturaAsJson.getJSONObject(NotaDeDebito.IDENTIFICACION).remove("motivoContingencia");
+		notaDeDebitoAsJson.remove(NotaDeDebito.ERRORMESSAGES);
 
-        facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("seguro");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("totalSujetoRetencion");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("tributos");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("tributosNotaDeDebito");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("numPagoElectronico");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("flete");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("ivaPerci1");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("descuento");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("codIncoterms");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("totalIVAretenidoLetras");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("descIncoterms");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("observaciones");
-		facturaAsJson.getJSONObject(NotaDeDebito.RESUMEN).remove("totalIVAretenido");
+		// Manipulate generated JSON string
+		String notaDeDebitoAsStringFinal = notaDeDebitoAsJson.toString().
+				replace(":[],", ":null,").
+				replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+				replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
+				replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
+				replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
+						"\"extension\":null,");
 
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove("numDocumento");
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove("fechaEmision");
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove("tributos");
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove("codTributo");
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove("codigoRetencionMH");
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove("montoSujetoGrav");
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove(" ivaRetenido");
-		facturaAsJson.getJSONObject(NotaDeDebito.CUERPODOCUMENTO).remove("tipoDte");
-
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("codigo");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("puntoVentaMH");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("direccion");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("codEstable");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("codPuntoVenta");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("codigoMH");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("codEstableMH");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("puntoVenta");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("recintoFiscal");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("regimen");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("nomEstablecimiento");
-		facturaAsJson.getJSONObject(NotaDeDebito.EMISOR).remove("codPuntoVentaMH");
-
-        String finalNotaDeDebitoAsString = objectMapper.writeValueAsString(facturaAsJson);
+		System.out.println("Nota de Debito: generated JSON object from Document:");
+		System.out.println(notaDeDebitoAsStringFinal);
 		System.out.println("Nota de Debito: end generating JSON object from Document");
-		return finalNotaDeDebitoAsString;
+		return notaDeDebitoAsStringFinal;	
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

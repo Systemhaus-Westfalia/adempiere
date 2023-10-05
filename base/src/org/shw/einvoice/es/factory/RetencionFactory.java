@@ -29,6 +29,7 @@ import org.shw.einvoice.es.fecrretencionv1.CuerpoDocumentoItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.EmisorRetencion;
 import org.shw.einvoice.es.fecrretencionv1.IdentificacionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ResumenRetencion;
+import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
@@ -180,6 +181,7 @@ public class RetencionFactory extends EDocumentFactory {
 
 	@Override
 	public void generateJSONInputData() {
+		System.out.println("Retencion: start collecting JSON data for all components");
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(Retencion.IDENTIFICACION, generateIdentificationInputData());
@@ -187,6 +189,10 @@ public class RetencionFactory extends EDocumentFactory {
 		jsonInputToFactory.put(Retencion.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(Retencion.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(Retencion.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+		
+		System.out.println("Generated JSON object from Invoice:");
+		System.out.println(jsonInputToFactory.toString());
+		System.out.println("Retencion: end collecting JSON data for all components");
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -417,64 +423,25 @@ public class RetencionFactory extends EDocumentFactory {
 
 	public String createJsonString() throws Exception {
 		System.out.println("Retencion: start generating JSON object from Document");
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsString    = objectMapper.writeValueAsString(retencion);
-        JSONObject  facturaAsJson = new JSONObject(facturaAsString);
-        
-        facturaAsJson.remove(Retencion.DOCUMENTORELACIONADO);
-        facturaAsJson.remove(Retencion.OTROSDOCUMENTOS);
-        facturaAsJson.remove(Retencion.RECEPTOR);
-        facturaAsJson.remove(Retencion.VENTATERCERO);        
-        facturaAsJson.remove(Retencion.EXTENSION);
-        facturaAsJson.remove(Retencion.APENDICE);
-        facturaAsJson.remove(Retencion.DOCUMENTO);
-        facturaAsJson.remove(Retencion.MOTIVO);
-        facturaAsJson.remove(Retencion.ERRORMESSAGES);
+		ObjectMapper objectMapper  = new ObjectMapper();
+		String retencionAsString   = objectMapper.writeValueAsString(retencion);
+		JSONObject retencionAsJson = new JSONObject(retencionAsString);
 
-        facturaAsJson.getJSONObject(Retencion.IDENTIFICACION).remove("horAnula");
-        facturaAsJson.getJSONObject(Retencion.IDENTIFICACION).remove("motivoContigencia");
-        facturaAsJson.getJSONObject(Retencion.IDENTIFICACION).remove("fecAnula");
-        facturaAsJson.getJSONObject(Retencion.IDENTIFICACION).remove("motivoContingencia");
+		retencionAsJson.remove(FacturaExportacion.ERRORMESSAGES);
 
-        facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("seguro");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("totalSujetoRetencion");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("tributos");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("tributosRetencion");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("numPagoElectronico");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("flete");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("ivaPerci1");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("descuento");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("codIncoterms");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("totalIVAretenidoLetras");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("descIncoterms");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("observaciones");
-		facturaAsJson.getJSONObject(Retencion.RESUMEN).remove("totalIVAretenido");
+		// Manipulate generated JSON string
+		String retencionAsStringFinal = retencionAsJson.toString().
+				replace(":[],", ":null,").
+				replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+				replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
+				replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
+				replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
+						"\"extension\":null,");
 
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove("numDocumento");
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove("fechaEmision");
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove("tributos");
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove("codTributo");
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove("codigoRetencionMH");
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove("montoSujetoGrav");
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove(" ivaRetenido");
-		facturaAsJson.getJSONObject(Retencion.CUERPODOCUMENTO).remove("tipoDte");
-
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("codigo");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("puntoVentaMH");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("direccion");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("codEstable");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("codPuntoVenta");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("codigoMH");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("codEstableMH");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("puntoVenta");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("recintoFiscal");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("regimen");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("nomEstablecimiento");
-		facturaAsJson.getJSONObject(Retencion.EMISOR).remove("codPuntoVentaMH");
-
-        String finalRetencionAsString = objectMapper.writeValueAsString(facturaAsJson);
+		System.out.println("Retencion: generated JSON object from Document:");
+		System.out.println(retencionAsStringFinal);
 		System.out.println("Retencion: end generating JSON object from Document");
-		return finalRetencionAsString;
+		return retencionAsStringFinal;	
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

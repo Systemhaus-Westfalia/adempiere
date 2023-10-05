@@ -18,6 +18,7 @@ import org.shw.einvoice.es.anulacionv2.DocumentoAnulacion;
 import org.shw.einvoice.es.anulacionv2.EmisorAnulacion;
 import org.shw.einvoice.es.anulacionv2.IdentificacionAnulacion;
 import org.shw.einvoice.es.anulacionv2.MotivoAnulacion;
+import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
@@ -90,12 +91,17 @@ public class AnulacionFactory extends EDocumentFactory {
 
 	@Override
 	public void generateJSONInputData() {
+		System.out.println("Anulacion: start collecting JSON data for all components");
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(Anulacion.IDENTIFICACION, generateIdentificationInputData());
 		jsonInputToFactory.put(Anulacion.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(Anulacion.DOCUMENTO, generateDocumentoInputData());
 		jsonInputToFactory.put(Anulacion.MOTIVO, generateMotivoInputData());
+		
+		System.out.println("Generated JSON object from Invoice:");
+		System.out.println(jsonInputToFactory.toString());
+		System.out.println("Anulacion: end collecting JSON data for all components");
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -173,13 +179,25 @@ public class AnulacionFactory extends EDocumentFactory {
 	
 	public String createJsonString() throws Exception {
 		System.out.println("Anulacion: start generating JSON object from Document");
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsString    = objectMapper.writeValueAsString(anulacion);
-        JSONObject  facturaAsJson = new JSONObject(facturaAsString);
-        
-        String finalAnulacionAsString = objectMapper.writeValueAsString(facturaAsJson);
-		System.out.println("Anulacion: start generating JSON object from Document");
-		return finalAnulacionAsString;
+		ObjectMapper objectMapper  = new ObjectMapper();
+		String anulacionAsString   = objectMapper.writeValueAsString(anulacion);
+		JSONObject anulacionAsJson = new JSONObject(anulacionAsString);
+
+		anulacionAsJson.remove(FacturaExportacion.ERRORMESSAGES);
+
+		// Manipulate generated JSON string
+		String anulacionAsStringFinal = anulacionAsJson.toString().
+				replace(":[],", ":null,").
+				replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+				replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
+				replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
+				replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
+						"\"extension\":null,");
+
+		System.out.println("Anulacion: generated JSON object from Document:");
+		System.out.println(anulacionAsStringFinal);
+		System.out.println("Anulacion: end generating JSON object from Document");
+		return anulacionAsStringFinal;	
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

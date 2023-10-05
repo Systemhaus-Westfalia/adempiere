@@ -103,7 +103,6 @@ public class EI_CreateInvoice_FacturaExport_SV extends EI_CreateInvoice_FacturaE
     	}
 		
     	System.out.println("Factura de Exportacion generada: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-    	System.out.println(creditoFiscalAsJsonString);
 		System.out.println("Process EI_CreateInvoice_CCFF_SV : Finished");
 		return "";
 	}

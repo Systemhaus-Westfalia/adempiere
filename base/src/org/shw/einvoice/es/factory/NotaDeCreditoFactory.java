@@ -180,6 +180,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 
 	@Override
 	public void generateJSONInputData() {
+		System.out.println("Nota  de Credito: start collecting JSON data for all components");
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(NotaDeCredito.IDENTIFICACION, generateIdentificationInputData());
@@ -187,6 +188,10 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		jsonInputToFactory.put(NotaDeCredito.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(NotaDeCredito.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(NotaDeCredito.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+		
+		System.out.println("Generated JSON object from Invoice:");
+		System.out.println(jsonInputToFactory.toString());
+		System.out.println("Nota  de Credito: end collecting JSON data for all components");
 	}
 	
 	private JSONObject generateIdentificationInputData() {
@@ -428,64 +433,25 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 
 	public String createJsonString() throws Exception {
 		System.out.println("Nota de Credito: start generating JSON object from Document");
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsString    = objectMapper.writeValueAsString(notaDeCredito);
-        JSONObject  facturaAsJson = new JSONObject(facturaAsString);
-        
-        facturaAsJson.remove(NotaDeCredito.DOCUMENTORELACIONADO);
-        facturaAsJson.remove(NotaDeCredito.OTROSDOCUMENTOS);
-        facturaAsJson.remove(NotaDeCredito.RECEPTOR);
-        facturaAsJson.remove(NotaDeCredito.VENTATERCERO);        
-        facturaAsJson.remove(NotaDeCredito.EXTENSION);
-        facturaAsJson.remove(NotaDeCredito.APENDICE);
-        facturaAsJson.remove(NotaDeCredito.DOCUMENTO);
-        facturaAsJson.remove(NotaDeCredito.MOTIVO);
-        facturaAsJson.remove(NotaDeCredito.ERRORMESSAGES);
+		ObjectMapper objectMapper      = new ObjectMapper();
+		String notaDeCreditoAsString   = objectMapper.writeValueAsString(notaDeCredito);
+		JSONObject notaDeCreditoAsJson = new JSONObject(notaDeCreditoAsString);
 
-        facturaAsJson.getJSONObject(NotaDeCredito.IDENTIFICACION).remove("horAnula");
-        facturaAsJson.getJSONObject(NotaDeCredito.IDENTIFICACION).remove("motivoContigencia");
-        facturaAsJson.getJSONObject(NotaDeCredito.IDENTIFICACION).remove("fecAnula");
-        facturaAsJson.getJSONObject(NotaDeCredito.IDENTIFICACION).remove("motivoContingencia");
+		notaDeCreditoAsJson.remove(NotaDeCredito.ERRORMESSAGES);
 
-        facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("seguro");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("totalSujetoRetencion");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("tributos");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("tributosNotaDeCredito");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("numPagoElectronico");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("flete");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("ivaPerci1");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("descuento");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("codIncoterms");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("totalIVAretenidoLetras");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("descIncoterms");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("observaciones");
-		facturaAsJson.getJSONObject(NotaDeCredito.RESUMEN).remove("totalIVAretenido");
+		// Manipulate generated JSON string
+		String notaDeCreditoAsStringFinal = notaDeCreditoAsJson.toString().
+				replace(":[],", ":null,").
+				replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+				replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
+				replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
+				replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
+						"\"extension\":null,");
 
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove("numDocumento");
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove("fechaEmision");
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove("tributos");
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove("codTributo");
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove("codigoRetencionMH");
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove("montoSujetoGrav");
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove(" ivaRetenido");
-		facturaAsJson.getJSONObject(NotaDeCredito.CUERPODOCUMENTO).remove("tipoDte");
-
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("codigo");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("puntoVentaMH");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("direccion");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("codEstable");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("codPuntoVenta");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("codigoMH");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("codEstableMH");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("puntoVenta");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("recintoFiscal");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("regimen");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("nomEstablecimiento");
-		facturaAsJson.getJSONObject(NotaDeCredito.EMISOR).remove("codPuntoVentaMH");
-
-        String finalNotaDeCreditoAsString = objectMapper.writeValueAsString(facturaAsJson);
+		System.out.println("Nota de Credito: generated JSON object from Document:");
+		System.out.println(notaDeCreditoAsStringFinal);
 		System.out.println("Nota de Credito: end generating JSON object from Document");
-		return finalNotaDeCreditoAsString;
+		return notaDeCreditoAsStringFinal;	
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

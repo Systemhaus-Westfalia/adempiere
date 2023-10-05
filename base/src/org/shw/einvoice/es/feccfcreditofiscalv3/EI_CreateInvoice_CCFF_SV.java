@@ -105,7 +105,6 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
     	}
 		
     	System.out.println("Credito Fiscal generado: " + invoice.getDocumentNo() + "Estado: " + invoiceElectronic.getei_ValidationStatus());
-    	System.out.println(creditoFiscalAsJsonString);
 		System.out.println("Process EI_CreateInvoice_CCFF_SV : finished");
 		return "";
 	}

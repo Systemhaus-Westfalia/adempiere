@@ -25,7 +25,6 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.feccfcreditofiscalv3.ReceptorCreditoFiscal;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.CuerpoDocumentoItemFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.EmisorFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
@@ -424,26 +423,25 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 
 	public String createJsonString() throws Exception {
 		System.out.println("Factura de Exportacion: start generating JSON object from Document");
-    	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaExportacionAsString    = objectMapper.writeValueAsString(facturaExportacion);
-        JSONObject facturaExportacionAsJson = new JSONObject(facturaExportacionAsString);
-        
-        facturaExportacionAsJson.remove(FacturaExportacion.ERRORMESSAGES);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String facturaExportacionAsString    = objectMapper.writeValueAsString(facturaExportacion);
+		JSONObject facturaExportacionAsJson = new JSONObject(facturaExportacionAsString);
 
-     // Manipulate generated JSON string
-        String facturaExportacionAsStringFinal = facturaExportacionAsJson.toString().
-        		replace(":[],", ":null,").
-        		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
-        		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
-        		replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
-        		replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
-        				"\"extension\":null,");
+		facturaExportacionAsJson.remove(FacturaExportacion.ERRORMESSAGES);
+
+		// Manipulate generated JSON string
+		String facturaExportacionAsStringFinal = facturaExportacionAsJson.toString().
+				replace(":[],", ":null,").
+				replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+				replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
+				replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
+				replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
+						"\"extension\":null,");
 
 		System.out.println("Factura de Exportacion: generated JSON object from Document:");
 		System.out.println(facturaExportacionAsStringFinal);
 		System.out.println("Factura de Exportacion: end generating JSON object from Document");
-		return facturaExportacionAsStringFinal;
-	
+		return facturaExportacionAsStringFinal;	
 	}
 
 	public String getNumeroControl(Integer id, MOrgInfo orgInfo, String prefix) {

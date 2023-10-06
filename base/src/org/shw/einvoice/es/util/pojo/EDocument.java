@@ -80,10 +80,12 @@ public class EDocument {
 	public static final String MONTOTOTALOPERACION 	= "montoTotalOperacion";
 	public static final String TOTALNOGRAVADO 		= "totalNoGravado";
 	public static final String TOTALPAGAR 			= "totalPagar";
+	public static final String TOTALCOMPRA 			= "totalCompra";
 	public static final String TOTALLETRAS 			= "totalLetras";
 	public static final String SALDOFAVOR 			= "saldoFavor";
 	public static final String CONDICIONOPERACION 	= "condicionOperacion";
 	public static final String TOTALDESCU 			= "totalDescu";
+	public static final String DESCU 				= "descu";
 	public static final String RETERENTA 			= "reteRenta";
 	public static final String TOTALIVA 			= "totalIva";
 	public static final String MONTOPAGO 			= "montoPago";

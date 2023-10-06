@@ -28,7 +28,7 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
 import org.shw.einvoice.es.factory.CreditoFiscalFactory;
-import org.shw.einvoice.es.factory.FacturaNoSujetoFactory;
+import org.shw.einvoice.es.factory.FacturaSujetoExcluidoFactory;
 import org.shw.einvoice.es.factory.NotaDeCreditoFactory;
 import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
@@ -93,7 +93,7 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 			documentBuilder.generateEDocument();			
 		}
 		else if (invoice.getC_DocType().getE_DocType().getValue().equals("14")) {
-			documentBuilder = new FacturaNoSujetoFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
+			documentBuilder = new FacturaSujetoExcluidoFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
 			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
 			documentBuilder.generateEDocument();			
 			

@@ -47,7 +47,8 @@ public class FacturaFactory extends EDocumentFactory {
 	public FacturaFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
 		super(trxName, contextProperties, client, orgInfo);
 		this.invoice = invoice;
-	}
+		factura = new Factura();
+		}
 
 	public Factura generateEDocument() {
 		System.out.println("Factura: start generating and filling the Document");
@@ -292,8 +293,15 @@ public class FacturaFactory extends EDocumentFactory {
 		JSONObject jsonObjectReceptor = new JSONObject();
 		
 		jsonObjectReceptor.put(Factura.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
-		jsonObjectReceptor.put(Factura.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
-		jsonObjectReceptor.put(Factura.NOMBRE, partner.getName());
+		if (partner.getTaxID() != null) {
+			jsonObjectReceptor.put(Factura.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+			jsonObjectReceptor.put(Factura.NOMBRE, partner.getName());			
+		}
+		else {
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta NIT"; 
+			factura.errorMessages.append(errorMessage);
+			System.out.println(errorMessage);
+		}
 		
 		if (partner.getE_Activity_ID()>0) {
 			jsonObjectReceptor.put(Factura.CODACTIVIDAD, partner.getE_Activity().getValue());

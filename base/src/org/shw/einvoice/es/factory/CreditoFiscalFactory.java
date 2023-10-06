@@ -47,12 +47,12 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 	public CreditoFiscalFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
 		super(trxName, contextProperties, client, orgInfo);
 		this.invoice = invoice;
+		creditoFiscal = new CreditoFiscal();
 	}
 
 	public CreditoFiscal generateEDocument() {
 		System.out.println("CreditoFiscal: start generating and filling the Document");
 		String result="";
-		creditoFiscal = new CreditoFiscal();
 
 		System.out.println("Instatiate, fill and verify Identificacion");
 		IdentificacionCreditoFiscal identification = creditoFiscal.getIdentificacion();
@@ -294,7 +294,11 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		}
 		
 		JSONObject jsonObjectReceptor = new JSONObject();
-		
+		if (partner.getTaxID() == null && partner.getDUNS() == null) {
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Facturacion Electronica"; 
+			creditoFiscal.errorMessages.append(errorMessage);
+			System.out.println(errorMessage);
+		}
 		jsonObjectReceptor.put(CreditoFiscal.NIT, partner.getTaxID().replace("-", ""));
 		jsonObjectReceptor.put(CreditoFiscal.NRC, partner.getDUNS().trim().replace("-", ""));
 		jsonObjectReceptor.put(CreditoFiscal.NOMBRE, partner.getName());

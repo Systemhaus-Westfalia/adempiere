@@ -6,6 +6,7 @@ package org.shw.einvoice.es.util.pojo;
 import java.util.Properties;
 
 import org.compiere.model.MClient;
+import org.compiere.model.MInvoice;
 import org.compiere.model.MOrgInfo;
 import org.json.JSONObject;
 
@@ -15,6 +16,9 @@ import org.json.JSONObject;
 public abstract class EDocumentFactory {
 	public abstract void generateJSONInputData();
 	public abstract StringBuffer getEDocumentErrorMessages(); 
+	public abstract EDocument generateEDocument();
+	public abstract String createJsonString() throws Exception;
+	public abstract  boolean writeToFile (String json, MInvoice invoice, String directory);
 
 	protected MClient	client = null;
 	protected MOrgInfo orgInfo = null;

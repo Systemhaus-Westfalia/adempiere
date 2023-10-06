@@ -45,12 +45,12 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 	public FacturaExportacionFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
 		super(trxName, contextProperties, client, orgInfo);
 		this.invoice = invoice;
+		facturaExportacion = new FacturaExportacion();
 	}
 
 	public FacturaExportacion generateEDocument() {
 		System.out.println("Factura Exportacion: start generating and filling the Document");
 		String result="";
-		facturaExportacion = new FacturaExportacion();
 
 		System.out.println("Instatiate, fill and verify Identificacion");
 		IdentificacionFacturaExportacion identification = facturaExportacion.getIdentificacion();
@@ -283,10 +283,24 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		jsonObjectReceptor.put(FacturaExportacion.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
 		if (partner.getE_Recipient_Identification().getValue().equals("36"))
 		{
-			jsonObjectReceptor.put(FacturaExportacion.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+			if (partner.getTaxID() == null) {
+				String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta NIT"; 
+				facturaExportacion.errorMessages.append(errorMessage);
+				System.out.println(errorMessage);
+			}
+			else {
+				jsonObjectReceptor.put(FacturaExportacion.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+			}
 		}
 		else {
-			jsonObjectReceptor.put(FacturaExportacion.NUMDOCUMENTO,partner.getDUNS().trim().replace("-", ""));
+			if (partner.getDUNS() == null) {
+				String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta No. Registro"; 
+				facturaExportacion.errorMessages.append(errorMessage);
+				System.out.println(errorMessage);
+			}
+			else {
+				jsonObjectReceptor.put(FacturaExportacion.NUMDOCUMENTO,partner.getDUNS().trim().replace("-", ""));
+			}
 		}
 
 		jsonObjectReceptor.put(FacturaExportacion.NOMBRE, partner.getName());

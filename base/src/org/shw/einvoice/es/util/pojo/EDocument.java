@@ -54,6 +54,7 @@ public class EDocument {
 	public static final String CODIGO 				= "codigo";
 	public static final String CODIGOTRIBUTO 		= "codigoTributo";
 	public static final String AMBIENTE 			= "ambiente";
+	public static final String TIPOGENERACION 		=  "tipoGeneracion";
 
 	public static final String UNIMEDIDA 			= "uniMedida";
 	public static final String DESCRIPCION 			= "descripcion";

@@ -42,6 +42,7 @@ public class CuerpoDocumentoItemNotaDeCredito {
 	 * Constructor without parameters. 
 	 */
 	public CuerpoDocumentoItemNotaDeCredito() {
+		tributos = new ArrayList<String>();
 		
 	}
 

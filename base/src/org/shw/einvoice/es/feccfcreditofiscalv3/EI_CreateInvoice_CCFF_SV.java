@@ -28,6 +28,10 @@ import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
 import org.shw.einvoice.es.factory.CreditoFiscalFactory;
+import org.shw.einvoice.es.factory.FacturaNoSujetoFactory;
+import org.shw.einvoice.es.factory.NotaDeCreditoFactory;
+import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
+import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 
 /** Generated Process for (SHW_Create_ElectronicInvoice)
  *  @author ADempiere (generated) 
@@ -63,10 +67,10 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		
 		MInvoice invoice = new MInvoice(getCtx(), getInvoiceId(), get_TrxName());
 		System.out.println("Process EI_CreateInvoice_CCFF_SV : Started with Invoice " + invoice.getDocumentNo());
-		
-		if (invoice.getC_DocType().getE_DocType_ID()<= 0 ||
-				!invoice.getC_DocType().getE_DocType().getValue().equals(IdentificacionCreditoFiscal.TIPO_DE_DOCUMENTO)) {
-			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es un Credito Fiscal. Aquí se interrumpe el proceso";
+		Boolean iscorrectDocType = 
+				invoice.getC_DocType().getE_DocType_ID()>0 ;													//TODO; package problem loesen
+		if (!iscorrectDocType) {
+			String errorMessage = "El documento" + invoice.getDocumentNo() + " no es un Credito Fiscal o Nota de Credito. Aquí se interrumpe el proceso";
 			System.out.println(errorMessage);
 			System.out.println("Process EI_CreateInvoice_CCFF_SV : finished with errors");
 			return errorMessage;
@@ -78,30 +82,42 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		int orgID = invoice.getAD_Org_ID();		
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
-
-		CreditoFiscalFactory creditoFiscalBuilder = new CreditoFiscalFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
-		creditoFiscalBuilder.generateJSONInputData(); // Will contain data passed to factory
-		creditoFiscalBuilder.generateEDocument();
+		EDocumentFactory documentBuilder = null;
+		if (invoice.getC_DocType().getC_DocBaseType_ID() == 50005) {
+			documentBuilder = new CreditoFiscalFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
+			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
+			documentBuilder.generateEDocument();			
+		} else if (invoice.getC_DocType().getC_DocBaseType_ID() == 50006) {
+			documentBuilder = new NotaDeCreditoFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
+			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
+			documentBuilder.generateEDocument();			
+		}
+		else if (invoice.getC_DocType().getE_DocType().getValue().equals("14")) {
+			documentBuilder = new FacturaNoSujetoFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
+			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
+			documentBuilder.generateEDocument();			
+			
+		}
 		
     	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());
     	invoiceElectronic.setC_Invoice_ID(invoice.getC_Invoice_ID());
     	invoiceElectronic.setei_ValidationStatus("01");
-    	if (creditoFiscalBuilder.getEDocumentErrorMessages().length() > 0) {
-    		invoiceElectronic.seterrMsgIntern(creditoFiscalBuilder.getEDocumentErrorMessages().toString());
+    	if (documentBuilder.getEDocumentErrorMessages().length() > 0) {
+    		invoiceElectronic.seterrMsgIntern(documentBuilder.getEDocumentErrorMessages().toString());
     		invoiceElectronic.setei_ValidationStatus("02");
         	invoiceElectronic.saveEx();
 			System.out.println("Process EI_CreateInvoice_CCFF_SV : produced the following errors:");
-			System.out.println(creditoFiscalBuilder.getEDocumentErrorMessages().toString());
+			System.out.println(documentBuilder.getEDocumentErrorMessages().toString());
 			System.out.println("Process EI_CreateInvoice_CCFF_SV : finished");
-    		return creditoFiscalBuilder.getEDocumentErrorMessages().toString();
+    		return documentBuilder.getEDocumentErrorMessages().toString();
     	}	
     	
-    	String creditoFiscalAsJsonString = creditoFiscalBuilder.createJsonString();
+    	String creditoFiscalAsJsonString = documentBuilder.createJsonString();
        	invoiceElectronic.setjson(creditoFiscalAsJsonString);
     	invoiceElectronic.saveEx();
     	
     	if (isSaveInHistoric()) {
-    		if (!creditoFiscalBuilder.writeToFile(creditoFiscalAsJsonString, invoice, CreditoFiscal.ABSDIRECTORY)) {
+    		if (!documentBuilder.writeToFile(creditoFiscalAsJsonString, invoice, CreditoFiscal.ABSDIRECTORY)) {
     			invoiceElectronic.seterrMsgIntern("Root File From MSystConfig EI_PATH does not exist");
     		}
     	}

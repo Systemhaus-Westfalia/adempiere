@@ -3,12 +3,14 @@
  */
 package org.shw.einvoice.es.anulacionv2;
 
+import org.json.JSONObject;
+import org.shw.einvoice.es.util.pojo.EDocument;
+import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 /**
  * 
  */
-public class Anulacion {
-	static final String VALIDATION_RESULT_OK = "OK";
+public class Anulacion extends EDocument {
 	static final String VALIDATION_CODIGOGENERACIONR_IS_NOT_NULL = "Documento: Anulacion, clase: Anulacion. Validacion falló: valor de 'codigoGeneracionR' debe ser ='null'";
 	static final String VALIDATION_CODIGOGENERACIONR_IS_NULL = "Documento: Anulacion, clase: Anulacion. Validacion falló: valor de 'codigoGeneracionR' no deber ser ='null'";
 
@@ -16,7 +18,6 @@ public class Anulacion {
 	EmisorAnulacion emisor;
 	DocumentoAnulacion documento;
 	MotivoAnulacion motivo;
-
 	/**
 	 * No parameters
 	 */
@@ -28,23 +29,24 @@ public class Anulacion {
 	}
 
 
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {
+		System.out.println("Anulacion: start validating values");
+		if(getMotivo().getTipoAnulacion()==2) {
+			if ( getDocumento().getCodigoGeneracionR()!= null)
+				return VALIDATION_CODIGOGENERACIONR_IS_NOT_NULL;
+		} else {
+			if ( getDocumento().getCodigoGeneracionR()== null)
+				return VALIDATION_CODIGOGENERACIONR_IS_NULL;
+		}
 
-/**
- * Validate the Schema conditions
- */
-public String validateValues() {
-	
-	if(getMotivo().getTipoAnulacion()==2) {
-		if ( getDocumento().getCodigoGeneracionR()!= null)
-			return VALIDATION_CODIGOGENERACIONR_IS_NOT_NULL;
-	} else {
-		if ( getDocumento().getCodigoGeneracionR()== null)
-			return VALIDATION_CODIGOGENERACIONR_IS_NULL;
+		System.out.println("Anulacion: end validating values");
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
-	
-	return VALIDATION_RESULT_OK;
-}
-	
+
+
 	/**
 	 * @return the identificacion
 	 */
@@ -59,6 +61,20 @@ public String validateValues() {
 	public void setIdentificacion(IdentificacionAnulacion identificacion) {
 		this.identificacion = identificacion;
 	}
+
+
+
+	public StringBuffer fillIdentification(JSONObject factoryInput) {
+		System.out.println("Start Anulacion.fillIdentificacion()");
+
+		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
+		try {identificacion.setVersion(identificationJson.getInt(VERSION));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillIdentificacion()");
+		return errorMessages;
+	}
+
 
 
 	/**
@@ -76,7 +92,20 @@ public String validateValues() {
 		this.emisor = emisor;
 	}
 
-	
+
+
+	public StringBuffer fillEmisor(JSONObject factoryInput) {
+		System.out.println("Start Anulacion.fillEmisor()");
+
+		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
+		try {emisor.setCodEstable(emisorJson.getString(CODESTABLE));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillEmisor()");
+		return errorMessages;
+	}
+
+
 
 	/**
 	 * @return the documento
@@ -89,9 +118,20 @@ public String validateValues() {
 	/**
 	 * @param documento the documento to set
 	 */
-	public void setDocumento(DocumentoAnulacion
-			documento) {
+	public void setDocumento(DocumentoAnulacion	documento) {
 		this.documento = documento;
+	}
+
+
+	public StringBuffer fillDocumento(JSONObject factoryInput) {
+		System.out.println("Start Anulacion.fillDocumento()");
+
+		JSONObject documentoJson = factoryInput.getJSONObject(DOCUMENTO);
+		try {documento.setCodigoGeneracion(documentoJson.getString(CODIGOGENERACION));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillDocumento()");
+		return errorMessages;
 	}
 
 
@@ -111,6 +151,18 @@ public String validateValues() {
 	}
 
 
+	public StringBuffer fillMotivo(JSONObject factoryInput) {
+		System.out.println("Start Anulacion.fillDocumento()");
+
+		JSONObject motivoJson = factoryInput.getJSONObject(DOCUMENTO);
+		try {motivo.setMotivoAnulacion(motivoJson.getString(MOTIVOANULACION));} 		catch (Exception e) {errorMessages.append(e);}
+		//TODO weitere Properties setzen
+
+		System.out.println("End Anulacion.fillDocumento()");
+		return errorMessages;
+	}
+
+
 	/**
 	 * @param args
 	 */
@@ -119,5 +171,5 @@ public String validateValues() {
 
 	}
 
-	
+
 }

@@ -97,14 +97,11 @@ public class EDocument {
 	public static final String DIRECCION			= "direccion";
 	public static final String IVAPERCI1			= "ivaPerci1";
 
-	public static final String VERSION				= "version";
-	
+	public static final String VERSION				= "version";	
 	
 	public static final String CODESTABLE			= "codEstable";
-	public static final String MOTIVOANULACION		= "motivoAnulacion";
-	
-	public static final String TOTALIVARETENIDO 	= "totalIVAretenido";
-	
+	public static final String MOTIVOANULACION		= "motivoAnulacion";	
+	public static final String TOTALIVARETENIDO 	= "totalIVAretenido";	
 	public static final String ERRORMESSAGES 		= "errorMessages";
 	public static final String MOTIVOCONTIN			= "motivoContin";
 	public static final String TIPOCONTINGENCIA		= "tipoContingencia";
@@ -115,6 +112,16 @@ public class EDocument {
 	public static final String DESCUENTO			= "descuento";
 	public static final String CODTRIBUTO 			= "codTributo";
 	public static final String NUMPAGOELECTRONICO	= "numPagoElectronico";
+	public static final String FECANULA				= "fecAnula";
+	public static final String HORANULA				= "horAnula";
+	public static final String NOMESTABLECIMIENTO	= "nomEstablecimiento";
+	public static final String CODESTABLEMH			= "codEstableMH";
+	public static final String CODPUNTOVENTAMH		= "codPuntoVentaMH";
+	public static final String CODPUNTOVENTA		= "codPuntoVenta";
+	public static final String TIPODTE				= "tipoDte";
+	public static final String SELLORECIBIDO		= "selloRecibido";
+	public static final String MONTOIVA				= "montoIva";
+	public static final String CODIGOGENERACIONR	= "codigoGeneracionR";
 	
 	
 	public static final int		TIPOMODELO_NOCONTIGENCIA			=1;

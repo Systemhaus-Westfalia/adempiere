@@ -14,6 +14,7 @@ import org.compiere.model.MClient;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MOrgInfo;
 import org.json.JSONObject;
+import org.shw.einvoice.es.anulacionv2.Anulacion;
 import org.shw.einvoice.es.anulacionv2.DocumentoAnulacion;
 import org.shw.einvoice.es.anulacionv2.EmisorAnulacion;
 import org.shw.einvoice.es.anulacionv2.IdentificacionAnulacion;
@@ -105,52 +106,45 @@ public class AnulacionFactory extends EDocumentFactory {
 	}
 	
 	private JSONObject generateIdentificationInputData() {
-		System.out.println("Start collecting JSON data for Identificacion");
+		System.out.println("Factura: start collecting JSON data for Identificacion");
+
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		int position = documentno.indexOf("_");
+		documentno = documentno.substring(0,position);
 		
 		Integer invoiceID = invoice.get_ID();
-		String numeroControl = getNumeroControl(invoiceID, orgInfo, "DTE-01-");
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
 		
 		JSONObject jsonObjectIdentificacion = new JSONObject();
-		jsonObjectIdentificacion.put(Anulacion.NUMEROCONTROL, numeroControl);
-		jsonObjectIdentificacion.put(Anulacion.CODIGOGENERACION, codigoGeneracion);
-		jsonObjectIdentificacion.put(Anulacion.TIPOMODELO, 1);
-		jsonObjectIdentificacion.put(Anulacion.TIPOOPERACION, 1);
-		jsonObjectIdentificacion.put(Anulacion.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
-		jsonObjectIdentificacion.put(Anulacion.HOREMI, "00:00:00");
-		jsonObjectIdentificacion.put(Anulacion.TIPOMONEDA, "USD");
-		jsonObjectIdentificacion.put(Anulacion.AMBIENTE, "00");
 
-		System.out.println("Finish collecting JSON data for Identificacion");
-		return jsonObjectIdentificacion;
+		jsonObjectIdentificacion.put(Anulacion.AMBIENTE, client.getE_Enviroment().getValue());
+		jsonObjectIdentificacion.put(Anulacion.CODIGOGENERACION, codigoGeneracion);
+		jsonObjectIdentificacion.put(Anulacion.FECANULA, invoice.getDateAcct().toString().substring(0, 10));
+		jsonObjectIdentificacion.put(Anulacion.HORANULA, "00:00:00");
 		
+		System.out.println("Factura: end collecting JSON data for Identificacion");
+		return jsonObjectIdentificacion;	
 	}
 	
 	private JSONObject generateEmisorInputData() {
-		System.out.println("Start collecting JSON data for Emisor");
+		System.out.println("Factura: start collecting JSON data for Emisor");
 		
 		JSONObject jsonObjectEmisor = new JSONObject();
 		jsonObjectEmisor.put(Anulacion.NIT, orgInfo.getTaxID().replace("-", ""));
-		jsonObjectEmisor.put(Anulacion.NRC, StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
 		jsonObjectEmisor.put(Anulacion.NOMBRE, client.getName());
-		jsonObjectEmisor.put(Anulacion.CODACTIVIDAD, client.getE_Activity().getValue());
-		jsonObjectEmisor.put(Anulacion.DESCACTIVIDAD, client.getE_Activity().getName());
-		jsonObjectEmisor.put(Anulacion.NOMBRECOMERCIAL, client.getDescription());
 		jsonObjectEmisor.put(Anulacion.TIPOESTABLECIMIENTO, client.getE_PlantType().getValue());
-
-		JSONObject jsonDireccion = new JSONObject();
-		jsonDireccion.put(Anulacion.DEPARTAMENTO, orgInfo.getC_Location().getC_City().getC_Region().getValue());
-		jsonDireccion.put(Anulacion.MUNICIPIO, orgInfo.getC_Location().getC_City().getValue());
-		jsonDireccion.put(Anulacion.COMPLEMENTO, orgInfo.getC_Location().getAddress1());
-		jsonObjectEmisor.put(Anulacion.DIRECCION, jsonDireccion);
-		
+		jsonObjectEmisor.put(Anulacion.NOMESTABLECIMIENTO, "AAAAAAAAAAAAAAAAAAAAAA");						// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Anulacion.CODESTABLEMH, "AAAAAAAAAAAAAAAAAAAAAA");								// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Anulacion.CODESTABLE, "AAAAAAAAAAAAAAAAAAAAAA");								// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Anulacion.CODPUNTOVENTAMH, "AAAAAAAAAAAAAAAAAAAAAA");							// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Anulacion.CODPUNTOVENTA, "AAAAAAAAAAAAAAAAAAAAAA");							// TODO: korrekte Daten einsetzen
 		jsonObjectEmisor.put(Anulacion.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(Anulacion.CORREO, client.getEMail());
 
-		System.out.println("Finish collecting JSON data for Emisor");
-		return jsonObjectEmisor;
-		
+		System.out.println("Factura: end collecting JSON data for Emisor");
+		return jsonObjectEmisor;	
 	}
 	
 
@@ -158,11 +152,21 @@ public class AnulacionFactory extends EDocumentFactory {
 		System.out.println("Start collecting JSON data for Documento");
 		
 		JSONObject jsonObjectDocumento = new JSONObject();
+		jsonObjectDocumento.put(Anulacion.TIPODTE, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.CODIGOGENERACION, "BBBBBBBBBBBBBBBBBBBBBB");		// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.SELLORECIBIDO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.NUMEROCONTROL, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
 		jsonObjectDocumento.put(Anulacion.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
+		jsonObjectDocumento.put(Anulacion.MONTOIVA, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.CODIGOGENERACIONR, "BBBBBBBBBBBBBBBBBBBBBB");		// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.TIPODOCUMENTO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.NUMDOCUMENTO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.NOMBRE, client.getName());
+		jsonObjectDocumento.put(Anulacion.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectDocumento.put(Anulacion.CORREO, client.getEMail());
 
 		System.out.println("Finish collecting JSON data for Documento");
-		return jsonObjectDocumento;
-		
+		return jsonObjectDocumento;		
 	}
 	
 	private JSONObject generateMotivoInputData() {

@@ -27,7 +27,6 @@ import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.feccfcreditofiscalv3.CreditoFiscal;
 import org.shw.einvoice.es.fencnotadecreditov1.CuerpoDocumentoItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.DocumentoRelacionadoItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.EmisorNotaDeCredito;
@@ -379,21 +378,21 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			JSONObject jsonTributoItem = new JSONObject();		
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				totalNoSuj = invoiceTax.getTaxBaseAmt();		
-				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
+				jsonTributoItem.put(NotaDeCredito.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(NotaDeCredito.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(NotaDeCredito.VALOR, invoiceTax.getTaxAmt());
 			}
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
 				totalExenta = invoiceTax.getTaxBaseAmt();
-				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
+				jsonTributoItem.put(NotaDeCredito.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(NotaDeCredito.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(NotaDeCredito.VALOR, invoiceTax.getTaxAmt());
 			}
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
-				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
+				jsonTributoItem.put(NotaDeCredito.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(NotaDeCredito.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(NotaDeCredito.VALOR, invoiceTax.getTaxAmt());
 			}
 			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 		}

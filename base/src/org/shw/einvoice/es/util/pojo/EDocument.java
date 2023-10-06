@@ -112,6 +112,7 @@ public class EDocument {
 	public static final String NOMBREPAIS			= "nombrePais";
 	public static final String DESCUENTO			= "descuento";
 	public static final String CODTRIBUTO 			= "codTributo";
+	public static final String NUMPAGOELECTRONICO	= "numPagoElectronico";
 	
 	
 	public static final int		TIPOMODELO_NOCONTIGENCIA			=1;

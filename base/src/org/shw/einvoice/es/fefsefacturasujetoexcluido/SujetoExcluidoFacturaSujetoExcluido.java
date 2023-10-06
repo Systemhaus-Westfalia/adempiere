@@ -1,4 +1,4 @@
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -7,7 +7,7 @@ import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
-public class SujetoExcluidoFacturaNoSujeto extends VentaTercero {
+public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 	
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: FacturaNoSujeto, clase: SujetoExcluido. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 	static final String VALIDATION_NRC_NOT_NULL                    = "Documento: FacturaNoSujeto, clase: SujetoExcluido. Validacion falló: valor de 'nrc' debe ser ='null'";
@@ -24,7 +24,7 @@ public class SujetoExcluidoFacturaNoSujeto extends VentaTercero {
 	/**
 	 * No parameters
 	 */
-	public SujetoExcluidoFacturaNoSujeto() {
+	public SujetoExcluidoFacturaSujetoExcluido() {
 		this.direccion = new Direccion();
 	}
 	

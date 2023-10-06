@@ -1,10 +1,10 @@
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
-public class DocumentoRelacionadoItemFacturaNoSujeto {
+public class DocumentoRelacionadoItemFacturaSujetoExcluido {
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED = "Documento: Factura, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";
 	static final String VALIDATION_NUMERODOCUMENTO_LENGTH_FAILED  = "Documento: Factura, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento'  debe  contener de 1 a 20 caracteres";
 	
@@ -16,7 +16,7 @@ public class DocumentoRelacionadoItemFacturaNoSujeto {
 
 	/**
 	 */
-	public DocumentoRelacionadoItemFacturaNoSujeto() {
+	public DocumentoRelacionadoItemFacturaSujetoExcluido() {
 	}
 	
 	/**
@@ -25,7 +25,7 @@ public class DocumentoRelacionadoItemFacturaNoSujeto {
 	 * @param numeroDocumento
 	 * @param fechaEmision
 	 */
-	public DocumentoRelacionadoItemFacturaNoSujeto(String tipoDocumento, int tipoGeneracion, String numeroDocumento,
+	public DocumentoRelacionadoItemFacturaSujetoExcluido(String tipoDocumento, int tipoGeneracion, String numeroDocumento,
 			String fechaEmision) {
 		this.tipoDocumento = tipoDocumento;
 		this.tipoGeneracion = tipoGeneracion;

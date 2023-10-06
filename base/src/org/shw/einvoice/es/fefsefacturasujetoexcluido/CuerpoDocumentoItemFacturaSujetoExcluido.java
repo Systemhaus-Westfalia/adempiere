@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 /**
  * 
  */
-public class CuerpoDocumentoItemFacturaNoSujeto {
+public class CuerpoDocumentoItemFacturaSujetoExcluido {
 	static final String VALIDATION_VENTAGRAVADA_IS_NULL     = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'ventaGravada' no debe ser = null";
 	static final String VALIDATION_TRIBUTOS_NOT_NULL        = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' debe ser ='null'";
 	static final String VALIDATION_TRIBUTOS_EMPTY           = "Documento: Nota de Credito, clase: CuerpoDocumentoItem. Validacion falló: valor de 'tributos' no debe ser vacío";
@@ -41,7 +41,7 @@ public class CuerpoDocumentoItemFacturaNoSujeto {
     /**
 	 * Constructor without parameters. 
 	 */
-	public CuerpoDocumentoItemFacturaNoSujeto() {
+	public CuerpoDocumentoItemFacturaSujetoExcluido() {
 		tributos = new ArrayList<String>();
 		
 	}
@@ -65,7 +65,7 @@ public class CuerpoDocumentoItemFacturaNoSujeto {
 	 * @param noGravado
 	 * @param ivaItem
 	 */
-	public CuerpoDocumentoItemFacturaNoSujeto(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
+	public CuerpoDocumentoItemFacturaSujetoExcluido(int numItem, int tipoItem, String numeroDocumento, BigDecimal cantidad, String codigo,
 			String codTributo, int uniMedida, String descripcion, BigDecimal precioUni, BigDecimal montoDescu,
 			BigDecimal ventaNoSuj, BigDecimal ventaExenta, BigDecimal ventaGravada, ArrayList<String> tributos) {
 		this.numItem = numItem;

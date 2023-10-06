@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +26,7 @@ import org.shw.einvoice.es.util.pojo.TributosItem;
 /**
  * 
  */
-public class FacturaNoSujeto extends EDocument {
+public class FacturaSujetoExcluido extends EDocument {
 	static final int MINIMUM_TOTOTAL_OF_OPERATION = 1095;
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 2000;
 
@@ -35,36 +35,36 @@ public class FacturaNoSujeto extends EDocument {
 	static final String VALIDATION_NUMDOCUMENTO_IS_NULL       = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'numDocumento' no debe ser ='null'";
 	static final String VALIDATION_NOMBRE_IS_NULL             = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'NOMBRE' no debe ser ='null'";
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'cuerpoDocumento' debe  contener máximo " + CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
-	IdentificacionFacturaNoSujeto identificacion;
-	EmisorFacturaNoSujeto emisor;
-	ReceptorFacturaNoSujeto receptor;
-	List<CuerpoDocumentoItemFacturaNoSujeto> cuerpoDocumento;
-	ResumenFacturaNoSujeto resumen;
-	SujetoExcluidoFacturaNoSujeto sujetoExcluido;
+	IdentificacionFacturaSujetoExcluido identificacion;
+	EmisorFacturaSujetoExcluido emisor;
+	ReceptorFacturaSujetoExcluido receptor;
+	List<CuerpoDocumentoItemFacturaSujetoExcluido> cuerpoDocumento;
+	ResumenFacturaSujetoExcluido resumen;
+	SujetoExcluidoFacturaSujetoExcluido sujetoExcluido;
 
-	ExtensionFacturaNoSujeto extension = null;
-	List<ApendiceItemFacturaNoSujeto> apendice=null;  // null allowed
-	List<DocumentoRelacionadoItemFacturaNoSujeto> documentoRelacionado = null;
-	List<OtrosDocumentosItemFacturaNoSujeto> otrosDocumentos = null;
-	VentaTerceroFacturaNoSujeto ventaTercero = null;
+	ExtensionFacturaSujetoExcluido extension = null;
+	List<ApendiceItemFacturaSujetoExcluido> apendice=null;  // null allowed
+	List<DocumentoRelacionadoItemFacturaSujetoExcluido> documentoRelacionado = null;
+	List<OtrosDocumentosItemFacturaSujetoExcluido> otrosDocumentos = null;
+	VentaTerceroFacturaSujetoExcluido ventaTercero = null;
 
 	/**
 	 * No parameters
 	 */
-	public FacturaNoSujeto() {
-		this.identificacion       			= new IdentificacionFacturaNoSujeto();
-		this.emisor               			= new EmisorFacturaNoSujeto();
-		this.receptor             			= new ReceptorFacturaNoSujeto();
-	    this.cuerpoDocumento      			= new ArrayList<CuerpoDocumentoItemFacturaNoSujeto>();
-		this.resumen              			= new ResumenFacturaNoSujeto();
-		this.sujetoExcluido 				= new SujetoExcluidoFacturaNoSujeto();
+	public FacturaSujetoExcluido() {
+		this.identificacion       			= new IdentificacionFacturaSujetoExcluido();
+		this.emisor               			= new EmisorFacturaSujetoExcluido();
+		this.receptor             			= new ReceptorFacturaSujetoExcluido();
+	    this.cuerpoDocumento      			= new ArrayList<CuerpoDocumentoItemFacturaSujetoExcluido>();
+		this.resumen              			= new ResumenFacturaSujetoExcluido();
+		this.sujetoExcluido 				= new SujetoExcluidoFacturaSujetoExcluido();
 		
 		//leer
-		this.extension						= new ExtensionFacturaNoSujeto();
-		this.apendice						= new ArrayList<ApendiceItemFacturaNoSujeto>();
-		this.documentoRelacionado			= new ArrayList<DocumentoRelacionadoItemFacturaNoSujeto>();
-		this.ventaTercero					= new VentaTerceroFacturaNoSujeto();
-		this.otrosDocumentos				= new ArrayList<OtrosDocumentosItemFacturaNoSujeto>();}
+		this.extension						= new ExtensionFacturaSujetoExcluido();
+		this.apendice						= new ArrayList<ApendiceItemFacturaSujetoExcluido>();
+		this.documentoRelacionado			= new ArrayList<DocumentoRelacionadoItemFacturaSujetoExcluido>();
+		this.ventaTercero					= new VentaTerceroFacturaSujetoExcluido();
+		this.otrosDocumentos				= new ArrayList<OtrosDocumentosItemFacturaSujetoExcluido>();}
 
 	/**
 	 * Validate the Schema conditions
@@ -76,11 +76,11 @@ public class FacturaNoSujeto extends EDocument {
 	/**
 	 * @return the identificacion
 	 */
-	public IdentificacionFacturaNoSujeto getIdentificacion() {
+	public IdentificacionFacturaSujetoExcluido getIdentificacion() {
 		return identificacion;
 	}
 
-	public void setIdentificacion(IdentificacionFacturaNoSujeto identificacion) {
+	public void setIdentificacion(IdentificacionFacturaSujetoExcluido identificacion) {
 		this.identificacion = identificacion;
 	}
 
@@ -107,25 +107,25 @@ public class FacturaNoSujeto extends EDocument {
 		return errorMessages;
 	}
 
-	public List<DocumentoRelacionadoItemFacturaNoSujeto> getDocumentoRelacionado() {
+	public List<DocumentoRelacionadoItemFacturaSujetoExcluido> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
 
-	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemFacturaNoSujeto> documentoRelacionado) {
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemFacturaSujetoExcluido> documentoRelacionado) {
 		this.documentoRelacionado = documentoRelacionado;
 	}
 
 	/**
 	 * @return the emisor
 	 */
-	public EmisorFacturaNoSujeto getEmisor() {
+	public EmisorFacturaSujetoExcluido getEmisor() {
 		return emisor;
 	}
 
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(EmisorFacturaNoSujeto emisor) {
+	public void setEmisor(EmisorFacturaSujetoExcluido emisor) {
 		this.emisor = emisor;
 	}
 
@@ -156,14 +156,14 @@ public class FacturaNoSujeto extends EDocument {
 	/**
 	 * @return the receptor
 	 */
-	public ReceptorFacturaNoSujeto getReceptor() {
+	public ReceptorFacturaSujetoExcluido getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(ReceptorFacturaNoSujeto receptor) {
+	public void setReceptor(ReceptorFacturaSujetoExcluido receptor) {
 		this.receptor = receptor;
 	}
 
@@ -217,25 +217,25 @@ public class FacturaNoSujeto extends EDocument {
 	/**
 	 * @return the ventaTercero
 	 */
-	public VentaTerceroFacturaNoSujeto getVentaTercero() {
+	public VentaTerceroFacturaSujetoExcluido getVentaTercero() {
 		return ventaTercero;
 	}
 
 	/**
 	 * @param ventaTercero the ventaTercero to set
 	 */
-	public void setVentaTercero(VentaTerceroFacturaNoSujeto ventaTercero) {
+	public void setVentaTercero(VentaTerceroFacturaSujetoExcluido ventaTercero) {
 		this.ventaTercero = ventaTercero;
 	}
 
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	public List<CuerpoDocumentoItemFacturaNoSujeto> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItemFacturaSujetoExcluido> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
-	public void setCuerpoDocumento(List<CuerpoDocumentoItemFacturaNoSujeto> cuerpoDocumento) {
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemFacturaSujetoExcluido> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 
@@ -248,7 +248,7 @@ public class FacturaNoSujeto extends EDocument {
 	
 		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) { 
 			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
-			CuerpoDocumentoItemFacturaNoSujeto cuerpoDocumentoItemFacturaNoSujeto = new CuerpoDocumentoItemFacturaNoSujeto();
+			CuerpoDocumentoItemFacturaSujetoExcluido cuerpoDocumentoItemFacturaNoSujeto = new CuerpoDocumentoItemFacturaSujetoExcluido();
 			try {cuerpoDocumentoItemFacturaNoSujeto.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFacturaNoSujeto.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
 			//try {cuerpoDocumentoItemFacturaNoSujeto.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
@@ -289,7 +289,7 @@ public class FacturaNoSujeto extends EDocument {
 	
 		for (int i=0; i< DocumentosRelacionadosArrayJson.length(); i++) { 
 			JSONObject DocRelaciondadosItemJson = DocumentosRelacionadosArrayJson.getJSONObject(i);
-			DocumentoRelacionadoItemFacturaNoSujeto documentoRelacionadoItem = new DocumentoRelacionadoItemFacturaNoSujeto();
+			DocumentoRelacionadoItemFacturaSujetoExcluido documentoRelacionadoItem = new DocumentoRelacionadoItemFacturaSujetoExcluido();
 			try {documentoRelacionadoItem.setNumeroDocumento(DocRelaciondadosItemJson.getString(NUMERODOCUMENTO));} 			catch (Exception e) {errorMessages.append(e);}
 			try {documentoRelacionadoItem.setTipoDocumento(DocRelaciondadosItemJson.getString(TIPODOCUMENTO));} 				catch (Exception e) {errorMessages.append(e);}
 			try {documentoRelacionadoItem.setTipoGeneracion(DocRelaciondadosItemJson.getInt(TIPOGENERACION));} 					catch (Exception e) {errorMessages.append(e);}
@@ -306,14 +306,14 @@ public class FacturaNoSujeto extends EDocument {
 	/**
 	 * @return the resumen
 	 */
-	public ResumenFacturaNoSujeto getResumen() {
+	public ResumenFacturaSujetoExcluido getResumen() {
 		return resumen;
 	}
 
 	/**
 	 * @param resumen the resumen to set
 	 */
-	public void setResumen(ResumenFacturaNoSujeto resumen) {
+	public void setResumen(ResumenFacturaSujetoExcluido resumen) {
 		this.resumen = resumen;
 	}
 
@@ -365,42 +365,42 @@ public class FacturaNoSujeto extends EDocument {
 	/**
 	 * @return the extension
 	 */
-	public ExtensionFacturaNoSujeto getExtension() {
+	public ExtensionFacturaSujetoExcluido getExtension() {
 		return extension;
 	}
 
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(ExtensionFacturaNoSujeto extension) {
+	public void setExtension(ExtensionFacturaSujetoExcluido extension) {
 		this.extension = extension;
 	}
 
 	/**
 	 * @return the apendice
 	 */
-	public List<ApendiceItemFacturaNoSujeto> getApendice() {
+	public List<ApendiceItemFacturaSujetoExcluido> getApendice() {
 		return apendice;
 	}
 
-	public void setApendice(List<ApendiceItemFacturaNoSujeto> apendice) {
+	public void setApendice(List<ApendiceItemFacturaSujetoExcluido> apendice) {
 		this.apendice = apendice;
 	}
 
 
-	public SujetoExcluidoFacturaNoSujeto getSujetoExcluidoFacturaNoSujeto() {
+	public SujetoExcluidoFacturaSujetoExcluido getSujetoExcluidoFacturaNoSujeto() {
 		return sujetoExcluido;
 	}
 
-	public void setSujetoExcluidoFacturaNoSujeto(SujetoExcluidoFacturaNoSujeto sujetoExcluidoFacturaNoSujeto) {
+	public void setSujetoExcluidoFacturaNoSujeto(SujetoExcluidoFacturaSujetoExcluido sujetoExcluidoFacturaNoSujeto) {
 		this.sujetoExcluido = sujetoExcluidoFacturaNoSujeto;
 	}
 
-	public List<OtrosDocumentosItemFacturaNoSujeto> getOtrosDocumentos() {
+	public List<OtrosDocumentosItemFacturaSujetoExcluido> getOtrosDocumentos() {
 		return otrosDocumentos;
 	}
 
-	public void setOtrosDocumentos(List<OtrosDocumentosItemFacturaNoSujeto> otrosDocumentos) {
+	public void setOtrosDocumentos(List<OtrosDocumentosItemFacturaSujetoExcluido> otrosDocumentos) {
 		this.otrosDocumentos = otrosDocumentos;
 	}
 

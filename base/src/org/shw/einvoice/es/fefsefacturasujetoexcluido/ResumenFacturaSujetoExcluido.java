@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import org.shw.einvoice.es.util.pojo.TributosItem;
 /**
  * 
  */
-public class ResumenFacturaNoSujeto {
+public class ResumenFacturaSujetoExcluido {
 	static final String VALIDATION_TOTALGRAVADA_IS_NULL  = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'totlaGravada' no debe ser = null";
 	static final String VALIDATION_PLAZO_IS_NULL         = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'plazo' de pagos no debe ser ='null'";
 	static final String VALIDATION_PERIODO_IS_NULL       = "Documento: Nota de Credito, clase: Resumen. Validacion falló: valor de 'periodo' de pagos no debe ser ='null'";
@@ -44,7 +44,7 @@ public class ResumenFacturaNoSujeto {
 	/**
 	 * No parameters
 	 */
-	public ResumenFacturaNoSujeto() {
+	public ResumenFacturaSujetoExcluido() {
 		this.tributos = new ArrayList<TributosItem>();
 	}
 

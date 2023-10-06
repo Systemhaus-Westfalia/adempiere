@@ -1,32 +1,28 @@
-/**
- * 
- */
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
-/**
- * 
- */
-public class ReceptorFacturaNoSujeto {
+public class EmisorFacturaSujetoExcluido {
 
 	String nit;
 	String nrc;
 	String nombre;
 	String codActividad;
 	String descActividad;
-	String nombreComercial;
-	Direccion direccion;
+	String nombreComercial=null;  // null possible
+	String tipoEstablecimiento;
+    Direccion direccion;
     String telefono;
     String correo;
-	
+    
+    
 	/**
-	 * No parameters
+	 * 
 	 */
-	public ReceptorFacturaNoSujeto() {
+	public EmisorFacturaSujetoExcluido() {
 		this.direccion = new Direccion();
 	}
 
@@ -34,26 +30,24 @@ public class ReceptorFacturaNoSujeto {
 	/**
 	 * Validate the Schema conditions
 	 */
-
 	public String validateValues() {
 		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
-	
-	
-    /**
+
+
+	/**
 	 * @return the nit
 	 */
-
-    public String getNit() {
+	public String getNit() {
 		return nit;
 	}
+
 
 	/**
 	 * @param nit the nit to set<br>
 	 * The parameter is validated.<br>
 	 * "pattern" : "^([0-9]{14}|[0-9]{9})$"
 	 */
-
 	public void setNit(String nit) {
 		final String PATTERN = "^([0-9]{14}|[0-9]{9})$";
 		boolean patternOK = (nit!=null) && Pattern.matches(PATTERN, nit);  
@@ -61,23 +55,23 @@ public class ReceptorFacturaNoSujeto {
 		if(patternOK)
 			this.nit = nit;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nit' in NotaDeCredito.Receptor.setNit()");
+	        throw new IllegalArgumentException("Wrong expression 'nit' in NotaDeCredito.Emisor.setNit()");
 	}
-	
+
+
 	/**
 	 * @return the nrc
 	 */
-
 	public String getNrc() {
 		return nrc;
 	}
+
 
 	/**
 	 * @param nrc the nrc to set<br>
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{1,8}$"
 	 */
-
 	public void setNrc(String nrc) {
 		final String PATTERN = "^[0-9]{1,8}$";
 		boolean patternOK = (nrc!=null) && Pattern.matches(PATTERN, nrc);  
@@ -85,48 +79,48 @@ public class ReceptorFacturaNoSujeto {
 		if(patternOK)
 			this.nrc = nrc;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'nrc' in NotaDeCredito.Receptor.setNrc()");
+	        throw new IllegalArgumentException("Wrong expression 'nrc' in NotaDeCredito.Emisor.setNrc()");
 	}
-    
+
+
 	/**
 	 * @return the nombre
 	 */
-
 	public String getNombre() {
 		return nombre;
 	}
 
+
 	/**
 	 * @param nombre the nombre to set<br>
 	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 250
+	 * "minLength" : 3, "maxLength" : 200
 	 */
-
 	public void setNombre(String nombre) {
-		final int MINLENGTH = 1;
-		final int MAXLENGTH = 250;
+		final int MINLENGTH = 3;
+		final int MAXLENGTH = 200;
 		int length = nombre==null?0:nombre.length();
 		
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in NotaDeCredito.Receptor.setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in NotaDeCredito.Emisor.setNombre()");
 	}
+
 
 	/**
 	 * @return the codActividad
 	 */
-
 	public String getCodActividad() {
 		return codActividad;
 	}
+
 
 	/**
 	 * @param codActividad the codActividad to set<br>
 	 * The parameter is validated.<br>
 	 * "pattern" : "^[0-9]{2,6}$"
 	 */
-
 	public void setCodActividad(String codActividad) {
 		final String PATTERN = "^[0-9]{2,6}$";
 		boolean patternOK = (codActividad!=null) && Pattern.matches(PATTERN, codActividad);  
@@ -134,23 +128,23 @@ public class ReceptorFacturaNoSujeto {
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in NotaDeCredito.Receptor.setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in NotaDeCredito.Emisor.setCodActividad()");
 	}
+
 
 	/**
 	 * @return the descActividad
 	 */
-
 	public String getDescActividad() {
 		return descActividad;
 	}
+
 
 	/**
 	 * @param descActividad the descActividad to set<br>
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 150
 	 */
-
 	public void setDescActividad(String descActividad) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
@@ -159,23 +153,23 @@ public class ReceptorFacturaNoSujeto {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in NotaDeCredito.Receptor.setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in NotaDeCredito.Emisor.setDescActividad()");
 	}
+
 
 	/**
 	 * @return the nombreComercial
 	 */
-
 	public String getNombreComercial() {
 		return nombreComercial;
 	}
+
 
 	/**
 	 * @param nombreComercial the nombreComercial to set<br>
 	 * The parameter is validated.<br>
 	 * "minLength" : 1, "maxLength" : 150; null also possible
 	 */
-
 	public void setNombreComercial(String nombreComercial) {
 		final int MINLENGTH = 1;
 		final int MAXLENGTH = 150;
@@ -184,39 +178,60 @@ public class ReceptorFacturaNoSujeto {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
 			this.nombreComercial = nombreComercial;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in NotaDeCredito.Receptor.setNombreComercial()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in NotaDeCredito.Emisor.setNombreComercial()");
 	}
+
+
+	/**
+	 * @return the tipoEstablecimiento
+	 */
+	public String getTipoEstablecimiento() {
+		return tipoEstablecimiento;
+	}
+
+
+	/**
+	 * @param tipoEstablecimiento the tipoEstablecimiento to set<br>
+	 * The parameter is validated.<br>
+	 * "enum" : ["01", "02", "04", "07", "20"]
+	 */
+	public void setTipoEstablecimiento(String tipoEstablecimiento) {
+		if (tipoEstablecimiento.compareTo("01")==0 || tipoEstablecimiento.compareTo("02")==0 || tipoEstablecimiento.compareTo("04")==0 || tipoEstablecimiento.compareTo("07")==0 || tipoEstablecimiento.compareTo("20")==0)
+			this.tipoEstablecimiento = tipoEstablecimiento;
+		else
+	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in NotaDeCredito.Emisor.setTipoEstablecimiento()");
+	}
+
 
 	/**
 	 * @return the direccion
 	 */
-
 	public Direccion getDireccion() {
 		return direccion;
 	}
 
+
 	/**
 	 * @param direccion the direccion to set
 	 */
-
 	public void setDireccion(Direccion direccion) {
 		this.direccion = direccion;
 	}
 
+
 	/**
 	 * @return the telefono
 	 */
-
 	public String getTelefono() {
 		return telefono;
 	}
+
 
 	/**
 	 * @param telefono the telefono to set<br>
 	 * The parameter is validated.<br>
 	 * "minLength" : 8, "maxLength" : 30
 	 */
-
 	public void setTelefono(String telefono) {
 		final int MINLENGTH = 8;
 		final int MAXLENGTH = 30;
@@ -225,41 +240,40 @@ public class ReceptorFacturaNoSujeto {
 		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in NotaDeCredito.Receptor.setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in NotaDeCredito.Emisor.setTelefono()");
 	}
+
 
 	/**
 	 * @return the correo
 	 */
-
 	public String getCorreo() {
 		return correo;
 	}
 
+
 	/**
 	 * @param correo the correo to set<br>
 	 * The parameter is validated.<br>
-	 * "maxLength" : 100
+	 * "minLength" : 3, "maxLength" : 100
 	 */
-
 	public void setCorreo(String correo) {
+		final int MINLENGTH = 3;
 		final int MAXLENGTH = 100;
 		int length = correo==null?0:correo.length();
 		
-		if(length<=MAXLENGTH)
+		if(length>=MINLENGTH && length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in NotaDeCredito.Receptor.setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in NotaDeCredito.Emisor.setCorreo()");
 	}
 
+    
 
-	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
+
 
 }

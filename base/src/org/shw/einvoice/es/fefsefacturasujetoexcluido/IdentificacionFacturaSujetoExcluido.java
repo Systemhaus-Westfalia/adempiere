@@ -1,10 +1,10 @@
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 import java.util.regex.Pattern;
 
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 
-public class IdentificacionFacturaNoSujeto {
+public class IdentificacionFacturaSujetoExcluido {
 
 	static final int VERSION              = 3;
 	static final String TIPO_DE_DOCUMENTO = "05";
@@ -33,7 +33,7 @@ public class IdentificacionFacturaNoSujeto {
 	/**
 	 * No parameters
 	 */
-	public IdentificacionFacturaNoSujeto() {
+	public IdentificacionFacturaSujetoExcluido() {
 		this.version    = VERSION;
 		this.tipoDte    = TIPO_DE_DOCUMENTO;
 		this.tipoMoneda = TIPOMONEDA;

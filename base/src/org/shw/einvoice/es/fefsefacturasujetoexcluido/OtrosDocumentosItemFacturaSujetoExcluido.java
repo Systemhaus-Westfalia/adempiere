@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ import org.shw.einvoice.es.util.pojo.Medico;
 /**
  * 
  */
-public class OtrosDocumentosItemFacturaNoSujeto {
+public class OtrosDocumentosItemFacturaSujetoExcluido {
 	static final String VALIDATION_MEDICO_IS_NULL            = "Documento: Factura, clase: OtrosDocumentosItem. Validacion falló: valor de 'medico' no debe ser ='null'";
 	static final String VALIDATION_DESCDOCUMENTO_NOT_NULL    = "Documento: Factura, clase: OtrosDocumentosItem. Validacion falló: valor de 'descDocumento' debe ser ='null'";
 	static final String VALIDATION_DETALLEDOCUMENTO_NOT_NULL = "Documento: Factura, clase: OtrosDocumentosItem. Validacion falló: valor de 'detalleDocumento' debe ser ='null'";
@@ -27,7 +27,7 @@ public class OtrosDocumentosItemFacturaNoSujeto {
 	/**
 	 * No Parameters
 	 */
-	public OtrosDocumentosItemFacturaNoSujeto() {
+	public OtrosDocumentosItemFacturaSujetoExcluido() {
 		this.medico = new Medico();
 	}
 

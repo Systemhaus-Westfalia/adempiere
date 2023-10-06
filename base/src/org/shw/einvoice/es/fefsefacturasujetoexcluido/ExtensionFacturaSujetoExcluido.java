@@ -1,14 +1,14 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fefsefacturanosujeto;
+package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 /**
  * 
  */
-public class ExtensionFacturaNoSujeto {
+public class ExtensionFacturaSujetoExcluido {
 	
 	String nombEntrega=null;  // null allowed
 	String docuEntrega=null;  // null allowed
@@ -19,7 +19,7 @@ public class ExtensionFacturaNoSujeto {
 	/**
 	 * No parameters
 	 */
-	public ExtensionFacturaNoSujeto() {
+	public ExtensionFacturaSujetoExcluido() {
 
 	}
 	

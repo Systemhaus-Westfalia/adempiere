@@ -6,8 +6,8 @@ import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 public class IdentificacionFacturaSujetoExcluido {
 
-	static final int VERSION              = 3;
-	static final String TIPO_DE_DOCUMENTO = "05";
+	static final int VERSION              = 1;
+	static final String TIPO_DE_DOCUMENTO = "14";
 	static final String TIPOMONEDA        = "USD";
 	
 	static final String VALIDATION_TIPOMODELO_FAILED_1         = "Documento: Nota de Credito, clase: Identificacion. Validacion falló: valor de 'tipoModelo' no debe ser diferente a 1";
@@ -135,13 +135,13 @@ public class IdentificacionFacturaSujetoExcluido {
 	 * "pattern" : "^DTE-05-[A-Z0-9]{8}-[0-9]{15}$"
 	 */
 	public void setNumeroControl(String numeroControl) {
-		final String PATTERN = "^DTE-05-[A-Z0-9]{8}-[0-9]{15}$";
+		final String PATTERN = "^DTE-14-[A-Z0-9]{8}-[0-9]{15}$";
 		boolean patternOK = (numeroControl!=null) && Pattern.matches(PATTERN, numeroControl);  
 		
 		if(patternOK)
 			this.numeroControl = numeroControl;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'numeroControl' in NotaDeCredito.Identificacion.setNumeroControl()");
+	        throw new IllegalArgumentException("Wrong expression 'numeroControl' in FacturaSujetoExcluido.Identificacion.setNumeroControl()");
 	}
 
 

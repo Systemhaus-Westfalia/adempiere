@@ -7,7 +7,7 @@ import org.shw.einvoice.es.util.pojo.Direccion;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 import org.shw.einvoice.es.util.pojo.VentaTercero;
 
-public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
+public class SujetoExcluidoFacturaSujetoExcluido {
 	
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: FacturaNoSujeto, clase: SujetoExcluido. Validacion falló: valor de 'numDocumento' no corresponde a patrón";
 	static final String VALIDATION_NRC_NOT_NULL                    = "Documento: FacturaNoSujeto, clase: SujetoExcluido. Validacion falló: valor de 'nrc' debe ser ='null'";
@@ -70,7 +70,7 @@ public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 		if((tipoDocumento==null) || (Arrays.stream(validTipoDocumento).anyMatch(tipoDocumento::equals)) )
 			this.tipoDocumento = tipoDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in Factura.Receptor.setTipoDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'tipoDocumento' in FacturaSujetoExcluido.SujetoExcluido.setTipoDocumento()");
 	}
 
 	public String getNumDocumento() {
@@ -85,7 +85,7 @@ public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (numDocumento==null) )
 			this.numDocumento = numDocumento;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in Factura.Receptor.setNumDocumento()");
+	        throw new IllegalArgumentException("Wrong parameter 'numDocumento' in FacturaSujetoExcluido.SujetoExcluido.setNumDocumento()");
 	}
 
 	public String getNombre() {
@@ -100,7 +100,7 @@ public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 		if( (length>=MINLENGTH && length<=MAXLENGTH)  || (nombre==null) )
 			this.nombre = nombre;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombre' in Factura.Receptor.setNombre()");
+	        throw new IllegalArgumentException("Wrong parameter 'nombre' in FacturaSujetoExcluido.SujetoExcluido.setNombre()");
 	}
 
 	public String getCodActividad() {
@@ -114,7 +114,7 @@ public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 		if(patternOK)
 			this.codActividad = codActividad;
 		else
-	        throw new IllegalArgumentException("Wrong expression 'codActividad' in Factura.Receptor.setCodActividad()");
+	        throw new IllegalArgumentException("Wrong expression 'codActividad' in FacturaSujetoExcluido.SujetoExcluido.setCodActividad()");
 	}
 
 	public String getDescActividad() {
@@ -129,7 +129,7 @@ public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (descActividad==null) )
 			this.descActividad = descActividad;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in Factura.Receptor.setDescActividad()");
+	        throw new IllegalArgumentException("Wrong parameter 'descActividad' in FacturaSujetoExcluido.SujetoExcluido.setDescActividad()");
 	}
 
 	public Direccion getDireccion() {
@@ -152,7 +152,7 @@ public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 		if( (length>=MINLENGTH && length<=MAXLENGTH) || (telefono==null) )
 			this.telefono = telefono;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'telefono' in Factura.Receptor.setTelefono()");
+	        throw new IllegalArgumentException("Wrong parameter 'telefono' in FacturaSujetoExcluido.SujetoExcluido.setTelefono()");
 	}
 
 	public String getCorreo() {
@@ -166,7 +166,7 @@ public class SujetoExcluidoFacturaSujetoExcluido extends VentaTercero {
 		if(length<=MAXLENGTH)
 			this.correo = correo;
 		else
-	        throw new IllegalArgumentException("Wrong parameter 'correo' in Factura.Receptor.setCorreo()");
+	        throw new IllegalArgumentException("Wrong parameter 'correo' in FacturaSujetoExcluido.SujetoExcluido.setCorreo()");
 	}
 
 

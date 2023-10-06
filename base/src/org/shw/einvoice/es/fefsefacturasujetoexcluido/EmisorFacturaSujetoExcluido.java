@@ -12,11 +12,16 @@ public class EmisorFacturaSujetoExcluido {
 	String nombre;
 	String codActividad;
 	String descActividad;
-	String nombreComercial=null;  // null possible
-	String tipoEstablecimiento;
     Direccion direccion;
     String telefono;
+
+    String codEstableMH;
+    String codEstable;
+    String codPuntoVentaMH;
+    String codPuntoVenta;
     String correo;
+    
+    
     
     
 	/**
@@ -158,52 +163,6 @@ public class EmisorFacturaSujetoExcluido {
 
 
 	/**
-	 * @return the nombreComercial
-	 */
-	public String getNombreComercial() {
-		return nombreComercial;
-	}
-
-
-	/**
-	 * @param nombreComercial the nombreComercial to set<br>
-	 * The parameter is validated.<br>
-	 * "minLength" : 1, "maxLength" : 150; null also possible
-	 */
-	public void setNombreComercial(String nombreComercial) {
-		final int MINLENGTH = 1;
-		final int MAXLENGTH = 150;
-		int length = nombreComercial==null?0:nombreComercial.length();
-		
-		if( (length>=MINLENGTH && length<=MAXLENGTH) || (nombreComercial==null) )
-			this.nombreComercial = nombreComercial;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'nombreComercial' in NotaDeCredito.Emisor.setNombreComercial()");
-	}
-
-
-	/**
-	 * @return the tipoEstablecimiento
-	 */
-	public String getTipoEstablecimiento() {
-		return tipoEstablecimiento;
-	}
-
-
-	/**
-	 * @param tipoEstablecimiento the tipoEstablecimiento to set<br>
-	 * The parameter is validated.<br>
-	 * "enum" : ["01", "02", "04", "07", "20"]
-	 */
-	public void setTipoEstablecimiento(String tipoEstablecimiento) {
-		if (tipoEstablecimiento.compareTo("01")==0 || tipoEstablecimiento.compareTo("02")==0 || tipoEstablecimiento.compareTo("04")==0 || tipoEstablecimiento.compareTo("07")==0 || tipoEstablecimiento.compareTo("20")==0)
-			this.tipoEstablecimiento = tipoEstablecimiento;
-		else
-	        throw new IllegalArgumentException("Wrong parameter 'tipoEstablecimiento' in NotaDeCredito.Emisor.setTipoEstablecimiento()");
-	}
-
-
-	/**
 	 * @return the direccion
 	 */
 	public Direccion getDireccion() {
@@ -269,6 +228,46 @@ public class EmisorFacturaSujetoExcluido {
 	}
 
     
+
+	public String getCodEstableMH() {
+		return codEstableMH;
+	}
+
+
+	public void setCodEstableMH(String codEstableMH) {
+		this.codEstableMH = codEstableMH;
+	}
+
+
+	public String getCodEstable() {
+		return codEstable;
+	}
+
+
+	public void setCodEstable(String codEstable) {
+		this.codEstable = codEstable;
+	}
+
+
+	public String getCodPuntoVentaMH() {
+		return codPuntoVentaMH;
+	}
+
+
+	public void setCodPuntoVentaMH(String codPuntoVentaMH) {
+		this.codPuntoVentaMH = codPuntoVentaMH;
+	}
+
+
+	public String getCodPuntoVenta() {
+		return codPuntoVenta;
+	}
+
+
+	public void setCodPuntoVenta(String codPuntoVenta) {
+		this.codPuntoVenta = codPuntoVenta;
+	}
+
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

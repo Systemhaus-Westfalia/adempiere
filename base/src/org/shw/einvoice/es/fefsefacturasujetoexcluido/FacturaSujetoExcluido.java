@@ -7,20 +7,9 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ApendiceItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.CuerpoDocumentoItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.DocumentoRelacionadoItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.EmisorFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ExtensionFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.IdentificacionFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.OtrosDocumentosItemFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ReceptorFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.ResumenFactura;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.VentaTerceroFactura;
 import org.shw.einvoice.es.util.pojo.EDocument;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.TributosItem;
 
 
 /**
@@ -37,16 +26,13 @@ public class FacturaSujetoExcluido extends EDocument {
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Factura, clase: FacturaElectronica. Validacion falló: valor de 'cuerpoDocumento' debe  contener máximo " + CUERPODOCUMENTO_MAXIMUM_ITEMS + " elementos";
 	IdentificacionFacturaSujetoExcluido identificacion;
 	EmisorFacturaSujetoExcluido emisor;
-	ReceptorFacturaSujetoExcluido receptor;
+	//ReceptorFacturaSujetoExcluido receptor;
 	List<CuerpoDocumentoItemFacturaSujetoExcluido> cuerpoDocumento;
 	ResumenFacturaSujetoExcluido resumen;
 	SujetoExcluidoFacturaSujetoExcluido sujetoExcluido;
 
-	ExtensionFacturaSujetoExcluido extension = null;
 	List<ApendiceItemFacturaSujetoExcluido> apendice=null;  // null allowed
 	List<DocumentoRelacionadoItemFacturaSujetoExcluido> documentoRelacionado = null;
-	List<OtrosDocumentosItemFacturaSujetoExcluido> otrosDocumentos = null;
-	VentaTerceroFacturaSujetoExcluido ventaTercero = null;
 
 	/**
 	 * No parameters
@@ -54,17 +40,15 @@ public class FacturaSujetoExcluido extends EDocument {
 	public FacturaSujetoExcluido() {
 		this.identificacion       			= new IdentificacionFacturaSujetoExcluido();
 		this.emisor               			= new EmisorFacturaSujetoExcluido();
-		this.receptor             			= new ReceptorFacturaSujetoExcluido();
+		//this.receptor             			= new ReceptorFacturaSujetoExcluido();
 	    this.cuerpoDocumento      			= new ArrayList<CuerpoDocumentoItemFacturaSujetoExcluido>();
 		this.resumen              			= new ResumenFacturaSujetoExcluido();
 		this.sujetoExcluido 				= new SujetoExcluidoFacturaSujetoExcluido();
 		
 		//leer
-		this.extension						= new ExtensionFacturaSujetoExcluido();
 		this.apendice						= new ArrayList<ApendiceItemFacturaSujetoExcluido>();
 		this.documentoRelacionado			= new ArrayList<DocumentoRelacionadoItemFacturaSujetoExcluido>();
-		this.ventaTercero					= new VentaTerceroFacturaSujetoExcluido();
-		this.otrosDocumentos				= new ArrayList<OtrosDocumentosItemFacturaSujetoExcluido>();}
+		}
 
 	/**
 	 * Validate the Schema conditions
@@ -138,8 +122,6 @@ public class FacturaSujetoExcluido extends EDocument {
 		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
 		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
 		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
-		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
-		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
 
 		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
 		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
@@ -152,54 +134,54 @@ public class FacturaSujetoExcluido extends EDocument {
 		System.out.println("End FacturaNoSujeto.fillEmisor()");
 		return errorMessages;
 	}
-
-	/**
-	 * @return the receptor
-	 */
-	public ReceptorFacturaSujetoExcluido getReceptor() {
-		return receptor;
-	}
-
-	/**
-	 * @param receptor the receptor to set
-	 */
-	public void setReceptor(ReceptorFacturaSujetoExcluido receptor) {
-		this.receptor = receptor;
-	}
-
-	public StringBuffer fillReceptor(JSONObject factoryInput) {
-		System.out.println("Start CreditoFiscal.fillReceptor()"); 
-
-		
-		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
-		try {receptor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
-		try {receptor.setNrc(receptorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
-		try {receptor.setNombre(receptorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
-		try {receptor.setCodActividad(receptorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
-		try {receptor.setDescActividad(receptorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
-
-		JSONObject jsonDireccion = receptorJson.getJSONObject(DIRECCION);
-		try {receptor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
-		try {receptor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
-		try {receptor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
-
-		try {receptor.setTelefono(receptorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
-		try {receptor.setCorreo(receptorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
-
-		System.out.println("End Factura.fillReceptor()"); 
-		return errorMessages;
-	}
+//
+//	/**
+//	 * @return the receptor
+//	 */
+//	public ReceptorFacturaSujetoExcluido getReceptor() {
+//		return receptor;
+//	}
+//
+//	/**
+//	 * @param receptor the receptor to set
+//	 */
+//	public void setReceptor(ReceptorFacturaSujetoExcluido receptor) {
+//		this.receptor = receptor;
+//	}
+//
+//	public StringBuffer fillReceptor(JSONObject factoryInput) {
+//		System.out.println("Start CreditoFiscal.fillReceptor()"); 
+//
+//		
+//		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
+//		try {receptor.setNit(receptorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {receptor.setNrc(receptorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+//		try {receptor.setNombre(receptorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+//		try {receptor.setCodActividad(receptorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+//		try {receptor.setDescActividad(receptorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+//
+//		JSONObject jsonDireccion = receptorJson.getJSONObject(DIRECCION);
+//		try {receptor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+//		try {receptor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+//		try {receptor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+//
+//		try {receptor.setTelefono(receptorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+//		try {receptor.setCorreo(receptorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+//
+//		System.out.println("End Factura.fillReceptor()"); 
+//		return errorMessages;
+//	}
 	
 	public StringBuffer fillSujetoExcluido(JSONObject factoryInput) {
 		System.out.println("Start CreditoFiscal.fillReceptor()"); 
 
 		
-		JSONObject sujetoExcluidoJson = factoryInput.getJSONObject(RECEPTOR);
+		JSONObject sujetoExcluidoJson = factoryInput.getJSONObject(SUJETOEXCLUIDO);
 		try {sujetoExcluido.setNumDocumento(sujetoExcluidoJson.getString(NUMDOCUMENTO));} 					catch (Exception e) {errorMessages.append(e);}
 		try {sujetoExcluido.setNombre(sujetoExcluidoJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
 		try {sujetoExcluido.setCodActividad(sujetoExcluidoJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
 		try {sujetoExcluido.setDescActividad(sujetoExcluidoJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
-		try {sujetoExcluido.setTipoDocumento(sujetoExcluidoJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+		try {sujetoExcluido.setTipoDocumento(sujetoExcluidoJson.getString(TIPODOCUMENTO));} 				catch (Exception e) {errorMessages.append(e);}
 
 		JSONObject jsonDireccion = sujetoExcluidoJson.getJSONObject(DIRECCION);
 		try {sujetoExcluido.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}			catch (Exception e) {errorMessages.append(e);}
@@ -214,19 +196,6 @@ public class FacturaSujetoExcluido extends EDocument {
 	}
 
 
-	/**
-	 * @return the ventaTercero
-	 */
-	public VentaTerceroFacturaSujetoExcluido getVentaTercero() {
-		return ventaTercero;
-	}
-
-	/**
-	 * @param ventaTercero the ventaTercero to set
-	 */
-	public void setVentaTercero(VentaTerceroFacturaSujetoExcluido ventaTercero) {
-		this.ventaTercero = ventaTercero;
-	}
 
 	/**
 	 * @return the cuerpoDocumento
@@ -250,29 +219,15 @@ public class FacturaSujetoExcluido extends EDocument {
 			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
 			CuerpoDocumentoItemFacturaSujetoExcluido cuerpoDocumentoItemFacturaNoSujeto = new CuerpoDocumentoItemFacturaSujetoExcluido();
 			try {cuerpoDocumentoItemFacturaNoSujeto.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFacturaNoSujeto.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
-			//try {cuerpoDocumentoItemFacturaNoSujeto.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaNoSujeto.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 				catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFacturaNoSujeto.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFacturaNoSujeto.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
-			
-			if (cuerpoDocumentoItemJson.getString(CODTRIBUTO).equals(""))
-				try {cuerpoDocumentoItemFacturaNoSujeto.setCodTributo(null);} 												catch (Exception e) {errorMessages.append(e);}
-			else
-				try {cuerpoDocumentoItemFacturaNoSujeto.setCodTributo(cuerpoDocumentoItemJson.getString(CODTRIBUTO));} 		catch (Exception e) {errorMessages.append(e);}
-
 			try {cuerpoDocumentoItemFacturaNoSujeto.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFacturaNoSujeto.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFacturaNoSujeto.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaNoSujeto.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemFacturaNoSujeto.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 		catch (Exception e) {errorMessages.append(e);}
 			try {cuerpoDocumentoItemFacturaNoSujeto.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFacturaNoSujeto.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFacturaNoSujeto.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemFacturaNoSujeto.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
-			
-			JSONArray tributosArrayJson = cuerpoDocumentoItemJson.getJSONArray(TRIBUTOS);
-			for (int j=0; j< tributosArrayJson.length(); j++) { 
-				String tributosItemJson = tributosArrayJson.getString(j);
-				try {cuerpoDocumentoItemFacturaNoSujeto.getTributos().add(tributosItemJson);} 								catch (Exception e) {errorMessages.append(e);}	
-			}			
+			try {cuerpoDocumentoItemFacturaNoSujeto.setCompra(cuerpoDocumentoItemJson.getBigDecimal(COMPRA));} 				catch (Exception e) {errorMessages.append(e);}
+		
 
 			cuerpoDocumento.add(cuerpoDocumentoItemFacturaNoSujeto);						
 		}
@@ -319,33 +274,18 @@ public class FacturaSujetoExcluido extends EDocument {
 
 	public StringBuffer fillResumen(JSONObject factoryInput) {
 		System.out.println("Start CreditoFiscal.fillResumen()");
-		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);
+		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
 
-		JSONArray tributosArrayJson = resumenJson.getJSONArray(TRIBUTOS);	
-		for (int i=0; i< tributosArrayJson.length(); i++) {
-			JSONObject tributosItemJson = tributosArrayJson.getJSONObject(i);
-			TributosItem tributosItemCreditoFiscal = new TributosItem();
-			try {tributosItemCreditoFiscal.setCodigo(tributosItemJson.getString(CODIGO));} 				catch (Exception e) {errorMessages.append(e);}
-			try {tributosItemCreditoFiscal.setDescripcion(tributosItemJson.getString(DESCRIPCION));}	catch (Exception e) {errorMessages.append(e);}
-			try {tributosItemCreditoFiscal.setValor(tributosItemJson.getBigDecimal(VALOR));} 			catch (Exception e) {errorMessages.append(e);}
-			resumen.getTributos().add(tributosItemCreditoFiscal);						
-		}
-
-		try {resumen.setTotalNoSuj(resumenJson.getBigDecimal(TOTALNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setTotalExenta(resumenJson.getBigDecimal(TOTALEXENTA));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setTotalGravada(resumenJson.getBigDecimal(TOTALGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setSubTotalVentas(resumenJson.getBigDecimal(SUBTOTALVENTAS));} 			catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setDescuNoSuj(resumenJson.getBigDecimal(DESCUNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 					catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setDescuGravada(resumenJson.getBigDecimal(DESCUGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setIvaRete1(resumenJson.getBigDecimal(IVARETE1));} 						catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} 	catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 						catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setIvaPerci1(resumenJson.getBigDecimal(IVAPERCI1));} 						catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setDescu(resumenJson.getBigDecimal(DESCU));} 								catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalCompra(resumenJson.getBigDecimal(TOTALCOMPRA));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setObservaciones(resumenJson.getString(OBSERVACIONES));} 						catch (Exception e) {errorMessages.append(e);}
 
 		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
 		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
@@ -356,24 +296,12 @@ public class FacturaSujetoExcluido extends EDocument {
 		try {newPagosItem.setReferencia(pagosItemJson.getString(REFERENCIA));} 		catch (Exception e) {errorMessages.append(e);}
 		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 				catch (Exception e) {errorMessages.append(e);}
 		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 				catch (Exception e) {errorMessages.append(e);}
-
+		resumen.getPagos().add(newPagosItem);
+		
+		
 
 		System.out.println("End CreditoFiscal.fillResumen()"); 
 		return errorMessages;
-	}
-
-	/**
-	 * @return the extension
-	 */
-	public ExtensionFacturaSujetoExcluido getExtension() {
-		return extension;
-	}
-
-	/**
-	 * @param extension the extension to set
-	 */
-	public void setExtension(ExtensionFacturaSujetoExcluido extension) {
-		this.extension = extension;
 	}
 
 	/**
@@ -388,20 +316,12 @@ public class FacturaSujetoExcluido extends EDocument {
 	}
 
 
-	public SujetoExcluidoFacturaSujetoExcluido getSujetoExcluidoFacturaNoSujeto() {
+	public SujetoExcluidoFacturaSujetoExcluido getSujetoExcluido() {
 		return sujetoExcluido;
 	}
 
-	public void setSujetoExcluidoFacturaNoSujeto(SujetoExcluidoFacturaSujetoExcluido sujetoExcluidoFacturaNoSujeto) {
+	public void setSujetoExcluido(SujetoExcluidoFacturaSujetoExcluido sujetoExcluidoFacturaNoSujeto) {
 		this.sujetoExcluido = sujetoExcluidoFacturaNoSujeto;
-	}
-
-	public List<OtrosDocumentosItemFacturaSujetoExcluido> getOtrosDocumentos() {
-		return otrosDocumentos;
-	}
-
-	public void setOtrosDocumentos(List<OtrosDocumentosItemFacturaSujetoExcluido> otrosDocumentos) {
-		this.otrosDocumentos = otrosDocumentos;
 	}
 
 	/**

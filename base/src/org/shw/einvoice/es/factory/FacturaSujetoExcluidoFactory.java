@@ -17,62 +17,61 @@ import org.compiere.model.MBPartnerLocation;
 import org.compiere.model.MClient;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceLine;
-import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
-import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.anulacionv2.Anulacion;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.CuerpoDocumentoItemFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.EmisorFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.FacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.IdentificacionFacturaSujetoExcluido;
-import org.shw.einvoice.es.fefsefacturasujetoexcluido.ReceptorFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.ResumenFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.SujetoExcluidoFacturaSujetoExcluido;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.model.MLCOInvoiceWithholding;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
-	FacturaSujetoExcluido facturaNoSujeto;
+	FacturaSujetoExcluido facturaSujetoExcluido;
 	MInvoice invoice;
 	
 	public FacturaSujetoExcluidoFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
 		super(trxName, contextProperties, client, orgInfo);
 		this.invoice = invoice;
-		facturaNoSujeto = new FacturaSujetoExcluido();
+		facturaSujetoExcluido = new FacturaSujetoExcluido();
 		}
 
 	public FacturaSujetoExcluido generateEDocument() {
 		System.out.println("Factura: start generating and filling the Document");
 		String result="";
-		facturaNoSujeto = new FacturaSujetoExcluido();
+		facturaSujetoExcluido = new FacturaSujetoExcluido();
 
 		System.out.println("Instatiate, fill and verify Identificacion");
-		IdentificacionFacturaSujetoExcluido identification = facturaNoSujeto.getIdentificacion();
+		IdentificacionFacturaSujetoExcluido identification = facturaSujetoExcluido.getIdentificacion();
 		if(identification!=null) {
-			facturaNoSujeto.errorMessages.append(facturaNoSujeto.fillIdentification(jsonInputToFactory));
+			facturaSujetoExcluido.errorMessages.append(facturaSujetoExcluido.fillIdentification(jsonInputToFactory));
 			result = identification.validateValues();
 			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-				facturaNoSujeto.errorMessages.append(result);
+				facturaSujetoExcluido.errorMessages.append(result);
 			}
 		}
 		
 
 		System.out.println("Instatiate, fill and verify Sujeto Excluido");
-		SujetoExcluidoFacturaSujetoExcluido sujetoExcluido = facturaNoSujeto.getSujetoExcluidoFacturaNoSujeto();
+		SujetoExcluidoFacturaSujetoExcluido sujetoExcluido = facturaSujetoExcluido.getSujetoExcluido();
 		if(sujetoExcluido!=null) {
-			facturaNoSujeto.errorMessages.append(facturaNoSujeto.fillIdentification(jsonInputToFactory));
+			facturaSujetoExcluido.errorMessages.append(facturaSujetoExcluido.fillSujetoExcluido(jsonInputToFactory));
 			result = sujetoExcluido.validateValues();
 			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-				facturaNoSujeto.errorMessages.append(result);
+				facturaSujetoExcluido.errorMessages.append(result);
 			}
 		}
 		
@@ -90,12 +89,12 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 //		}
 
 		System.out.println("Instatiate, fill and verify Emisor");
-		EmisorFacturaSujetoExcluido emisor = facturaNoSujeto.getEmisor();
+		EmisorFacturaSujetoExcluido emisor = facturaSujetoExcluido.getEmisor();
 		if(emisor!=null) {
-			facturaNoSujeto.fillEmisor(jsonInputToFactory);
+			facturaSujetoExcluido.fillEmisor(jsonInputToFactory);
 			result = emisor.validateValues();
 			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-				facturaNoSujeto.errorMessages.append(result);
+				facturaSujetoExcluido.errorMessages.append(result);
 			}
 		}
 		
@@ -122,39 +121,39 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 //		}
 
 		System.out.println("Instatiate, fill and verify Cuerpo Documento");
-		List<CuerpoDocumentoItemFacturaSujetoExcluido> cuerpoDocumento = facturaNoSujeto.getCuerpoDocumento();
+		List<CuerpoDocumentoItemFacturaSujetoExcluido> cuerpoDocumento = facturaSujetoExcluido.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
-			facturaNoSujeto.fillCuerpoDocumento(jsonInputToFactory);
+			facturaSujetoExcluido.fillCuerpoDocumento(jsonInputToFactory);
 			
 			cuerpoDocumento.stream().forEach( cuerpoDocumentoItem -> { 
 				String resultLambda = cuerpoDocumentoItem.validateValues();
 					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-						facturaNoSujeto.errorMessages.append(resultLambda);
+						facturaSujetoExcluido.errorMessages.append(resultLambda);
 					}
 				} 
 			);
 		}
 
 		System.out.println("Instatiate, fill and verify Resumen");
-		ResumenFacturaSujetoExcluido resumen = facturaNoSujeto.getResumen();
+		ResumenFacturaSujetoExcluido resumen = facturaSujetoExcluido.getResumen();
 		if(resumen!=null) {
-			facturaNoSujeto.fillResumen(jsonInputToFactory);
+			facturaSujetoExcluido.fillResumen(jsonInputToFactory);
 			result = resumen.validateValues();
 			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-				facturaNoSujeto.errorMessages.append(result);
+				facturaSujetoExcluido.errorMessages.append(result);
 			}
 		}
 		
-
-		System.out.println("Instatiate, fill and verify Receptor");
-		ReceptorFacturaSujetoExcluido receptor = facturaNoSujeto.getReceptor();
-		if(receptor!=null) {
-			facturaNoSujeto.fillReceptor(jsonInputToFactory);
-			result = receptor.validateValues();
-			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-				facturaNoSujeto.errorMessages.append(result);
-			}
-		}
+//
+//		System.out.println("Instatiate, fill and verify Receptor");
+//		ReceptorFacturaSujetoExcluido receptor = facturaSujetoExcluido.getReceptor();
+//		if(receptor!=null) {
+//			facturaSujetoExcluido.fillReceptor(jsonInputToFactory);
+//			result = receptor.validateValues();
+//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+//				facturaSujetoExcluido.errorMessages.append(result);
+//			}
+//		}
 		
 //		Extension extension = facturaNoSujeto.getExtension();
 //		if(extension!=null) {
@@ -196,13 +195,13 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 //			}
 //		}
 
-		facturaNoSujeto.validateValues();
+		facturaSujetoExcluido.validateValues();
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-			facturaNoSujeto.errorMessages.append(result);
+			facturaSujetoExcluido.errorMessages.append(result);
 		}
 
 		System.out.println("Factura: end generating and filling the Document");
-		return facturaNoSujeto;
+		return facturaSujetoExcluido;
 	}
 
 	@Override
@@ -211,7 +210,7 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 		jsonInputToFactory = new JSONObject();
 
 		jsonInputToFactory.put(FacturaSujetoExcluido.IDENTIFICACION, generateIdentificationInputData());
-		jsonInputToFactory.put(FacturaSujetoExcluido.RECEPTOR, generateReceptorInputData());
+		jsonInputToFactory.put(FacturaSujetoExcluido.SUJETOEXCLUIDO, generateSujetoExcluidoInputData());
 		jsonInputToFactory.put(FacturaSujetoExcluido.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(FacturaSujetoExcluido.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(FacturaSujetoExcluido.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
@@ -275,8 +274,6 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 		jsonObjectEmisor.put(FacturaSujetoExcluido.NOMBRE, client.getName());
 		jsonObjectEmisor.put(FacturaSujetoExcluido.CODACTIVIDAD, client.getE_Activity().getValue());
 		jsonObjectEmisor.put(FacturaSujetoExcluido.DESCACTIVIDAD, client.getE_Activity().getName());
-		jsonObjectEmisor.put(FacturaSujetoExcluido.NOMBRECOMERCIAL, client.getDescription());
-		jsonObjectEmisor.put(FacturaSujetoExcluido.TIPOESTABLECIMIENTO, client.getE_PlantType().getValue());
 
 		JSONObject jsonDireccion = new JSONObject();
 		jsonDireccion.put(FacturaSujetoExcluido.DEPARTAMENTO, orgInfo.getC_Location().getC_City().getC_Region().getValue());
@@ -286,41 +283,47 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 		
 		jsonObjectEmisor.put(FacturaSujetoExcluido.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(FacturaSujetoExcluido.CORREO, client.getEMail());
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODESTABLEMH, "");								// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODESTABLE, client.getE_PlantType_ID());								// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODPUNTOVENTAMH, "");							// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODPUNTOVENTA, "");							// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(FacturaSujetoExcluido.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CORREO, client.getEMail());
+
 
 		System.out.println("Factura: end collecting JSON data for Emisor");
 		return jsonObjectEmisor;
 		
 	}
-	
-	private JSONObject generateReceptorInputData() {
-		System.out.println("Factura: start collecting JSON data for Receptor");
+	private JSONObject generateSujetoExcluidoInputData() {
+		System.out.println("Factura: start collecting JSON data for Sujeto Excluido");
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
 			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Facturacion Electronica"; 
-			facturaNoSujeto.errorMessages.append(errorMessage);
+			facturaSujetoExcluido.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
 		
-		JSONObject jsonObjectReceptor = new JSONObject();
+		JSONObject jsonObjectSujetoExcluido = new JSONObject();
 		
-		jsonObjectReceptor.put(FacturaSujetoExcluido.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
+		jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
 		if (partner.getTaxID() != null) {
-			jsonObjectReceptor.put(FacturaSujetoExcluido.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
-			jsonObjectReceptor.put(FacturaSujetoExcluido.NOMBRE, partner.getName());			
+			jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+			jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.NOMBRE, partner.getName());			
 		}
 		else {
 			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta NIT"; 
-			facturaNoSujeto.errorMessages.append(errorMessage);
+			facturaSujetoExcluido.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
 		
 		if (partner.getE_Activity_ID()>0) {
-			jsonObjectReceptor.put(FacturaSujetoExcluido.CODACTIVIDAD, partner.getE_Activity().getValue());
-			jsonObjectReceptor.put(FacturaSujetoExcluido.DESCACTIVIDAD, partner.getE_Activity().getName());
+			jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.CODACTIVIDAD, partner.getE_Activity().getValue());
+			jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.DESCACTIVIDAD, partner.getE_Activity().getName());
 		} else  {
-			jsonObjectReceptor.put(FacturaSujetoExcluido.CODACTIVIDAD, "");
-			jsonObjectReceptor.put(FacturaSujetoExcluido.DESCACTIVIDAD, "");
+			jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.CODACTIVIDAD, "");
+			jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.DESCACTIVIDAD, "");
 		}
 
 		JSONObject jsonDireccion = new JSONObject();
@@ -345,101 +348,58 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 			jsonDireccion.put(FacturaSujetoExcluido.MUNICIPIO, municipio);
 			jsonDireccion.put(FacturaSujetoExcluido.COMPLEMENTO, complemento);
 		}		
-		jsonObjectReceptor.put(FacturaSujetoExcluido.DIRECCION, jsonDireccion);
+		jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.DIRECCION, jsonDireccion);
 		
-		jsonObjectReceptor.put(FacturaSujetoExcluido.TELEFONO, client.get_ValueAsString("phone"));
-		jsonObjectReceptor.put(FacturaSujetoExcluido.CORREO, partner.get_ValueAsString("EMail"));		
+		jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectSujetoExcluido.put(FacturaSujetoExcluido.CORREO, partner.get_ValueAsString("EMail"));		
 
 		System.out.println("Factura: end collecting JSON data for Receptor");
-		return jsonObjectReceptor;
+		return jsonObjectSujetoExcluido;
 		
 	}
 	
 	private JSONObject generateResumenInputData() {
 		System.out.println("Factura Sujeto Excluido: start collecting JSON data for Resumen");
-		BigDecimal totalNoSuj 	= Env.ZERO;
-		BigDecimal totalExenta 	= Env.ZERO;
-		BigDecimal totalGravada = Env.ZERO;		
-		BigDecimal totalIVA 	= Env.ZERO;
+		BigDecimal 			totalDescu 	= Env.ZERO;
+		BigDecimal 			ivaRete1	= Env.ZERO;
+		BigDecimal 			reteRenta 	= Env.ZERO;
+		BigDecimal 			totalCompra	= invoice.getGrandTotal();
+		BigDecimal			descu		= Env.ZERO;
+		BigDecimal			subTotal	= invoice.getGrandTotal();
+
+		String 	   			totalLetras;
 		
-		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
+		totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 
-		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
-				.setParameters(invoice.getC_Invoice_ID())
-				.list();
-
-//		JSONArray jsonTributosArray = new JSONArray();
-//		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-//				totalNoSuj = invoiceTax.getTaxBaseAmt();
-//				JSONObject jsonTributoItem = new JSONObject();				
-//				jsonTributoItem.put(FacturaNoSujeto.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
-//				jsonTributoItem.put(FacturaNoSujeto.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
-//				jsonTributoItem.put(FacturaNoSujeto.VALOR), invoiceTax.getTaxAmt());
-//				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
-//			}
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
-//				totalExenta = invoiceTax.getTaxBaseAmt();
-//			}
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
-//				totalGravada = invoiceTax.getTaxBaseAmt();
-//				totalIVA = invoiceTax.getTaxAmt();
-//			}
-//		}
+		
 				
 		JSONObject jsonObjectResumen = new JSONObject();
 		
 
 		JSONArray jsonTributosArray = new JSONArray();
-		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("RET"))
-				continue;
-			JSONObject jsonTributoItem = new JSONObject();		
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				totalNoSuj = invoiceTax.getTaxBaseAmt();		
-				jsonTributoItem.put(FacturaSujetoExcluido.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(FacturaSujetoExcluido.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(FacturaSujetoExcluido.VALOR, invoiceTax.getTaxAmt());
-				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
-			}
-			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
-				totalExenta = invoiceTax.getTaxBaseAmt();
-				jsonTributoItem.put(FacturaSujetoExcluido.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(FacturaSujetoExcluido.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(FacturaSujetoExcluido.VALOR, invoiceTax.getTaxAmt());
-				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
-			}
-			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
-				totalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();	
-				//jsonTributoItem.put(FacturaNoSujeto.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				//jsonTributoItem.put(FacturaNoSujeto.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				//jsonTributoItem.put(FacturaNoSujeto.VALOR, invoiceTax.getTaxAmt());
-			}
+		List<MLCOInvoiceWithholding> invoiceWithholdings = new Query(contextProperties, MLCOInvoiceWithholding.Table_Name, 
+				"C_Invoice_ID=?", trxName)
+				.setParameters(invoice.getC_Invoice_ID())
+				.list();
+		for (MLCOInvoiceWithholding invoiceWithholding:invoiceWithholdings) {
+			reteRenta = reteRenta.add(invoiceWithholding.getTaxAmt());
+			subTotal = totalCompra.add(invoiceWithholding.getTaxAmt());
 		}
 		// (!jsonTributosArray.isEmpty())
 		jsonObjectResumen.put(FacturaSujetoExcluido.TRIBUTOS, jsonTributosArray);
 		
 		
-		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALNOSUJ, totalNoSuj);
-		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALEXENTA, totalExenta);
-		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALGRAVADA, totalGravada);
-		jsonObjectResumen.put(FacturaSujetoExcluido.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(FacturaSujetoExcluido.DESCUNOSUJ, Env.ZERO);
-		jsonObjectResumen.put(FacturaSujetoExcluido.DESCUEXENTA, Env.ZERO);
-		jsonObjectResumen.put(FacturaSujetoExcluido.DESCUGRAVADA, Env.ZERO);
-		jsonObjectResumen.put(FacturaSujetoExcluido.PORCENTAJEDESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(FacturaSujetoExcluido.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(FacturaSujetoExcluido.IVARETE1, Env.ZERO);
+		jsonObjectResumen.put(FacturaSujetoExcluido.IVARETE1, ivaRete1);
 		jsonObjectResumen.put(FacturaSujetoExcluido.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
 		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALPAGAR, invoice.getGrandTotal());
-		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALLETRAS, totalLetras);
-		jsonObjectResumen.put(FacturaSujetoExcluido.SALDOFAVOR, Env.ZERO);
+		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALLETRAS, totalLetras);		
 		jsonObjectResumen.put(FacturaSujetoExcluido.CONDICIONOPERACION, FacturaSujetoExcluido.CONDICIONOPERACION_A_CREDITO);
-		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALDESCU, Env.ZERO);
-		jsonObjectResumen.put(FacturaSujetoExcluido.RETERENTA, Env.ZERO);
-		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALIVA, totalIVA);
+		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALDESCU, totalDescu);
+		jsonObjectResumen.put(FacturaSujetoExcluido.DESCU, descu);
+		jsonObjectResumen.put(FacturaSujetoExcluido.RETERENTA, reteRenta);
+		jsonObjectResumen.put(FacturaSujetoExcluido.TOTALCOMPRA, totalCompra);
+		jsonObjectResumen.put(FacturaSujetoExcluido.SUBTOTAL, subTotal);
+		jsonObjectResumen.put(FacturaSujetoExcluido.OBSERVACIONES, invoice.getDescription());
 
 		JSONArray jsonArrayPagos = new JSONArray();
 			JSONObject jsonPago = new JSONObject();
@@ -449,8 +409,11 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 			jsonPago.put(FacturaSujetoExcluido.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
 			jsonPago.put(FacturaSujetoExcluido.PERIODO, invoice.getC_PaymentTerm().getNetDays());
 		jsonArrayPagos.put(jsonPago);
+		
+		
 
 		jsonObjectResumen.put(FacturaSujetoExcluido.PAGOS, jsonArrayPagos);
+
 		
 
 		System.out.println("Factura: end collecting JSON data for Resumen");
@@ -466,44 +429,22 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
 			
-			BigDecimal ventaNoSuj 	= Env.ZERO;
-			BigDecimal ventaExenta 	= Env.ZERO;
-			BigDecimal ventaGravada = Env.ONEHUNDRED;
-			BigDecimal ivaItem 		= Env.ZERO;
-			
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
-				ventaNoSuj = invoiceLine.getLineNetAmt();
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
-				ventaExenta = invoiceLine.getLineNetAmt();
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
-				ventaGravada = invoiceLine.getLineNetAmt(); 
-				MTax tax = (MTax)invoiceLine.getC_Tax();
-				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
-					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
-			}
+			BigDecimal compra 	= Env.ZERO;
+			String description = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
+			String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
+			compra = invoiceLine.getLineTotalAmt();
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.NUMITEM, invoiceLine.getLine()/10);
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.TIPOITEM, 2);
-			//jsonCuerpoDocumentoItem.put(FacturaNoSujeto.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.CANTIDAD, invoiceLine.getQtyInvoiced());
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.CODIGOTRIBUTO, "20");  // String codTributo = "20";
-			
-			JSONArray jsonTributosArray = new JSONArray();
-			jsonCuerpoDocumentoItem. put( FacturaSujetoExcluido.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
-			
+			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.CODIGO, codigo.substring(0,10));
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.UNIMEDIDA, 1);
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
+			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.DESCRIPCION, description);
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.PRECIOUNI, invoiceLine.getPriceActual());
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.MONTODESCU, Env.ZERO);
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.VENTANOSUJ, ventaNoSuj);
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.VENTAEXENTA, ventaExenta);
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.VENTAGRAVADA, ventaGravada);
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.PSV, invoiceLine.getTaxAmt());
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.NOGRAVADO, ventaNoSuj.add(ventaExenta));
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.IVAITEM, ivaItem);
+			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.COMPRA, compra);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");
@@ -518,7 +459,7 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 	public String createJsonString() throws Exception {
 		System.out.println("Factura: start generating JSON object from Document");
     	ObjectMapper objectMapper = new ObjectMapper();
-    	String facturaAsStringTmp = objectMapper.writeValueAsString(facturaNoSujeto);
+    	String facturaAsStringTmp = objectMapper.writeValueAsString(facturaSujetoExcluido);
         JSONObject facturaAsJson  = new JSONObject(facturaAsStringTmp);
         
         facturaAsJson.remove(FacturaSujetoExcluido.ERRORMESSAGES);
@@ -530,7 +471,8 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
         		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
         		replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
         		replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 
-        				"\"extension\":null,");
+        				"\"extension\":null,").
+        		replace(",\"documentoRelacionado\":null","");
 
 		System.out.println("Factura: generated JSON object from Document:");
 		System.out.println(facturaAsStringFinal);
@@ -548,7 +490,7 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 
 	@Override
 	public StringBuffer getEDocumentErrorMessages() {
-		 return facturaNoSujeto.errorMessages;
+		 return facturaSujetoExcluido.errorMessages;
 	 }
 	
 	public boolean writeToFile (String json, MInvoice invoice, String directory) {

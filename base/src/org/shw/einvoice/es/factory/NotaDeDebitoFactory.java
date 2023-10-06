@@ -357,11 +357,11 @@ public class NotaDeDebitoFactory extends EDocumentFactory {
 	
 	private JSONObject generateResumenInputData() {
 		System.out.println("CreditoFiscal: start collecting JSON data for Resumen");
-		BigDecimal totalNoSuj 	= Env.ZERO;
-		BigDecimal totalExenta 	= Env.ZERO;
-		BigDecimal totalGravada = Env.ZERO;	
-		BigDecimal ivaRete1 	= Env.ZERO;
-		String numPagoElectronico = "";
+		BigDecimal totalNoSuj 	  = Env.ZERO;
+		BigDecimal totalExenta 	  = Env.ZERO;
+		BigDecimal totalGravada   = Env.ZERO;	
+		BigDecimal ivaRete1 	  = Env.ZERO;
+		String numPagoElectronico = "";			// TODO: get correct data for this variable
 
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 

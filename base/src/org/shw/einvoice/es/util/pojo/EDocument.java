@@ -122,6 +122,13 @@ public class EDocument {
 	public static final String SELLORECIBIDO		= "selloRecibido";
 	public static final String MONTOIVA				= "montoIva";
 	public static final String CODIGOGENERACIONR	= "codigoGeneracionR";
+	public static final String TIPOANULACION 		= "tipoAnulacion";
+	public static final String NOMBRERESPONSABLE	= "nombreResponsable";
+	public static final String TIPDOCRESPONSABLE	= "tipDocResponsable";
+	public static final String NUMDOCRESPONSABLE	= "numDocResponsable";
+	public static final String NOMBRESOLICITA		= "nombreSolicita";
+	public static final String TIPDOCSOLICITA		= "tipDocSolicita";
+	public static final String NUMDOCSOLICITA		= "numDocSolicita";
 	
 	
 	public static final int		TIPOMODELO_NOCONTIGENCIA			=1;

@@ -173,7 +173,14 @@ public class AnulacionFactory extends EDocumentFactory {
 		System.out.println("Start collecting JSON data for Motivo");
 		
 		JSONObject jsonObjectMotivo = new JSONObject();
-		jsonObjectMotivo.put(Anulacion.MOTIVOANULACION, invoice.getDateAcct().toString().substring(0, 10));
+		jsonObjectMotivo.put(Anulacion.TIPOANULACION, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.MOTIVOANULACION, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.NOMBRERESPONSABLE, "CCCCCCCCCCCCCCCCCCCCCCCCCc");	// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.TIPDOCRESPONSABLE, "CCCCCCCCCCCCCCCCCCCCCCCCCc");	// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.NUMDOCRESPONSABLE, "CCCCCCCCCCCCCCCCCCCCCCCCCc");	// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.NOMBRESOLICITA, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.TIPDOCSOLICITA, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.NUMDOCSOLICITA, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
 
 		System.out.println("Finish collecting JSON data for Maotivo");
 		return jsonObjectMotivo;

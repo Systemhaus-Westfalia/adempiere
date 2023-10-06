@@ -57,12 +57,12 @@ public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
 
 		invoicesList.forEach((key, invoice) -> {
 			MDocType docType = (MDocType)invoice.getC_DocType();
-			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000003)
+			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000003) {
+				
 				processingCCFF(invoice);
+			}
 			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000004)
 				processingFactura(invoice);
-
-
 			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000006)
 				processingFacturaExportacion(invoice);
 		});;

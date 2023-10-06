@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -26,7 +27,9 @@ import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.feccfcreditofiscalv3.CreditoFiscal;
 import org.shw.einvoice.es.fencnotadecreditov1.CuerpoDocumentoItemNotaDeCredito;
+import org.shw.einvoice.es.fencnotadecreditov1.DocumentoRelacionadoItemNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.EmisorNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.NotaDeCredito;
@@ -46,12 +49,12 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 	public NotaDeCreditoFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
 		super(trxName, contextProperties, client, orgInfo);
 		this.invoice = invoice;
+		notaDeCredito = new NotaDeCredito();
 	}
 
 	public NotaDeCredito generateEDocument() {
 		System.out.println("Nota de Credito: start generating and filling the Document");
 		String result="";
-		notaDeCredito = new NotaDeCredito();
 
 		System.out.println("Instatiate, fill and verify Identificacion");		
 		IdentificacionNotaDeCredito identification = notaDeCredito.getIdentificacion();
@@ -109,6 +112,20 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 //		}
 
 		System.out.println("Instatiate, fill and verify Cuerpo Documento");
+		List<DocumentoRelacionadoItemNotaDeCredito> documentosRelacionados = notaDeCredito.getDocumentoRelacionado();
+		if(documentosRelacionados!=null) {
+			notaDeCredito.fillDocumentosRelacionados(jsonInputToFactory);
+			
+			documentosRelacionados.stream().forEach( documentoRelacionadoItem -> { 
+				String resultLambda = documentoRelacionadoItem.validateValues();
+					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+						notaDeCredito.errorMessages.append(resultLambda);
+					}
+				} 
+			);
+		}
+		
+		System.out.println("Instatiate, fill and verify Documento Relacionados");
 		List<CuerpoDocumentoItemNotaDeCredito> cuerpoDocumento = notaDeCredito.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
 			notaDeCredito.fillCuerpoDocumento(jsonInputToFactory);
@@ -202,6 +219,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		jsonInputToFactory.put(NotaDeCredito.EMISOR, generateEmisorInputData());
 		jsonInputToFactory.put(NotaDeCredito.RESUMEN, generateResumenInputData());
 		jsonInputToFactory.put(NotaDeCredito.CUERPODOCUMENTO, generateCuerpoDocumentoInputData());
+		jsonInputToFactory.put(NotaDeCredito.DOCUMENTORELACIONADO, generateDocumentoRelacionadoInputData());
 		
 		System.out.println("Generated JSON object from Invoice:");
 		System.out.println(jsonInputToFactory.toString());
@@ -225,7 +243,8 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
 		String documentno = invoice.getDocumentNo().replace(prefix,"");
 		int position = documentno.indexOf("_");
-		documentno = documentno.substring(0,position);
+		if (position>=0)
+			documentno = documentno.substring(0,position);
 		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
 		String duns = orgInfo.getDUNS().replace("-", "");
 		
@@ -281,27 +300,28 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 	}
 	
 	private JSONObject generateReceptorInputData() {
-		System.out.println("Start collecting JSON data for Receptor");
+		System.out.println("CreditoFiscal: start collecting JSON data for Receptor");
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
-			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Nota de Credito Electronica"; 
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Facturacion Electronica"; 
 			notaDeCredito.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
 		
 		JSONObject jsonObjectReceptor = new JSONObject();
-		
-		jsonObjectReceptor.put(NotaDeCredito.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
-		jsonObjectReceptor.put(NotaDeCredito.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+		if (partner.getTaxID() == null && partner.getDUNS() == null) {
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Facturacion Electronica"; 
+			notaDeCredito.errorMessages.append(errorMessage);
+			System.out.println(errorMessage);
+		}
+		jsonObjectReceptor.put(NotaDeCredito.NIT, partner.getTaxID().replace("-", ""));
+		jsonObjectReceptor.put(NotaDeCredito.NRC, partner.getDUNS().trim().replace("-", ""));
 		jsonObjectReceptor.put(NotaDeCredito.NOMBRE, partner.getName());
 		
 		if (partner.getE_Activity_ID()>0) {
 			jsonObjectReceptor.put(NotaDeCredito.CODACTIVIDAD, partner.getE_Activity().getValue());
 			jsonObjectReceptor.put(NotaDeCredito.DESCACTIVIDAD, partner.getE_Activity().getName());
-		} else  {
-			jsonObjectReceptor.put(NotaDeCredito.CODACTIVIDAD, "");
-			jsonObjectReceptor.put(NotaDeCredito.DESCACTIVIDAD, "");
 		}
 
 		JSONObject jsonDireccion = new JSONObject();
@@ -331,34 +351,55 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		jsonObjectReceptor.put(NotaDeCredito.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(NotaDeCredito.CORREO, partner.get_ValueAsString("EMail"));		
 
-		System.out.println("Finish collecting JSON data for Receptor");
+		System.out.println("NotaDeCredito: end collecting JSON data for Receptor");
 		return jsonObjectReceptor;
 		
 	}
 	
 	private JSONObject generateResumenInputData() {
-		System.out.println("Start collecting JSON data for Resumen");
+		System.out.println("CreditoFiscal: start collecting JSON data for Resumen");
 		BigDecimal totalNoSuj 	= Env.ZERO;
 		BigDecimal totalExenta 	= Env.ZERO;
-		BigDecimal totalGravada = Env.ZERO;		
-		BigDecimal totalIVA 	= Env.ZERO;
-		List<MInvoiceTax> invoiceTaxes = null;
+		BigDecimal totalGravada = Env.ZERO;	
+		BigDecimal ivaRete1 	= Env.ZERO;
 
-		String totalLetras = Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
+		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 
-		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				totalNoSuj = invoiceTax.getTaxBaseAmt();
-			}
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT"))
-				totalExenta = invoiceTax.getTaxBaseAmt();
-			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA") ) {
-				totalIVA = totalIVA.add(invoiceTax.getTaxAmt());
-				totalGravada = totalGravada.add(invoiceTax.getTaxBaseAmt());
-			}
-		}
-
+		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
+				.setParameters(invoice.getC_Invoice_ID())
+				.list();
 		JSONObject jsonObjectResumen = new JSONObject();
+
+
+		JSONArray jsonTributosArray = new JSONArray();
+		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("RET")) {
+				ivaRete1 = ivaRete1.add(invoiceTax.getTaxAmt().multiply(new BigDecimal(-1)));
+			}
+			JSONObject jsonTributoItem = new JSONObject();		
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
+				totalNoSuj = invoiceTax.getTaxBaseAmt();		
+				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
+			}
+			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
+				totalExenta = invoiceTax.getTaxBaseAmt();
+				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
+			}
+			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
+				totalGravada = invoiceTax.getTaxBaseAmt();
+				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
+			}
+			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
+		}
+		jsonObjectResumen.put(NotaDeCredito.TRIBUTOS, jsonTributosArray);
+
+
 		jsonObjectResumen.put(NotaDeCredito.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(NotaDeCredito.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(NotaDeCredito.TOTALGRAVADA, totalGravada);
@@ -366,15 +407,32 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		jsonObjectResumen.put(NotaDeCredito.DESCUNOSUJ, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.DESCUEXENTA, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.DESCUGRAVADA, Env.ZERO);
+		jsonObjectResumen.put(NotaDeCredito.PORCENTAJEDESCUENTO, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(NotaDeCredito.IVAPERCI1, Env.ZERO);
-		jsonObjectResumen.put(NotaDeCredito.IVARETE1, Env.ZERO);
+		jsonObjectResumen.put(NotaDeCredito.IVARETE1, ivaRete1);
 		jsonObjectResumen.put(NotaDeCredito.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(NotaDeCredito.CONDICIONOPERACION, 1);
+		jsonObjectResumen.put(NotaDeCredito.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
+		jsonObjectResumen.put(NotaDeCredito.TOTALPAGAR, invoice.getGrandTotal());
+		jsonObjectResumen.put(NotaDeCredito.TOTALLETRAS, totalLetras);
+		jsonObjectResumen.put(NotaDeCredito.SALDOFAVOR, Env.ZERO);
+		jsonObjectResumen.put(NotaDeCredito.CONDICIONOPERACION, NotaDeCredito.CONDICIONOPERACION_A_CREDITO);
 		jsonObjectResumen.put(NotaDeCredito.TOTALDESCU, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.RETERENTA, Env.ZERO);
+		jsonObjectResumen.put(NotaDeCredito.IVAPERCI1, Env.ZERO);
 
-		System.out.println("Finish collecting JSON data for Resumen");
+		JSONArray jsonArrayPagos = new JSONArray();
+		JSONObject jsonPago = new JSONObject();
+		jsonPago.put(NotaDeCredito.CODIGO, "05");
+		jsonPago.put(NotaDeCredito.MONTOPAGO, invoice.getGrandTotal());
+		jsonPago.put(NotaDeCredito.REFERENCIA, "Transferencia_ Depósito Bancario");
+		jsonPago.put(NotaDeCredito.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
+		jsonPago.put(NotaDeCredito.PERIODO, invoice.getC_PaymentTerm().getNetDays());
+		jsonArrayPagos.put(jsonPago);
+
+		jsonObjectResumen.put(NotaDeCredito.PAGOS, jsonArrayPagos);
+
+
+		System.out.println("NotaDeCredito: end collecting JSON data for Resumen");
 		return jsonObjectResumen;
 
 	}
@@ -391,6 +449,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			BigDecimal ventaExenta 	= Env.ZERO;
 			BigDecimal ventaGravada = Env.ONEHUNDRED;
 			BigDecimal ivaItem 		= Env.ZERO;
+			MTax tax = (MTax)invoiceLine.getC_Tax();
 			
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
 				ventaNoSuj = invoiceLine.getLineNetAmt();
@@ -398,7 +457,6 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 				ventaExenta = invoiceLine.getLineNetAmt();
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				ventaGravada = invoiceLine.getLineNetAmt(); 
-				MTax tax = (MTax)invoiceLine.getC_Tax();
 				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
 					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
 			}
@@ -411,17 +469,17 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.CANTIDAD, invoiceLine.getQtyInvoiced());
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.CODTRIBUTO, "");  // String codTributo = "20";
-			
-			JSONArray jsonTributosArray = new JSONArray();
-			jsonCuerpoDocumentoItem. put( NotaDeCredito.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
-			
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.UNIMEDIDA, 1);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.PRECIOUNI, invoiceLine.getPriceActual());
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.MONTODESCU, Env.ZERO);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTANOSUJ, ventaNoSuj);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTAEXENTA, ventaExenta);
-			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTAGRAVADA, ventaGravada);
+			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTAGRAVADA, ventaGravada);	
+			
+			JSONArray jsonTributosArray = new JSONArray();
+			jsonTributosArray.put(tax.getE_Duties().getValue());
+			jsonCuerpoDocumentoItem. put( NotaDeCredito.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");			
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");
@@ -432,6 +490,31 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		System.out.println("Finish collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		
 		return jsonCuerpoDocumento;
+	}
+	
+	private JSONObject generateDocumentoRelacionadoInputData() {
+		System.out.println("Start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		JSONObject jsonDocumentoRelacionado = new JSONObject();
+		JSONArray jsonDocumentoRelacionadoArray = new JSONArray();
+
+		HashMap<Integer,MInvoice> invoiceIds = new HashMap<Integer, MInvoice>();
+		for (MInvoiceLine invoiceLine:invoice.getLines()) {
+			MInvoiceLine invoiceLineOrg = new MInvoiceLine(contextProperties, invoiceLine.getRef_InvoiceLine_ID(), null);
+			invoiceIds.put(invoiceLineOrg.getC_Invoice_ID(), (MInvoice)invoiceLine.getReversalLine().getC_Invoice());
+		}  
+		for (MInvoice invoiceOrginal : invoiceIds.values()) {
+			JSONObject jsonDocumentoRelacionadoItem = new JSONObject();
+			jsonDocumentoRelacionadoItem.put(NotaDeCredito.TIPODOCUMENTO, invoiceOrginal.getC_DocType().getE_DocType().getValue());
+			jsonDocumentoRelacionadoItem.put(NotaDeCredito.TIPOGENERACION, 1);
+			jsonDocumentoRelacionadoItem.put(NotaDeCredito.NUMERODOCUMENTO, invoiceOrginal.getDocumentNo());
+			jsonDocumentoRelacionadoItem.put(NotaDeCredito.FECEMI, invoiceOrginal.getDateAcct().toString().substring(0, 10));
+			jsonDocumentoRelacionadoArray.put(jsonDocumentoRelacionadoItem);
+		}
+		
+		jsonDocumentoRelacionado.put(NotaDeCredito.DOCUMENTORELACIONADO, jsonDocumentoRelacionadoArray);
+		System.out.println("Finish collecting JSON data for Documento Relacionado. Document: " + invoice.getDocumentNo());
+		
+		return jsonDocumentoRelacionado;
 	}
 
 	public String createJsonString() throws Exception {

@@ -25,11 +25,13 @@ import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.fecrretencionv1.ApendiceItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.CuerpoDocumentoItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.EmisorRetencion;
+import org.shw.einvoice.es.fecrretencionv1.ExtensionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.IdentificacionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ResumenRetencion;
-import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
+import org.shw.einvoice.es.fecrretencionv1.Retencion;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
@@ -51,7 +53,7 @@ public class RetencionFactory extends EDocumentFactory {
 		String result="";
 		retencion = new Retencion();
 
-		System.out.println("Instatiate, fill and verify Identificacion");
+		System.out.println("Instantiate, fill and verify Identificacion");
 		IdentificacionRetencion identification = retencion.getIdentificacion();
 		if(identification!=null) {
 			retencion.errorMessages.append(retencion.fillIdentification(jsonInputToFactory));
@@ -61,20 +63,7 @@ public class RetencionFactory extends EDocumentFactory {
 			}
 		}
 		
-//		List<DocumentoRelacionadoItem> documentoRelacionado = factura.getDocumentoRelacionado();
-//		if(documentoRelacionado!=null) {
-//			errorMessages.append(factura.fillDocumentoRelacionado(jsonInputToFactory));
-//			
-//			documentoRelacionado.stream().forEach( documentoRelacionadoItem -> { 
-//					String resultLambda = documentoRelacionadoItem.validateValues();
-//					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-//						errorMessages.append(resultLambda);
-//					}
-//				} 
-//			);
-//		}
-
-		System.out.println("Instatiate, fill and verify Emisor");
+		System.out.println("Instantiate, fill and verify Emisor");
 		EmisorRetencion emisor = retencion.getEmisor();
 		if(emisor!=null) {
 			retencion.fillEmisor(jsonInputToFactory);
@@ -83,30 +72,8 @@ public class RetencionFactory extends EDocumentFactory {
 				retencion.errorMessages.append(result);
 			}
 		}
-		
-//		List<OtrosDocumentosItem> otrosDocumentos = factura.getOtrosDocumentos();
-//		if(otrosDocumentos!=null) {
-//			factura.fillOtrosDocumentos(jsonInputToFactory);
-//			
-//			otrosDocumentos.stream().forEach( otrosDocumentosItem -> { 
-//				String resultLambda = otrosDocumentosItem.validateValues();
-//					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-//						errorMessages.append(resultLambda);
-//					}
-//				} 
-//			);
-//		}
-		
-//		VentaTercero ventaTercero = factura.getVentaTercero();
-//		if(ventaTercero!=null) {
-//			factura.fillVentaTercero(jsonInputToFactory);
-//			result = ventaTercero.validateValues();
-//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-//				errorMessages.append(result);
-//			}
-//		}
 
-		System.out.println("Instatiate, fill and verify Cuerpo Documento");
+		System.out.println("Instantiate, fill and verify Cuerpo Documento");
 		List<CuerpoDocumentoItemRetencion> cuerpoDocumento = retencion.getCuerpoDocumento();
 		if(cuerpoDocumento!=null) {
 			retencion.fillCuerpoDocumento(jsonInputToFactory);
@@ -120,7 +87,7 @@ public class RetencionFactory extends EDocumentFactory {
 			);
 		}
 
-		System.out.println("Instatiate, fill and verify Resumen");
+		System.out.println("Instantiate, fill and verify Resumen");
 		ResumenRetencion resumen = retencion.getResumen();
 		if(resumen!=null) {
 			retencion.fillResumen(jsonInputToFactory);
@@ -129,46 +96,29 @@ public class RetencionFactory extends EDocumentFactory {
 				retencion.errorMessages.append(result);
 			}
 		}
-		
-//		Extension extension = factura.getExtension();
-//		if(extension!=null) {
-//			factura.fillExtension(jsonInputToFactory);
-//			result = extension.validateValues();
-//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-//				errorMessages.append(result);
-//			}
-//		}
-		
-//		List<ApendiceItem> apendice = factura.getApendice();
-//		if(apendice!=null) {
-//			factura.fillApendice(jsonInputToFactory);
-//			
-//			apendice.stream().forEach( apendiceItem -> { 
-//				String resultLambda = apendiceItem.validateValues();
-//					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-//						errorMessages.append(resultLambda);
-//					}
-//				} 
-//			);
-//		}
-		
-//		Documento documento = eDocument.getDocumento();
-//		if(documento!=null) {
-//			eDocument.fillDocumento(jsonInputToFactory);
-//			result = documento.validateValues();
-//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-//				errorMessages.append(result);
-//			}
-//		}
-		
-//		Motivo motivo = eDocument.getMotivo();
-//		if(documento!=null) {
-//			eDocument.fillMotivo(jsonInputToFactory);
-//			result = motivo.validateValues();
-//			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
-//				errorMessages.append(result);
-//			}
-//		}
+
+		System.out.println("Instantiate, fill and verify Extension");
+		ExtensionRetencion extension = retencion.getExtension();
+		if(extension!=null) {
+			retencion.fillExtension(jsonInputToFactory);
+			result = extension.validateValues();
+			if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+				retencion.errorMessages.append(result);
+			}
+		}
+//		
+		List<ApendiceItemRetencion> apendice = retencion.getApendice();
+		if(apendice!=null) {
+			retencion.fillApendice(jsonInputToFactory);
+			
+			apendice.stream().forEach( apendiceItem -> { 
+				String resultLambda = apendiceItem.validateValues();
+					if(! resultLambda.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
+						retencion.errorMessages.append(resultLambda);
+					}
+				} 
+			);
+		}
 
 		retencion.validateValues();
 		if(! result.equals(EDocumentUtils.VALIDATION_RESULT_OK)) {
@@ -204,14 +154,17 @@ public class RetencionFactory extends EDocumentFactory {
 		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
 		
 		JSONObject jsonObjectIdentificacion = new JSONObject();
+		jsonObjectIdentificacion.put(Retencion.AMBIENTE, "00");									// TODO: korrekte Daten einsetzen
+		jsonObjectIdentificacion.put(Retencion.TIPODTE, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
 		jsonObjectIdentificacion.put(Retencion.NUMEROCONTROL, numeroControl);
 		jsonObjectIdentificacion.put(Retencion.CODIGOGENERACION, codigoGeneracion);
-		jsonObjectIdentificacion.put(Retencion.TIPOMODELO, 1);
-		jsonObjectIdentificacion.put(Retencion.TIPOOPERACION, 1);
+		jsonObjectIdentificacion.put(Retencion.TIPOMODELO, 1);									// TODO: korrekte Daten einsetzen
+		jsonObjectIdentificacion.put(Retencion.TIPOOPERACION, 1);								// TODO: korrekte Daten einsetzen
+		jsonObjectIdentificacion.put(Retencion.TIPOCONTINGENCIA, 5);								// TODO: korrekte Daten einsetzen
+		jsonObjectIdentificacion.put(Retencion.MOTIVOCONTIN, "BBBBBBBBBBBBBBBBBBbbbbb");			// TODO: korrekte Daten einsetzen		
 		jsonObjectIdentificacion.put(Retencion.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
 		jsonObjectIdentificacion.put(Retencion.HOREMI, "00:00:00");
 		jsonObjectIdentificacion.put(Retencion.TIPOMONEDA, "USD");
-		jsonObjectIdentificacion.put(Retencion.AMBIENTE, "00");
 
 		System.out.println("Finish collecting JSON data for Identificacion");
 		return jsonObjectIdentificacion;
@@ -237,6 +190,10 @@ public class RetencionFactory extends EDocumentFactory {
 		jsonObjectEmisor.put(Retencion.DIRECCION, jsonDireccion);
 		
 		jsonObjectEmisor.put(Retencion.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectEmisor.put(Retencion.CODIGOMH, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Retencion.CODIGO, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Retencion.PUNTOVENTAMH, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Retencion.PUNTOVENTA, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
 		jsonObjectEmisor.put(Retencion.CORREO, client.getEMail());
 
 		System.out.println("Finish collecting JSON data for Emisor");
@@ -245,11 +202,11 @@ public class RetencionFactory extends EDocumentFactory {
 	}
 	
 	private JSONObject generateReceptorInputData() {
-		System.out.println("Start collecting JSON data for Receptor");
+		System.out.println("Retencion: start collecting JSON data for Receptor");
 
 		MBPartner partner = (MBPartner)invoice.getC_BPartner();
 		if (partner.getE_Activity_ID()<=0 || partner.getE_Recipient_Identification_ID() <= 0) {
-			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Retencioncion Electronica"; 
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta configuracion para Retencion Electronica"; 
 			retencion.errorMessages.append(errorMessage);
 			System.out.println(errorMessage);
 		}
@@ -257,8 +214,17 @@ public class RetencionFactory extends EDocumentFactory {
 		JSONObject jsonObjectReceptor = new JSONObject();
 		
 		jsonObjectReceptor.put(Retencion.TIPODOCUMENTO, partner.getE_Recipient_Identification().getValue());
-		jsonObjectReceptor.put(Retencion.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
-		jsonObjectReceptor.put(Retencion.NOMBRE, partner.getName());
+		if (partner.getTaxID() != null) {
+			jsonObjectReceptor.put(Retencion.NUMDOCUMENTO, partner.getTaxID().replace("-", ""));
+			jsonObjectReceptor.put(Retencion.NRC, partner.getDUNS().trim().replace("-", ""));
+			jsonObjectReceptor.put(Retencion.NOMBRE, partner.getName());	
+			jsonObjectReceptor.put(Retencion.NOMBRECOMERCIAL, client.getDescription());		
+		}
+		else {
+			String errorMessage = "Socio de Negocio " + partner.getName() + ": Falta NIT"; 
+			retencion.errorMessages.append(errorMessage);
+			System.out.println(errorMessage);
+		}
 		
 		if (partner.getE_Activity_ID()>0) {
 			jsonObjectReceptor.put(Retencion.CODACTIVIDAD, partner.getE_Activity().getValue());
@@ -295,18 +261,15 @@ public class RetencionFactory extends EDocumentFactory {
 		jsonObjectReceptor.put(Retencion.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(Retencion.CORREO, partner.get_ValueAsString("EMail"));		
 
-		System.out.println("Finish collecting JSON data for Receptor");
+		System.out.println("Retencion: end collecting JSON data for Receptor");
 		return jsonObjectReceptor;
 		
 	}
 	
-	private JSONObject generateResumenInputData() {
+	private JSONObject generateResumenInputData() {						// TODO: korrekte Daten einsetzen
 		System.out.println("Start collecting JSON data for Resumen");
 		BigDecimal totalNoSuj 	= Env.ZERO;
 		BigDecimal totalExenta 	= Env.ZERO;
-		BigDecimal totalGravada = Env.ZERO;		
-		BigDecimal totalIVA 	= Env.ZERO;
-		
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 
 		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
@@ -320,43 +283,12 @@ public class RetencionFactory extends EDocumentFactory {
 			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()==0.00) {
 				totalExenta = invoiceTax.getTaxBaseAmt();
 			}
-			if (!invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ") && invoiceTax.getC_Tax().getRate().doubleValue()!=0.00) {
-				totalGravada = invoiceTax.getTaxBaseAmt();
-				totalIVA = invoiceTax.getTaxAmt();
-			}
 		}
 				
 		JSONObject jsonObjectResumen = new JSONObject();
-		jsonObjectResumen.put(Retencion.TOTALNOSUJ, totalNoSuj);
-		jsonObjectResumen.put(Retencion.TOTALEXENTA, totalExenta);
-		jsonObjectResumen.put(Retencion.TOTALGRAVADA, totalGravada);
-		jsonObjectResumen.put(Retencion.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(Retencion.DESCUNOSUJ, Env.ZERO);
-		jsonObjectResumen.put(Retencion.DESCUEXENTA, Env.ZERO);
-		jsonObjectResumen.put(Retencion.DESCUGRAVADA, Env.ZERO);
-		jsonObjectResumen.put(Retencion.PORCENTAJEDESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(Retencion.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
-		jsonObjectResumen.put(Retencion.IVARETE1, Env.ZERO);
-		jsonObjectResumen.put(Retencion.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(Retencion.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
-		jsonObjectResumen.put(Retencion.TOTALPAGAR, invoice.getGrandTotal());
-		jsonObjectResumen.put(Retencion.TOTALLETRAS, totalLetras);
-		jsonObjectResumen.put(Retencion.SALDOFAVOR, invoice.getGrandTotal());
-		jsonObjectResumen.put(Retencion.CONDICIONOPERACION, 1);
-		jsonObjectResumen.put(Retencion.TOTALDESCU, Env.ZERO);
-		jsonObjectResumen.put(Retencion.RETERENTA, Env.ZERO);
-		jsonObjectResumen.put(Retencion.TOTALIVA, totalIVA);
-
-		JSONArray jsonArrayPagos = new JSONArray();
-			JSONObject jsonPago = new JSONObject();
-			jsonPago.put(Retencion.CODIGO, "05");
-			jsonPago.put(Retencion.MONTOPAGO, new BigDecimal(0.00));
-			jsonPago.put(Retencion.REFERENCIA, "Transferencia_ Depósito Bancario");
-			jsonPago.put(Retencion.PLAZO, invoice.getC_PaymentTerm().getE_TimeSpan().getValue());
-			jsonPago.put(Retencion.PERIODO, invoice.getC_PaymentTerm().getNetDays());
-		jsonArrayPagos.put(jsonPago);
-
-		jsonObjectResumen.put(Retencion.PAGOS, jsonArrayPagos);
+		jsonObjectResumen.put(Retencion.TOTALSUJETORETENCION, totalNoSuj);		// TODO: korrekte Daten einsetzen
+		jsonObjectResumen.put(Retencion.TOTALIVARETENIDO, totalExenta);			// TODO: korrekte Daten einsetzen
+		jsonObjectResumen.put(Retencion.TOTALIVARETENIDOLETRAS, totalLetras);	// TODO: korrekte Daten einsetzen
 		
 		System.out.println("Finish collecting JSON data for Resumen");
 		return jsonObjectResumen;
@@ -364,7 +296,7 @@ public class RetencionFactory extends EDocumentFactory {
 	}
 	
 	private JSONObject generateCuerpoDocumentoInputData() {
-		System.out.println("Start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		System.out.println("CreditoFiscal: start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		JSONObject jsonCuerpoDocumento = new JSONObject();
 		JSONArray jsonCuerpoDocumentoArray = new JSONArray();
 		
@@ -375,48 +307,40 @@ public class RetencionFactory extends EDocumentFactory {
 			BigDecimal ventaExenta 	= Env.ZERO;
 			BigDecimal ventaGravada = Env.ONEHUNDRED;
 			BigDecimal ivaItem 		= Env.ZERO;
+			MTax tax = (MTax)invoiceLine.getC_Tax();
 			
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
+			
+			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				ventaNoSuj = invoiceLine.getLineNetAmt();
+			}
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
 				ventaExenta = invoiceLine.getLineNetAmt();
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				ventaGravada = invoiceLine.getLineNetAmt(); 
-				MTax tax = (MTax)invoiceLine.getC_Tax();
 				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
 					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
 			}
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put(Retencion.NUMITEM, invoiceLine.getLine());
-			jsonCuerpoDocumentoItem.put(Retencion.TIPOITEM, 2);
-			jsonCuerpoDocumentoItem.put(Retencion.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
-			jsonCuerpoDocumentoItem.put(Retencion.CANTIDAD, invoiceLine.getQtyInvoiced());
-			jsonCuerpoDocumentoItem.put(Retencion.CODIGO, invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(Retencion.CODIGOTRIBUTO, "");  // String codTributo = "20";
-			
-			JSONArray jsonTributosArray = new JSONArray();
-			jsonCuerpoDocumentoItem. put( Retencion.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
-			
-			jsonCuerpoDocumentoItem.put(Retencion.UNIMEDIDA, 1);
+			jsonCuerpoDocumentoItem.put(Retencion.NUMITEM, invoiceLine.getLine()/10);
+			jsonCuerpoDocumentoItem.put(Retencion.TIPODTE, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
+			jsonCuerpoDocumentoItem.put(Retencion.TIPODOC, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
+			jsonCuerpoDocumentoItem.put(Retencion.NUMDOCUMENTO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
+			jsonCuerpoDocumentoItem.put(Retencion.FECHAEMISION, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
+			jsonCuerpoDocumentoItem.put(Retencion.MONTOSUJETOGRAV, "BBBBBBBBBBBBBBBBBBBBBB");		// TODO: korrekte Daten einsetzen
+			jsonCuerpoDocumentoItem.put(Retencion.CODIGORETENCIONMH, "BBBBBBBBBBBBBBBBBBBBBB");		// TODO: korrekte Daten einsetzen
+			jsonCuerpoDocumentoItem.put(Retencion.IVARETENIDO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen			
 			jsonCuerpoDocumentoItem.put(Retencion.DESCRIPCION, invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName());
-			jsonCuerpoDocumentoItem.put(Retencion.PRECIOUNI, invoiceLine.getPriceActual());
-			jsonCuerpoDocumentoItem.put(Retencion.MONTODESCU, Env.ZERO);
-			jsonCuerpoDocumentoItem.put(Retencion.VENTANOSUJ, ventaNoSuj);
-			jsonCuerpoDocumentoItem.put(Retencion.VENTAEXENTA, ventaExenta);
-			jsonCuerpoDocumentoItem.put(Retencion.VENTAGRAVADA, ventaGravada);
-			jsonCuerpoDocumentoItem.put(Retencion.PSV, invoiceLine.getTaxAmt());
-			jsonCuerpoDocumentoItem.put(Retencion.NOGRAVADO, ventaNoSuj.add(ventaNoSuj));
-			jsonCuerpoDocumentoItem.put(Retencion.IVAITEM, ivaItem);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);
+
+		
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() + " Finished");
 
 		}  
-		
 		jsonCuerpoDocumento.put(Retencion.CUERPODOCUMENTO, jsonCuerpoDocumentoArray);
-		System.out.println("Finish collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		System.out.println("CreditoFiscal: end collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		
 		return jsonCuerpoDocumento;
 	}
@@ -427,7 +351,7 @@ public class RetencionFactory extends EDocumentFactory {
 		String retencionAsString   = objectMapper.writeValueAsString(retencion);
 		JSONObject retencionAsJson = new JSONObject(retencionAsString);
 
-		retencionAsJson.remove(FacturaExportacion.ERRORMESSAGES);
+		retencionAsJson.remove(Retencion.ERRORMESSAGES);
 
 		// Manipulate generated JSON string
 		String retencionAsStringFinal = retencionAsJson.toString().

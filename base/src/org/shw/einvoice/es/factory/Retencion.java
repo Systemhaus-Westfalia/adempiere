@@ -2,13 +2,11 @@
  * 
  */
 package org.shw.einvoice.es.factory;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.feccfcreditofiscalv3.CuerpoDocumentoItemCreditoFiscal;
 import org.shw.einvoice.es.fecrretencionv1.ApendiceItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.CuerpoDocumentoItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.EmisorRetencion;
@@ -16,9 +14,7 @@ import org.shw.einvoice.es.fecrretencionv1.ExtensionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.IdentificacionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ReceptorRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ResumenRetencion;
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
 import org.shw.einvoice.es.util.pojo.EDocument;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
 import org.shw.einvoice.es.util.pojo.EDocumentUtils;
 
 

@@ -26,9 +26,6 @@ import org.compiere.model.MDocType;
 import org.compiere.model.MInvoice;
 import org.compiere.process.ProcessInfo;
 import org.eevolution.services.dsl.ProcessBuilder;
-import org.shw.einvoice.es.feccfcreditofiscalv3.EI_CreateInvoice_CCFF_SV;
-import org.shw.einvoice.es.fefcfacturaelectronicav1.EI_CreateInvoice_Factura_SV;
-import org.shw.einvoice.es.fefexfacturaexportacionv1.EI_CreateInvoice_FacturaExport_SV;
 
 /** Generated Process for (SB_ElectronicInvoice)
  *  @author ADempiere (generated) 
@@ -46,7 +43,6 @@ public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
 	@Override
 	protected String doIt() 
 	{
-		String filedirectory = getDirectory();
 		List<MInvoice> invoices = (List<MInvoice>) getInstancesForSelection(get_TrxName());
 		Hashtable<Integer, MInvoice> invoicesList = new Hashtable<>();
 		invoices.forEach(invoice -> {
@@ -59,21 +55,18 @@ public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
 			MDocType docType = (MDocType)invoice.getC_DocType();
 			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000003) {
 				
-				processingCCFF(invoice);
+				processingInvoice(invoice);
 			}
-			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000004)
-				processingFactura(invoice);
-			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000006)
-				processingFacturaExportacion(invoice);
+			
 		});;
 		return "";
 	}
 	
 	
-	private void processingCCFF(MInvoice invoice) {
+	private void processingInvoice(MInvoice invoice) {
 
             ProcessInfo processInfo = ProcessBuilder.create(getCtx())
-                    .process(EI_CreateInvoice_CCFF_SV.getProcessId())
+                    .process(EI_CreateInvoice_Electronic.getProcessId())
                     .withParameter(MInvoice.COLUMNNAME_C_Invoice_ID, invoice.getC_Invoice_ID())
                     .withParameter(ISSAVEINHISTORIC, isSaveInHistoric())
                     .withoutTransactionClose()
@@ -90,46 +83,4 @@ public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
                 });
             });*/
     }
-	
-	private void processingFactura(MInvoice invoice) {
-
-        ProcessInfo processInfo = ProcessBuilder.create(getCtx())
-                .process(EI_CreateInvoice_Factura_SV.getProcessId())
-                .withParameter(MInvoice.COLUMNNAME_C_Invoice_ID, invoice.getC_Invoice_ID())
-                .withParameter(ISSAVEINHISTORIC, isSaveInHistoric())
-                .withoutTransactionClose()
-                .execute(get_TrxName());
-        if (processInfo.isError())
-            throw new AdempiereException(processInfo.getSummary());
-
-        addLog(processInfo.getSummary());
-        /*Arrays.stream(processInfo.getIDs()).forEach(recordId -> {
-            Optional<MMovement> maybeMovement = Optional.ofNullable(new MMovement(getCtx(), recordId, get_TrxName()));
-            maybeMovement.ifPresent(movement -> {
-                documentCreated++;
-                printDocument(movement, true);
-            });
-        });*/
-}
-	
-	private void processingFacturaExportacion(MInvoice invoice) {
-
-        ProcessInfo processInfo = ProcessBuilder.create(getCtx())
-                .process(EI_CreateInvoice_FacturaExport_SV.getProcessId())
-                .withParameter(MInvoice.COLUMNNAME_C_Invoice_ID, invoice.getC_Invoice_ID())
-                .withParameter(ISSAVEINHISTORIC, isSaveInHistoric())
-                .withoutTransactionClose()
-                .execute(get_TrxName());
-        if (processInfo.isError())
-            throw new AdempiereException(processInfo.getSummary());
-
-        addLog(processInfo.getSummary());
-        /*Arrays.stream(processInfo.getIDs()).forEach(recordId -> {
-            Optional<MMovement> maybeMovement = Optional.ofNullable(new MMovement(getCtx(), recordId, get_TrxName()));
-            maybeMovement.ifPresent(movement -> {
-                documentCreated++;
-                printDocument(movement, true);
-            });
-        });*/
-}
 }

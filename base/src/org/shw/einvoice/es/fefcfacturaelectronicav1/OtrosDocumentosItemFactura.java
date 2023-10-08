@@ -5,8 +5,8 @@ package org.shw.einvoice.es.fefcfacturaelectronicav1;
 
 import java.util.Objects;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
-import org.shw.einvoice.es.util.pojo.Medico;
+import org.shw.einvoice.es.utils.EDocumentUtils;
+import org.shw.einvoice.es.utils.Medico;
 
 /**
  * 

@@ -6,8 +6,8 @@ package org.shw.einvoice.es.fefcfacturaelectronicav1;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.Direccion;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 /**
  * 

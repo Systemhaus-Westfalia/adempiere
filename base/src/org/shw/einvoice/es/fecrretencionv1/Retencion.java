@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.util.pojo.EDocument;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocument;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 
 /**

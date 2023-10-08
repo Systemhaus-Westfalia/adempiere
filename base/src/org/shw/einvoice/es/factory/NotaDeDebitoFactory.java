@@ -34,8 +34,8 @@ import org.shw.einvoice.es.fendnotadedebitov3.IdentificacionNotaDeDebito;
 import org.shw.einvoice.es.fendnotadedebitov3.NotaDeDebito;
 import org.shw.einvoice.es.fendnotadedebitov3.ReceptorNotaDeDebito;
 import org.shw.einvoice.es.fendnotadedebitov3.ResumenNotaDeDebito;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentFactory;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

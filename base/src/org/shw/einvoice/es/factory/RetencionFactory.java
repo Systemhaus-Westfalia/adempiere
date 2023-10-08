@@ -26,7 +26,6 @@ import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.feccfcreditofiscalv3.CreditoFiscal;
 import org.shw.einvoice.es.fecrretencionv1.ApendiceItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.CuerpoDocumentoItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.EmisorRetencion;
@@ -34,8 +33,8 @@ import org.shw.einvoice.es.fecrretencionv1.ExtensionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.IdentificacionRetencion;
 import org.shw.einvoice.es.fecrretencionv1.ResumenRetencion;
 import org.shw.einvoice.es.fecrretencionv1.Retencion;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentFactory;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -167,8 +166,8 @@ public class RetencionFactory extends EDocumentFactory {
 			isContigencia = true;
 		}
 
-		int tipoModelo = isContigencia?CreditoFiscal.TIPOMODELO_CONTIGENCIA:CreditoFiscal.TIPOMODELO_NOCONTIGENCIA;
-		int tipoOperacion = isContigencia?CreditoFiscal.TIPOOPERACION_CONTIGENCIA:CreditoFiscal.TIPOOPERACION_NOCONTIGENCIA;
+		int tipoModelo = isContigencia?Retencion.TIPOMODELO_CONTIGENCIA:Retencion.TIPOMODELO_NOCONTIGENCIA;
+		int tipoOperacion = isContigencia?Retencion.TIPOOPERACION_CONTIGENCIA:Retencion.TIPOOPERACION_NOCONTIGENCIA;
 		JSONObject jsonObjectIdentificacion = new JSONObject();
 		jsonObjectIdentificacion.put(Retencion.AMBIENTE,client.getE_Enviroment().getValue());									// TODO: korrekte Daten einsetzen
 		jsonObjectIdentificacion.put(Retencion.TIPODTE, invoice.getC_DocType().getE_DocType().getValue());				// TODO: korrekte Daten einsetzen
@@ -177,12 +176,12 @@ public class RetencionFactory extends EDocumentFactory {
 		jsonObjectIdentificacion.put(Retencion.TIPOMODELO, tipoModelo);									// TODO: korrekte Daten einsetzen
 		jsonObjectIdentificacion.put(Retencion.TIPOOPERACION, tipoOperacion);								// TODO: korrekte Daten einsetzen
 		if (isContigencia) {
-			jsonObjectIdentificacion.put(CreditoFiscal.MOTIVOCONTIN, "Contigencia por fecha de factura");
-			jsonObjectIdentificacion.put(CreditoFiscal.TIPOCONTINGENCIA, 5);
+			jsonObjectIdentificacion.put(Retencion.MOTIVOCONTIN, "Contigencia por fecha de factura");
+			jsonObjectIdentificacion.put(Retencion.TIPOCONTINGENCIA, 5);
 		}
 		else {
-			jsonObjectIdentificacion.put(CreditoFiscal.MOTIVOCONTIN, "");
-			jsonObjectIdentificacion.put(CreditoFiscal.TIPOCONTINGENCIA, "");
+			jsonObjectIdentificacion.put(Retencion.MOTIVOCONTIN, "");
+			jsonObjectIdentificacion.put(Retencion.TIPOCONTINGENCIA, "");
 		}		jsonObjectIdentificacion.put(Retencion.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
 		jsonObjectIdentificacion.put(Retencion.HOREMI, "00:00:00");
 		jsonObjectIdentificacion.put(Retencion.TIPOMONEDA, "USD");
@@ -317,7 +316,7 @@ public class RetencionFactory extends EDocumentFactory {
 	}
 	
 	private JSONObject generateCuerpoDocumentoInputData() {
-		System.out.println("CreditoFiscal: start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		System.out.println("Retencion: start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		JSONObject jsonCuerpoDocumento = new JSONObject();
 		JSONArray jsonCuerpoDocumentoArray = new JSONArray();
 		
@@ -361,7 +360,7 @@ public class RetencionFactory extends EDocumentFactory {
 
 		}  
 		jsonCuerpoDocumento.put(Retencion.CUERPODOCUMENTO, jsonCuerpoDocumentoArray);
-		System.out.println("CreditoFiscal: end collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
+		System.out.println("Retencion: end collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		
 		return jsonCuerpoDocumento;
 	}

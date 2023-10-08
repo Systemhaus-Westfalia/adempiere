@@ -1,7 +1,7 @@
 package org.shw.einvoice.es.fendnotadedebitov3;
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
  
 
 public class IdentificacionNotaDeDebito {

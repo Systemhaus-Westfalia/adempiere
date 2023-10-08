@@ -24,15 +24,14 @@ import org.compiere.util.Msg;
 import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.shw.einvoice.es.anulacionv2.Anulacion;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.CuerpoDocumentoItemFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.EmisorFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.FacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.IdentificacionFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.ResumenFacturaSujetoExcluido;
 import org.shw.einvoice.es.fefsefacturasujetoexcluido.SujetoExcluidoFacturaSujetoExcluido;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentFactory;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 import org.shw.model.MLCOInvoiceWithholding;
 
 import com.fasterxml.jackson.databind.JsonNode;

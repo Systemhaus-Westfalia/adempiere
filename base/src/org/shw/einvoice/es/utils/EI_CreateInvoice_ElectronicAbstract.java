@@ -16,7 +16,7 @@
  * or https://github.com/adempiere/adempiere/blob/develop/license.html        *
  *****************************************************************************/
 
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.utils;
 
 import org.compiere.process.SvrProcess;
 

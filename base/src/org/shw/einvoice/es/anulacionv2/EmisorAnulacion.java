@@ -2,7 +2,7 @@ package org.shw.einvoice.es.anulacionv2;
 
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 /**
  * Just for class Anulacion

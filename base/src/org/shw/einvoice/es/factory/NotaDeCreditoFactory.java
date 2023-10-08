@@ -34,8 +34,8 @@ import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.NotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.ReceptorNotaDeCredito;
 import org.shw.einvoice.es.fencnotadecreditov1.ResumenNotaDeCredito;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentFactory;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

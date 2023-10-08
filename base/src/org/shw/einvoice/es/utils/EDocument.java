@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.utils;
 
 import org.compiere.model.MSysConfig;
 

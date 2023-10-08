@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.shw.einvoice.es.feccfcreditofiscalv3.DocumentoRelacionadoItemCreditoFiscal;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 /**
  * 

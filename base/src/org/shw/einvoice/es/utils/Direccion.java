@@ -1,4 +1,4 @@
-package org.shw.einvoice.es.util.pojo;
+package org.shw.einvoice.es.utils;
 
 import java.util.regex.Pattern;
 

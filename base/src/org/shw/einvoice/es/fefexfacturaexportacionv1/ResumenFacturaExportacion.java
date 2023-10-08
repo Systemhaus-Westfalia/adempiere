@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
-import org.shw.einvoice.es.util.pojo.PagosItem;
-import org.shw.einvoice.es.util.pojo.TributosItem;  // This is only needed because interface Resumen.
+import org.shw.einvoice.es.utils.EDocumentUtils;
+import org.shw.einvoice.es.utils.PagosItem;
+import org.shw.einvoice.es.utils.TributosItem;
 
 /**
  * 

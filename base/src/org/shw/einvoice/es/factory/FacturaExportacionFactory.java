@@ -31,8 +31,8 @@ import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.IdentificacionFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.ReceptorFacturaExportacion;
 import org.shw.einvoice.es.fefexfacturaexportacionv1.ResumenFacturaExportacion;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentFactory;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

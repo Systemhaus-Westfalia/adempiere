@@ -1,7 +1,7 @@
 package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 
 public class IdentificacionFacturaSujetoExcluido {

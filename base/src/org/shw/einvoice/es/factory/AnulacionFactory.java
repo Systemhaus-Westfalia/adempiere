@@ -25,9 +25,8 @@ import org.shw.einvoice.es.anulacionv2.DocumentoAnulacion;
 import org.shw.einvoice.es.anulacionv2.EmisorAnulacion;
 import org.shw.einvoice.es.anulacionv2.IdentificacionAnulacion;
 import org.shw.einvoice.es.anulacionv2.MotivoAnulacion;
-import org.shw.einvoice.es.fefexfacturaexportacionv1.FacturaExportacion;
-import org.shw.einvoice.es.util.pojo.EDocumentFactory;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentFactory;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -213,7 +212,7 @@ public class AnulacionFactory extends EDocumentFactory {
 		String anulacionAsString   = objectMapper.writeValueAsString(anulacion);
 		JSONObject anulacionAsJson = new JSONObject(anulacionAsString);
 
-		anulacionAsJson.remove(FacturaExportacion.ERRORMESSAGES);
+		anulacionAsJson.remove(Anulacion.ERRORMESSAGES);
 
 		// Manipulate generated JSON string
 		String anulacionAsStringFinal = anulacionAsJson.toString().

@@ -2,8 +2,8 @@ package org.shw.einvoice.es.fefexfacturaexportacionv1;
 
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.Direccion;
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.Direccion;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 public class EmisorFacturaExportacion {
 	static final String VALIDATION_RECINTOFISCAL_NOT_NULL = "Documento: Factura de Exportacion, clase: Emisor. Validacion falló: valor de 'recintoFiscal' de pagos debe ser ='null'";

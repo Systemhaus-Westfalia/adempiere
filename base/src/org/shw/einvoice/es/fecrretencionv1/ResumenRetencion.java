@@ -5,7 +5,7 @@ package org.shw.einvoice.es.fecrretencionv1;
 
 import java.math.BigDecimal;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 /**
  * 

@@ -2,7 +2,7 @@ package org.shw.einvoice.es.feccfcreditofiscalv3;
 
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 public class DocumentoRelacionadoItemCreditoFiscal {
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED  = "Documento: Credito Fiscal, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";

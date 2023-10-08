@@ -3,7 +3,7 @@
  */
 package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 /**
  * 

@@ -2,7 +2,7 @@ package org.shw.einvoice.es.fefsefacturasujetoexcluido;
 
 import java.util.regex.Pattern;
 
-import org.shw.einvoice.es.util.pojo.EDocumentUtils;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 public class DocumentoRelacionadoItemFacturaSujetoExcluido {
 	static final String VALIDATION_NUMERODOCUMENTO_PATTERN_FAILED = "Documento: Factura, clase: DocumentoRelacionadoItem. Validacion falló: valor de 'numeroDocumento' no corresponde a patrón";

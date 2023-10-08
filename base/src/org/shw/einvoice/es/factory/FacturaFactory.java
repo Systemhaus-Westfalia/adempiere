@@ -310,13 +310,12 @@ public class FacturaFactory extends EDocumentFactory {
 			jsonObjectReceptor.put(Factura.CODACTIVIDAD, "");
 			jsonObjectReceptor.put(Factura.DESCACTIVIDAD, "");
 		}
-
 		JSONObject jsonDireccion = new JSONObject();
 		String departamento = "";
 		String municipio = "";
 		String complemento = "";
 		for (MBPartnerLocation partnerLocation : MBPartnerLocation.getForBPartner(contextProperties, partner.getC_BPartner_ID(), trxName)){
-			if (partnerLocation.isBillTo()) {
+			if (partnerLocation.isBillTo() && partnerLocation.getC_Location().getC_Country_ID() == 173) {
 				departamento = partnerLocation.getC_Location().getC_City().getC_Region().getValue();
 				municipio =  partnerLocation.getC_Location().getC_City().getValue();
 				complemento = (partnerLocation.getC_Location().getAddress1() + " " + partnerLocation.getC_Location().getAddress2());

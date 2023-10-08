@@ -23,8 +23,10 @@ import org.compiere.model.MTax;
 import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
+import org.compiere.util.TimeUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.shw.einvoice.es.feccfcreditofiscalv3.CreditoFiscal;
 import org.shw.einvoice.es.fecrretencionv1.ApendiceItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.CuerpoDocumentoItemRetencion;
 import org.shw.einvoice.es.fecrretencionv1.EmisorRetencion;
@@ -146,23 +148,42 @@ public class RetencionFactory extends EDocumentFactory {
 	}
 	
 	private JSONObject generateIdentificationInputData() {
-		System.out.println("Start collecting JSON data for Identificacion");
+		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		int position = documentno.indexOf("_");
+		documentno = documentno.substring(0,position);
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
+		String duns = orgInfo.getDUNS().replace("-", "");
 		
+		String numeroControl = "DTE-" + invoice.getC_DocType().getE_DocType().getValue()
+				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
 		Integer invoiceID = invoice.get_ID();
-		String numeroControl = getNumeroControl(invoiceID, orgInfo, "DTE-01-");
+		//String numeroControl = getNumeroControl(invoiceID, orgInfo, "DTE-01-");
 		Integer clientID = (Integer)client.getAD_Client_ID();
 		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
 		
+		Boolean isContigencia = false;
+		if (TimeUtil.getDaysBetween(invoice.getDateAcct(), TimeUtil.getDay(0))>=3) {
+			isContigencia = true;
+		}
+
+		int tipoModelo = isContigencia?CreditoFiscal.TIPOMODELO_CONTIGENCIA:CreditoFiscal.TIPOMODELO_NOCONTIGENCIA;
+		int tipoOperacion = isContigencia?CreditoFiscal.TIPOOPERACION_CONTIGENCIA:CreditoFiscal.TIPOOPERACION_NOCONTIGENCIA;
 		JSONObject jsonObjectIdentificacion = new JSONObject();
-		jsonObjectIdentificacion.put(Retencion.AMBIENTE, "00");									// TODO: korrekte Daten einsetzen
-		jsonObjectIdentificacion.put(Retencion.TIPODTE, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
+		jsonObjectIdentificacion.put(Retencion.AMBIENTE,client.getE_Enviroment().getValue());									// TODO: korrekte Daten einsetzen
+		jsonObjectIdentificacion.put(Retencion.TIPODTE, invoice.getC_DocType().getE_DocType().getValue());				// TODO: korrekte Daten einsetzen
 		jsonObjectIdentificacion.put(Retencion.NUMEROCONTROL, numeroControl);
 		jsonObjectIdentificacion.put(Retencion.CODIGOGENERACION, codigoGeneracion);
-		jsonObjectIdentificacion.put(Retencion.TIPOMODELO, 1);									// TODO: korrekte Daten einsetzen
-		jsonObjectIdentificacion.put(Retencion.TIPOOPERACION, 1);								// TODO: korrekte Daten einsetzen
-		jsonObjectIdentificacion.put(Retencion.TIPOCONTINGENCIA, 5);								// TODO: korrekte Daten einsetzen
-		jsonObjectIdentificacion.put(Retencion.MOTIVOCONTIN, "BBBBBBBBBBBBBBBBBBbbbbb");			// TODO: korrekte Daten einsetzen		
-		jsonObjectIdentificacion.put(Retencion.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
+		jsonObjectIdentificacion.put(Retencion.TIPOMODELO, tipoModelo);									// TODO: korrekte Daten einsetzen
+		jsonObjectIdentificacion.put(Retencion.TIPOOPERACION, tipoOperacion);								// TODO: korrekte Daten einsetzen
+		if (isContigencia) {
+			jsonObjectIdentificacion.put(CreditoFiscal.MOTIVOCONTIN, "Contigencia por fecha de factura");
+			jsonObjectIdentificacion.put(CreditoFiscal.TIPOCONTINGENCIA, 5);
+		}
+		else {
+			jsonObjectIdentificacion.put(CreditoFiscal.MOTIVOCONTIN, "");
+			jsonObjectIdentificacion.put(CreditoFiscal.TIPOCONTINGENCIA, "");
+		}		jsonObjectIdentificacion.put(Retencion.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
 		jsonObjectIdentificacion.put(Retencion.HOREMI, "00:00:00");
 		jsonObjectIdentificacion.put(Retencion.TIPOMONEDA, "USD");
 
@@ -190,10 +211,10 @@ public class RetencionFactory extends EDocumentFactory {
 		jsonObjectEmisor.put(Retencion.DIRECCION, jsonDireccion);
 		
 		jsonObjectEmisor.put(Retencion.TELEFONO, client.get_ValueAsString("phone"));
-		jsonObjectEmisor.put(Retencion.CODIGOMH, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(Retencion.CODIGO, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(Retencion.PUNTOVENTAMH, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(Retencion.PUNTOVENTA, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Retencion.CODIGOMH, "");				// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Retencion.CODIGO, "");				// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Retencion.PUNTOVENTAMH, "");			// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Retencion.PUNTOVENTA, "");			// TODO: korrekte Daten einsetzen
 		jsonObjectEmisor.put(Retencion.CORREO, client.getEMail());
 
 		System.out.println("Finish collecting JSON data for Emisor");

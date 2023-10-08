@@ -33,5 +33,13 @@ public abstract class EDocumentFactory {
 		this.client = client;
 		this.orgInfo = orgInfo;
 	}
+	
+	public String getCodigoGeneracion (String eDocumentAsJsonString) {
+
+        JSONObject eDocumentAsJson  = new JSONObject(eDocumentAsJsonString);
+        JSONObject identification = (JSONObject)eDocumentAsJson.get(EDocument.IDENTIFICACION);
+        String codigoGeneracion = identification.getString(EDocument.CODIGOGENERACION);
+		return codigoGeneracion;
+	}
 
 }

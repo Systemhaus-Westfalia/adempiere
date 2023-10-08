@@ -4,15 +4,21 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.compiere.model.Query;
 import org.compiere.model.MClient;
 import org.compiere.model.MInvoice;
+import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
+import org.compiere.model.MUser;
+import org.compiere.util.Env;
 import org.json.JSONObject;
 import org.shw.einvoice.es.anulacionv2.Anulacion;
 import org.shw.einvoice.es.anulacionv2.DocumentoAnulacion;
@@ -30,6 +36,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class AnulacionFactory extends EDocumentFactory {
 	Anulacion anulacion;
 	MInvoice invoice;
+	String codigoGeneracion = "";
 	
 	public AnulacionFactory(String trxName, Properties contextProperties, MClient client, MOrgInfo orgInfo, MInvoice invoice) {
 		super(trxName, contextProperties, client, orgInfo);
@@ -110,12 +117,14 @@ public class AnulacionFactory extends EDocumentFactory {
 
 		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
 		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		documentno = documentno.replace("^","");
 		int position = documentno.indexOf("_");
+		if (position >= 0)
 		documentno = documentno.substring(0,position);
 		
 		Integer invoiceID = invoice.get_ID();
 		Integer clientID = (Integer)client.getAD_Client_ID();
-		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
+		codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
 		
 		JSONObject jsonObjectIdentificacion = new JSONObject();
 
@@ -135,11 +144,11 @@ public class AnulacionFactory extends EDocumentFactory {
 		jsonObjectEmisor.put(Anulacion.NIT, orgInfo.getTaxID().replace("-", ""));
 		jsonObjectEmisor.put(Anulacion.NOMBRE, client.getName());
 		jsonObjectEmisor.put(Anulacion.TIPOESTABLECIMIENTO, client.getE_PlantType().getValue());
-		jsonObjectEmisor.put(Anulacion.NOMESTABLECIMIENTO, "AAAAAAAAAAAAAAAAAAAAAA");						// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(Anulacion.CODESTABLEMH, "AAAAAAAAAAAAAAAAAAAAAA");								// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(Anulacion.CODESTABLE, "AAAAAAAAAAAAAAAAAAAAAA");								// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(Anulacion.CODPUNTOVENTAMH, "AAAAAAAAAAAAAAAAAAAAAA");							// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(Anulacion.CODPUNTOVENTA, "AAAAAAAAAAAAAAAAAAAAAA");							// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(Anulacion.NOMESTABLECIMIENTO, client.getE_PlantType().getName());						// TODO: korrekte Daten einsetzen
+		//jsonObjectEmisor.put(Anulacion.CODESTABLEMH, "");								// TODO: korrekte Daten einsetzen
+		//jsonObjectEmisor.put(Anulacion.CODESTABLE, client.getE_PlantType().getValue());								// TODO: korrekte Daten einsetzen
+		//jsonObjectEmisor.put(Anulacion.CODPUNTOVENTAMH, "");							// TODO: korrekte Daten einsetzen
+		//jsonObjectEmisor.put(Anulacion.CODPUNTOVENTA, "");							// TODO: korrekte Daten einsetzen
 		jsonObjectEmisor.put(Anulacion.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(Anulacion.CORREO, client.getEMail());
 
@@ -152,18 +161,27 @@ public class AnulacionFactory extends EDocumentFactory {
 		System.out.println("Start collecting JSON data for Documento");
 		
 		JSONObject jsonObjectDocumento = new JSONObject();
-		jsonObjectDocumento.put(Anulacion.TIPODTE, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.CODIGOGENERACION, "BBBBBBBBBBBBBBBBBBBBBB");		// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.SELLORECIBIDO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.NUMEROCONTROL, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.FECEMI, invoice.getDateAcct().toString().substring(0, 10));
-		jsonObjectDocumento.put(Anulacion.MONTOIVA, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.CODIGOGENERACIONR, "BBBBBBBBBBBBBBBBBBBBBB");		// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.TIPODOCUMENTO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.NUMDOCUMENTO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen
-		jsonObjectDocumento.put(Anulacion.NOMBRE, client.getName());
-		jsonObjectDocumento.put(Anulacion.TELEFONO, client.get_ValueAsString("phone"));
-		jsonObjectDocumento.put(Anulacion.CORREO, client.getEMail());
+		jsonObjectDocumento.put(Anulacion.TIPODTE, invoice.getReversal().getC_DocType().getE_DocType().getValue());			
+		jsonObjectDocumento.put(Anulacion.CODIGOGENERACION, invoice.getReversal().getei_codigoGeneracion());		
+		jsonObjectDocumento.put(Anulacion.SELLORECIBIDO, invoice.getReversal().getei_selloRecibido());			// TODO: korrekte Daten einsetzen
+		jsonObjectDocumento.put(Anulacion.NUMEROCONTROL, invoice.getReversal().getei_numeroControl());			
+		jsonObjectDocumento.put(Anulacion.FECEMI, invoice.getReversal().getDateAcct().toString().substring(0, 10));
+		jsonObjectDocumento.put(Anulacion.CODIGOGENERACIONR, codigoGeneracion);		
+		jsonObjectDocumento.put(Anulacion.TIPODOCUMENTO, invoice.getReversal().getC_DocType().getE_DocType().getValue());			
+		jsonObjectDocumento.put(Anulacion.NUMDOCUMENTO, invoice.getReversal().getDocumentNo());			
+		jsonObjectDocumento.put(Anulacion.NOMBRE, invoice.getReversal().getC_BPartner().getName());
+		jsonObjectDocumento.put(Anulacion.TELEFONO, invoice.getReversal().getC_BPartner().getPhone());
+		jsonObjectDocumento.put(Anulacion.CORREO, invoice.getReversal().getC_BPartner().getEMail());
+		
+		BigDecimal montoIVA = Env.ZERO;
+		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
+				.setParameters(invoice.getC_Invoice_ID())
+				.list();
+		for (MInvoiceTax invoiceTax:invoiceTaxes) {
+			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA"))
+				montoIVA = montoIVA.add(invoiceTax.getTaxAmt().multiply(new BigDecimal(-1)));
+		}
+		jsonObjectDocumento.put(Anulacion.MONTOIVA, montoIVA);				
 
 		System.out.println("Finish collecting JSON data for Documento");
 		return jsonObjectDocumento;		
@@ -171,16 +189,17 @@ public class AnulacionFactory extends EDocumentFactory {
 	
 	private JSONObject generateMotivoInputData() {
 		System.out.println("Start collecting JSON data for Motivo");
+		MUser user = new MUser(contextProperties, invoice.getCreatedBy(), trxName);
 		
 		JSONObject jsonObjectMotivo = new JSONObject();
-		jsonObjectMotivo.put(Anulacion.TIPOANULACION, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
-		jsonObjectMotivo.put(Anulacion.MOTIVOANULACION, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
-		jsonObjectMotivo.put(Anulacion.NOMBRERESPONSABLE, "CCCCCCCCCCCCCCCCCCCCCCCCCc");	// TODO: korrekte Daten einsetzen
-		jsonObjectMotivo.put(Anulacion.TIPDOCRESPONSABLE, "CCCCCCCCCCCCCCCCCCCCCCCCCc");	// TODO: korrekte Daten einsetzen
-		jsonObjectMotivo.put(Anulacion.NUMDOCRESPONSABLE, "CCCCCCCCCCCCCCCCCCCCCCCCCc");	// TODO: korrekte Daten einsetzen
-		jsonObjectMotivo.put(Anulacion.NOMBRESOLICITA, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
-		jsonObjectMotivo.put(Anulacion.TIPDOCSOLICITA, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
-		jsonObjectMotivo.put(Anulacion.NUMDOCSOLICITA, "CCCCCCCCCCCCCCCCCCCCCCCCCc");		// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.TIPOANULACION, 3);		
+		jsonObjectMotivo.put(Anulacion.MOTIVOANULACION, "Error en generacion");		
+		jsonObjectMotivo.put(Anulacion.NOMBRERESPONSABLE, user.getC_BPartner().getName());	
+		jsonObjectMotivo.put(Anulacion.TIPDOCRESPONSABLE, user.getC_BPartner().getE_Recipient_Identification().getValue());	
+		jsonObjectMotivo.put(Anulacion.NUMDOCRESPONSABLE, user.getC_BPartner().getTaxID());	
+		jsonObjectMotivo.put(Anulacion.NOMBRESOLICITA, user.getC_BPartner().getName());		// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.TIPDOCSOLICITA, user.getC_BPartner().getE_Recipient_Identification().getValue());		// TODO: korrekte Daten einsetzen
+		jsonObjectMotivo.put(Anulacion.NUMDOCSOLICITA, user.getC_BPartner().getTaxID());		// TODO: korrekte Daten einsetzen
 
 		System.out.println("Finish collecting JSON data for Maotivo");
 		return jsonObjectMotivo;

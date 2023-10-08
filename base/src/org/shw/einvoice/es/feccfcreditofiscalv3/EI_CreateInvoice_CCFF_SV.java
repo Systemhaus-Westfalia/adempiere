@@ -27,11 +27,16 @@ import org.compiere.model.MClient;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MInvoiceTax;
 import org.compiere.model.MOrgInfo;
+import org.compiere.model.Query;
+import org.shw.einvoice.es.anulacionv2.Anulacion;
+import org.shw.einvoice.es.factory.AnulacionFactory;
 import org.shw.einvoice.es.factory.CreditoFiscalFactory;
 import org.shw.einvoice.es.factory.FacturaSujetoExcluidoFactory;
 import org.shw.einvoice.es.factory.NotaDeCreditoFactory;
+import org.shw.einvoice.es.factory.RetencionFactory;
 import org.shw.einvoice.es.fencnotadecreditov1.IdentificacionNotaDeCredito;
 import org.shw.einvoice.es.util.pojo.EDocumentFactory;
+import org.shw.model.MLCOInvoiceWithholding;
 
 /** Generated Process for (SHW_Create_ElectronicInvoice)
  *  @author ADempiere (generated) 
@@ -77,26 +82,47 @@ public class EI_CreateInvoice_CCFF_SV extends EI_CreateInvoice_CCFF_SVAbstract
 		} else  {
 			System.out.println("Process EI_CreateInvoice_CCFF_SV : produced no errors");			
 		}
-		
 		System.out.println("Process EI_CreateInvoice_CCFF_SV : Started with Invoice " + invoice.getDocumentNo());
+		Boolean isreversal = ((invoice.getDocStatus().equals("VO")) || invoice.getDocStatus().equals("RE"))
+				&& invoice.getReversal_ID() > 0
+				&& invoice.getReversal_ID() < invoice.getC_Invoice_ID();
+				
+		Boolean isOriginal = ((invoice.getDocStatus().equals("CO") || 
+				invoice.getReversal_ID() > invoice.getC_Invoice_ID())) ;
+		List<MLCOInvoiceWithholding> invoiceWithholdings = new Query(getCtx(), MLCOInvoiceWithholding.Table_Name, 
+				" C_Invoice_ID=?", get_TrxName())
+				.setParameters(getInvoiceId())
+				.list();
+		Boolean existsWithholding = false;
+		//existsRetencion = !invoiceWithholdings.isEmpty();		
+		
 		client = new MClient(getCtx(), invoice.getAD_Client_ID(), get_TrxName());
 		int orgID = invoice.getAD_Org_ID();		
 		orgInfo= MOrgInfo.get(getCtx(), orgID, get_TrxName());
 		EDocumentFactory documentBuilder = null;
-		if (invoice.getC_DocType().getC_DocBaseType_ID() == 50005) {
+		if (invoice.getC_DocType().getC_DocBaseType_ID() == 50005 && isOriginal) {
 			documentBuilder = new CreditoFiscalFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
 			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
 			documentBuilder.generateEDocument();			
-		} else if (invoice.getC_DocType().getC_DocBaseType_ID() == 50006) {
+		} else if (invoice.getC_DocType().getC_DocBaseType_ID() == 50006 && invoice.getDocStatus().equals("CO")) {
 			documentBuilder = new NotaDeCreditoFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
 			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
 			documentBuilder.generateEDocument();			
 		}
-		else if (invoice.getC_DocType().getE_DocType().getValue().equals("14")) {
+		else if (invoice.getC_DocType().getE_DocType().getValue().equals("14") && invoice.getDocStatus().equals("CO")) {
 			documentBuilder = new FacturaSujetoExcluidoFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
 			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
+			documentBuilder.generateEDocument();
+		}
+		else if (isreversal) {
+			documentBuilder = new AnulacionFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
+			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
 			documentBuilder.generateEDocument();			
-			
+		}
+		else if (existsWithholding) {
+			documentBuilder = new RetencionFactory(get_TrxName(), getCtx(), client, orgInfo, invoice);
+			documentBuilder.generateJSONInputData(); // Will contain data passed to factory
+			documentBuilder.generateEDocument();			
 		}
 		
     	X_E_InvoiceElectronic invoiceElectronic = new X_E_InvoiceElectronic(getCtx(), 0, get_TrxName());

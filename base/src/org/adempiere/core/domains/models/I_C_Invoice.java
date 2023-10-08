@@ -19,6 +19,7 @@ package org.adempiere.core.domains.models;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+
 import org.compiere.model.MTable;
 import org.compiere.util.KeyNamePair;
 
@@ -77,8 +78,6 @@ public interface I_C_Invoice
 	  */
 	public int getAD_OrgTrx_ID();
 
-	public org.adempiere.core.domains.models.I_AD_Org getAD_OrgTrx() throws RuntimeException;
-
     /** Column name AD_User_ID */
     public static final String COLUMNNAME_AD_User_ID = "AD_User_ID";
 
@@ -94,6 +93,49 @@ public interface I_C_Invoice
 
 	public org.adempiere.core.domains.models.I_AD_User getAD_User() throws RuntimeException;
 
+    /** Column name BackupValue */
+    public static final String COLUMNNAME_BackupValue = "BackupValue";
+
+	/** Set Backup Value.
+	  * The value of the column prior to migration.
+	  */
+	public void setBackupValue (String BackupValue);
+
+	/** Get Backup Value.
+	  * The value of the column prior to migration.
+	  */
+	public String getBackupValue();
+
+    /** Column name Bill_BPartner_ID */
+    public static final String COLUMNNAME_Bill_BPartner_ID = "Bill_BPartner_ID";
+
+	/** Set Invoice Partner.
+	  * Business Partner to be invoiced
+	  */
+	public void setBill_BPartner_ID (int Bill_BPartner_ID);
+
+	/** Get Invoice Partner.
+	  * Business Partner to be invoiced
+	  */
+	public int getBill_BPartner_ID();
+
+	public org.adempiere.core.domains.models.I_C_BPartner getBill_BPartner() throws RuntimeException;
+
+    /** Column name BillTo_ID */
+    public static final String COLUMNNAME_BillTo_ID = "BillTo_ID";
+
+	/** Set Invoice To.
+	  * Bill to Address
+	  */
+	public void setBillTo_ID (int BillTo_ID);
+
+	/** Get Invoice To.
+	  * Bill to Address
+	  */
+	public int getBillTo_ID();
+
+	public org.adempiere.core.domains.models.I_C_BPartner_Location getBillTo() throws RuntimeException;
+
     /** Column name BOMDrop */
     public static final String COLUMNNAME_BOMDrop = "BOMDrop";
 
@@ -106,6 +148,17 @@ public interface I_C_Invoice
 	  * Drop (expand) Bill of Materials into an Order, Invoice, etc.
 	  */
 	public String getBOMDrop();
+
+    /** Column name broker_ID */
+    public static final String COLUMNNAME_broker_ID = "broker_ID";
+
+	/** Set broker_ID	  */
+	public void setbroker_ID (int broker_ID);
+
+	/** Get broker_ID	  */
+	public int getbroker_ID();
+
+	public org.adempiere.core.domains.models.I_C_BPartner getbroker() throws RuntimeException;
 
     /** Column name C_Activity_ID */
     public static final String COLUMNNAME_C_Activity_ID = "C_Activity_ID";
@@ -152,6 +205,17 @@ public interface I_C_Invoice
 
 	public org.adempiere.core.domains.models.I_C_BPartner_Location getC_BPartner_Location() throws RuntimeException;
 
+    /** Column name c_BPartnerimport_ID */
+    public static final String COLUMNNAME_c_BPartnerimport_ID = "c_BPartnerimport_ID";
+
+	/** Set c_BPartnerimport_ID	  */
+	public void setc_BPartnerimport_ID (int c_BPartnerimport_ID);
+
+	/** Get c_BPartnerimport_ID	  */
+	public int getc_BPartnerimport_ID();
+
+	public org.adempiere.core.domains.models.I_C_BPartner getc_BPartnerimport() throws RuntimeException;
+
     /** Column name C_Campaign_ID */
     public static final String COLUMNNAME_C_Campaign_ID = "C_Campaign_ID";
 
@@ -196,6 +260,21 @@ public interface I_C_Invoice
 	public int getC_Charge_ID();
 
 	public org.adempiere.core.domains.models.I_C_Charge getC_Charge() throws RuntimeException;
+
+    /** Column name C_CommissionRun_ID */
+    public static final String COLUMNNAME_C_CommissionRun_ID = "C_CommissionRun_ID";
+
+	/** Set Commission Run.
+	  * Commission Run or Process
+	  */
+	public void setC_CommissionRun_ID (int C_CommissionRun_ID);
+
+	/** Get Commission Run.
+	  * Commission Run or Process
+	  */
+	public int getC_CommissionRun_ID();
+
+	public org.adempiere.core.domains.models.I_C_CommissionRun getC_CommissionRun() throws RuntimeException;
 
     /** Column name C_ConversionType_ID */
     public static final String COLUMNNAME_C_ConversionType_ID = "C_ConversionType_ID";
@@ -326,6 +405,21 @@ public interface I_C_Invoice
 
 	public org.adempiere.core.domains.models.I_C_PaymentTerm getC_PaymentTerm() throws RuntimeException;
 
+    /** Column name C_Period_ID */
+    public static final String COLUMNNAME_C_Period_ID = "C_Period_ID";
+
+	/** Set Period.
+	  * Period of the Calendar
+	  */
+	public void setC_Period_ID (int C_Period_ID);
+
+	/** Get Period.
+	  * Period of the Calendar
+	  */
+	public int getC_Period_ID();
+
+	public org.adempiere.core.domains.models.I_C_Period getC_Period() throws RuntimeException;
+
     /** Column name C_POS_ID */
     public static final String COLUMNNAME_C_POS_ID = "C_POS_ID";
 
@@ -371,6 +465,17 @@ public interface I_C_Invoice
 
 	public org.adempiere.core.domains.models.I_C_SalesRegion getC_SalesRegion() throws RuntimeException;
 
+    /** Column name cashcollector */
+    public static final String COLUMNNAME_cashcollector = "cashcollector";
+
+	/** Set cashcollector	  */
+	public void setcashcollector (int cashcollector);
+
+	/** Get cashcollector	  */
+	public int getcashcollector();
+
+	public org.adempiere.core.domains.models.I_AD_User getcashcollec() throws RuntimeException;
+
     /** Column name ChargeAmt */
     public static final String COLUMNNAME_ChargeAmt = "ChargeAmt";
 
@@ -383,6 +488,41 @@ public interface I_C_Invoice
 	  * Charge Amount
 	  */
 	public BigDecimal getChargeAmt();
+
+    /** Column name CodigoDeDeclaracion */
+    public static final String COLUMNNAME_CodigoDeDeclaracion = "CodigoDeDeclaracion";
+
+	/** Set Código registro DM.
+	  * Código registro de la declaración de mercancías en el sistema de Aduanas
+	  */
+	public void setCodigoDeDeclaracion (String CodigoDeDeclaracion);
+
+	/** Get Código registro DM.
+	  * Código registro de la declaración de mercancías en el sistema de Aduanas
+	  */
+	public String getCodigoDeDeclaracion();
+
+    /** Column name Comments */
+    public static final String COLUMNNAME_Comments = "Comments";
+
+	/** Set Comments.
+	  * Comments or additional information
+	  */
+	public void setComments (String Comments);
+
+	/** Get Comments.
+	  * Comments or additional information
+	  */
+	public String getComments();
+
+    /** Column name Concepto */
+    public static final String COLUMNNAME_Concepto = "Concepto";
+
+	/** Set Concepto	  */
+	public void setConcepto (String Concepto);
+
+	/** Get Concepto	  */
+	public String getConcepto();
 
     /** Column name CopyFrom */
     public static final String COLUMNNAME_CopyFrom = "CopyFrom";
@@ -491,6 +631,30 @@ public interface I_C_Invoice
 	  */
 	public String getDescription();
 
+    /** Column name descriptionCancel */
+    public static final String COLUMNNAME_descriptionCancel = "descriptionCancel";
+
+	/** Set descriptionCancel	  */
+	public void setdescriptionCancel (String descriptionCancel);
+
+	/** Get descriptionCancel	  */
+	public String getdescriptionCancel();
+
+    /** Column name DifBPPaytmentTo */
+    public static final String COLUMNNAME_DifBPPaytmentTo = "DifBPPaytmentTo";
+
+	/** Set DifBPPaytmentTo.
+	  * Paytment/Reimbursement To business partner
+	  */
+	public void setDifBPPaytmentTo (int DifBPPaytmentTo);
+
+	/** Get DifBPPaytmentTo.
+	  * Paytment/Reimbursement To business partner
+	  */
+	public int getDifBPPaytmentTo();
+
+	public org.adempiere.core.domains.models.I_C_BPartner getDifBPPaytmen() throws RuntimeException;
+
     /** Column name DocAction */
     public static final String COLUMNNAME_DocAction = "DocAction";
 
@@ -530,6 +694,19 @@ public interface I_C_Invoice
 	  */
 	public String getDocumentNo();
 
+    /** Column name DocumentoDeTransporte */
+    public static final String COLUMNNAME_DocumentoDeTransporte = "DocumentoDeTransporte";
+
+	/** Set Documento transporte.
+	  * Número de documento de transporte (AWB, BL, carta porte, etc.)
+	  */
+	public void setDocumentoDeTransporte (String DocumentoDeTransporte);
+
+	/** Get Documento transporte.
+	  * Número de documento de transporte (AWB, BL, carta porte, etc.)
+	  */
+	public String getDocumentoDeTransporte();
+
     /** Column name DunningGrace */
     public static final String COLUMNNAME_DunningGrace = "DunningGrace";
 
@@ -538,6 +715,46 @@ public interface I_C_Invoice
 
 	/** Get Dunning Grace Date	  */
 	public Timestamp getDunningGrace();
+
+    /** Column name ei_codigoGeneracion */
+    public static final String COLUMNNAME_ei_codigoGeneracion = "ei_codigoGeneracion";
+
+	/** Set ei_codigoGeneracion	  */
+	public void setei_codigoGeneracion (String ei_codigoGeneracion);
+
+	/** Get ei_codigoGeneracion	  */
+	public String getei_codigoGeneracion();
+
+    /** Column name ei_numeroControl */
+    public static final String COLUMNNAME_ei_numeroControl = "ei_numeroControl";
+
+	/** Set numeroControl	  */
+	public void setei_numeroControl (String ei_numeroControl);
+
+	/** Get numeroControl	  */
+	public String getei_numeroControl();
+
+    /** Column name ei_selloRecibido */
+    public static final String COLUMNNAME_ei_selloRecibido = "ei_selloRecibido";
+
+	/** Set selloRecibido	  */
+	public void setei_selloRecibido (String ei_selloRecibido);
+
+	/** Get selloRecibido	  */
+	public String getei_selloRecibido();
+
+    /** Column name ei_ValidationStatus */
+    public static final String COLUMNNAME_ei_ValidationStatus = "ei_ValidationStatus";
+
+	/** Set EI Validation Status (Intern).
+	  * EI Validation Status
+	  */
+	public void setei_ValidationStatus (String ei_ValidationStatus);
+
+	/** Get EI Validation Status (Intern).
+	  * EI Validation Status
+	  */
+	public String getei_ValidationStatus();
 
     /** Column name FM_Account_ID */
     public static final String COLUMNNAME_FM_Account_ID = "FM_Account_ID";
@@ -548,8 +765,6 @@ public interface I_C_Invoice
 	/** Get Financial Account	  */
 	public int getFM_Account_ID();
 
-	public org.adempiere.core.domains.models.I_FM_Account getFM_Account() throws RuntimeException;
-
     /** Column name FM_Agreement_ID */
     public static final String COLUMNNAME_FM_Agreement_ID = "FM_Agreement_ID";
 
@@ -558,8 +773,6 @@ public interface I_C_Invoice
 
 	/** Get Agreement	  */
 	public int getFM_Agreement_ID();
-
-	public org.adempiere.core.domains.models.I_FM_Agreement getFM_Agreement() throws RuntimeException;
 
     /** Column name GenerateTo */
     public static final String COLUMNNAME_GenerateTo = "GenerateTo";
@@ -574,6 +787,15 @@ public interface I_C_Invoice
 	  */
 	public String getGenerateTo();
 
+    /** Column name GenerateWithholding */
+    public static final String COLUMNNAME_GenerateWithholding = "GenerateWithholding";
+
+	/** Set Generate Withholding	  */
+	public void setGenerateWithholding (String GenerateWithholding);
+
+	/** Get Generate Withholding	  */
+	public String getGenerateWithholding();
+
     /** Column name GrandTotal */
     public static final String COLUMNNAME_GrandTotal = "GrandTotal";
 
@@ -586,6 +808,28 @@ public interface I_C_Invoice
 	  * Total amount of document
 	  */
 	public BigDecimal getGrandTotal();
+
+    /** Column name Incoterms */
+    public static final String COLUMNNAME_Incoterms = "Incoterms";
+
+	/** Set Incoterm.
+	  * Término de compra del pedido
+	  */
+	public void setIncoterms (String Incoterms);
+
+	/** Get Incoterm.
+	  * Término de compra del pedido
+	  */
+	public String getIncoterms();
+
+    /** Column name invoiceclass */
+    public static final String COLUMNNAME_invoiceclass = "invoiceclass";
+
+	/** Set invoiceclass	  */
+	public void setinvoiceclass (String invoiceclass);
+
+	/** Get invoiceclass	  */
+	public String getinvoiceclass();
 
     /** Column name InvoiceCollectionType */
     public static final String COLUMNNAME_InvoiceCollectionType = "InvoiceCollectionType";
@@ -625,6 +869,15 @@ public interface I_C_Invoice
 	  * Indicates if this document requires approval
 	  */
 	public boolean isApproved();
+
+    /** Column name isContract */
+    public static final String COLUMNNAME_isContract = "isContract";
+
+	/** Set isContract	  */
+	public void setisContract (boolean isContract);
+
+	/** Get isContract	  */
+	public boolean isContract();
 
     /** Column name IsDiscountPrinted */
     public static final String COLUMNNAME_IsDiscountPrinted = "IsDiscountPrinted";
@@ -704,6 +957,19 @@ public interface I_C_Invoice
 	  */
 	public boolean isPrinted();
 
+    /** Column name IsPublished */
+    public static final String COLUMNNAME_IsPublished = "IsPublished";
+
+	/** Set Published.
+	  * The Topic is published and can be viewed
+	  */
+	public void setIsPublished (boolean IsPublished);
+
+	/** Get Published.
+	  * The Topic is published and can be viewed
+	  */
+	public boolean isPublished();
+
     /** Column name IsSelfService */
     public static final String COLUMNNAME_IsSelfService = "IsSelfService";
 
@@ -729,6 +995,15 @@ public interface I_C_Invoice
 	  * This is a Sales Transaction
 	  */
 	public boolean isSOTrx();
+
+    /** Column name isSplitInvoice */
+    public static final String COLUMNNAME_isSplitInvoice = "isSplitInvoice";
+
+	/** Set isSplitInvoice	  */
+	public void setisSplitInvoice (boolean isSplitInvoice);
+
+	/** Get isSplitInvoice	  */
+	public boolean isSplitInvoice();
 
     /** Column name IsTaxIncluded */
     public static final String COLUMNNAME_IsTaxIncluded = "IsTaxIncluded";
@@ -756,6 +1031,15 @@ public interface I_C_Invoice
 	  */
 	public boolean isTransferred();
 
+    /** Column name LG_Route_ID */
+    public static final String COLUMNNAME_LG_Route_ID = "LG_Route_ID";
+
+	/** Set LG_Route ID	  */
+	public void setLG_Route_ID (int LG_Route_ID);
+
+	/** Get LG_Route ID	  */
+	public int getLG_Route_ID();
+
     /** Column name M_PriceList_ID */
     public static final String COLUMNNAME_M_PriceList_ID = "M_PriceList_ID";
 
@@ -771,6 +1055,21 @@ public interface I_C_Invoice
 
 	public org.adempiere.core.domains.models.I_M_PriceList getM_PriceList() throws RuntimeException;
 
+    /** Column name M_Product_Classification_ID */
+    public static final String COLUMNNAME_M_Product_Classification_ID = "M_Product_Classification_ID";
+
+	/** Set Product Classification.
+	  * Classification of a Product
+	  */
+	public void setM_Product_Classification_ID (int M_Product_Classification_ID);
+
+	/** Get Product Classification.
+	  * Classification of a Product
+	  */
+	public int getM_Product_Classification_ID();
+
+	public org.adempiere.core.domains.models.I_M_Product_Classification getM_Product_Classification() throws RuntimeException;
+
     /** Column name M_RMA_ID */
     public static final String COLUMNNAME_M_RMA_ID = "M_RMA_ID";
 
@@ -785,6 +1084,28 @@ public interface I_C_Invoice
 	public int getM_RMA_ID();
 
 	public org.adempiere.core.domains.models.I_M_RMA getM_RMA() throws RuntimeException;
+
+    /** Column name oneProjectInvoice */
+    public static final String COLUMNNAME_oneProjectInvoice = "oneProjectInvoice";
+
+	/** Set oneProjectInvoice	  */
+	public void setoneProjectInvoice (boolean oneProjectInvoice);
+
+	/** Get oneProjectInvoice	  */
+	public boolean isoneProjectInvoice();
+
+    /** Column name PayDate */
+    public static final String COLUMNNAME_PayDate = "PayDate";
+
+	/** Set Payment date.
+	  * Date Payment made
+	  */
+	public void setPayDate (Timestamp PayDate);
+
+	/** Get Payment date.
+	  * Date Payment made
+	  */
+	public Timestamp getPayDate();
 
     /** Column name PaymentRule */
     public static final String COLUMNNAME_PaymentRule = "PaymentRule";
@@ -860,6 +1181,28 @@ public interface I_C_Invoice
 	/** Get Process Now	  */
 	public boolean isProcessing();
 
+    /** Column name Provider */
+    public static final String COLUMNNAME_Provider = "Provider";
+
+	/** Set Provider	  */
+	public void setProvider (String Provider);
+
+	/** Get Provider	  */
+	public String getProvider();
+
+    /** Column name ProviderPO */
+    public static final String COLUMNNAME_ProviderPO = "ProviderPO";
+
+	/** Set Pedido.
+	  * Número de la Orden de Compra o pedido del cliente hacia el proveedor
+	  */
+	public void setProviderPO (String ProviderPO);
+
+	/** Get Pedido.
+	  * Número de la Orden de Compra o pedido del cliente hacia el proveedor
+	  */
+	public String getProviderPO();
+
     /** Column name Ref_Invoice_ID */
     public static final String COLUMNNAME_Ref_Invoice_ID = "Ref_Invoice_ID";
 
@@ -868,6 +1211,30 @@ public interface I_C_Invoice
 
 	/** Get Referenced Invoice	  */
 	public int getRef_Invoice_ID();
+
+    /** Column name ReferenciaDeDeclaracion */
+    public static final String COLUMNNAME_ReferenciaDeDeclaracion = "ReferenciaDeDeclaracion";
+
+	/** Set Referencia DM.
+	  * Referencia interna de la mercancía del agente de aduana
+	  */
+	public void setReferenciaDeDeclaracion (String ReferenciaDeDeclaracion);
+
+	/** Get Referencia DM.
+	  * Referencia interna de la mercancía del agente de aduana
+	  */
+	public String getReferenciaDeDeclaracion();
+
+    /** Column name remitee_ID */
+    public static final String COLUMNNAME_remitee_ID = "remitee_ID";
+
+	/** Set remitee_ID	  */
+	public void setremitee_ID (int remitee_ID);
+
+	/** Get remitee_ID	  */
+	public int getremitee_ID();
+
+	public org.adempiere.core.domains.models.I_C_BPartner getremitee() throws RuntimeException;
 
     /** Column name Reversal_ID */
     public static final String COLUMNNAME_Reversal_ID = "Reversal_ID";
@@ -911,6 +1278,161 @@ public interface I_C_Invoice
 	  * Enable sending Document EMail
 	  */
 	public boolean isSendEMail();
+
+    /** Column name SeqNo */
+    public static final String COLUMNNAME_SeqNo = "SeqNo";
+
+	/** Set Sequence.
+	  * Method of ordering records;
+ lowest number comes first
+	  */
+	public void setSeqNo (int SeqNo);
+
+	/** Get Sequence.
+	  * Method of ordering records;
+ lowest number comes first
+	  */
+	public int getSeqNo();
+
+    /** Column name SerNo */
+    public static final String COLUMNNAME_SerNo = "SerNo";
+
+	/** Set Serial No.
+	  * Product Serial Number 
+	  */
+	public void setSerNo (String SerNo);
+
+	/** Get Serial No.
+	  * Product Serial Number 
+	  */
+	public String getSerNo();
+
+    /** Column name shw_Amt */
+    public static final String COLUMNNAME_shw_Amt = "shw_Amt";
+
+	/** Set shw_Amt	  */
+	public void setshw_Amt (BigDecimal shw_Amt);
+
+	/** Get shw_Amt	  */
+	public BigDecimal getshw_Amt();
+
+    /** Column name SHW_ChangeDocumentNo */
+    public static final String COLUMNNAME_SHW_ChangeDocumentNo = "SHW_ChangeDocumentNo";
+
+	/** Set SHW_ChangeDocumentNo	  */
+	public void setSHW_ChangeDocumentNo (String SHW_ChangeDocumentNo);
+
+	/** Get SHW_ChangeDocumentNo	  */
+	public String getSHW_ChangeDocumentNo();
+
+    /** Column name shw_contract_ID */
+    public static final String COLUMNNAME_shw_contract_ID = "shw_contract_ID";
+
+	/** Set shw_contract_ID	  */
+	public void setshw_contract_ID (int shw_contract_ID);
+
+	/** Get shw_contract_ID	  */
+	public int getshw_contract_ID();
+
+	public org.adempiere.core.domains.models.I_C_Invoice getshw_contract() throws RuntimeException;
+
+    /** Column name SHW_CreateQuedan */
+    public static final String COLUMNNAME_SHW_CreateQuedan = "SHW_CreateQuedan";
+
+	/** Set SHW_CreateQuedan	  */
+	public void setSHW_CreateQuedan (String SHW_CreateQuedan);
+
+	/** Get SHW_CreateQuedan	  */
+	public String getSHW_CreateQuedan();
+
+    /** Column name SHW_INV_Reactivate */
+    public static final String COLUMNNAME_SHW_INV_Reactivate = "SHW_INV_Reactivate";
+
+	/** Set SHW_INV_Reactivate	  */
+	public void setSHW_INV_Reactivate (String SHW_INV_Reactivate);
+
+	/** Get SHW_INV_Reactivate	  */
+	public String getSHW_INV_Reactivate();
+
+    /** Column name shw_PrintComprobanteReintegro */
+    public static final String COLUMNNAME_shw_PrintComprobanteReintegro = "shw_PrintComprobanteReintegro";
+
+	/** Set shw_PrintComprobanteReintegro	  */
+	public void setshw_PrintComprobanteReintegro (String shw_PrintComprobanteReintegro);
+
+	/** Get shw_PrintComprobanteReintegro	  */
+	public String getshw_PrintComprobanteReintegro();
+
+    /** Column name shw_reason_Cancelation */
+    public static final String COLUMNNAME_shw_reason_Cancelation = "shw_reason_Cancelation";
+
+	/** Set shw_reason_Cancelation	  */
+	public void setshw_reason_Cancelation (String shw_reason_Cancelation);
+
+	/** Get shw_reason_Cancelation	  */
+	public String getshw_reason_Cancelation();
+
+    /** Column name shw_retaceo_ID */
+    public static final String COLUMNNAME_shw_retaceo_ID = "shw_retaceo_ID";
+
+	/** Set shw_retaceo ID	  */
+	public void setshw_retaceo_ID (int shw_retaceo_ID);
+
+	/** Get shw_retaceo ID	  */
+	public int getshw_retaceo_ID();
+
+    /** Column name shw_tax */
+    public static final String COLUMNNAME_shw_tax = "shw_tax";
+
+	/** Set shw_tax	  */
+	public void setshw_tax (BigDecimal shw_tax);
+
+	/** Get shw_tax	  */
+	public BigDecimal getshw_tax();
+
+    /** Column name TaxAmt */
+    public static final String COLUMNNAME_TaxAmt = "TaxAmt";
+
+	/** Set Tax Amount.
+	  * Tax Amount for a document
+	  */
+	public void setTaxAmt (BigDecimal TaxAmt);
+
+	/** Get Tax Amount.
+	  * Tax Amount for a document
+	  */
+	public BigDecimal getTaxAmt();
+
+    /** Column name taxamtdeclared */
+    public static final String COLUMNNAME_taxamtdeclared = "taxamtdeclared";
+
+	/** Set taxamtdeclared	  */
+	public void settaxamtdeclared (BigDecimal taxamtdeclared);
+
+	/** Get taxamtdeclared	  */
+	public BigDecimal gettaxamtdeclared();
+
+    /** Column name TaxBaseAmt */
+    public static final String COLUMNNAME_TaxBaseAmt = "TaxBaseAmt";
+
+	/** Set Tax base Amount.
+	  * Base for calculating the tax amount
+	  */
+	public void setTaxBaseAmt (BigDecimal TaxBaseAmt);
+
+	/** Get Tax base Amount.
+	  * Base for calculating the tax amount
+	  */
+	public BigDecimal getTaxBaseAmt();
+
+    /** Column name taxbaseamtdeclared */
+    public static final String COLUMNNAME_taxbaseamtdeclared = "taxbaseamtdeclared";
+
+	/** Set taxbaseamtdeclared	  */
+	public void settaxbaseamtdeclared (BigDecimal taxbaseamtdeclared);
+
+	/** Get taxbaseamtdeclared	  */
+	public BigDecimal gettaxbaseamtdeclared();
 
     /** Column name TotalLines */
     public static final String COLUMNNAME_TotalLines = "TotalLines";
@@ -1013,4 +1535,49 @@ public interface I_C_Invoice
 	  * Immutable Universally Unique Identifier
 	  */
 	public String getUUID();
+
+    /** Column name WithholdingAmt */
+    public static final String COLUMNNAME_WithholdingAmt = "WithholdingAmt";
+
+	/** Set Withholding Amount	  */
+	public void setWithholdingAmt (BigDecimal WithholdingAmt);
+
+	/** Get Withholding Amount	  */
+	public BigDecimal getWithholdingAmt();
+
+    /** Column name Z_SHW_AMOUNT_HAC */
+    public static final String COLUMNNAME_Z_SHW_AMOUNT_HAC = "Z_SHW_AMOUNT_HAC";
+
+	/** Set Z_SHW_AMOUNT_HAC	  */
+	public void setZ_SHW_AMOUNT_HAC (BigDecimal Z_SHW_AMOUNT_HAC);
+
+	/** Get Z_SHW_AMOUNT_HAC	  */
+	public BigDecimal getZ_SHW_AMOUNT_HAC();
+
+    /** Column name Z_SHW_AMOUNTIVA */
+    public static final String COLUMNNAME_Z_SHW_AMOUNTIVA = "Z_SHW_AMOUNTIVA";
+
+	/** Set Z_SHW_AMOUNTIVA	  */
+	public void setZ_SHW_AMOUNTIVA (BigDecimal Z_SHW_AMOUNTIVA);
+
+	/** Get Z_SHW_AMOUNTIVA	  */
+	public BigDecimal getZ_SHW_AMOUNTIVA();
+
+    /** Column name Z_SHW_InvoiceType */
+    public static final String COLUMNNAME_Z_SHW_InvoiceType = "Z_SHW_InvoiceType";
+
+	/** Set Z_SHW_InvoiceType	  */
+	public void setZ_SHW_InvoiceType (String Z_SHW_InvoiceType);
+
+	/** Get Z_SHW_InvoiceType	  */
+	public String getZ_SHW_InvoiceType();
+
+    /** Column name Z_SHW_NoCorr */
+    public static final String COLUMNNAME_Z_SHW_NoCorr = "Z_SHW_NoCorr";
+
+	/** Set Z_SHW_NoCorr	  */
+	public void setZ_SHW_NoCorr (int Z_SHW_NoCorr);
+
+	/** Get Z_SHW_NoCorr	  */
+	public int getZ_SHW_NoCorr();
 }

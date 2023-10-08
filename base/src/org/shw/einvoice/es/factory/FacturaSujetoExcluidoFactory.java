@@ -283,10 +283,10 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 		
 		jsonObjectEmisor.put(FacturaSujetoExcluido.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(FacturaSujetoExcluido.CORREO, client.getEMail());
-		jsonObjectEmisor.put(FacturaSujetoExcluido.CODESTABLEMH, "");								// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(FacturaSujetoExcluido.CODESTABLE, client.getE_PlantType_ID());								// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(FacturaSujetoExcluido.CODPUNTOVENTAMH, "");							// TODO: korrekte Daten einsetzen
-		jsonObjectEmisor.put(FacturaSujetoExcluido.CODPUNTOVENTA, "");							// TODO: korrekte Daten einsetzen
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODESTABLEMH, "");								
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODESTABLE, client.getE_PlantType().getValue());								
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODPUNTOVENTAMH, "");							
+		jsonObjectEmisor.put(FacturaSujetoExcluido.CODPUNTOVENTA, "");							
 		jsonObjectEmisor.put(FacturaSujetoExcluido.TELEFONO, client.get_ValueAsString("phone"));
 		jsonObjectEmisor.put(FacturaSujetoExcluido.CORREO, client.getEMail());
 
@@ -432,6 +432,8 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 			BigDecimal compra 	= Env.ZERO;
 			String description = invoiceLine.getM_Product_ID()>0?invoiceLine.getM_Product().getName():invoiceLine.getC_Charge().getName();
 			String codigo = invoiceLine.getM_Product_ID()>0? invoiceLine.getProduct().getValue(): invoiceLine.getC_Charge().getName();
+			int codigolength = codigo.length()>10? 10: codigo.length();
+			
 			compra = invoiceLine.getLineTotalAmt();
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
@@ -439,7 +441,7 @@ public class FacturaSujetoExcluidoFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.NUMITEM, invoiceLine.getLine()/10);
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.TIPOITEM, 2);
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.CANTIDAD, invoiceLine.getQtyInvoiced());
-			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.CODIGO, codigo.substring(0,10));
+			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.CODIGO, codigo.substring(0,codigolength));
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.UNIMEDIDA, 1);
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.DESCRIPCION, description);
 			jsonCuerpoDocumentoItem.put(FacturaSujetoExcluido.PRECIOUNI, invoiceLine.getPriceActual());

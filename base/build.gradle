@@ -19,7 +19,8 @@ allprojects {
 
 dependencies {
 	implementation fileTree(
-        dir: [
+        dir: '../tools/lib', 
+        include: [
         'Verisign.jar', 
 		'payflow.jar',
         ]

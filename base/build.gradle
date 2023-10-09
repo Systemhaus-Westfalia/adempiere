@@ -22,7 +22,7 @@ dependencies {
         dir: '../tools/lib', 
         include: [
         'Verisign.jar', 
-		'payflow.jar',
+		'payflow.jar'
         ]
     )
     

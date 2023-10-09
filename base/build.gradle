@@ -20,10 +20,7 @@ allprojects {
 dependencies {
 	implementation fileTree(
         dir: '../tools/lib', 
-        include: [
-        'Verisign.jar', 
-		'payflow.jar'
-        ]
+        include: '**/*.jar'
     )
     
     implementation 'org.json:json:20211205'

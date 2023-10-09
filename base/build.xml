@@ -52,6 +52,7 @@
   	<pathelement path="../tools/lib/discord/jackson-databind-2.13.2.2.jar" />
   	<pathelement path="../tools/lib/discord/jackson-core-2.13.2.jar" />
   	<pathelement path="../tools/lib/discord/jackson-annotations-2.13.2.jar" />
+  	<pathelement path="../tools/lib/telegrambots-6.0.1-jar-with-dependencies.jar" />
   </path>
 		
   <target name="init" description="initialization target">

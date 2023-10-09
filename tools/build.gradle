@@ -4,10 +4,8 @@ apply plugin: 'signing'
 
 
 
-implementation files('lib/telegrambots-6.0.1-jar-with-dependencies.jar')
-
-
 dependencies {
+api group: 'org.telegram', name: 'telegrambots', version: '6.0.1'
 	//api '<library-group>:<library-name>:<library-version>'
 }
 

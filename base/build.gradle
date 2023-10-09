@@ -17,13 +17,16 @@ allprojects {
    	}
 }
 
-api files('../tools/lib/telegrambots-6.0.1-jar-with-dependencies.jar')
-
 dependencies {
 	implementation fileTree(
-        dir: '../tools/lib', 
-        include: '*.jar'
+        dir: [
+        'Verisign.jar', 
+		'payflow.jar',
+        ]
     )
+    
+    api group: 'org.telegram', name: 'telegrambots', version: '6.0.1'
+
 	//api '<library-group>:<library-name>:<library-version>'
     // https://mvnrepository.com/artifact/org.apache.poi/poi
 	implementation group: 'org.apache.poi', name: 'poi', version: '3.17'

@@ -5,7 +5,15 @@ apply plugin: 'signing'
 
 
 
+// Neu wg. JSON
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
 dependencies {
+    // Neu wg. JSON
+    api 'org.telegram:telegrambots:6.0.1'
 	//api '<library-group>:<library-name>:<library-version>'
 }
 

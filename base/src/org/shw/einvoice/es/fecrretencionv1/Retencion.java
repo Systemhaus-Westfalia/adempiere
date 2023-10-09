@@ -2,158 +2,289 @@
  * 
  */
 package org.shw.einvoice.es.fecrretencionv1;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.shw.einvoice.es.util.pojo.ApendiceItem;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.shw.einvoice.es.utils.EDocument;
+import org.shw.einvoice.es.utils.EDocumentUtils;
 
 
 /**
  * 
  */
-public class Retencion {
+public class Retencion extends EDocument {	
 	static final int CUERPODOCUMENTO_MAXIMUM_ITEMS = 500;
-	
 	static final String VALIDATION_RESULT_OK = "OK";
 	static final String VALIDATION_CUERPODOCUMENTO_MAX_ITEMS  = "Documento: Retencion, clase: Retencion. Validacion falló: valor de 'cuerpoDocumento' debe  contener de 1 a 500 elementos";
 	
-	Identificacion identificacion;
-	Emisor emisor;
-	Receptor receptor;
-	List<CuerpoDocumentoItem> cuerpoDocumento;
-	Resumen resumen;
-	Extension extension;
-	List<ApendiceItem> apendice=null;  // null allowed
+	IdentificacionRetencion identificacion;
+	EmisorRetencion emisor;
+	ReceptorRetencion receptor;
+	List<CuerpoDocumentoItemRetencion> cuerpoDocumento;
+	ResumenRetencion resumen;
+	ExtensionRetencion extension;
+	List<ApendiceItemRetencion> apendice=null;  // null allowed
 
 	/**
 	 * No parameters
 	 */
 	public Retencion() {
-		this.identificacion       = new Identificacion();
-		this.emisor               = new Emisor();
-		this.receptor             = new Receptor();
-		this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItem>();
-		this.resumen              = new Resumen();
-		this.extension            = new Extension();
-		//this.apendice             = new ArrayList<ApendiceItem>();
-	}
-	
-	/**
-	 * Validate the Schema conditions
-	 */
-	public String validateValues() {
-		if( (getCuerpoDocumento()==null) ||  (getCuerpoDocumento().size()==0) || (getCuerpoDocumento().size()>CUERPODOCUMENTO_MAXIMUM_ITEMS) ) {
-			return VALIDATION_CUERPODOCUMENTO_MAX_ITEMS;
-		}
-		
-		return VALIDATION_RESULT_OK;
+
+		this.identificacion       =  new IdentificacionRetencion();
+		this.emisor               = new EmisorRetencion();
+		this.receptor             = new ReceptorRetencion();
+	    this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemRetencion>();
+		this.resumen              = new ResumenRetencion();
+		this.extension            = new ExtensionRetencion();
+	    this.apendice             = new ArrayList<ApendiceItemRetencion>();
 	}
 
 	/**
 	 * @return the identificacion
 	 */
-	public Identificacion getIdentificacion() {
+	public IdentificacionRetencion getIdentificacion() {
 		return identificacion;
+	}
+
+	/**
+	 * Validate the Schema conditions
+	 */
+	public String validateValues() {		
+		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
 
 
 	/**
 	 * @param identificacion the identificacion to set
 	 */
-	public void setIdentificacion(Identificacion identificacion) {
+	public void setIdentificacion(IdentificacionRetencion identificacion) {
 		this.identificacion = identificacion;
+	}
+
+	/**
+	 * @param identificacion the (IdentificacionFactura) identificacion to set
+	 */
+	public StringBuffer fillIdentification(JSONObject factoryInput) {
+		System.out.println("Start Credito Fiscal.fillIdentificacion()"); 
+
+		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
+		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoDte(identificationJson.getString(TIPODTE));} 					catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setCodigoGeneracion(identificationJson.getString(CODIGOGENERACION));} 	catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoModelo(identificationJson.getInt(TIPOMODELO));} 					catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoOperacion(identificationJson.getInt(TIPOOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoContingencia(identificationJson.getInt(TIPOCONTINGENCIA));} 		catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setMotivoContin(identificationJson.getString(MOTIVOCONTIN));} 			catch (Exception e) {errorMessages.append(e);}		
+		try {identificacion.setFecEmi(identificationJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
+		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
+		System.out.println("End Credito Fiscal.fillIdentificacion()");
+		return errorMessages;
 	}
 
 	/**
 	 * @return the emisor
 	 */
-	public Emisor getEmisor() {
+	public EmisorRetencion getEmisor() {
 		return emisor;
 	}
 
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(Emisor emisor) {
+	public void setEmisor(EmisorRetencion emisor) {
 		this.emisor = emisor;
+	}
+
+	public StringBuffer fillEmisor(JSONObject factoryInput) {
+		System.out.println("Start Retencion.fillEmisor()");
+
+		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
+		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setNrc(emisorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setNombre(emisorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setCodActividad(emisorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setDescActividad(emisorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setNombreComercial(emisorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}		
+		try {emisor.setTipoEstablecimiento(emisorJson.getString(TIPOESTABLECIMIENTO));}		catch (Exception e) {errorMessages.append(e);}	
+
+		JSONObject jsonDireccion = emisorJson.getJSONObject(DIRECCION);
+		try {emisor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+		try {emisor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+		try {emisor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+
+		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setCodigoMH(emisorJson.getString(CODIGOMH));} 							catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setCodigo(emisorJson.getString(CODIGO));} 								catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setPuntoVentaMH(emisorJson.getString(PUNTOVENTAMH));} 					catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setPuntoVenta(emisorJson.getString(PUNTOVENTA));} 						catch (Exception e) {errorMessages.append(e);}
+		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Retencion.fillEmisor()");
+		return errorMessages;
 	}
 
 	/**
 	 * @return the receptor
 	 */
-	public Receptor getReceptor() {
+	public ReceptorRetencion getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(Receptor receptor) {
+	public void setReceptor(ReceptorRetencion receptor) {
 		this.receptor = receptor;
+	}
+
+	public StringBuffer fillReceptor(JSONObject factoryInput) {
+		System.out.println("Start Retencion.fillReceptor()"); 
+
+		JSONObject receptorJson = factoryInput.getJSONObject(RECEPTOR);
+		try {receptor.setTipoDocumento(receptorJson.getString(TIPODOCUMENTO));} 				catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNumDocumento(receptorJson.getString(NUMDOCUMENTO));} 					catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNrc(receptorJson.getString(NRC));} 									catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNombre(receptorJson.getString(NOMBRE));} 								catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setCodActividad(receptorJson.getString(CODACTIVIDAD));} 					catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setDescActividad(receptorJson.getString(DESCACTIVIDAD));} 				catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setNombreComercial(receptorJson.getString(NOMBRECOMERCIAL));} 			catch (Exception e) {errorMessages.append(e);}
+		
+		JSONObject jsonDireccion = receptorJson.getJSONObject(DIRECCION);
+		try {receptor.getDireccion().setDepartamento(jsonDireccion.getString(DEPARTAMENTO));}	catch (Exception e) {errorMessages.append(e);}
+		try {receptor.getDireccion().setMunicipio(jsonDireccion.getString(MUNICIPIO));} 		catch (Exception e) {errorMessages.append(e);}
+		try {receptor.getDireccion().setComplemento(jsonDireccion.getString(COMPLEMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+
+		try {receptor.setTelefono(receptorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
+		try {receptor.setCorreo(receptorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Retencion.fillReceptor()"); 
+		return errorMessages;
 	}
 
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	public List<CuerpoDocumentoItem> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItemRetencion> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
 	/**
 	 * @param cuerpoDocumento the cuerpoDocumento to set
 	 */
-	public void setCuerpoDocumento(List<CuerpoDocumentoItem> cuerpoDocumento) {
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemRetencion> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
+	}
+
+
+	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
+		System.out.println("Start Retencion.fillCuerpoDocumento()"); 
+
+		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
+		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
+	
+		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) {
+			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
+			CuerpoDocumentoItemRetencion cuerpoDocumentoItemRetencion = new CuerpoDocumentoItemRetencion();
+			try {cuerpoDocumentoItemRetencion.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 						catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setTipoDte(cuerpoDocumentoItemJson.getString(NUMITEM));} 						catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setTipoDoc(cuerpoDocumentoItemJson.getInt(TIPODOC));} 						catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setNumDocumento(cuerpoDocumentoItemJson.getString(NUMDOCUMENTO));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setFechaEmision(cuerpoDocumentoItemJson.getString(FECHAEMISION));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setMontoSujetoGrav(cuerpoDocumentoItemJson.getBigDecimal(MONTOSUJETOGRAV));} 	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setCodigoRetencionMH(cuerpoDocumentoItemJson.getString(CODIGORETENCIONMH));}	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setIvaRetenido(cuerpoDocumentoItemJson.getBigDecimal(IVARETENIDO));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemRetencion.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 				catch (Exception e) {errorMessages.append(e);}
+
+			cuerpoDocumento.add(cuerpoDocumentoItemRetencion);						
+		}
+
+		System.out.println("End Retencion.fillCuerpoDocumento()"); 
+		return errorMessages;
 	}
 
 	/**
 	 * @return the resumen
 	 */
-	public Resumen getResumen() {
+	public ResumenRetencion getResumen() {
 		return resumen;
 	}
 
 	/**
 	 * @param resumen the resumen to set
 	 */
-	public void setResumen(Resumen resumen) {
+	public void setResumen(ResumenRetencion resumen) {
 		this.resumen = resumen;
+	}
+
+	
+	public StringBuffer fillResumen(JSONObject factoryInput) {
+		System.out.println("Start Retencion.fillResumen()");
+		JSONObject resumenJson = factoryInput.getJSONObject(RESUMEN);		
+
+		try {resumen.setTotalSujetoRetencion(resumenJson.getBigDecimal(TOTALSUJETORETENCION));}	catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalIVAretenido(resumenJson.getBigDecimal(TOTALIVARETENIDO));} 		catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalIVAretenidoLetras(resumenJson.getString(TOTALIVARETENIDOLETRAS));} catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Retencion.fillResumen()"); 
+		return errorMessages;
 	}
 
 	/**
 	 * @return the extension
 	 */
-	public Extension getExtension() {
+	public ExtensionRetencion getExtension() {
 		return extension;
 	}
 
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(Extension extension) {
+	public void setExtension(ExtensionRetencion extension) {
 		this.extension = extension;
+	}
+
+	
+	public StringBuffer fillExtension(JSONObject factoryInput) {
+		System.out.println("Start Retencion.fillExtension()");
+		JSONObject resumenJson = factoryInput.getJSONObject(EXTENSION);		
+
+		try {resumen.setTotalIVAretenido(resumenJson.getBigDecimal(TOTALIVARETENIDO));} 					catch (Exception e) {errorMessages.append(e);}
+
+		System.out.println("End Retencion.fillExtension()"); 
+		return errorMessages;
 	}
 
 	/**
 	 * @return the apendice
 	 */
-	public List<ApendiceItem> getApendice() {
+	public List<ApendiceItemRetencion> getApendice() {
 		return apendice;
 	}
 
 	/**
 	 * @param apendice the apendice to set
 	 */
-	public void setApendice(List<ApendiceItem> apendice) {
+	public void setApendice(List<ApendiceItemRetencion> apendice) {
 		this.apendice = apendice;
+	}
+
+	
+	public StringBuffer fillApendice(JSONObject factoryInput) {
+		System.out.println("Start Retencion.fillApendice()");
+		//JSONObject resumenJson = factoryInput.getJSONObject(EXTENSION);
+
+		System.out.println("End Retencion.fillApendice()"); 
+		return errorMessages;
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 	}
 	

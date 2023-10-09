@@ -5,7 +5,7 @@ apply plugin: 'signing'
 
 
 dependencies {
-implementation group: 'org.telegram', name: 'telegrambots', version: '6.0.1'
+    implementation 'org.json:json:20211205'
 	//api '<library-group>:<library-name>:<library-version>'
 }
 

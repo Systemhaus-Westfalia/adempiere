@@ -22,6 +22,10 @@ dependencies {
         dir: '../tools/lib', 
         include: '*.jar'
     )
+    
+    // Neu wg. JSON
+    api 'org.telegram:telegrambots:6.0.1'
+    
 	//api '<library-group>:<library-name>:<library-version>'
     // https://mvnrepository.com/artifact/org.apache.poi/poi
 	implementation group: 'org.apache.poi', name: 'poi', version: '3.17'

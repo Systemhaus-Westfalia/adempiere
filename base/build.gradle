@@ -20,11 +20,11 @@ allprojects {
 dependencies {
 	implementation fileTree(
         dir: '../tools/lib', 
-        include: '**/*.jar'
+        include: [
+        'Verisign.jar', 
+		'payflow.jar',
+        ]
     )
-    
-    implementation 'org.json:json:20211205'
-
 	//api '<library-group>:<library-name>:<library-version>'
     // https://mvnrepository.com/artifact/org.apache.poi/poi
 	implementation group: 'org.apache.poi', name: 'poi', version: '3.17'

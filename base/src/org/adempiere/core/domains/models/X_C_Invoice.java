@@ -18,6 +18,7 @@
 /** Generated Model - DO NOT CHANGE */
 package org.adempiere.core.domains.models;
 
+
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -38,7 +39,7 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 20230102L;
+	private static final long serialVersionUID = 20231006L;
 
     /** Standard Constructor */
     public X_C_Invoice (Properties ctx, int C_Invoice_ID, String trxName)
@@ -67,18 +68,25 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 			setGrandTotal (Env.ZERO);
 			setIsApproved (false);
 // @IsApproved@
+			setisContract (false);
+// N
 			setIsDiscountPrinted (false);
 			setIsInDispute (false);
 // N
 			setIsPaid (false);
+// N
 			setIsPayScheduleValid (false);
 			setIsPrinted (false);
+			setIsPublished (true);
+// Y
 			setIsSelfService (false);
 			setIsSOTrx (false);
 // @IsSOTrx@
 			setIsTaxIncluded (false);
 			setIsTransferred (false);
 			setM_PriceList_ID (0);
+			setoneProjectInvoice (true);
+// Y
 			setPaymentRule (null);
 // P
 			setPosted (false);
@@ -86,6 +94,7 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 			setProcessed (false);
 			setSendEMail (false);
 			setTotalLines (Env.ZERO);
+			setUser1_ID (0);
         } */
     }
 
@@ -116,11 +125,6 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
         .append(get_ID()).append("]");
       return sb.toString();
     }
-
-	public org.adempiere.core.domains.models.I_AD_Org getAD_OrgTrx() throws RuntimeException
-    {
-		return (org.adempiere.core.domains.models.I_AD_Org)MTable.get(getCtx(), org.adempiere.core.domains.models.I_AD_Org.Table_Name)
-			.getPO(getAD_OrgTrx_ID(), get_TrxName());	}
 
 	/** Set Trx Organization.
 		@param AD_OrgTrx_ID 
@@ -173,6 +177,79 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return ii.intValue();
 	}
 
+	/** Set Backup Value.
+		@param BackupValue 
+		The value of the column prior to migration.
+	  */
+	public void setBackupValue (String BackupValue)
+	{
+		set_Value (COLUMNNAME_BackupValue, BackupValue);
+	}
+
+	/** Get Backup Value.
+		@return The value of the column prior to migration.
+	  */
+	public String getBackupValue () 
+	{
+		return (String)get_Value(COLUMNNAME_BackupValue);
+	}
+
+	public org.adempiere.core.domains.models.I_C_BPartner getBill_BPartner() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_BPartner)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_BPartner.Table_Name)
+			.getPO(getBill_BPartner_ID(), get_TrxName());	}
+
+	/** Set Invoice Partner.
+		@param Bill_BPartner_ID 
+		Business Partner to be invoiced
+	  */
+	public void setBill_BPartner_ID (int Bill_BPartner_ID)
+	{
+		if (Bill_BPartner_ID < 1) 
+			set_Value (COLUMNNAME_Bill_BPartner_ID, null);
+		else 
+			set_Value (COLUMNNAME_Bill_BPartner_ID, Integer.valueOf(Bill_BPartner_ID));
+	}
+
+	/** Get Invoice Partner.
+		@return Business Partner to be invoiced
+	  */
+	public int getBill_BPartner_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_Bill_BPartner_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.adempiere.core.domains.models.I_C_BPartner_Location getBillTo() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_BPartner_Location)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_BPartner_Location.Table_Name)
+			.getPO(getBillTo_ID(), get_TrxName());	}
+
+	/** Set Invoice To.
+		@param BillTo_ID 
+		Bill to Address
+	  */
+	public void setBillTo_ID (int BillTo_ID)
+	{
+		if (BillTo_ID < 1) 
+			set_Value (COLUMNNAME_BillTo_ID, null);
+		else 
+			set_Value (COLUMNNAME_BillTo_ID, Integer.valueOf(BillTo_ID));
+	}
+
+	/** Get Invoice To.
+		@return Bill to Address
+	  */
+	public int getBillTo_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_BillTo_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	/** Set BOM Drop.
 		@param BOMDrop 
 		Drop (expand) Bill of Materials into an Order, Invoice, etc.
@@ -188,6 +265,31 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	public String getBOMDrop () 
 	{
 		return (String)get_Value(COLUMNNAME_BOMDrop);
+	}
+
+	public org.adempiere.core.domains.models.I_C_BPartner getbroker() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_BPartner)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_BPartner.Table_Name)
+			.getPO(getbroker_ID(), get_TrxName());	}
+
+	/** Set broker_ID.
+		@param broker_ID broker_ID	  */
+	public void setbroker_ID (int broker_ID)
+	{
+		if (broker_ID < 1) 
+			set_Value (COLUMNNAME_broker_ID, null);
+		else 
+			set_Value (COLUMNNAME_broker_ID, Integer.valueOf(broker_ID));
+	}
+
+	/** Get broker_ID.
+		@return broker_ID	  */
+	public int getbroker_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_broker_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
 	}
 
 	public org.adempiere.core.domains.models.I_C_Activity getC_Activity() throws RuntimeException
@@ -274,6 +376,31 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return ii.intValue();
 	}
 
+	public org.adempiere.core.domains.models.I_C_BPartner getc_BPartnerimport() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_BPartner)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_BPartner.Table_Name)
+			.getPO(getc_BPartnerimport_ID(), get_TrxName());	}
+
+	/** Set c_BPartnerimport_ID.
+		@param c_BPartnerimport_ID c_BPartnerimport_ID	  */
+	public void setc_BPartnerimport_ID (int c_BPartnerimport_ID)
+	{
+		if (c_BPartnerimport_ID < 1) 
+			set_Value (COLUMNNAME_c_BPartnerimport_ID, null);
+		else 
+			set_Value (COLUMNNAME_c_BPartnerimport_ID, Integer.valueOf(c_BPartnerimport_ID));
+	}
+
+	/** Get c_BPartnerimport_ID.
+		@return c_BPartnerimport_ID	  */
+	public int getc_BPartnerimport_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_c_BPartnerimport_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	public org.adempiere.core.domains.models.I_C_Campaign getC_Campaign() throws RuntimeException
     {
 		return (org.adempiere.core.domains.models.I_C_Campaign)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_Campaign.Table_Name)
@@ -353,6 +480,34 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	public int getC_Charge_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_C_Charge_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.adempiere.core.domains.models.I_C_CommissionRun getC_CommissionRun() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_CommissionRun)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_CommissionRun.Table_Name)
+			.getPO(getC_CommissionRun_ID(), get_TrxName());	}
+
+	/** Set Commission Run.
+		@param C_CommissionRun_ID 
+		Commission Run or Process
+	  */
+	public void setC_CommissionRun_ID (int C_CommissionRun_ID)
+	{
+		if (C_CommissionRun_ID < 1) 
+			set_Value (COLUMNNAME_C_CommissionRun_ID, null);
+		else 
+			set_Value (COLUMNNAME_C_CommissionRun_ID, Integer.valueOf(C_CommissionRun_ID));
+	}
+
+	/** Get Commission Run.
+		@return Commission Run or Process
+	  */
+	public int getC_CommissionRun_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_CommissionRun_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -602,6 +757,34 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return ii.intValue();
 	}
 
+	public org.adempiere.core.domains.models.I_C_Period getC_Period() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_Period)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_Period.Table_Name)
+			.getPO(getC_Period_ID(), get_TrxName());	}
+
+	/** Set Period.
+		@param C_Period_ID 
+		Period of the Calendar
+	  */
+	public void setC_Period_ID (int C_Period_ID)
+	{
+		if (C_Period_ID < 1) 
+			set_Value (COLUMNNAME_C_Period_ID, null);
+		else 
+			set_Value (COLUMNNAME_C_Period_ID, Integer.valueOf(C_Period_ID));
+	}
+
+	/** Get Period.
+		@return Period of the Calendar
+	  */
+	public int getC_Period_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_C_Period_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	public org.adempiere.core.domains.models.I_C_POS getC_POS() throws RuntimeException
     {
 		return (org.adempiere.core.domains.models.I_C_POS)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_POS.Table_Name)
@@ -686,6 +869,28 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return ii.intValue();
 	}
 
+	public org.adempiere.core.domains.models.I_AD_User getcashcollec() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_AD_User)MTable.get(getCtx(), org.adempiere.core.domains.models.I_AD_User.Table_Name)
+			.getPO(getcashcollector(), get_TrxName());	}
+
+	/** Set cashcollector.
+		@param cashcollector cashcollector	  */
+	public void setcashcollector (int cashcollector)
+	{
+		set_Value (COLUMNNAME_cashcollector, Integer.valueOf(cashcollector));
+	}
+
+	/** Get cashcollector.
+		@return cashcollector	  */
+	public int getcashcollector () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_cashcollector);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	/** Set Charge amount.
 		@param ChargeAmt 
 		Charge Amount
@@ -704,6 +909,54 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		if (bd == null)
 			 return Env.ZERO;
 		return bd;
+	}
+
+	/** Set Código registro DM.
+		@param CodigoDeDeclaracion 
+		Código registro de la declaración de mercancías en el sistema de Aduanas
+	  */
+	public void setCodigoDeDeclaracion (String CodigoDeDeclaracion)
+	{
+		set_Value (COLUMNNAME_CodigoDeDeclaracion, CodigoDeDeclaracion);
+	}
+
+	/** Get Código registro DM.
+		@return Código registro de la declaración de mercancías en el sistema de Aduanas
+	  */
+	public String getCodigoDeDeclaracion () 
+	{
+		return (String)get_Value(COLUMNNAME_CodigoDeDeclaracion);
+	}
+
+	/** Set Comments.
+		@param Comments 
+		Comments or additional information
+	  */
+	public void setComments (String Comments)
+	{
+		set_Value (COLUMNNAME_Comments, Comments);
+	}
+
+	/** Get Comments.
+		@return Comments or additional information
+	  */
+	public String getComments () 
+	{
+		return (String)get_Value(COLUMNNAME_Comments);
+	}
+
+	/** Set Concepto.
+		@param Concepto Concepto	  */
+	public void setConcepto (String Concepto)
+	{
+		set_Value (COLUMNNAME_Concepto, Concepto);
+	}
+
+	/** Get Concepto.
+		@return Concepto	  */
+	public String getConcepto () 
+	{
+		return (String)get_Value(COLUMNNAME_Concepto);
 	}
 
 	/** Set Copy From.
@@ -825,6 +1078,45 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return (String)get_Value(COLUMNNAME_Description);
 	}
 
+	/** Set descriptionCancel.
+		@param descriptionCancel descriptionCancel	  */
+	public void setdescriptionCancel (String descriptionCancel)
+	{
+		set_Value (COLUMNNAME_descriptionCancel, descriptionCancel);
+	}
+
+	/** Get descriptionCancel.
+		@return descriptionCancel	  */
+	public String getdescriptionCancel () 
+	{
+		return (String)get_Value(COLUMNNAME_descriptionCancel);
+	}
+
+	public org.adempiere.core.domains.models.I_C_BPartner getDifBPPaytmen() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_BPartner)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_BPartner.Table_Name)
+			.getPO(getDifBPPaytmentTo(), get_TrxName());	}
+
+	/** Set DifBPPaytmentTo.
+		@param DifBPPaytmentTo 
+		Paytment/Reimbursement To business partner
+	  */
+	public void setDifBPPaytmentTo (int DifBPPaytmentTo)
+	{
+		set_Value (COLUMNNAME_DifBPPaytmentTo, Integer.valueOf(DifBPPaytmentTo));
+	}
+
+	/** Get DifBPPaytmentTo.
+		@return Paytment/Reimbursement To business partner
+	  */
+	public int getDifBPPaytmentTo () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_DifBPPaytmentTo);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	/** DocAction AD_Reference_ID=135 */
 	public static final int DOCACTION_AD_Reference_ID=135;
 	/** Complete = CO */
@@ -923,7 +1215,7 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	  */
 	public void setDocumentNo (String DocumentNo)
 	{
-		set_ValueNoCheck (COLUMNNAME_DocumentNo, DocumentNo);
+		set_Value (COLUMNNAME_DocumentNo, DocumentNo);
 	}
 
 	/** Get Document No.
@@ -942,6 +1234,23 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
         return new KeyNamePair(get_ID(), getDocumentNo());
     }
 
+	/** Set Documento transporte.
+		@param DocumentoDeTransporte 
+		Número de documento de transporte (AWB, BL, carta porte, etc.)
+	  */
+	public void setDocumentoDeTransporte (String DocumentoDeTransporte)
+	{
+		set_Value (COLUMNNAME_DocumentoDeTransporte, DocumentoDeTransporte);
+	}
+
+	/** Get Documento transporte.
+		@return Número de documento de transporte (AWB, BL, carta porte, etc.)
+	  */
+	public String getDocumentoDeTransporte () 
+	{
+		return (String)get_Value(COLUMNNAME_DocumentoDeTransporte);
+	}
+
 	/** Set Dunning Grace Date.
 		@param DunningGrace Dunning Grace Date	  */
 	public void setDunningGrace (Timestamp DunningGrace)
@@ -956,10 +1265,71 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return (Timestamp)get_Value(COLUMNNAME_DunningGrace);
 	}
 
-	public org.adempiere.core.domains.models.I_FM_Account getFM_Account() throws RuntimeException
-    {
-		return (org.adempiere.core.domains.models.I_FM_Account)MTable.get(getCtx(), org.adempiere.core.domains.models.I_FM_Account.Table_Name)
-			.getPO(getFM_Account_ID(), get_TrxName());	}
+	/** Set ei_codigoGeneracion.
+		@param ei_codigoGeneracion ei_codigoGeneracion	  */
+	public void setei_codigoGeneracion (String ei_codigoGeneracion)
+	{
+		set_Value (COLUMNNAME_ei_codigoGeneracion, ei_codigoGeneracion);
+	}
+
+	/** Get ei_codigoGeneracion.
+		@return ei_codigoGeneracion	  */
+	public String getei_codigoGeneracion () 
+	{
+		return (String)get_Value(COLUMNNAME_ei_codigoGeneracion);
+	}
+
+	/** Set numeroControl.
+		@param ei_numeroControl numeroControl	  */
+	public void setei_numeroControl (String ei_numeroControl)
+	{
+		set_Value (COLUMNNAME_ei_numeroControl, ei_numeroControl);
+	}
+
+	/** Get numeroControl.
+		@return numeroControl	  */
+	public String getei_numeroControl () 
+	{
+		return (String)get_Value(COLUMNNAME_ei_numeroControl);
+	}
+
+	/** Set selloRecibido.
+		@param ei_selloRecibido selloRecibido	  */
+	public void setei_selloRecibido (String ei_selloRecibido)
+	{
+		set_Value (COLUMNNAME_ei_selloRecibido, ei_selloRecibido);
+	}
+
+	/** Get selloRecibido.
+		@return selloRecibido	  */
+	public String getei_selloRecibido () 
+	{
+		return (String)get_Value(COLUMNNAME_ei_selloRecibido);
+	}
+
+	/** ei_ValidationStatus AD_Reference_ID=3000276 */
+	public static final int EI_VALIDATIONSTATUS_AD_Reference_ID=3000276;
+	/** Valid = 01 */
+	public static final String EI_VALIDATIONSTATUS_Valid = "01";
+	/** Not Valid = 02 */
+	public static final String EI_VALIDATIONSTATUS_NotValid = "02";
+	/** Set EI Validation Status (Intern).
+		@param ei_ValidationStatus 
+		EI Validation Status
+	  */
+	public void setei_ValidationStatus (String ei_ValidationStatus)
+	{
+
+		set_Value (COLUMNNAME_ei_ValidationStatus, ei_ValidationStatus);
+	}
+
+	/** Get EI Validation Status (Intern).
+		@return EI Validation Status
+	  */
+	public String getei_ValidationStatus () 
+	{
+		return (String)get_Value(COLUMNNAME_ei_ValidationStatus);
+	}
 
 	/** Set Financial Account.
 		@param FM_Account_ID Financial Account	  */
@@ -980,11 +1350,6 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 			 return 0;
 		return ii.intValue();
 	}
-
-	public org.adempiere.core.domains.models.I_FM_Agreement getFM_Agreement() throws RuntimeException
-    {
-		return (org.adempiere.core.domains.models.I_FM_Agreement)MTable.get(getCtx(), org.adempiere.core.domains.models.I_FM_Agreement.Table_Name)
-			.getPO(getFM_Agreement_ID(), get_TrxName());	}
 
 	/** Set Agreement.
 		@param FM_Agreement_ID Agreement	  */
@@ -1023,13 +1388,27 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return (String)get_Value(COLUMNNAME_GenerateTo);
 	}
 
+	/** Set Generate Withholding.
+		@param GenerateWithholding Generate Withholding	  */
+	public void setGenerateWithholding (String GenerateWithholding)
+	{
+		set_Value (COLUMNNAME_GenerateWithholding, GenerateWithholding);
+	}
+
+	/** Get Generate Withholding.
+		@return Generate Withholding	  */
+	public String getGenerateWithholding () 
+	{
+		return (String)get_Value(COLUMNNAME_GenerateWithholding);
+	}
+
 	/** Set Grand Total.
 		@param GrandTotal 
 		Total amount of document
 	  */
 	public void setGrandTotal (BigDecimal GrandTotal)
 	{
-		set_ValueNoCheck (COLUMNNAME_GrandTotal, GrandTotal);
+		set_Value (COLUMNNAME_GrandTotal, GrandTotal);
 	}
 
 	/** Get Grand Total.
@@ -1041,6 +1420,62 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		if (bd == null)
 			 return Env.ZERO;
 		return bd;
+	}
+
+	/** Incoterms AD_Reference_ID=1000015 */
+	public static final int INCOTERMS_AD_Reference_ID=1000015;
+	/** EXW = 10 */
+	public static final String INCOTERMS_EXW = "10";
+	/** DAP = 100 */
+	public static final String INCOTERMS_DAP = "100";
+	/** DDP = 110 */
+	public static final String INCOTERMS_DDP = "110";
+	/** FCA = 20 */
+	public static final String INCOTERMS_FCA = "20";
+	/** FAS = 30 */
+	public static final String INCOTERMS_FAS = "30";
+	/** FOB = 40 */
+	public static final String INCOTERMS_FOB = "40";
+	/** CFR = 50 */
+	public static final String INCOTERMS_CFR = "50";
+	/** CIF = 60 */
+	public static final String INCOTERMS_CIF = "60";
+	/** CPT = 70 */
+	public static final String INCOTERMS_CPT = "70";
+	/** CIP = 80 */
+	public static final String INCOTERMS_CIP = "80";
+	/** DAT = 90 */
+	public static final String INCOTERMS_DAT = "90";
+	/** Set Incoterm.
+		@param Incoterms 
+		Término de compra del pedido
+	  */
+	public void setIncoterms (String Incoterms)
+	{
+
+		set_Value (COLUMNNAME_Incoterms, Incoterms);
+	}
+
+	/** Get Incoterm.
+		@return Término de compra del pedido
+	  */
+	public String getIncoterms () 
+	{
+		return (String)get_Value(COLUMNNAME_Incoterms);
+	}
+
+	/** Set invoiceclass.
+		@param invoiceclass invoiceclass	  */
+	public void setinvoiceclass (String invoiceclass)
+	{
+		set_Value (COLUMNNAME_invoiceclass, invoiceclass);
+	}
+
+	/** Get invoiceclass.
+		@return invoiceclass	  */
+	public String getinvoiceclass () 
+	{
+		return (String)get_Value(COLUMNNAME_invoiceclass);
 	}
 
 	/** InvoiceCollectionType AD_Reference_ID=394 */
@@ -1086,6 +1521,27 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	public boolean isApproved () 
 	{
 		Object oo = get_Value(COLUMNNAME_IsApproved);
+		if (oo != null) 
+		{
+			 if (oo instanceof Boolean) 
+				 return ((Boolean)oo).booleanValue(); 
+			return "Y".equals(oo);
+		}
+		return false;
+	}
+
+	/** Set isContract.
+		@param isContract isContract	  */
+	public void setisContract (boolean isContract)
+	{
+		set_Value (COLUMNNAME_isContract, Boolean.valueOf(isContract));
+	}
+
+	/** Get isContract.
+		@return isContract	  */
+	public boolean isContract () 
+	{
+		Object oo = get_Value(COLUMNNAME_isContract);
 		if (oo != null) 
 		{
 			 if (oo instanceof Boolean) 
@@ -1239,6 +1695,30 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return false;
 	}
 
+	/** Set Published.
+		@param IsPublished 
+		The Topic is published and can be viewed
+	  */
+	public void setIsPublished (boolean IsPublished)
+	{
+		set_Value (COLUMNNAME_IsPublished, Boolean.valueOf(IsPublished));
+	}
+
+	/** Get Published.
+		@return The Topic is published and can be viewed
+	  */
+	public boolean isPublished () 
+	{
+		Object oo = get_Value(COLUMNNAME_IsPublished);
+		if (oo != null) 
+		{
+			 if (oo instanceof Boolean) 
+				 return ((Boolean)oo).booleanValue(); 
+			return "Y".equals(oo);
+		}
+		return false;
+	}
+
 	/** Set Self-Service.
 		@param IsSelfService 
 		This is a Self-Service entry or this entry can be changed via Self-Service
@@ -1278,6 +1758,27 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	public boolean isSOTrx () 
 	{
 		Object oo = get_Value(COLUMNNAME_IsSOTrx);
+		if (oo != null) 
+		{
+			 if (oo instanceof Boolean) 
+				 return ((Boolean)oo).booleanValue(); 
+			return "Y".equals(oo);
+		}
+		return false;
+	}
+
+	/** Set isSplitInvoice.
+		@param isSplitInvoice isSplitInvoice	  */
+	public void setisSplitInvoice (boolean isSplitInvoice)
+	{
+		set_Value (COLUMNNAME_isSplitInvoice, Boolean.valueOf(isSplitInvoice));
+	}
+
+	/** Get isSplitInvoice.
+		@return isSplitInvoice	  */
+	public boolean isSplitInvoice () 
+	{
+		Object oo = get_Value(COLUMNNAME_isSplitInvoice);
 		if (oo != null) 
 		{
 			 if (oo instanceof Boolean) 
@@ -1335,6 +1836,26 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return false;
 	}
 
+	/** Set LG_Route ID.
+		@param LG_Route_ID LG_Route ID	  */
+	public void setLG_Route_ID (int LG_Route_ID)
+	{
+		if (LG_Route_ID < 1) 
+			set_Value (COLUMNNAME_LG_Route_ID, null);
+		else 
+			set_Value (COLUMNNAME_LG_Route_ID, Integer.valueOf(LG_Route_ID));
+	}
+
+	/** Get LG_Route ID.
+		@return LG_Route ID	  */
+	public int getLG_Route_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_LG_Route_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
 	public org.adempiere.core.domains.models.I_M_PriceList getM_PriceList() throws RuntimeException
     {
 		return (org.adempiere.core.domains.models.I_M_PriceList)MTable.get(getCtx(), org.adempiere.core.domains.models.I_M_PriceList.Table_Name)
@@ -1358,6 +1879,34 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	public int getM_PriceList_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_M_PriceList_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	public org.adempiere.core.domains.models.I_M_Product_Classification getM_Product_Classification() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_M_Product_Classification)MTable.get(getCtx(), org.adempiere.core.domains.models.I_M_Product_Classification.Table_Name)
+			.getPO(getM_Product_Classification_ID(), get_TrxName());	}
+
+	/** Set Product Classification.
+		@param M_Product_Classification_ID 
+		Classification of a Product
+	  */
+	public void setM_Product_Classification_ID (int M_Product_Classification_ID)
+	{
+		if (M_Product_Classification_ID < 1) 
+			set_Value (COLUMNNAME_M_Product_Classification_ID, null);
+		else 
+			set_Value (COLUMNNAME_M_Product_Classification_ID, Integer.valueOf(M_Product_Classification_ID));
+	}
+
+	/** Get Product Classification.
+		@return Classification of a Product
+	  */
+	public int getM_Product_Classification_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_M_Product_Classification_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -1389,6 +1938,44 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
+	}
+
+	/** Set oneProjectInvoice.
+		@param oneProjectInvoice oneProjectInvoice	  */
+	public void setoneProjectInvoice (boolean oneProjectInvoice)
+	{
+		set_Value (COLUMNNAME_oneProjectInvoice, Boolean.valueOf(oneProjectInvoice));
+	}
+
+	/** Get oneProjectInvoice.
+		@return oneProjectInvoice	  */
+	public boolean isoneProjectInvoice () 
+	{
+		Object oo = get_Value(COLUMNNAME_oneProjectInvoice);
+		if (oo != null) 
+		{
+			 if (oo instanceof Boolean) 
+				 return ((Boolean)oo).booleanValue(); 
+			return "Y".equals(oo);
+		}
+		return false;
+	}
+
+	/** Set Payment date.
+		@param PayDate 
+		Date Payment made
+	  */
+	public void setPayDate (Timestamp PayDate)
+	{
+		set_Value (COLUMNNAME_PayDate, PayDate);
+	}
+
+	/** Get Payment date.
+		@return Date Payment made
+	  */
+	public Timestamp getPayDate () 
+	{
+		return (Timestamp)get_Value(COLUMNNAME_PayDate);
 	}
 
 	/** PaymentRule AD_Reference_ID=195 */
@@ -1531,6 +2118,37 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 		return false;
 	}
 
+	/** Set Provider.
+		@param Provider Provider	  */
+	public void setProvider (String Provider)
+	{
+		set_Value (COLUMNNAME_Provider, Provider);
+	}
+
+	/** Get Provider.
+		@return Provider	  */
+	public String getProvider () 
+	{
+		return (String)get_Value(COLUMNNAME_Provider);
+	}
+
+	/** Set Pedido.
+		@param ProviderPO 
+		Número de la Orden de Compra o pedido del cliente hacia el proveedor
+	  */
+	public void setProviderPO (String ProviderPO)
+	{
+		set_Value (COLUMNNAME_ProviderPO, ProviderPO);
+	}
+
+	/** Get Pedido.
+		@return Número de la Orden de Compra o pedido del cliente hacia el proveedor
+	  */
+	public String getProviderPO () 
+	{
+		return (String)get_Value(COLUMNNAME_ProviderPO);
+	}
+
 	/** Set Referenced Invoice.
 		@param Ref_Invoice_ID Referenced Invoice	  */
 	public void setRef_Invoice_ID (int Ref_Invoice_ID)
@@ -1546,6 +2164,48 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	public int getRef_Invoice_ID () 
 	{
 		Integer ii = (Integer)get_Value(COLUMNNAME_Ref_Invoice_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	/** Set Referencia DM.
+		@param ReferenciaDeDeclaracion 
+		Referencia interna de la mercancía del agente de aduana
+	  */
+	public void setReferenciaDeDeclaracion (String ReferenciaDeDeclaracion)
+	{
+		set_Value (COLUMNNAME_ReferenciaDeDeclaracion, ReferenciaDeDeclaracion);
+	}
+
+	/** Get Referencia DM.
+		@return Referencia interna de la mercancía del agente de aduana
+	  */
+	public String getReferenciaDeDeclaracion () 
+	{
+		return (String)get_Value(COLUMNNAME_ReferenciaDeDeclaracion);
+	}
+
+	public org.adempiere.core.domains.models.I_C_BPartner getremitee() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_BPartner)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_BPartner.Table_Name)
+			.getPO(getremitee_ID(), get_TrxName());	}
+
+	/** Set remitee_ID.
+		@param remitee_ID remitee_ID	  */
+	public void setremitee_ID (int remitee_ID)
+	{
+		if (remitee_ID < 1) 
+			set_Value (COLUMNNAME_remitee_ID, null);
+		else 
+			set_Value (COLUMNNAME_remitee_ID, Integer.valueOf(remitee_ID));
+	}
+
+	/** Get remitee_ID.
+		@return remitee_ID	  */
+	public int getremitee_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_remitee_ID);
 		if (ii == null)
 			 return 0;
 		return ii.intValue();
@@ -1629,6 +2289,266 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 			return "Y".equals(oo);
 		}
 		return false;
+	}
+
+	/** Set Sequence.
+		@param SeqNo 
+		Method of ordering records; lowest number comes first
+	  */
+	public void setSeqNo (int SeqNo)
+	{
+		set_Value (COLUMNNAME_SeqNo, Integer.valueOf(SeqNo));
+	}
+
+	/** Get Sequence.
+		@return Method of ordering records; lowest number comes first
+	  */
+	public int getSeqNo () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_SeqNo);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	/** Set Serial No.
+		@param SerNo 
+		Product Serial Number 
+	  */
+	public void setSerNo (String SerNo)
+	{
+		set_Value (COLUMNNAME_SerNo, SerNo);
+	}
+
+	/** Get Serial No.
+		@return Product Serial Number 
+	  */
+	public String getSerNo () 
+	{
+		return (String)get_Value(COLUMNNAME_SerNo);
+	}
+
+	/** Set shw_Amt.
+		@param shw_Amt shw_Amt	  */
+	public void setshw_Amt (BigDecimal shw_Amt)
+	{
+		set_Value (COLUMNNAME_shw_Amt, shw_Amt);
+	}
+
+	/** Get shw_Amt.
+		@return shw_Amt	  */
+	public BigDecimal getshw_Amt () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_shw_Amt);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Set SHW_ChangeDocumentNo.
+		@param SHW_ChangeDocumentNo SHW_ChangeDocumentNo	  */
+	public void setSHW_ChangeDocumentNo (String SHW_ChangeDocumentNo)
+	{
+		set_Value (COLUMNNAME_SHW_ChangeDocumentNo, SHW_ChangeDocumentNo);
+	}
+
+	/** Get SHW_ChangeDocumentNo.
+		@return SHW_ChangeDocumentNo	  */
+	public String getSHW_ChangeDocumentNo () 
+	{
+		return (String)get_Value(COLUMNNAME_SHW_ChangeDocumentNo);
+	}
+
+	public org.adempiere.core.domains.models.I_C_Invoice getshw_contract() throws RuntimeException
+    {
+		return (org.adempiere.core.domains.models.I_C_Invoice)MTable.get(getCtx(), org.adempiere.core.domains.models.I_C_Invoice.Table_Name)
+			.getPO(getshw_contract_ID(), get_TrxName());	}
+
+	/** Set shw_contract_ID.
+		@param shw_contract_ID shw_contract_ID	  */
+	public void setshw_contract_ID (int shw_contract_ID)
+	{
+		if (shw_contract_ID < 1) 
+			set_Value (COLUMNNAME_shw_contract_ID, null);
+		else 
+			set_Value (COLUMNNAME_shw_contract_ID, Integer.valueOf(shw_contract_ID));
+	}
+
+	/** Get shw_contract_ID.
+		@return shw_contract_ID	  */
+	public int getshw_contract_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_shw_contract_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	/** Set SHW_CreateQuedan.
+		@param SHW_CreateQuedan SHW_CreateQuedan	  */
+	public void setSHW_CreateQuedan (String SHW_CreateQuedan)
+	{
+		set_Value (COLUMNNAME_SHW_CreateQuedan, SHW_CreateQuedan);
+	}
+
+	/** Get SHW_CreateQuedan.
+		@return SHW_CreateQuedan	  */
+	public String getSHW_CreateQuedan () 
+	{
+		return (String)get_Value(COLUMNNAME_SHW_CreateQuedan);
+	}
+
+	/** Set SHW_INV_Reactivate.
+		@param SHW_INV_Reactivate SHW_INV_Reactivate	  */
+	public void setSHW_INV_Reactivate (String SHW_INV_Reactivate)
+	{
+		set_Value (COLUMNNAME_SHW_INV_Reactivate, SHW_INV_Reactivate);
+	}
+
+	/** Get SHW_INV_Reactivate.
+		@return SHW_INV_Reactivate	  */
+	public String getSHW_INV_Reactivate () 
+	{
+		return (String)get_Value(COLUMNNAME_SHW_INV_Reactivate);
+	}
+
+	/** Set shw_PrintComprobanteReintegro.
+		@param shw_PrintComprobanteReintegro shw_PrintComprobanteReintegro	  */
+	public void setshw_PrintComprobanteReintegro (String shw_PrintComprobanteReintegro)
+	{
+		set_Value (COLUMNNAME_shw_PrintComprobanteReintegro, shw_PrintComprobanteReintegro);
+	}
+
+	/** Get shw_PrintComprobanteReintegro.
+		@return shw_PrintComprobanteReintegro	  */
+	public String getshw_PrintComprobanteReintegro () 
+	{
+		return (String)get_Value(COLUMNNAME_shw_PrintComprobanteReintegro);
+	}
+
+	/** Set shw_reason_Cancelation.
+		@param shw_reason_Cancelation shw_reason_Cancelation	  */
+	public void setshw_reason_Cancelation (String shw_reason_Cancelation)
+	{
+		set_Value (COLUMNNAME_shw_reason_Cancelation, shw_reason_Cancelation);
+	}
+
+	/** Get shw_reason_Cancelation.
+		@return shw_reason_Cancelation	  */
+	public String getshw_reason_Cancelation () 
+	{
+		return (String)get_Value(COLUMNNAME_shw_reason_Cancelation);
+	}
+
+	/** Set shw_retaceo ID.
+		@param shw_retaceo_ID shw_retaceo ID	  */
+	public void setshw_retaceo_ID (int shw_retaceo_ID)
+	{
+		if (shw_retaceo_ID < 1) 
+			set_Value (COLUMNNAME_shw_retaceo_ID, null);
+		else 
+			set_Value (COLUMNNAME_shw_retaceo_ID, Integer.valueOf(shw_retaceo_ID));
+	}
+
+	/** Get shw_retaceo ID.
+		@return shw_retaceo ID	  */
+	public int getshw_retaceo_ID () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_shw_retaceo_ID);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
+	}
+
+	/** Set shw_tax.
+		@param shw_tax shw_tax	  */
+	public void setshw_tax (BigDecimal shw_tax)
+	{
+		set_Value (COLUMNNAME_shw_tax, shw_tax);
+	}
+
+	/** Get shw_tax.
+		@return shw_tax	  */
+	public BigDecimal getshw_tax () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_shw_tax);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Set Tax Amount.
+		@param TaxAmt 
+		Tax Amount for a document
+	  */
+	public void setTaxAmt (BigDecimal TaxAmt)
+	{
+		set_Value (COLUMNNAME_TaxAmt, TaxAmt);
+	}
+
+	/** Get Tax Amount.
+		@return Tax Amount for a document
+	  */
+	public BigDecimal getTaxAmt () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_TaxAmt);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Set taxamtdeclared.
+		@param taxamtdeclared taxamtdeclared	  */
+	public void settaxamtdeclared (BigDecimal taxamtdeclared)
+	{
+		set_Value (COLUMNNAME_taxamtdeclared, taxamtdeclared);
+	}
+
+	/** Get taxamtdeclared.
+		@return taxamtdeclared	  */
+	public BigDecimal gettaxamtdeclared () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_taxamtdeclared);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Set Tax base Amount.
+		@param TaxBaseAmt 
+		Base for calculating the tax amount
+	  */
+	public void setTaxBaseAmt (BigDecimal TaxBaseAmt)
+	{
+		set_Value (COLUMNNAME_TaxBaseAmt, TaxBaseAmt);
+	}
+
+	/** Get Tax base Amount.
+		@return Base for calculating the tax amount
+	  */
+	public BigDecimal getTaxBaseAmt () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_TaxBaseAmt);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Set taxbaseamtdeclared.
+		@param taxbaseamtdeclared taxbaseamtdeclared	  */
+	public void settaxbaseamtdeclared (BigDecimal taxbaseamtdeclared)
+	{
+		set_Value (COLUMNNAME_taxbaseamtdeclared, taxbaseamtdeclared);
+	}
+
+	/** Get taxbaseamtdeclared.
+		@return taxbaseamtdeclared	  */
+	public BigDecimal gettaxbaseamtdeclared () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_taxbaseamtdeclared);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
 	}
 
 	/** Set Total Lines.
@@ -1778,5 +2698,112 @@ public class X_C_Invoice extends PO implements I_C_Invoice, I_Persistent
 	public String getUUID () 
 	{
 		return (String)get_Value(COLUMNNAME_UUID);
+	}
+
+	/** Set Withholding Amount.
+		@param WithholdingAmt Withholding Amount	  */
+	public void setWithholdingAmt (BigDecimal WithholdingAmt)
+	{
+		set_Value (COLUMNNAME_WithholdingAmt, WithholdingAmt);
+	}
+
+	/** Get Withholding Amount.
+		@return Withholding Amount	  */
+	public BigDecimal getWithholdingAmt () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_WithholdingAmt);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Set Z_SHW_AMOUNT_HAC.
+		@param Z_SHW_AMOUNT_HAC Z_SHW_AMOUNT_HAC	  */
+	public void setZ_SHW_AMOUNT_HAC (BigDecimal Z_SHW_AMOUNT_HAC)
+	{
+		set_Value (COLUMNNAME_Z_SHW_AMOUNT_HAC, Z_SHW_AMOUNT_HAC);
+	}
+
+	/** Get Z_SHW_AMOUNT_HAC.
+		@return Z_SHW_AMOUNT_HAC	  */
+	public BigDecimal getZ_SHW_AMOUNT_HAC () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_Z_SHW_AMOUNT_HAC);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Set Z_SHW_AMOUNTIVA.
+		@param Z_SHW_AMOUNTIVA Z_SHW_AMOUNTIVA	  */
+	public void setZ_SHW_AMOUNTIVA (BigDecimal Z_SHW_AMOUNTIVA)
+	{
+		set_Value (COLUMNNAME_Z_SHW_AMOUNTIVA, Z_SHW_AMOUNTIVA);
+	}
+
+	/** Get Z_SHW_AMOUNTIVA.
+		@return Z_SHW_AMOUNTIVA	  */
+	public BigDecimal getZ_SHW_AMOUNTIVA () 
+	{
+		BigDecimal bd = (BigDecimal)get_Value(COLUMNNAME_Z_SHW_AMOUNTIVA);
+		if (bd == null)
+			 return Env.ZERO;
+		return bd;
+	}
+
+	/** Z_SHW_InvoiceType AD_Reference_ID=1000033 */
+	public static final int Z_SHW_INVOICETYPE_AD_Reference_ID=1000033;
+	/** Venta con crédito fiscal = VCRE */
+	public static final String Z_SHW_INVOICETYPE_VentaConCréditoFiscal = "VCRE";
+	/** c = DAI */
+	public static final String Z_SHW_INVOICETYPE_C = "DAI";
+	/** Factura de Costos Adicionales de Importaciones = FCI */
+	public static final String Z_SHW_INVOICETYPE_FacturaDeCostosAdicionalesDeImportaciones = "FCI";
+	/** Factura de Cargos Adicionales = FCN */
+	public static final String Z_SHW_INVOICETYPE_FacturaDeCargosAdicionales = "FCN";
+	/** Factura de Cargos = FCO */
+	public static final String Z_SHW_INVOICETYPE_FacturaDeCargos = "FCO";
+	/** Factura de mercaderia (importacion) = FMI */
+	public static final String Z_SHW_INVOICETYPE_FacturaDeMercaderiaImportacion = "FMI";
+	/** Factura de mercaderia (nacional) = FMN */
+	public static final String Z_SHW_INVOICETYPE_FacturaDeMercaderiaNacional = "FMN";
+	/** Nota de Abono para clientes nacionales = NABO */
+	public static final String Z_SHW_INVOICETYPE_NotaDeAbonoParaClientesNacionales = "NABO";
+	/** Nota de Credito para contribuyentes = NCRE */
+	public static final String Z_SHW_INVOICETYPE_NotaDeCreditoParaContribuyentes = "NCRE";
+	/** Exportacion = VEXP */
+	public static final String Z_SHW_INVOICETYPE_Exportacion = "VEXP";
+	/** Venta al consumidot final = VFAC */
+	public static final String Z_SHW_INVOICETYPE_VentaAlConsumidotFinal = "VFAC";
+	/** Set Z_SHW_InvoiceType.
+		@param Z_SHW_InvoiceType Z_SHW_InvoiceType	  */
+	public void setZ_SHW_InvoiceType (String Z_SHW_InvoiceType)
+	{
+
+		set_Value (COLUMNNAME_Z_SHW_InvoiceType, Z_SHW_InvoiceType);
+	}
+
+	/** Get Z_SHW_InvoiceType.
+		@return Z_SHW_InvoiceType	  */
+	public String getZ_SHW_InvoiceType () 
+	{
+		return (String)get_Value(COLUMNNAME_Z_SHW_InvoiceType);
+	}
+
+	/** Set Z_SHW_NoCorr.
+		@param Z_SHW_NoCorr Z_SHW_NoCorr	  */
+	public void setZ_SHW_NoCorr (int Z_SHW_NoCorr)
+	{
+		set_Value (COLUMNNAME_Z_SHW_NoCorr, Integer.valueOf(Z_SHW_NoCorr));
+	}
+
+	/** Get Z_SHW_NoCorr.
+		@return Z_SHW_NoCorr	  */
+	public int getZ_SHW_NoCorr () 
+	{
+		Integer ii = (Integer)get_Value(COLUMNNAME_Z_SHW_NoCorr);
+		if (ii == null)
+			 return 0;
+		return ii.intValue();
 	}
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.shw.einvoice.es.fendnotadedebitov3;
+package org.shw.einvoice.es.feccfcreditofiscalv3;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,60 +16,66 @@ import org.shw.einvoice.es.utils.TributosItem;
 /**
  * 
  */
-public class NotaDeDebito extends EDocument {
-	IdentificacionNotaDeDebito identificacion;
-	List<DocumentoRelacionadoItemNotaDeDebito> documentoRelacionado;
-	EmisorNotaDeDebito emisor;
-	ReceptorNotaDeDebito receptor;
-	VentaTerceroNotaDeDebito ventaTercero = null;
-	List<CuerpoDocumentoItemNotaDeDebito> cuerpoDocumento;
-	ResumenNotaDeDebito resumen;
-	ExtensionNotaDeDebito extension;
-	List<ApendiceItemNotaDeDebito> apendice=null;  // null allowed
+public class CreditoFiscal extends EDocument {
+	
+	IdentificacionCreditoFiscal identificacion;
+	List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionado = null;
+	EmisorCreditoFiscal emisor;
+	ReceptorCreditoFiscal receptor;
+	List<OtrosDocumentosItemCreditoFiscal> otrosDocumentos = null;
+	VentaTerceroCreditoFiscal ventaTercero = null;
+	List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento;
+	ResumenCreditoFiscal resumen;
+	ExtensionCreditoFiscal extension;
+	List<ApendiceItemCreditoFiscal> apendice=null;  // null allowed
 
 	/**
 	 * No parameters
 	 */
-	public NotaDeDebito() {
-		this.identificacion       = new IdentificacionNotaDeDebito();
-	    this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemNotaDeDebito>();
-		this.emisor               = new EmisorNotaDeDebito();
-		this.receptor             = new ReceptorNotaDeDebito();
-		this.ventaTercero         = new VentaTerceroNotaDeDebito();
-	    this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemNotaDeDebito>();
-		this.resumen              = new ResumenNotaDeDebito();
-		this.extension            = new ExtensionNotaDeDebito();
-	    this.apendice      		  = new ArrayList<ApendiceItemNotaDeDebito>();
+	public CreditoFiscal() {
+		
+		this.identificacion       = new IdentificacionCreditoFiscal();
+		this.documentoRelacionado = new ArrayList<DocumentoRelacionadoItemCreditoFiscal>();
+		this.emisor               = new EmisorCreditoFiscal();
+		this.receptor             = new ReceptorCreditoFiscal();
+	    this.otrosDocumentos      = new ArrayList<OtrosDocumentosItemCreditoFiscal>();
+		this.ventaTercero         = new VentaTerceroCreditoFiscal();
+	    this.cuerpoDocumento      = new ArrayList<CuerpoDocumentoItemCreditoFiscal>();	
+		this.resumen              = new ResumenCreditoFiscal();
+		this.extension            = new ExtensionCreditoFiscal();
+	    this.apendice             = new ArrayList<ApendiceItemCreditoFiscal>();
 	}
-
+	
 	/**
 	 * Validate the Schema conditions
 	 */
-	public String validateValues() {		
+	public String validateValues() {	
 		return EDocumentUtils.VALIDATION_RESULT_OK;
 	}
+
 
 	/**
 	 * @return the identificacion
 	 */
-	public IdentificacionNotaDeDebito getIdentificacion() {
+	public IdentificacionCreditoFiscal getIdentificacion() {
 		return identificacion;
-	}
-
-	public void setIdentificacion(IdentificacionNotaDeDebito identificacion) {
-		this.identificacion = identificacion;
 	}
 
 
 	/**
-	 * @param identificacion the (IdentificacionFactura) identificacion to set
+	 * @param identificacion the identificacion to set
+	 */
+	public void setIdentificacion(IdentificacionCreditoFiscal identificacion) {
+		this.identificacion = identificacion;
+	}
+
+	/**
+	 * @param identificacion the (IdentificacionCreditoFiscal) identificacion to set
 	 */
 	public StringBuffer fillIdentification(JSONObject factoryInput) {
-		System.out.println("Start NotaDeDebito.fillIdentificacion()");
+		System.out.println("Start Credito Fiscal.fillIdentificacion()"); 
 
 		JSONObject identificationJson = factoryInput.getJSONObject(IDENTIFICACION);
-		try {identificacion.setMotivoContin(identificationJson.getString(MOTIVOCONTIN));} 			catch (Exception e) {errorMessages.append(e);}
-		try {identificacion.setTipoContingencia(identificationJson.getInt(TIPOCONTINGENCIA));} 		catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setNumeroControl(identificationJson.getString(NUMEROCONTROL));} 		catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setCodigoGeneracion(identificationJson.getString(CODIGOGENERACION));} 	catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setTipoModelo(identificationJson.getInt(TIPOMODELO));} 					catch (Exception e) {errorMessages.append(e);}
@@ -78,35 +84,73 @@ public class NotaDeDebito extends EDocument {
 		try {identificacion.setHorEmi(identificationJson.getString(HOREMI));} 						catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setTipoMoneda(identificationJson.getString(TIPOMONEDA));} 				catch (Exception e) {errorMessages.append(e);}
 		try {identificacion.setAmbiente(identificationJson.getString(AMBIENTE));} 					catch (Exception e) {errorMessages.append(e);}
-
-		System.out.println("End NotaDeDebito.fillIdentificacion()");
+		if (!identificationJson.getString(MOTIVOCONTIN).equals("")) {		
+			try {identificacion.setMotivoContin(identificationJson.getString(MOTIVOCONTIN));} 			catch (Exception e) {errorMessages.append(e);}
+			try {identificacion.setTipoContingencia(identificationJson.getInt(TIPOCONTINGENCIA));} 		catch (Exception e) {errorMessages.append(e);}
+		}
+		System.out.println("End Credito Fiscal.fillIdentificacion()");
 		return errorMessages;
 	}
 
-	public List<DocumentoRelacionadoItemNotaDeDebito> getDocumentoRelacionado() {
+
+	/**
+	 * @return the documentoRelacionado
+	 * To cast Lists where B extends A
+	 * 
+	 * List<B> b = new ArrayList<>();
+	 * List<?> t = (List<B>)b;
+	 * List<A> a = (List<A>)t;
+	 * 
+	 */
+	public List<DocumentoRelacionadoItemCreditoFiscal> getDocumentoRelacionado() {
 		return documentoRelacionado;
 	}
 
-	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemNotaDeDebito> documentoRelacionado) {
+
+
+	/**
+	 * @param documentoRelacionado the documentoRelacionado to set
+	 */
+	public void setDocumentoRelacionado(List<DocumentoRelacionadoItemCreditoFiscal> documentoRelacionado) {		
 		this.documentoRelacionado = documentoRelacionado;
 	}
+
+	public StringBuffer fillDocumentoRelacionado(JSONObject factoryInput) {
+		System.out.println("Start CreditoFiscal.fillDocumentoRelacionado()"); 
+
+		JSONObject documentoRelacionadoItemsJson = factoryInput.getJSONObject(DOCUMENTORELACIONADO);
+		JSONArray documentoRelacionadoArrayJson = documentoRelacionadoItemsJson.getJSONArray(DOCUMENTORELACIONADO);
+	
+		for (int i=0; i< documentoRelacionadoArrayJson.length(); i++) {
+			JSONObject cuerpoDocumentoRelacionadoItemJson = documentoRelacionadoArrayJson.getJSONObject(i);
+			DocumentoRelacionadoItemCreditoFiscal documentoRelacionadoItemCreditoFiscal = new DocumentoRelacionadoItemCreditoFiscal();
+			try {documentoRelacionadoItemCreditoFiscal.setNumeroDocumento(cuerpoDocumentoRelacionadoItemJson.getString(NUMERODOCUMENTO));} 					catch (Exception e) {errorMessages.append(e);}
+
+			documentoRelacionado.add(documentoRelacionadoItemCreditoFiscal);						
+		}
+
+		System.out.println("End CreditoFiscal.fillDocumentoRelacionado()"); 
+		return errorMessages;
+	}
+
 
 	/**
 	 * @return the emisor
 	 */
-	public EmisorNotaDeDebito getEmisor() {
+	public EmisorCreditoFiscal getEmisor() {
 		return emisor;
 	}
+
 
 	/**
 	 * @param emisor the emisor to set
 	 */
-	public void setEmisor(EmisorNotaDeDebito emisor) {
+	public void setEmisor(EmisorCreditoFiscal emisor) {
 		this.emisor = emisor;
 	}
-
+	
 	public StringBuffer fillEmisor(JSONObject factoryInput) {
-		System.out.println("Start NotaDeDebito.fillEmisor()");
+		System.out.println("Start CreditoFiscal.fillEmisor()");
 
 		JSONObject emisorJson = factoryInput.getJSONObject(EMISOR);
 		try {emisor.setNit(emisorJson.getString(NIT));} 									catch (Exception e) {errorMessages.append(e);}
@@ -125,21 +169,22 @@ public class NotaDeDebito extends EDocument {
 		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
 		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
 
-		System.out.println("End NotaDeDebito.fillEmisor()");
+		System.out.println("End CreditoFiscal.fillEmisor()");
 		return errorMessages;
 	}
+
 
 	/**
 	 * @return the receptor
 	 */
-	public ReceptorNotaDeDebito getReceptor() {
+	public ReceptorCreditoFiscal getReceptor() {
 		return receptor;
 	}
 
 	/**
 	 * @param receptor the receptor to set
 	 */
-	public void setReceptor(ReceptorNotaDeDebito receptor) {
+	public void setReceptor(ReceptorCreditoFiscal receptor) {
 		this.receptor = receptor;
 	}
 
@@ -167,105 +212,108 @@ public class NotaDeDebito extends EDocument {
 	}
 
 	/**
+	 * @return the otrosDocumentos
+	 */
+	public List<OtrosDocumentosItemCreditoFiscal> getOtrosDocumentos() {
+		return otrosDocumentos;
+	}
+
+
+	/**
+	 * @param otrosDocumentos the otrosDocumentos to set
+	 */
+	public void setOtrosDocumentos(List<OtrosDocumentosItemCreditoFiscal> otrosDocumentos) {
+		this.otrosDocumentos = otrosDocumentos;
+	}
+
+
+	/**
 	 * @return the ventaTercero
 	 */
-	public VentaTerceroNotaDeDebito getVentaTercero() {
+	public VentaTerceroCreditoFiscal getVentaTercero() {
 		return ventaTercero;
 	}
+
 
 	/**
 	 * @param ventaTercero the ventaTercero to set
 	 */
-	public void setVentaTercero(VentaTerceroNotaDeDebito ventaTercero) {
+	public void setVentaTercero(VentaTerceroCreditoFiscal ventaTercero) {
 		this.ventaTercero = ventaTercero;
 	}
+
 
 	/**
 	 * @return the cuerpoDocumento
 	 */
-	public List<CuerpoDocumentoItemNotaDeDebito> getCuerpoDocumento() {
+	public List<CuerpoDocumentoItemCreditoFiscal> getCuerpoDocumento() {
 		return cuerpoDocumento;
 	}
 
-	public void setCuerpoDocumento(List<CuerpoDocumentoItemNotaDeDebito> cuerpoDocumento) {
+
+	/**
+	 * @param cuerpoDocumento the cuerpoDocumento to set
+	 */
+	public void setCuerpoDocumento(List<CuerpoDocumentoItemCreditoFiscal> cuerpoDocumento) {
 		this.cuerpoDocumento = cuerpoDocumento;
 	}
 
 
 	public StringBuffer fillCuerpoDocumento(JSONObject factoryInput) {
-		System.out.println("Start NotaDeDebito.fillCuerpoDocumento()");
+		System.out.println("Start CreditoFiscal.fillCuerpoDocumento()"); 
 
 		JSONObject cuerpoDocumentoItemsJson = factoryInput.getJSONObject(CUERPODOCUMENTO);
 		JSONArray cuerpoDocumentoArrayJson = cuerpoDocumentoItemsJson.getJSONArray(CUERPODOCUMENTO);
 	
-		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) { 
+		for (int i=0; i< cuerpoDocumentoArrayJson.length(); i++) {
 			JSONObject cuerpoDocumentoItemJson = cuerpoDocumentoArrayJson.getJSONObject(i);
-			CuerpoDocumentoItemNotaDeDebito cuerpoDocumentoItemNotaDeDebito = new CuerpoDocumentoItemNotaDeDebito();
-			try {cuerpoDocumentoItemNotaDeDebito.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 				catch (Exception e) {errorMessages.append(e);}
-			//try {cuerpoDocumentoItemNotaDeDebito.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 				catch (Exception e) {errorMessages.append(e);}
+			CuerpoDocumentoItemCreditoFiscal cuerpoDocumentoItemCreditoFiscal = new CuerpoDocumentoItemCreditoFiscal();
+			try {cuerpoDocumentoItemCreditoFiscal.setNumItem(cuerpoDocumentoItemJson.getInt(NUMITEM));} 					catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setTipoItem(cuerpoDocumentoItemJson.getInt(TIPOITEM));} 					catch (Exception e) {errorMessages.append(e);}
+			//try {cuerpoDocumentoItemCreditoFiscal.setNumeroDocumento(cuerpoDocumentoItemJson.getString(NUMERODOCUMENTO));} 	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setCantidad(cuerpoDocumentoItemJson.getBigDecimal(CANTIDAD));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setCodigo(cuerpoDocumentoItemJson.getString(CODIGO));} 					catch (Exception e) {errorMessages.append(e);}
 			
 			if (cuerpoDocumentoItemJson.getString(CODTRIBUTO).equals(""))
-				try {cuerpoDocumentoItemNotaDeDebito.setCodTributo(null);} 												catch (Exception e) {errorMessages.append(e);}
+				try {cuerpoDocumentoItemCreditoFiscal.setCodTributo(null);} 												catch (Exception e) {errorMessages.append(e);}
 			else
-				try {cuerpoDocumentoItemNotaDeDebito.setCodTributo(cuerpoDocumentoItemJson.getString(CODTRIBUTO));} 	catch (Exception e) {errorMessages.append(e);}
+				try {cuerpoDocumentoItemCreditoFiscal.setCodTributo(cuerpoDocumentoItemJson.getString(CODTRIBUTO));} 		catch (Exception e) {errorMessages.append(e);}
 
-			try {cuerpoDocumentoItemNotaDeDebito.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 		catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 	catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 	catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 	catch (Exception e) {errorMessages.append(e);}
-			try {cuerpoDocumentoItemNotaDeDebito.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));}	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setUniMedida(cuerpoDocumentoItemJson.getInt(UNIMEDIDA));} 				catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setDescripcion(cuerpoDocumentoItemJson.getString(DESCRIPCION));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setPrecioUni(cuerpoDocumentoItemJson.getBigDecimal(PRECIOUNI));} 			catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setMontoDescu(cuerpoDocumentoItemJson.getBigDecimal(MONTODESCU));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setVentaNoSuj(cuerpoDocumentoItemJson.getBigDecimal(VENTANOSUJ));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setVentaExenta(cuerpoDocumentoItemJson.getBigDecimal(VENTAEXENTA));} 		catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setVentaGravada(cuerpoDocumentoItemJson.getBigDecimal(VENTAGRAVADA));} 	catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setPsv(cuerpoDocumentoItemJson.getBigDecimal(PSV));} 						catch (Exception e) {errorMessages.append(e);}
+			try {cuerpoDocumentoItemCreditoFiscal.setNoGravado(cuerpoDocumentoItemJson.getBigDecimal(NOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
 			
 			JSONArray tributosArrayJson = cuerpoDocumentoItemJson.getJSONArray(TRIBUTOS);
 			for (int j=0; j< tributosArrayJson.length(); j++) { 
 				String tributosItemJson = tributosArrayJson.getString(j);
-				try {cuerpoDocumentoItemNotaDeDebito.getTributos().add(tributosItemJson);} 								catch (Exception e) {errorMessages.append(e);}	
-			}			
+				try {cuerpoDocumentoItemCreditoFiscal.getTributos().add(tributosItemJson);} 								catch (Exception e) {errorMessages.append(e);}	
+			}
 
-			cuerpoDocumento.add(cuerpoDocumentoItemNotaDeDebito);						
+			cuerpoDocumento.add(cuerpoDocumentoItemCreditoFiscal);						
 		}
 
-		System.out.println("End NotaDeDebito.fillCuerpoDocumento()"); 
-		return errorMessages;
-	}
-	
-	public StringBuffer fillDocumentosRelacionados(JSONObject factoryInput) {
-		System.out.println("Start NotaDeDebito.fillCuerpoDocumento()");
-
-		JSONObject documentosRelacionadosItemsJson = factoryInput.getJSONObject(DOCUMENTORELACIONADO);
-		JSONArray DocumentosRelacionadosArrayJson = documentosRelacionadosItemsJson.getJSONArray(DOCUMENTORELACIONADO);
-	
-		for (int i=0; i< DocumentosRelacionadosArrayJson.length(); i++) { 
-			JSONObject DocRelaciondadosItemJson = DocumentosRelacionadosArrayJson.getJSONObject(i);
-			DocumentoRelacionadoItemNotaDeDebito documentoRelacionadoItem = new DocumentoRelacionadoItemNotaDeDebito();
-			try {documentoRelacionadoItem.setNumeroDocumento(DocRelaciondadosItemJson.getString(NUMERODOCUMENTO));} 			catch (Exception e) {errorMessages.append(e);}
-			try {documentoRelacionadoItem.setTipoDocumento(DocRelaciondadosItemJson.getString(TIPODOCUMENTO));} 				catch (Exception e) {errorMessages.append(e);}
-			try {documentoRelacionadoItem.setTipoGeneracion(DocRelaciondadosItemJson.getInt(TIPOGENERACION));} 					catch (Exception e) {errorMessages.append(e);}
-			try {documentoRelacionadoItem.setFechaEmision(DocRelaciondadosItemJson.getString(FECEMI));} 						catch (Exception e) {errorMessages.append(e);}
-					
-
-			documentoRelacionado.add(documentoRelacionadoItem);						
-		}
-
-		System.out.println("End NotaDeDebito.fillCuerpoDocumento()"); 
+		System.out.println("End CreditoFiscal.fillCuerpoDocumento()"); 
 		return errorMessages;
 	}
 
 	/**
 	 * @return the resumen
 	 */
-	public ResumenNotaDeDebito getResumen() {
+	public ResumenCreditoFiscal getResumen() {
 		return resumen;
 	}
+
 
 	/**
 	 * @param resumen the resumen to set
 	 */
-	public void setResumen(ResumenNotaDeDebito resumen) {
+	public void setResumen(ResumenCreditoFiscal resumen) {
 		this.resumen = resumen;
 	}
 
@@ -290,15 +338,18 @@ public class NotaDeDebito extends EDocument {
 		try {resumen.setDescuNoSuj(resumenJson.getBigDecimal(DESCUNOSUJ));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setDescuExenta(resumenJson.getBigDecimal(DESCUEXENTA));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setDescuGravada(resumenJson.getBigDecimal(DESCUGRAVADA));} 				catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setPorcentajeDescuento(resumenJson.getBigDecimal(PORCENTAJEDESCUENTO));}	catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setSubTotal(resumenJson.getBigDecimal(SUBTOTAL));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setIvaRete1(resumenJson.getBigDecimal(IVARETE1));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setMontoTotalOperacion(resumenJson.getBigDecimal(MONTOTOTALOPERACION));} 	catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalNoGravado(resumenJson.getBigDecimal(TOTALNOGRAVADO));} 			catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setTotalPagar(resumenJson.getBigDecimal(TOTALPAGAR));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalLetras(resumenJson.getString(TOTALLETRAS));} 						catch (Exception e) {errorMessages.append(e);}
+		try {resumen.setSaldoFavor(resumenJson.getBigDecimal(SALDOFAVOR));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setCondicionOperacion(resumenJson.getInt(CONDICIONOPERACION));} 			catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setTotalDescu(resumenJson.getBigDecimal(TOTALDESCU));} 					catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setReteRenta(resumenJson.getBigDecimal(RETERENTA));} 						catch (Exception e) {errorMessages.append(e);}
 		try {resumen.setIvaPerci1(resumenJson.getBigDecimal(IVAPERCI1));} 						catch (Exception e) {errorMessages.append(e);}
-		try {resumen.setNumPagoElectronico(resumenJson.getString(NUMPAGOELECTRONICO));} 		catch (Exception e) {errorMessages.append(e);}
 
 		JSONArray pagosItemsJson = resumenJson.getJSONArray(PAGOS);
 		JSONObject pagosItemJson = pagosItemsJson.getJSONObject(0);
@@ -310,33 +361,42 @@ public class NotaDeDebito extends EDocument {
 		try {newPagosItem.setPlazo(pagosItemJson.getString(PLAZO));} 				catch (Exception e) {errorMessages.append(e);}
 		try {newPagosItem.setPeriodo(pagosItemJson.getInt(PERIODO));} 				catch (Exception e) {errorMessages.append(e);}
 
+		resumen.getPagos().add(newPagosItem);
 
 		System.out.println("End CreditoFiscal.fillResumen()"); 
 		return errorMessages;
 	}
 
+
 	/**
 	 * @return the extension
 	 */
-	public ExtensionNotaDeDebito getExtension() {
+	public ExtensionCreditoFiscal getExtension() {
 		return extension;
 	}
+
 
 	/**
 	 * @param extension the extension to set
 	 */
-	public void setExtension(ExtensionNotaDeDebito extension) {
+	public void setExtension(ExtensionCreditoFiscal extension) {
 		this.extension = extension;
 	}
+
+
 
 	/**
 	 * @return the apendice
 	 */
-	public List<ApendiceItemNotaDeDebito> getApendice() {
+	public List<ApendiceItemCreditoFiscal> getApendice() {
 		return apendice;
 	}
 
-	public void setApendice(List<ApendiceItemNotaDeDebito> apendice) {
+
+	/**
+	 * @param apendice the apendice to set
+	 */
+	public void setApendice(List<ApendiceItemCreditoFiscal> apendice) {		
 		this.apendice = apendice;
 	}
 
@@ -347,5 +407,8 @@ public class NotaDeDebito extends EDocument {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-	}	
+	}
+
+
+	
 }

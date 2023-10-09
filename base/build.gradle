@@ -17,7 +17,7 @@ allprojects {
    	}
 }
 
-implementation files('../tools/lib/telegrambots-6.0.1-jar-with-dependencies.jar')
+api files('../tools/lib/telegrambots-6.0.1-jar-with-dependencies.jar')
 
 dependencies {
 	implementation fileTree(

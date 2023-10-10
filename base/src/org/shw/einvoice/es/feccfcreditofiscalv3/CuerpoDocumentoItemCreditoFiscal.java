@@ -96,12 +96,14 @@ public class CuerpoDocumentoItemCreditoFiscal {
 		if(getVentaGravada()==null) {
 			return VALIDATION_VENTAGRAVADA_IS_NULL;
 		}
+
+		Boolean existsTributo = getTributos() != null && !getTributos().isEmpty();
 		
 		if(getVentaGravada().compareTo(BigDecimal.ZERO)==0) {
-			if (getTributos()!=null)
+			if (existsTributo)
 				return VALIDATION_TRIBUTOS_NOT_NULL;
 		} else {
-			if ( (getTributos()==null) || (getTributos().isEmpty())  )
+			if ( !existsTributo  )
 				return VALIDATION_TRIBUTOS_EMPTY;
 		}
 		
@@ -115,12 +117,11 @@ public class CuerpoDocumentoItemCreditoFiscal {
 		} else {
 			if (getCodTributo()!=null)
 				return VALIDATION_CODTRIBUTO_NOT_NULL;
-			
 			ArrayList<String> expectedValues=  new ArrayList<>(List.of(   "20", "C3", "59", "71", "D1", "C5", "C6", "C7", "C8", "D5",
 					"D4", "19", "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "42", "43", "44", "50", "51", "52", "53",
                     "54", "55", "58", "77", "78", "79", "85", "86", "91", "92", "A1", "A5", "A7", "A9"));
 			// Here, is only ONE item expected; where there are MANY items expected, the query must be changed.
-			if ( (getTributos()!=null) && ( (getTributos().isEmpty()) || (expectedValues.indexOf(getTributos().get(0))==-1)) )
+			if ( (existsTributo && (expectedValues.indexOf(getTributos().get(0))==-1)) )
 				return VALIDATION_TRIBUTOS_PATTERN_FAILED;			
 		}
 		

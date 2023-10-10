@@ -32,6 +32,7 @@ import org.shw.einvoice.es.feccfcreditofiscalv3.EmisorCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.IdentificacionCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ReceptorCreditoFiscal;
 import org.shw.einvoice.es.feccfcreditofiscalv3.ResumenCreditoFiscal;
+import org.shw.einvoice.es.fefcfacturaelectronicav1.Factura;
 import org.shw.einvoice.es.utils.EDocumentFactory;
 import org.shw.einvoice.es.utils.EDocumentUtils;
 
@@ -344,6 +345,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		BigDecimal totalNoSuj 	= Env.ZERO;
 		BigDecimal totalExenta 	= Env.ZERO;
 		BigDecimal totalGravada = Env.ZERO;	
+		BigDecimal totalNoGravada 	= Env.ZERO;		
 		BigDecimal ivaRete1 	= Env.ZERO;
 
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
@@ -353,15 +355,20 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 				.list();
 		JSONObject jsonObjectResumen = new JSONObject();
 
-
+		
 		JSONArray jsonTributosArray = new JSONArray();
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("RET")) {
 				ivaRete1 = ivaRete1.add(invoiceTax.getTaxAmt().multiply(new BigDecimal(-1)));
+				continue;
 			}
 			JSONObject jsonTributoItem = new JSONObject();		
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				totalNoSuj = invoiceTax.getTaxBaseAmt();		
+				if (invoiceTax.getC_Tax().getC_TaxCategory().getCommodityCode() != null &&
+						invoiceTax.getC_Tax().getC_TaxCategory().getCommodityCode().equals("CTAJ"))
+					totalNoGravada = invoiceTax.getTaxBaseAmt();	
+				else
+					totalNoSuj = invoiceTax.getTaxBaseAmt();		
 				jsonTributoItem.put(CreditoFiscal.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
 				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
@@ -378,7 +385,7 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 				jsonTributoItem.put(CreditoFiscal.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(CreditoFiscal.VALOR, invoiceTax.getTaxAmt());
 			}
-			//jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
+			jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
 		}
 		jsonObjectResumen.put(CreditoFiscal.TRIBUTOS, jsonTributosArray);
 
@@ -386,15 +393,15 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		jsonObjectResumen.put(CreditoFiscal.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(CreditoFiscal.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(CreditoFiscal.TOTALGRAVADA, totalGravada);
-		jsonObjectResumen.put(CreditoFiscal.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(CreditoFiscal.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada).add(ivaRete1));
 		jsonObjectResumen.put(CreditoFiscal.DESCUNOSUJ, Env.ZERO);
 		jsonObjectResumen.put(CreditoFiscal.DESCUEXENTA, Env.ZERO);
 		jsonObjectResumen.put(CreditoFiscal.DESCUGRAVADA, Env.ZERO);
 		jsonObjectResumen.put(CreditoFiscal.PORCENTAJEDESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(CreditoFiscal.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(CreditoFiscal.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada));
 		jsonObjectResumen.put(CreditoFiscal.IVARETE1, ivaRete1);
 		jsonObjectResumen.put(CreditoFiscal.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(CreditoFiscal.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
+		jsonObjectResumen.put(CreditoFiscal.TOTALNOGRAVADO, totalNoGravada);
 		jsonObjectResumen.put(CreditoFiscal.TOTALPAGAR, invoice.getGrandTotal());
 		jsonObjectResumen.put(CreditoFiscal.TOTALLETRAS, totalLetras);
 		jsonObjectResumen.put(CreditoFiscal.SALDOFAVOR, Env.ZERO);
@@ -428,20 +435,26 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
 			
-			BigDecimal ventaNoSuj 	= Env.ZERO;
-			BigDecimal ventaExenta 	= Env.ZERO;
-			BigDecimal ventaGravada = Env.ONEHUNDRED;
-			BigDecimal ivaItem 		= Env.ZERO;
-			String codTributo 		= "";
+			BigDecimal ventaNoSuj 		= Env.ZERO;
+			BigDecimal ventaExenta 		= Env.ZERO;
+			BigDecimal ventaGravada 	= Env.ZERO;
+			BigDecimal ventaNoGravada 	= Env.ZERO;
+			BigDecimal ivaItem 			= Env.ZERO;
+			String codTributo 			= "";
 			MTax tax = (MTax)invoiceLine.getC_Tax();
 			
-			
+			boolean isVentanoGravada = (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ") && 
+					invoiceLine.getC_Charge_ID() > 0 
+					&& invoiceLine.getC_Charge().getC_ChargeType().getValue().equals("CTAJ"))?true:false;
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				ventaNoSuj = invoiceLine.getLineNetAmt();
+				if (isVentanoGravada)
+					ventaNoGravada = invoiceLine.getLineNetAmt();
+				else
+					ventaNoSuj = invoiceLine.getLineNetAmt();
 			}
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
+			else if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
 				ventaExenta = invoiceLine.getLineNetAmt();
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
+			else if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				ventaGravada = invoiceLine.getLineNetAmt(); 
 				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
 					ivaItem = tax.calculateTax(invoiceLine.getLineNetAmt(), invoice.getM_PriceList().isTaxIncluded(), 2);
@@ -461,11 +474,13 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTAEXENTA, ventaExenta);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.VENTAGRAVADA, ventaGravada);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.PSV, Env.ZERO);
-			jsonCuerpoDocumentoItem.put(CreditoFiscal.NOGRAVADO, ventaNoSuj.add(ventaExenta));
+			jsonCuerpoDocumentoItem.put(CreditoFiscal.NOGRAVADO, ventaNoGravada);
 			jsonCuerpoDocumentoItem.put(CreditoFiscal.CODTRIBUTO, codTributo);
 
 			JSONArray jsonTributosArray = new JSONArray();
-			jsonTributosArray.put(tax.getE_Duties().getValue());
+			if (ventaGravada.compareTo(Env.ZERO) != 0) {
+				jsonTributosArray.put(tax.getE_Duties().getValue());
+			}
 			jsonCuerpoDocumentoItem.put( CreditoFiscal.TRIBUTOS, jsonTributosArray);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);

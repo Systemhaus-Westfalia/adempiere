@@ -360,6 +360,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		BigDecimal totalNoSuj 	= Env.ZERO;
 		BigDecimal totalExenta 	= Env.ZERO;
 		BigDecimal totalGravada = Env.ZERO;	
+		BigDecimal totalNoGravada = Env.ZERO;	
 		BigDecimal ivaRete1 	= Env.ZERO;
 
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
@@ -374,9 +375,14 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		for (MInvoiceTax invoiceTax:invoiceTaxes) {
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("RET")) {
 				ivaRete1 = ivaRete1.add(invoiceTax.getTaxAmt().multiply(new BigDecimal(-1)));
+				continue;
 			}
 			JSONObject jsonTributoItem = new JSONObject();		
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
+				if (invoiceTax.getC_Tax().getC_TaxCategory().getCommodityCode().equals("CTAJ"))
+					totalNoGravada = invoiceTax.getTaxBaseAmt();	
+			else
+				totalNoSuj = invoiceTax.getTaxBaseAmt();	
 				totalNoSuj = invoiceTax.getTaxBaseAmt();		
 				jsonTributoItem.put(NotaDeCredito.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
 				jsonTributoItem.put(NotaDeCredito.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
@@ -402,15 +408,15 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		jsonObjectResumen.put(NotaDeCredito.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(NotaDeCredito.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(NotaDeCredito.TOTALGRAVADA, totalGravada);
-		jsonObjectResumen.put(NotaDeCredito.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(NotaDeCredito.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada));
 		jsonObjectResumen.put(NotaDeCredito.DESCUNOSUJ, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.DESCUEXENTA, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.DESCUGRAVADA, Env.ZERO);
 		jsonObjectResumen.put(NotaDeCredito.PORCENTAJEDESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(NotaDeCredito.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(NotaDeCredito.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada).add(ivaRete1));
 		jsonObjectResumen.put(NotaDeCredito.IVARETE1, ivaRete1);
 		jsonObjectResumen.put(NotaDeCredito.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(NotaDeCredito.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
+		jsonObjectResumen.put(NotaDeCredito.TOTALNOGRAVADO, totalNoGravada);
 		jsonObjectResumen.put(NotaDeCredito.TOTALPAGAR, invoice.getGrandTotal());
 		jsonObjectResumen.put(NotaDeCredito.TOTALLETRAS, totalLetras);
 		jsonObjectResumen.put(NotaDeCredito.SALDOFAVOR, Env.ZERO);
@@ -446,12 +452,20 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			
 			BigDecimal ventaNoSuj 	= Env.ZERO;
 			BigDecimal ventaExenta 	= Env.ZERO;
-			BigDecimal ventaGravada = Env.ONEHUNDRED;
+			BigDecimal ventaGravada = Env.ZERO;
+			BigDecimal ventaNoGravada = Env.ZERO;
 			BigDecimal ivaItem 		= Env.ZERO;
 			MTax tax = (MTax)invoiceLine.getC_Tax();
+			boolean ventanoGravada = (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ") && 
+					invoiceLine.getC_Charge_ID() > 0 
+					&& invoiceLine.getC_Charge().getC_ChargeType().getValue().equals("CTAJ"))?true:false;
 			
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
-				ventaNoSuj = invoiceLine.getLineNetAmt();
+			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ")) {
+				if (ventanoGravada)
+					ventaNoGravada = invoiceLine.getLineNetAmt();
+				else
+					ventaNoSuj = invoiceLine.getLineNetAmt();
+			}
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
 				ventaExenta = invoiceLine.getLineNetAmt();
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
@@ -474,6 +488,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.MONTODESCU, Env.ZERO);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTANOSUJ, ventaNoSuj);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTAEXENTA, ventaExenta);
+			jsonCuerpoDocumentoItem.put(NotaDeCredito.NOGRAVADO, ventaNoGravada);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.VENTAGRAVADA, ventaGravada);	
 			
 			JSONArray jsonTributosArray = new JSONArray();

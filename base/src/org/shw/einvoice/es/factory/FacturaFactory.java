@@ -343,10 +343,11 @@ public class FacturaFactory extends EDocumentFactory {
 	
 	private JSONObject generateResumenInputData() {
 		System.out.println("Factura: start collecting JSON data for Resumen");
-		BigDecimal totalNoSuj 	= Env.ZERO;
-		BigDecimal totalExenta 	= Env.ZERO;
-		BigDecimal totalGravada = Env.ZERO;		
-		BigDecimal totalIVA 	= Env.ZERO;
+		BigDecimal totalNoSuj 		= Env.ZERO;
+		BigDecimal totalExenta 		= Env.ZERO;
+		BigDecimal totalGravada 	= Env.ZERO;		
+		BigDecimal totalNoGravada 	= Env.ZERO;		
+		BigDecimal totalIVA 		= Env.ZERO;
 		
 		String totalLetras=Msg.getAmtInWords(Env.getLanguage(contextProperties), invoice.getGrandTotal().setScale(2).toString());
 
@@ -354,24 +355,6 @@ public class FacturaFactory extends EDocumentFactory {
 				.setParameters(invoice.getC_Invoice_ID())
 				.list();
 
-//		JSONArray jsonTributosArray = new JSONArray();
-//		for (MInvoiceTax invoiceTax:invoiceTaxes) {
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-//				totalNoSuj = invoiceTax.getTaxBaseAmt();
-//				JSONObject jsonTributoItem = new JSONObject();				
-//				jsonTributoItem.put(Factura.CODIGO), invoiceTax.getC_Tax().getE_Duties().getValue());
-//				jsonTributoItem.put(Factura.DESCRIPCION), invoiceTax.getC_Tax().getE_Duties().getName());
-//				jsonTributoItem.put(Factura.VALOR), invoiceTax.getTaxAmt());
-//				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
-//			}
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
-//				totalExenta = invoiceTax.getTaxBaseAmt();
-//			}
-//			if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
-//				totalGravada = invoiceTax.getTaxBaseAmt();
-//				totalIVA = invoiceTax.getTaxAmt();
-//			}
-//		}
 				
 		JSONObject jsonObjectResumen = new JSONObject();
 		
@@ -382,7 +365,11 @@ public class FacturaFactory extends EDocumentFactory {
 				continue;
 			JSONObject jsonTributoItem = new JSONObject();		
 			if (invoiceTax.getC_Tax().getTaxIndicator().equals("NSUJ")) {
-				totalNoSuj = invoiceTax.getTaxBaseAmt();		
+				if (invoiceTax.getC_Tax().getC_TaxCategory().getCommodityCode() != null &&
+						invoiceTax.getC_Tax().getC_TaxCategory().getCommodityCode().equals("CTAJ"))
+					totalNoGravada = invoiceTax.getTaxBaseAmt();	
+				else
+					totalNoSuj = invoiceTax.getTaxBaseAmt();		
 				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
 				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
 				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
@@ -410,15 +397,15 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonObjectResumen.put(Factura.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(Factura.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(Factura.TOTALGRAVADA, totalGravada);
-		jsonObjectResumen.put(Factura.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(Factura.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada));
 		jsonObjectResumen.put(Factura.DESCUNOSUJ, Env.ZERO);
 		jsonObjectResumen.put(Factura.DESCUEXENTA, Env.ZERO);
 		jsonObjectResumen.put(Factura.DESCUGRAVADA, Env.ZERO);
 		jsonObjectResumen.put(Factura.PORCENTAJEDESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(Factura.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
+		jsonObjectResumen.put(Factura.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada));
 		jsonObjectResumen.put(Factura.IVARETE1, Env.ZERO);
 		jsonObjectResumen.put(Factura.MONTOTOTALOPERACION, invoice.getGrandTotal());
-		jsonObjectResumen.put(Factura.TOTALNOGRAVADO, totalExenta.add(totalNoSuj));
+		jsonObjectResumen.put(Factura.TOTALNOGRAVADO, totalNoGravada);
 		jsonObjectResumen.put(Factura.TOTALPAGAR, invoice.getGrandTotal());
 		jsonObjectResumen.put(Factura.TOTALLETRAS, totalLetras);
 		jsonObjectResumen.put(Factura.SALDOFAVOR, Env.ZERO);
@@ -452,16 +439,23 @@ public class FacturaFactory extends EDocumentFactory {
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
 			
-			BigDecimal ventaNoSuj 	= Env.ZERO;
-			BigDecimal ventaExenta 	= Env.ZERO;
-			BigDecimal ventaGravada = Env.ONEHUNDRED;
-			BigDecimal ivaItem 		= Env.ZERO;
-			
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ"))
-				ventaNoSuj = invoiceLine.getLineNetAmt();
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
+			BigDecimal ventaNoSuj 		= Env.ZERO;
+			BigDecimal ventaExenta 		= Env.ZERO;
+			BigDecimal ventaGravada 	= Env.ZERO;
+			BigDecimal ventaNoGravada 	= Env.ZERO;
+			BigDecimal ivaItem 			= Env.ZERO;
+			boolean isventaNoGravada = (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ") && 
+					invoiceLine.getC_Charge_ID() > 0 
+					&& invoiceLine.getC_Charge().getC_ChargeType().getValue().equals("CTAJ"))?true:false;
+			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ")) {
+				if (isventaNoGravada)
+					ventaNoGravada = invoiceLine.getLineNetAmt();
+				else
+					ventaNoSuj = invoiceLine.getLineNetAmt();
+			}
+			else if (invoiceLine.getC_Tax().getTaxIndicator().equals("EXT"))
 				ventaExenta = invoiceLine.getLineNetAmt();
-			if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
+			else if (invoiceLine.getC_Tax().getTaxIndicator().equals("IVA") ) {
 				ventaGravada = invoiceLine.getLineNetAmt(); 
 				MTax tax = (MTax)invoiceLine.getC_Tax();
 				if (invoiceLine.getTaxAmt().compareTo(Env.ZERO) == 0)
@@ -488,7 +482,7 @@ public class FacturaFactory extends EDocumentFactory {
 			jsonCuerpoDocumentoItem.put(Factura.VENTAEXENTA, ventaExenta);
 			jsonCuerpoDocumentoItem.put(Factura.VENTAGRAVADA, ventaGravada);
 			jsonCuerpoDocumentoItem.put(Factura.PSV, invoiceLine.getTaxAmt());
-			jsonCuerpoDocumentoItem.put(Factura.NOGRAVADO, ventaNoSuj.add(ventaExenta));
+			jsonCuerpoDocumentoItem.put(Factura.NOGRAVADO, ventaNoGravada);
 			jsonCuerpoDocumentoItem.put(Factura.IVAITEM, ivaItem);
 
 			jsonCuerpoDocumentoArray.put(jsonCuerpoDocumentoItem);

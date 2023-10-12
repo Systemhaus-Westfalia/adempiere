@@ -18,6 +18,7 @@
 
 package org.shw.einvoice.es.utils;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import org.eevolution.services.dsl.ProcessBuilder;
  */
 public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
 {
+	ArrayList<String> result = new ArrayList<String>();
 	@Override
 	protected void prepare()
 	{
@@ -53,13 +55,13 @@ public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
 
 		invoicesList.forEach((key, invoice) -> {
 			MDocType docType = (MDocType)invoice.getC_DocType();
-			if (docType.get_ValueAsInt("C_INvoiceType_ID") == 1000003) {
+			if (docType.getE_DocType_ID() > 0) {
 				
 				processingInvoice(invoice);
 			}
 			
 		});;
-		return "";
+		return result.toString();
 	}
 	
 	
@@ -71,10 +73,14 @@ public class SB_ElectronicInvoice extends SB_ElectronicInvoiceAbstract
                     .withParameter(ISSAVEINHISTORIC, isSaveInHistoric())
                     .withoutTransactionClose()
                     .execute(get_TrxName());
-            if (processInfo.isError())
+            if (processInfo.isError()) {
+
                 throw new AdempiereException(processInfo.getSummary());
+            }
 
             addLog(processInfo.getSummary());
+
+            result.add(invoice.getDocumentNo());
             /*Arrays.stream(processInfo.getIDs()).forEach(recordId -> {
                 Optional<MMovement> maybeMovement = Optional.ofNullable(new MMovement(getCtx(), recordId, get_TrxName()));
                 maybeMovement.ifPresent(movement -> {

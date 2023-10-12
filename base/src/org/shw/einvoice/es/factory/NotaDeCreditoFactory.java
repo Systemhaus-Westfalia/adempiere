@@ -514,7 +514,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		HashMap<Integer,MInvoice> invoiceIds = new HashMap<Integer, MInvoice>();
 		for (MInvoiceLine invoiceLine:invoice.getLines()) {
 			MInvoiceLine invoiceLineOrg = new MInvoiceLine(contextProperties, invoiceLine.getRef_InvoiceLine_ID(), null);
-			invoiceIds.put(invoiceLineOrg.getC_Invoice_ID(), (MInvoice)invoiceLine.getReversalLine().getC_Invoice());
+			invoiceIds.put(invoiceLineOrg.getC_Invoice_ID(), (MInvoice)invoiceLine.getRef_InvoiceLine().getC_Invoice());
 		}  
 		for (MInvoice invoiceOrginal : invoiceIds.values()) {
 			JSONObject jsonDocumentoRelacionadoItem = new JSONObject();

@@ -55,48 +55,48 @@ public class EI_ReadJsonResponse extends EI_ReadJsonResponseAbstract
 	
 	public void readFiles()
 	        throws IOException {
-		String pathname = EDocument.ABSDIRECTORYRESPONSE;
-		Path path = Paths.get(pathname);
-		JSONParser parser = new JSONParser();
-	        try (Stream<Path> walk = Files.walk(path)) {
-	            walk
-	                    .filter(Files::isReadable)      // read permission
-	                    .filter(Files::isRegularFile)   // file only
-	                    .forEach(p -> {
-	                        try {
-	                        	 Object obj = parser.parse(new FileReader(p.toString()));
-	                             JSONObject eDocumentAsJson  = new JSONObject(obj.toString());
-	                             updateInvoice(eDocumentAsJson);
-	                        } catch (IOException e) {
-	                            e.printStackTrace();
-	                        }catch (Exception e) {
-	                            e.printStackTrace();
-	                        }
-	                    });
-	        }
+//		String pathname = EDocument.ABSDIRECTORYRESPONSE;
+//		Path path = Paths.get(pathname);
+//		JSONParser parser = new JSONParser();
+//	        try (Stream<Path> walk = Files.walk(path)) {
+//	            walk
+//	                    .filter(Files::isReadable)      // read permission
+//	                    .filter(Files::isRegularFile)   // file only
+//	                    .forEach(p -> {
+//	                        try {
+//	                        	 Object obj = parser.parse(new FileReader(p.toString()));
+//	                             JSONObject eDocumentAsJson  = new JSONObject(obj.toString());
+//	                             updateInvoice(eDocumentAsJson);
+//	                        } catch (IOException e) {
+//	                            e.printStackTrace();
+//	                        }catch (Exception e) {
+//	                            e.printStackTrace();
+//	                        }
+//	                    });
+//	        }
 	    }
 	
 	private void updateInvoice(JSONObject eDocumentAsJson) {
-   	 String codigoGeneracion = eDocumentAsJson.getString(EDocument.CODIGOGENERACION);
-		String whereClause = "ei_codigoGeneracion = ?";
-		List<MInvoice> invoices = new Query(getCtx(), MInvoice.Table_Name, whereClause, get_TrxName())
-				.setParameters(codigoGeneracion)
-				.list();
-		
-		//	Validate contact
-		Optional<MInvoice> maybeInvoice = invoices
-				.stream()
-				.findFirst();
-		if(maybeInvoice.isPresent()) {
-			MInvoice invoice = maybeInvoice.get();
-			invoice.setei_selloRecibido(eDocumentAsJson.getString(EDocument.SELLORECIBIDO));
-			invoice.saveEx();
-		}
-		else {
-			result.append("Invoice not present");
-			
-		}
-    
-		
+//   	 String codigoGeneracion = eDocumentAsJson.getString(EDocument.CODIGOGENERACION);
+//		String whereClause = "ei_codigoGeneracion = ?";
+//		List<MInvoice> invoices = new Query(getCtx(), MInvoice.Table_Name, whereClause, get_TrxName())
+//				.setParameters(codigoGeneracion)
+//				.list();
+//		
+//		//	Validate contact
+//		Optional<MInvoice> maybeInvoice = invoices
+//				.stream()
+//				.findFirst();
+//		if(maybeInvoice.isPresent()) {
+//			MInvoice invoice = maybeInvoice.get();
+//			invoice.setei_selloRecibido(eDocumentAsJson.getString(EDocument.SELLORECIBIDO));
+//			invoice.saveEx();
+//		}
+//		else {
+//			result.append("Invoice not present");
+//			
+//		}
+//    
+//		
 	}
 }

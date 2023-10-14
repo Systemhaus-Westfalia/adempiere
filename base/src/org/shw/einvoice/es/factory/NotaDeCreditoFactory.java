@@ -347,7 +347,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		}		
 		jsonObjectReceptor.put(NotaDeCredito.DIRECCION, jsonDireccion);
 		
-		jsonObjectReceptor.put(NotaDeCredito.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectReceptor.put(NotaDeCredito.TELEFONO, partner.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(NotaDeCredito.CORREO, partner.get_ValueAsString("EMail"));		
 
 		System.out.println("NotaDeCredito: end collecting JSON data for Receptor");
@@ -446,10 +446,11 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 		System.out.println("Start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		JSONObject jsonCuerpoDocumento = new JSONObject();
 		JSONArray jsonCuerpoDocumentoArray = new JSONArray();
+		int i=0;
 		
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
-			
+			i++;
 			BigDecimal ventaNoSuj 	= Env.ZERO;
 			BigDecimal ventaExenta 	= Env.ZERO;
 			BigDecimal ventaGravada = Env.ZERO;
@@ -476,7 +477,7 @@ public class NotaDeCreditoFactory extends EDocumentFactory {
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put(NotaDeCredito.NUMITEM, invoiceLine.getLine()/10);
+			jsonCuerpoDocumentoItem.put(NotaDeCredito.NUMITEM, i);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.TIPOITEM, 2);
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(NotaDeCredito.CANTIDAD, invoiceLine.getQtyInvoiced());

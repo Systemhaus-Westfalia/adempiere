@@ -130,7 +130,7 @@ public class FacturaSujetoExcluido extends EDocument {
 
 		try {emisor.setTelefono(emisorJson.getString(TELEFONO));} 							catch (Exception e) {errorMessages.append(e);}
 		try {emisor.setCorreo(emisorJson.getString(CORREO));} 								catch (Exception e) {errorMessages.append(e);}
-		try {emisor.setCodEstable(emisorJson.getString(CODESTABLE));} 						catch (Exception e) {errorMessages.append(e);}
+//		try {emisor.setCodEstable(emisorJson.getString(CODESTABLE));} 						catch (Exception e) {errorMessages.append(e);}
 
 		System.out.println("End FacturaNoSujeto.fillEmisor()");
 		return errorMessages;

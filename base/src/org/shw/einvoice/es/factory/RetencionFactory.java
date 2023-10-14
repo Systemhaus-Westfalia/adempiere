@@ -278,7 +278,7 @@ public class RetencionFactory extends EDocumentFactory {
 		}		
 		jsonObjectReceptor.put(Retencion.DIRECCION, jsonDireccion);
 		
-		jsonObjectReceptor.put(Retencion.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectReceptor.put(Retencion.TELEFONO, partner.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(Retencion.CORREO, partner.get_ValueAsString("EMail"));		
 
 		System.out.println("Retencion: end collecting JSON data for Receptor");
@@ -319,6 +319,7 @@ public class RetencionFactory extends EDocumentFactory {
 		System.out.println("Retencion: start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		JSONObject jsonCuerpoDocumento = new JSONObject();
 		JSONArray jsonCuerpoDocumentoArray = new JSONArray();
+		int i=0;
 		
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
@@ -328,7 +329,7 @@ public class RetencionFactory extends EDocumentFactory {
 			BigDecimal ventaGravada = Env.ONEHUNDRED;
 			BigDecimal ivaItem 		= Env.ZERO;
 			MTax tax = (MTax)invoiceLine.getC_Tax();
-			
+			i++;
 			
 			if (invoiceLine.getC_Tax().getTaxIndicator().equals("NSUJ")) {
 				ventaNoSuj = invoiceLine.getLineNetAmt();
@@ -343,7 +344,7 @@ public class RetencionFactory extends EDocumentFactory {
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put(Retencion.NUMITEM, invoiceLine.getLine()/10);
+			jsonCuerpoDocumentoItem.put(Retencion.NUMITEM, i);
 			jsonCuerpoDocumentoItem.put(Retencion.TIPODTE, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
 			jsonCuerpoDocumentoItem.put(Retencion.TIPODOC, "BBBBBBBBBBBBBBBBBBBBBB");				// TODO: korrekte Daten einsetzen
 			jsonCuerpoDocumentoItem.put(Retencion.NUMDOCUMENTO, "BBBBBBBBBBBBBBBBBBBBBB");			// TODO: korrekte Daten einsetzen

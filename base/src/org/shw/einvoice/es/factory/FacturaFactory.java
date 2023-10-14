@@ -321,6 +321,7 @@ public class FacturaFactory extends EDocumentFactory {
 				jsonDireccion.put(Factura.DEPARTAMENTO, departamento);
 				jsonDireccion.put(Factura.MUNICIPIO, municipio);
 				jsonDireccion.put(Factura.COMPLEMENTO, complemento);
+				jsonObjectReceptor.put(Factura.DIRECCION, jsonDireccion);
 				break;
 			}
 		}		
@@ -331,9 +332,9 @@ public class FacturaFactory extends EDocumentFactory {
 			jsonDireccion.put(Factura.MUNICIPIO, municipio);
 			jsonDireccion.put(Factura.COMPLEMENTO, complemento);
 		}		
+
 		jsonObjectReceptor.put(Factura.DIRECCION, jsonDireccion);
-		
-		jsonObjectReceptor.put(Factura.TELEFONO, client.get_ValueAsString("phone"));
+		jsonObjectReceptor.put(Factura.TELEFONO, partner.get_ValueAsString("phone"));
 		jsonObjectReceptor.put(Factura.CORREO, partner.get_ValueAsString("EMail"));		
 
 		System.out.println("Factura: end collecting JSON data for Receptor");
@@ -368,12 +369,13 @@ public class FacturaFactory extends EDocumentFactory {
 				if (invoiceTax.getC_Tax().getC_TaxCategory().getCommodityCode() != null &&
 						invoiceTax.getC_Tax().getC_TaxCategory().getCommodityCode().equals("CTAJ"))
 					totalNoGravada = invoiceTax.getTaxBaseAmt();	
-				else
+				else {
 					totalNoSuj = invoiceTax.getTaxBaseAmt();		
-				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
-				jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
+					jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+					jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+					jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
+					jsonTributosArray.put(jsonTributoItem); //tributosItems.add("20");
+				}
 			}
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("EXT")) {
 				totalExenta = invoiceTax.getTaxBaseAmt();
@@ -385,9 +387,9 @@ public class FacturaFactory extends EDocumentFactory {
 			else if (invoiceTax.getC_Tax().getTaxIndicator().equals("IVA")) {
 				totalGravada = invoiceTax.getTaxBaseAmt();
 				totalIVA = invoiceTax.getTaxAmt();	
-				//jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
-				//jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
-				//jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
+				jsonTributoItem.put(Factura.CODIGO, invoiceTax.getC_Tax().getE_Duties().getValue());
+				jsonTributoItem.put(Factura.DESCRIPCION, invoiceTax.getC_Tax().getE_Duties().getName());
+				jsonTributoItem.put(Factura.VALOR, invoiceTax.getTaxAmt());
 			}
 		}
 		// (!jsonTributosArray.isEmpty())
@@ -397,12 +399,12 @@ public class FacturaFactory extends EDocumentFactory {
 		jsonObjectResumen.put(Factura.TOTALNOSUJ, totalNoSuj);
 		jsonObjectResumen.put(Factura.TOTALEXENTA, totalExenta);
 		jsonObjectResumen.put(Factura.TOTALGRAVADA, totalGravada);
-		jsonObjectResumen.put(Factura.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada));
+		jsonObjectResumen.put(Factura.SUBTOTALVENTAS, totalGravada.add(totalNoSuj).add(totalExenta));
 		jsonObjectResumen.put(Factura.DESCUNOSUJ, Env.ZERO);
 		jsonObjectResumen.put(Factura.DESCUEXENTA, Env.ZERO);
 		jsonObjectResumen.put(Factura.DESCUGRAVADA, Env.ZERO);
 		jsonObjectResumen.put(Factura.PORCENTAJEDESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(Factura.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta).add(totalNoGravada));
+		jsonObjectResumen.put(Factura.SUBTOTAL, totalGravada.add(totalNoSuj).add(totalExenta));
 		jsonObjectResumen.put(Factura.IVARETE1, Env.ZERO);
 		jsonObjectResumen.put(Factura.MONTOTOTALOPERACION, invoice.getGrandTotal());
 		jsonObjectResumen.put(Factura.TOTALNOGRAVADO, totalNoGravada);
@@ -435,10 +437,11 @@ public class FacturaFactory extends EDocumentFactory {
 		System.out.println("Factura: start collecting JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo());
 		JSONObject jsonCuerpoDocumento = new JSONObject();
 		JSONArray jsonCuerpoDocumentoArray = new JSONArray();
+		int i=0;
 		
 		for (MInvoiceLine invoiceLine:invoice.getLines()) { 
 			System.out.println("Collect JSON data for Cuerpo Documento. Document: " + invoice.getDocumentNo() + ", Line: " + invoiceLine.getLine() );
-			
+			i++;
 			BigDecimal ventaNoSuj 		= Env.ZERO;
 			BigDecimal ventaExenta 		= Env.ZERO;
 			BigDecimal ventaGravada 	= Env.ZERO;
@@ -464,7 +467,7 @@ public class FacturaFactory extends EDocumentFactory {
 			
 			JSONObject jsonCuerpoDocumentoItem = new JSONObject();
                 
-			jsonCuerpoDocumentoItem.put(Factura.NUMITEM, invoiceLine.getLine()/10);
+			jsonCuerpoDocumentoItem.put(Factura.NUMITEM, i);
 			jsonCuerpoDocumentoItem.put(Factura.TIPOITEM, 2);
 			//jsonCuerpoDocumentoItem.put(Factura.NUMERODOCUMENTO, getNumeroControl(invoice.get_ID(), orgInfo, "DTE-01-"));
 			jsonCuerpoDocumentoItem.put(Factura.CANTIDAD, invoiceLine.getQtyInvoiced());
@@ -507,6 +510,7 @@ public class FacturaFactory extends EDocumentFactory {
         String facturaAsStringFinal = facturaAsJson.toString().
         		replace(":[],", ":null,").
         		replace("\"documentoRelacionado\":[]", "\"documentoRelacionado\":null").
+        		replace("\"direccion\":{\"complemento\":null,\"municipio\":null,\"departamento\":null},", "\"direccion\":null,").
         		replace("\"ventaTercero\":{\"nit\":null,\"nombre\":null},", "\"ventaTercero\":null,").
         		replace("\"tributos\":[{\"descripcion\":null,\"codigo\":null,\"valor\":null}]", "\"tributos\":null").
         		replace("\"extension\":{\"docuEntrega\":null,\"placaVehiculo\":null,\"observaciones\":null,\"nombRecibe\":null,\"nombEntrega\":null,\"docuRecibe\":null},", 

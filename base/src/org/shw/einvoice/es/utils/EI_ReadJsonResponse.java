@@ -18,19 +18,8 @@
 
 package org.shw.einvoice.es.utils;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
-import org.compiere.model.MInvoice;
-import org.compiere.model.Query;
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 /** Generated Process for (EI_ReadJsonResponse)
  *  @author ADempiere (generated) 
  *  @version Release 3.9.4
@@ -49,12 +38,13 @@ public class EI_ReadJsonResponse extends EI_ReadJsonResponseAbstract
 	protected String doIt()  throws IOException, Exception
 	{
 		
-		readFiles();
+		//readFiles();
 		return "";
         }
 	
 	public void readFiles()
-	        throws IOException {
+	        //throws IOException 
+	{
 //		String pathname = EDocument.ABSDIRECTORYRESPONSE;
 //		Path path = Paths.get(pathname);
 //		JSONParser parser = new JSONParser();
@@ -76,7 +66,7 @@ public class EI_ReadJsonResponse extends EI_ReadJsonResponseAbstract
 //	        }
 	    }
 	
-	private void updateInvoice(JSONObject eDocumentAsJson) {
+	//private void updateInvoice(JSONObject eDocumentAsJson) {
 //   	 String codigoGeneracion = eDocumentAsJson.getString(EDocument.CODIGOGENERACION);
 //		String whereClause = "ei_codigoGeneracion = ?";
 //		List<MInvoice> invoices = new Query(getCtx(), MInvoice.Table_Name, whereClause, get_TrxName())
@@ -98,5 +88,5 @@ public class EI_ReadJsonResponse extends EI_ReadJsonResponseAbstract
 //		}
 //    
 //		
-	}
+	//}
 }

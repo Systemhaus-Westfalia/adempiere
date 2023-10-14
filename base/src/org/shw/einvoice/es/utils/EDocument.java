@@ -11,6 +11,7 @@ import org.compiere.model.MSysConfig;
 public class EDocument {
 	public StringBuffer errorMessages = new StringBuffer();
 	public static String ABSDIRECTORY = MSysConfig.getValue("EI_PATH");	
+	public static String ABSDIRECTORYRESPONSE = MSysConfig.getValue("EI_PATH_Response");	
 	
 	public static final String IDENTIFICACION 		= "identificacion";
 	public static final String EMISOR 				= "emisor";

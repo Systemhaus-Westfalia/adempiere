@@ -55,7 +55,8 @@ public class EI_ReadJsonResponse extends EI_ReadJsonResponseAbstract
 	
 	public void readFiles()
 	        throws IOException {
-		Path path = Paths.get(getDirectory());
+		String pathname = EDocument.ABSDIRECTORYRESPONSE;
+		Path path = Paths.get(pathname);
 		JSONParser parser = new JSONParser();
 	        try (Stream<Path> walk = Files.walk(path)) {
 	            walk
